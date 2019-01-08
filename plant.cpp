@@ -5,11 +5,12 @@ class Plant {
 
     int id, curState, yield, gdd, liveState, deadState;
     bool living, flowering;
-    int states[][]; // see if there is better data structure
+    int l_states[][]; // see if there is better data structure\
+    int d_states[][];
 
     public:
         Plant(int id);
-        void transition(int state);
+        void transition(int env[]);
 
     };
 
@@ -23,6 +24,7 @@ Plant::Plant(int id)
 
     living = true;
     flowering = false;
+    dead = false;
 }
 
 Plant::void transition(int env[])
@@ -31,6 +33,9 @@ Plant::void transition(int env[])
     // if liveState reaches threshold then advance curState
     // if env does not fulfill needs of current state increment deadState
     // kill plant if deadState exceeds threshold
+    if(living == 1){
+        
+    }
 }
 
 
