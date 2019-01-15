@@ -1,5 +1,5 @@
 #include <iostream>
-#incldue "plant.h"
+#include "plant.h"
 
 using namespace std;
 
@@ -16,6 +16,8 @@ Plant::Plant(int id)
     dead = false;
 }
 
+//flesh this function out as necessary
+//assume water and nutrient data are stored in env 1 and 2 respectively
 bool Plant::checkNeeds(int env[]){
     if(env[1] >= waterNeeds && env[2] >= nutrientNeeds){
         return true;
@@ -29,7 +31,7 @@ void Plant::transition(int env[])
     // if env fulfills needs then increment liveState
     // if liveState reaches threshold then advance curState
     // if env does not fulfill needs of current state increment deadState
-    // kill plant if deadState exceeds threshold
+    // kill plant if dieState exceeds threshold
     if(living == 1){
         if(checkNeeds(env[])){
             liveState++;
