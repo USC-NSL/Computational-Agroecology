@@ -10,5 +10,6 @@ class Plant {
     public:
         Plant(int id);
         void transition(int env[]);
+        bool checkNeeds(int env[]);
 
     };
