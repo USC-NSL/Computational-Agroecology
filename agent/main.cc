@@ -1,32 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
-// Action type represents activities that can be done in a farm.
-enum ActionType {
-    ADD_CROP,
-    REMOVE_CROP,
-    CHANGE_TERRAIN,
-    ADD_WATER
-};
-
-class Location {
-public:
-    double longitude;
-    double latitude;
-};
-
-// This class specifies the parameters for an action
-class Action {
-
-public:
-    ActionType type;
-    Location location;
-    int timestep;
-
-
-};
-
 // A configuration is defined by a list of actions taken over a time period
 
 class Config {
