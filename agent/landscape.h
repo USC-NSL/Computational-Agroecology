@@ -8,16 +8,13 @@
 class LandscapeCell {
 private:
     std::string name_;
-    std::string plant_;
     double area_;
 
 public:
     std::string GetName();
     void SetName(std::string name);
     void SetArea(double area);
-    void SetPlant(std::string plant);
-    void SetAll(std::string, std::string, double);
-    LandscapeCell(std::string, std::string, double);
+    LandscapeCell(std::string , double);
     LandscapeCell();
     ~LandscapeCell();
 };

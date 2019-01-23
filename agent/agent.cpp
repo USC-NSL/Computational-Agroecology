@@ -5,15 +5,15 @@
 #include "agent.h"
 #include "landscape.h"
 
-void LandScapeCell::SelectAction(LandscapeCell cell) {
+void Agent::SelectAction(LandscapeCell cell) {
 
     // TODO (Elizabeth) Function to select random action from
 
 }
 
-double LandScapeCell::GetEvaluation() {
-    
-    double sample_value = 10.2;
-    return sample_value;
-}
-
+//double Agent::GetEvaluation() {
+//
+//    double sample_value = 10.2;
+//    return sample_value;
+//}
+//
