@@ -6,7 +6,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_AGENT_H
 #include "landscape.h"
 
-class agent {
+class Agent {
 public:
     void SelectAction(LandscapeCell cell);
     double GetEvaluation();
