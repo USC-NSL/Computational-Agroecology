@@ -10,16 +10,17 @@ Plant::Plant(int id)
 
     // Populate states data structure based on database
     liveState = 0;
-    dieState = 0;
+    dieCount = 0;
     living = true;
     flowering = false;
     dead = false;
+    perennial = true; //change with data files input
 }
 
 //flesh this function out as necessary
 //assume water and nutrient data are stored in env 1 and 2 respectively
 bool Plant::checkNeeds(int env[]){
-    if(env[1] >= waterNeeds && env[2] >= nutrientNeeds){
+    if(env[0] >= waterNeeds && env[1] >= nutrientNeeds){
         return true;
     }
     else{
@@ -32,14 +33,30 @@ void Plant::transition(int env[])
     // if liveState reaches threshold then advance curState
     // if env does not fulfill needs of current state increment deadState
     // kill plant if dieState exceeds threshold
-    if(living == 1){
+    if(living){
         if(checkNeeds(env[])){
-            liveState++;
+            if (perennial && dieCount == 0) {
+                liveState++;
+            }
+            else if (!perennial && liveState < 5 && dieCount == 0) {
+                liveState++;
+            }
+            else if (!perennial && liveState >= 5) {
+                dieCount++;
+            }
+            else if (dieCount > 0) {
+                dieCount = 0;
+            }
         }
         else{
-            dieState++;
+            dieCount++;
+        }
+        if (dieCount >= 5) {
+            living = false;
         }
     }
+    
+    
 }
 
 
