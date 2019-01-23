@@ -5,7 +5,7 @@ using namespace std;
 
 Plant::Plant(int id)
 {
-    this.id = id;
+    this->id = id;
 
 
     // Populate states data structure based on database
