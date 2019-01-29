@@ -9,7 +9,7 @@ LandscapeCell::LandscapeCell(std::string name, double area){
     this -> area = area;
 }
 LandscapeCell::LandscapeCell() {
-    this -> name_ = "Default";
+    this -> name_ = "Default"
     this -> area_ = 300;
 }
 LandscapeCell::~LandscapeCell() {
