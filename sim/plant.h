@@ -1,11 +1,11 @@
 using namespace std;
 
 class Plant {
-
-    int id, curState, yield, gdd, liveState, deadState;
-    bool living, flowering;
-    int l_states[][]; // see if there is better data structure
-    int d_states[][];
+    private:
+        int id, curState, yield, gdd, liveState, deadState;
+        bool living, flowering, perennial;
+        int l_states[][]; // see if there is better data structure
+        int d_states[][];
 
     public:
         Plant(int id);
