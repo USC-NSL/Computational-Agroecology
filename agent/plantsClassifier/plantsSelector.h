@@ -1,0 +1,16 @@
+//
+// Created by xiao on 1/30/19.
+//
+
+#ifndef COMPUTATIONAL_AGROECOLOGY_PLANTSSELECTOR_H
+#define COMPUTATIONAL_AGROECOLOGY_PLANTSSELECTOR_H
+
+
+
+class plantsSelector {
+
+};
+
+
+
+#endif //COMPUTATIONAL_AGROECOLOGY_PLANTSSELECTOR_H
