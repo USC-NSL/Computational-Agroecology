@@ -37,13 +37,23 @@ std::vector<std::vector<std::string> > CSVReader::getData()
     return dataList;
 }
 
-//int main() {
-//    // Creating an object of CSVWriter
-//    CSVReader reader("PlantEnvironment.csv");
-//
-//    // Get the data from CSV File
-//    std::vector<std::vector<std::string> > dataList = reader.getData();
-//    std::cout << dataList[3][2] << std::endl;
-//    std::cout << dataList[dataList.size() - 2][0] << dataList.size() - 1 << std::endl;
-//    return 1;
-//}
+std::vector<plantType> getPlantTypes()
+{
+    std::vector<plantType> plantTypesVector;
+
+    // Information about plant and environment are in "../data/PlantEnvironment.csv
+    CSVReader reader("../data/PlantEnvironment.csv");
+
+    // Get the data from CSV File
+    std::vector<std::vector<std::string> > dataList = reader.getData();
+
+    // Iterate through all the row and put them into the plant type class
+    for(int i = 1; i != dataList.size(); i++) {
+        plantType plant(dataList[i][0], atoi(dataList[i][3].c_str()), atoi(dataList[i][4].c_str()),
+                atoi(dataList[i][5].c_str()), atoi(dataList[i][6].c_str()));
+
+        plantTypesVector.push_back(plant);
+
+    }
+    return plantTypesVector;
+}
