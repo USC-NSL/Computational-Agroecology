@@ -1,5 +1,6 @@
 #include "weather.h"
 
-int main(){
-    return 1;
+// Allow user to get weather information according to their location
+void Weather::getWeatherByLocation() {
+// Todo(Xiao): Add impl.
 }

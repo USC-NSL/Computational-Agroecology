@@ -19,6 +19,7 @@ TEST(DataTest, DataHandlerOutput)
     EXPECT_NE(dataList.size(), 0);
     std::string lastComponentName = dataList[dataList.size() - 1][0];
     EXPECT_EQ("Zoysia matrella", lastComponentName);
+    // int MaxOT, int MinOT, int MaxAT, int MinAT
 }
 
 TEST(DataAdapterPlant, DataAdapterPlantOutput)
@@ -31,10 +32,10 @@ TEST(DataAdapterPlant, DataAdapterPlantOutput)
     EXPECT_NE(plantTypesVector.size(), 0);
     //std::string lastComponentName = dataList[dataList.size() - 1][0];
     EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name);
-    EXPECT_EQ(18, plantTypesVector[plantTypesVector.size() - 1].maxOptimalTemperature);
-    EXPECT_EQ(26, plantTypesVector[plantTypesVector.size() - 1].minOptimalTemperature);
-    EXPECT_EQ(18, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteTemperature);
-    EXPECT_EQ(30, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteTemperature);
+    EXPECT_EQ(18, plantTypesVector[plantTypesVector.size() - 1].minOptimalTemperature);
+    EXPECT_EQ(26, plantTypesVector[plantTypesVector.size() - 1].maxOptimalTemperature);
+    EXPECT_EQ(12, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteTemperature);
+    EXPECT_EQ(30, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteTemperature);
 
 }
 

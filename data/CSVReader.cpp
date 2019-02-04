@@ -48,9 +48,10 @@ std::vector<plantType> getPlantTypes()
     std::vector<std::vector<std::string> > dataList = reader.getData();
 
     // Iterate through all the row and put them into the plant type class
+    // int MaxOT, int MinOT, int MaxAT, int MinAT
     for(int i = 1; i != dataList.size(); i++) {
-        plantType plant(dataList[i][0], atoi(dataList[i][3].c_str()), atoi(dataList[i][4].c_str()),
-                atoi(dataList[i][5].c_str()), atoi(dataList[i][6].c_str()));
+        plantType plant(dataList[i][0], atoi(dataList[i][4].c_str()), atoi(dataList[i][3].c_str())
+               , atoi(dataList[i][6].c_str()), atoi(dataList[i][5].c_str()));
 
         plantTypesVector.push_back(plant);
 

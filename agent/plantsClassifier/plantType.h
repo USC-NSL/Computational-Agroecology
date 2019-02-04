@@ -14,10 +14,13 @@ public:
     int minOptimalTemperature;
     int maxAbsoluteTemperature;
     int minAbsoluteTemperature;
-
+    int maxAbsoluteRainfall;
+    int minAbsoluteRainfall;
+    int maxOptimalRainfall;
+    int minOptimalRainfall;
 
     plantType(std::string plantName, int MaxOT, int MinOT, int MaxAT, int MinAT) :
-    name(plantName), maxOptimalTemperature(MaxOT), minOptimalTemperature(MinOT), maxAbsoluteTemperature(MaxOT),
+    name(plantName), maxOptimalTemperature(MaxOT), minOptimalTemperature(MinOT), maxAbsoluteTemperature(MaxAT),
     minAbsoluteTemperature(MinAT){ }
 };
 
