@@ -58,6 +58,10 @@ void Plant::transition(int env[])
     
     
 }
+//see this - should we also return diecount?
+int Plant::get_state(){
+    return liveState;
+}
 
 
 

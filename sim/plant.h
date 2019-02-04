@@ -11,5 +11,6 @@ class Plant {
         Plant(int id);
         void transition(int env[]);
         bool checkNeeds(int env[]);
+        int get_state();
 
     };
