@@ -1,14 +1,11 @@
-//
-// Created by xiao on 1/31/19.
-//
-
-#ifndef COMPUTATIONAL_AGROECOLOGY_PLANTTYPE_H
-#define COMPUTATIONAL_AGROECOLOGY_PLANTTYPE_H
+// Copyright 2019
+#ifndef AGENT_PLANTSCLASSIFIER_PLANTTYPE_H_
+#define AGENT_PLANTSCLASSIFIER_PLANTTYPE_H_
 
 #include <string>
 
 class plantType {
-public:
+ public:
     std::string name;
     int maxOptimalTemperature;
     int minOptimalTemperature;
@@ -19,10 +16,19 @@ public:
     int maxOptimalRainfall;
     int minOptimalRainfall;
 
-    plantType(std::string plantName, int MaxOT, int MinOT, int MaxAT, int MinAT) :
-    name(plantName), maxOptimalTemperature(MaxOT), minOptimalTemperature(MinOT), maxAbsoluteTemperature(MaxAT),
-    minAbsoluteTemperature(MinAT){ }
+    plantType(std::string plantName, int MaxOT, int MinOT,
+            int MaxAT, int MinAT) :
+    name(plantName), maxOptimalTemperature(MaxOT),
+    minOptimalTemperature(MinOT), maxAbsoluteTemperature(MaxAT),
+    minAbsoluteTemperature(MinAT) { }
+
+    plantType(std::string plantName, int MaxOT, int MinOT, int MaxAT,
+            int MinAT, int MaxAR, int MinAR, int MaxOR, int MinOR) :
+            name(plantName), maxOptimalTemperature(MaxOT),
+            minOptimalTemperature(MinOT), maxAbsoluteTemperature(MaxAT),
+            minAbsoluteTemperature(MinAT), maxAbsoluteRainfall(MaxAR),
+            minAbsoluteRainfall(MinAR), maxOptimalRainfall(MaxOR),
+            minOptimalRainfall(MinOR) { }
 };
 
-
-#endif //COMPUTATIONAL_AGROECOLOGY_PLANTTYPE_H
+#endif  // AGENT_PLANTSCLASSIFIER_PLANTTYPE_H_

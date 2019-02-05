@@ -1,5 +1,6 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_CSVREADER_H
-#define COMPUTATIONAL_AGROECOLOGY_CSVREADER_H
+// Copyright 2019
+#ifndef DATA_CSVREADER_H_
+#define DATA_CSVREADER_H_
 
 #include <iostream>
 #include <fstream>
@@ -9,21 +10,21 @@
 #include <sstream>
 #include <stdlib.h>
 
-#include "../agent/plantsClassifier/plantType.cpp"
+#include "../agent/plantsClassifier/plantType.h"
 
 class CSVReader {
     std::string fileName;
     std::string delimeter;
 
-public:
-  CSVReader(std::string filename, std::string delm = ",") :
+ public:
+    CSVReader(std::string filename, std::string delm = ","):
         fileName(filename), delimeter(delm) { }
 
-  // Function to fetch data from a CSV File
-  std::vector<std::vector<std::string> > getData();
+    // Function to fetch data from a CSV File
+    std::vector<std::vector<std::string> > getData();
 
-  // Function that transfer the data into plant type holder
-  std::vector<plantType> getPlantTypes();
+    // Function that transfer the data into plant type holder
+    std::vector<plantType> getPlantTypes();
 };
 
-#endif //COMPUTATIONAL_AGROECOLOGY_CSVREADER_H
+#endif  // DATA_CSVREADER_H_

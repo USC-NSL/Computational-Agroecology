@@ -22,6 +22,7 @@ TEST(DataTest, DataHandlerOutput)
     // int MaxOT, int MinOT, int MaxAT, int MinAT
 }
 
+// Test the getPlantTypes function to see if it transfer the data into plantType
 TEST(DataAdapterPlant, DataAdapterPlantOutput)
 {
     CSVReader reader("../data/PlantEnvironment.csv");
@@ -36,6 +37,20 @@ TEST(DataAdapterPlant, DataAdapterPlantOutput)
     EXPECT_EQ(26, plantTypesVector[plantTypesVector.size() - 1].maxOptimalTemperature);
     EXPECT_EQ(12, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteTemperature);
     EXPECT_EQ(30, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteTemperature);
+
+}
+// Test the data adapter to see if the rainfall passing in successfully
+TEST(DataAdapterPlant, DataAdapterPlantOutputWithRainfall)
+{
+    CSVReader reader("../data/PlantEnvironment.csv");
+    // Creating an object of CSVWriter
+    std::vector<plantType> plantTypesVector = getPlantTypes();
+
+    EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name);
+    EXPECT_EQ(1000, plantTypesVector[plantTypesVector.size() - 1].minOptimalRainfall);
+    EXPECT_EQ(1700, plantTypesVector[plantTypesVector.size() - 1].maxOptimalRainfall);
+    EXPECT_EQ(700, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteRainfall);
+    EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteRainfall);
 
 }
 

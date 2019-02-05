@@ -8,7 +8,7 @@
  * handling in ../data.
 */
 
-
+// Tests the plantTypeVector to see the weather passed in successfully
 TEST(PlantTypes, GetAllPlantTypes)
 {
     Weather weather = Weather(0, 0, 0, 0, 0, 0, 0);
@@ -25,6 +25,7 @@ TEST(PlantTypes, GetAllPlantTypes)
 
 }
 
+// See the function getTypesVector is actually working
 TEST(PlantTypes, WeatherPassingIn)
 {
     Weather weather = Weather(100, -100, 0, 0, 0, 0, 0);
@@ -36,6 +37,8 @@ TEST(PlantTypes, WeatherPassingIn)
 
 }
 
+// Tests getQualifiedPlants which returns all the plants that's reach the requirement
+// for rainfall and temperature
 TEST(PlantTypes, getQualifiedPlants)
 {
     Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
@@ -46,6 +49,8 @@ TEST(PlantTypes, getQualifiedPlants)
     EXPECT_NE(plants.size(),0);
 }
 
+// Tests getQualifiedPlants which returns all the plants that's reach the optimal status
+// for rainfall and temperature
 TEST(PlantTypes, getOptimalPlants)
 {
     Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);

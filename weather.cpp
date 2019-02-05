@@ -1,4 +1,6 @@
-#include "weather.h"
+// Copyright 2019
+
+#include <weather.h>
 
 // Allow user to get weather information according to their location
 void Weather::getWeatherByLocation() {

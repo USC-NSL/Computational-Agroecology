@@ -1,5 +1,2 @@
-//
-// Created by xiao on 1/31/19.
-//
-
+// Copyright 2019
 #include "plantType.h"
