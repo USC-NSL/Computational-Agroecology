@@ -52,12 +52,14 @@ void Simulate(cell** landscape, int num_rows, int num_cols, Action action, int r
     int** sun_values = [[1, 3],[2, 4],[1, 2],[0, 1]];
     int rain, sun = 0;
     
+    int env[] = [rain, sun]
+    
     //start the year in spring
     while ( weeks < 52 ) {
         //sim weather
         GenerateWeather(rain, sun, weeks, season, rain_values, sun_values);
         //update growth
-        int env[] = [rain, sun]
+        
         RunPlantGrowth(landscape, num_rows, num_cols, env);
         //time passes
         weeks++;
