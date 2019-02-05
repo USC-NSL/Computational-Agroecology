@@ -59,10 +59,10 @@ void simulate(cell** landscape, int num_rows, int num_cols, Action action) {
         srand(time(0));
         //create rain and sun values for weather
         rain = rain_values[season][0] +
-        (rand() % (rain_values[season][1] - rain_values[season][1] + 1));
+        (rand() % (rain_values[season][1] - rain_values[season][0] + 1));
         
         sun = sun_values[season][0] +
-        (rand() % (sun_values[season][1] - sun_values[season][1] + 1));
+        (rand() % (sun_values[season][1] - sun_values[season][0] + 1));
         
         //update growth
         for ( int i = 0; i < num_rows; i++ ) {
