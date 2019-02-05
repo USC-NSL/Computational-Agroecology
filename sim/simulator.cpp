@@ -18,10 +18,10 @@ void SimulateAction(cell** landscape, Action action, int row, int col) {
     landscape[row][col] = action;
 }
 
-void RunPlantGrowth(cell** lanscape, int num_rows, int num_cols) {
+void RunPlantGrowth(cell** lanscape, int num_rows, int num_cols, int* env) {
     for ( int i = 0; i < num_rows; i++ ) {
         for ( int j = 0; j < num_cols; j++ ) {
-            landscape[i][j].plant.transition(/*paramter is int env[], but should be changed to reflect rain/sun*/);
+            landscape[i][j].plant.transition(env);
         }
     }
 }
@@ -40,7 +40,7 @@ void GenerateWeather(int& rain, int& sun, int& weeks, int& season, int**& rain_v
     (rand() % (sun_values[season][1] - sun_values[season][1] + 1));
 }
 
-void simulate(cell** landscape, int num_rows, int num_cols, Action action, int row, int col) {
+void Simulate(cell** landscape, int num_rows, int num_cols, Action action, int row, int col) {
     //perform action
     SimulateAction(landscape, row, col);
     
@@ -56,25 +56,9 @@ void simulate(cell** landscape, int num_rows, int num_cols, Action action, int r
     while ( weeks < 52 ) {
         //sim weather
         GenerateWeather(rain, sun, weeks, season, rain_values, sun_values);
-        
-        //change season & type of weather
-        int rain, sun;
-        //increment season
-        if ( weeks % 13 == 0 ) {
-            season++;
-        }
-        //seed the random value
-        srand(time(0));
-        //create rain and sun values for weather
-        rain = rain_values[season][0] +
-        (rand() % (rain_values[season][1] - rain_values[season][0] + 1));
-        
-        sun = sun_values[season][0] +
-        (rand() % (sun_values[season][1] - sun_values[season][0] + 1));
-        
-
         //update growth
-        RunPlantGrowth(landscape, num_rows, num_cols);
+        int env[] = [rain, sun]
+        RunPlantGrowth(landscape, num_rows, num_cols, env);
         //time passes
         weeks++;
     }
