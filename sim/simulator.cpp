@@ -56,6 +56,23 @@ void simulate(cell** landscape, int num_rows, int num_cols, Action action, int r
     while ( weeks < 52 ) {
         //sim weather
         GenerateWeather(rain, sun, weeks, season, rain_values, sun_values);
+        
+        //change season & type of weather
+        int rain, sun;
+        //increment season
+        if ( weeks % 13 == 0 ) {
+            season++;
+        }
+        //seed the random value
+        srand(time(0));
+        //create rain and sun values for weather
+        rain = rain_values[season][0] +
+        (rand() % (rain_values[season][1] - rain_values[season][0] + 1));
+        
+        sun = sun_values[season][0] +
+        (rand() % (sun_values[season][1] - sun_values[season][0] + 1));
+        
+
         //update growth
         RunPlantGrowth(landscape, num_rows, num_cols);
         //time passes
