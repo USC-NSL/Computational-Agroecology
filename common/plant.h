@@ -35,6 +35,8 @@ class Plant {
   // Allows the plant to move to a new maturity state.
   // Returns true upon success.
   bool Transition(Maturity new_maturity);
+    
+    bool CheckNeeds(int rainfall, int temperature);
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
