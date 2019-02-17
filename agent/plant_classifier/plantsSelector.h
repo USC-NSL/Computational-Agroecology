@@ -7,14 +7,14 @@
 #include <iterator>
 #include "../../data/CSVReader.h"
 #include "../../data/CSVReader.cpp"
-#include "plantType.h"
+#include "../../common/plant_type.h"
 #include <string>
 
 class plantsSelector {
  public:
-    std::vector<plantType> plantTypesVector;
+    std::vector<PlantType> plantTypesVector;
     plantsSelector(Weather weather,
-            std::vector<plantType> plantTV = getPlantTypes()) :
+            std::vector<PlantType> plantTV = getPlantTypes()) :
     weather_(weather), plantTypesVector(plantTV) {}
     std::vector<std::string> getQualifiedPlants();
     std::vector<std::string> getOptimalPlants();

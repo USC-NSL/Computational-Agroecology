@@ -10,7 +10,7 @@
 #include <sstream>
 #include <stdlib.h>
 
-#include "../agent/plantsClassifier/plantType.h"
+#include "../common/plant_type.h"
 
 class CSVReader {
     std::string fileName;
@@ -18,13 +18,14 @@ class CSVReader {
 
  public:
     CSVReader(std::string filename, std::string delm = ","):
-        fileName(filename), delimeter(delm) { }
+        fileName(filename),
+        delimeter(delm) { }
 
     // Function to fetch data from a CSV File
     std::vector<std::vector<std::string> > getData();
 
     // Function that transfer the data into plant type holder
-    std::vector<plantType> getPlantTypes();
+    std::vector<PlantType> getPlantTypes();
 };
 
 #endif  // DATA_CSVREADER_H_

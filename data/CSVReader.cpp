@@ -33,8 +33,8 @@ std::vector<std::vector<std::string> > CSVReader::getData() {
     return dataList;
 }
 
-std::vector<plantType> getPlantTypes() {
-    std::vector<plantType> plantTypesVector;
+std::vector<PlantType> getPlantTypes() {
+    std::vector<PlantType> plantTypesVector;
 
     // Information about plant and environment are in
     // "../data/PlantEnvironment.csv"
@@ -50,7 +50,7 @@ std::vector<plantType> getPlantTypes() {
     // Min Absolute Temperature, Max Absolute Rainfall,
     // Min Absolute Rainfall, Max Optimal Rainfall, Min Optimal Rainfall
     for ( int i = 1; i != dataList.size(); i++ ) {
-        plantType plant(dataList[i][0], atoi(dataList[i][4].c_str()),
+        PlantType plant(dataList[i][0], atoi(dataList[i][4].c_str()),
                 atoi(dataList[i][3].c_str()), atoi(dataList[i][6].c_str()),
                 atoi(dataList[i][5].c_str()), atoi(dataList[i][10].c_str()),
                atoi(dataList[i][9].c_str()), atoi(dataList[i][8].c_str()),

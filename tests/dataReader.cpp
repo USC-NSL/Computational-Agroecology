@@ -27,16 +27,16 @@ TEST(DataAdapterPlant, DataAdapterPlantOutput)
 {
     CSVReader reader("../data/PlantEnvironment.csv");
     // Creating an object of CSVWriter
-    std::vector<plantType> plantTypesVector = getPlantTypes();
+    std::vector<PlantType> plantTypesVector = getPlantTypes();
 
 
     EXPECT_NE(plantTypesVector.size(), 0);
     //std::string lastComponentName = dataList[dataList.size() - 1][0];
-    EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name);
-    EXPECT_EQ(18, plantTypesVector[plantTypesVector.size() - 1].minOptimalTemperature);
-    EXPECT_EQ(26, plantTypesVector[plantTypesVector.size() - 1].maxOptimalTemperature);
-    EXPECT_EQ(12, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteTemperature);
-    EXPECT_EQ(30, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteTemperature);
+    EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name());
+    EXPECT_EQ(18, plantTypesVector[plantTypesVector.size() - 1].min_optimal_temperature());
+    EXPECT_EQ(26, plantTypesVector[plantTypesVector.size() - 1].max_optimal_temperature());
+    EXPECT_EQ(12, plantTypesVector[plantTypesVector.size() - 1].min_absolute_temperature());
+    EXPECT_EQ(30, plantTypesVector[plantTypesVector.size() - 1].max_absolute_temperature());
 
 }
 // Test the data adapter to see if the rainfall passing in successfully
@@ -44,13 +44,13 @@ TEST(DataAdapterPlant, DataAdapterPlantOutputWithRainfall)
 {
     CSVReader reader("../data/PlantEnvironment.csv");
     // Creating an object of CSVWriter
-    std::vector<plantType> plantTypesVector = getPlantTypes();
+    std::vector<PlantType> plantTypesVector = getPlantTypes();
 
-    EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name);
-    EXPECT_EQ(1000, plantTypesVector[plantTypesVector.size() - 1].minOptimalRainfall);
-    EXPECT_EQ(1700, plantTypesVector[plantTypesVector.size() - 1].maxOptimalRainfall);
-    EXPECT_EQ(700, plantTypesVector[plantTypesVector.size() - 1].minAbsoluteRainfall);
-    EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].maxAbsoluteRainfall);
+    EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name());
+    EXPECT_EQ(1000, plantTypesVector[plantTypesVector.size() - 1].min_optimal_rainfall());
+    EXPECT_EQ(1700, plantTypesVector[plantTypesVector.size() - 1].max_optimal_rainfall());
+    EXPECT_EQ(700, plantTypesVector[plantTypesVector.size() - 1].min_absolute_rainfall());
+    EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].max_absolute_rainfall());
 
 }
 
