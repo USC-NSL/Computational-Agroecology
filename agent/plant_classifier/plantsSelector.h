@@ -12,13 +12,19 @@
 
 class plantsSelector {
  public:
-    std::vector<PlantType> plantTypesVector;
     plantsSelector(Weather weather,
             std::vector<PlantType> plantTV = getPlantTypes()) :
-    weather_(weather), plantTypesVector(plantTV) {}
+    weather_(weather),
+    plantTypesVector(plantTV) {}
+    Weather weather() { return weather_; }
     std::vector<std::string> getQualifiedPlants();
     std::vector<std::string> getOptimalPlants();
-    Weather weather_;
+    std::vector<PlantType> plantTypesVector;  // keep the information of all plant types
+
+
+ private:
+    Weather weather_;  // keep the weather information of the farm that perform selection
+
 };
 
 
