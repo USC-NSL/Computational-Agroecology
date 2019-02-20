@@ -18,9 +18,10 @@ class PlantType {
   max_absolute_temperature_(MaxAT),
   min_absolute_temperature_(MinAT) { }
 
-  PlantType(std::string plantName, int MaxOT, int MinOT, int MaxAT,
+  PlantType(std::string plantName, int Base, int MaxOT, int MinOT, int MaxAT,
           int MinAT, int MaxAR, int MinAR, int MaxOR, int MinOR, bool cultivar = false) :
           name_(plantName),
+          base_temp_(Base),
           max_optimal_temperature_(MaxOT),
           min_optimal_temperature_(MinOT),
           max_absolute_temperature_(MaxAT),
@@ -32,6 +33,7 @@ class PlantType {
           cultivar_(cultivar){ }
 
   std::string name() { return  name_; }
+  int base_temp() { return base_temp_; }
   int max_optimal_temperature() { return max_optimal_temperature_; }
   int min_optimal_temperature() { return min_optimal_temperature_; }
   int max_absolute_temperature() { return max_absolute_temperature_; }
@@ -45,6 +47,8 @@ class PlantType {
  private:
     // the name of the single species or single cultivar
     std::string name_;
+    
+    int base_temp_; // base temperature for Growing Degree Day calculations
 
     int max_optimal_temperature_;  // max optimal temperature requirement for plant type
 
