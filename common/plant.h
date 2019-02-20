@@ -35,8 +35,12 @@ class Plant {
   // Allows the plant to move to a new maturity state.
   // Returns true upon success.
   bool Transition(Maturity new_maturity);
+ 
+  int CalcGDD(int minTemp, int maxTemp);
+ 
+  void Stage(int[] thresholds);
     
-    bool CheckNeeds(int rainfall, int temperature);
+  bool CheckNeeds(int rainfall, int temperature);
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
@@ -46,6 +50,9 @@ class Plant {
   // Accumulated Growing Degree Days, to be used by simulator.
   int accumulated_gdd_;
 
+  // Array to store different stages of growth
+  Maturity stages_[5] = {SEED, SEEDLING, JUVENILE, MATURE, OLD};
+ 
   // The plant's current maturity.
   Maturity maturity_;
 
