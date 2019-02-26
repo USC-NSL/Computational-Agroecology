@@ -14,7 +14,7 @@ TEST(PlantTypes, GetAllPlantTypes)
     Weather weather = Weather(0, 0, 0, 0, 0, 0, 0);
     plantsSelector plSelector(weather);
     // Creating an object of CSVWriter
-    std::vector<PlantType> plantTypesVector = plSelector.plantTypesVector;
+    std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
 
     EXPECT_NE(plantTypesVector.size(), 0);
     EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name());
@@ -30,7 +30,7 @@ TEST(PlantTypes, WeatherPassingIn)
 {
     Weather weather = Weather(100, -100, 0, 0, 0, 0, 0);
     plantsSelector plSelector(weather);
-    std::vector<PlantType> plantTypesVector = plSelector.plantTypesVector;
+    std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
     EXPECT_EQ(plants.size(),0);
@@ -43,7 +43,7 @@ TEST(PlantTypes, getQualifiedPlants)
 {
     Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
     plantsSelector plSelector(weather);
-    std::vector<PlantType> plantTypesVector = plSelector.plantTypesVector;
+    std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
     EXPECT_NE(plants.size(),0);
@@ -55,7 +55,7 @@ TEST(PlantTypes, getOptimalPlants)
 {
     Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
     plantsSelector plSelector(weather);
-    std::vector<PlantType> plantTypesVector = plSelector.plantTypesVector;
+    std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getOptimalPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
     EXPECT_NE(plants.size(),0);

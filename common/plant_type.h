@@ -18,20 +18,22 @@ class PlantType {
   max_absolute_temperature_(MaxAT),
   min_absolute_temperature_(MinAT) { }
 
-  PlantType(std::string plantName, int Thresholds[], int Base, int MaxOT, int MinOT, int MaxAT,
-          int MinAT, int MaxAR, int MinAR, int MaxOR, int MinOR, bool cultivar = false) :
+  PlantType(std::string plantName, int MaxOT, int MinOT, int MaxAT,
+          int MinAT, int MaxAR, int MinAR,
+          int MaxOR, int MinOR, bool cultivar = false,
+          int Base = 0, int* Thresholds) :
           name_(plantName),
-          gdd_thresholds_(Thresholds),
-          base_temp_(Base),
           max_optimal_temperature_(MaxOT),
           min_optimal_temperature_(MinOT),
           max_absolute_temperature_(MaxAT),
           min_absolute_temperature_(MinAT),
-          max_absolute_rainfall_(MaxAR),
-          min_absolute_rainfall_(MinAR),
-          max_optimal_rainfall_(MaxOR),
-          min_optimal_rainfall_(MinOR),
-          cultivar_(cultivar){ }
+          max_absolute_annual_rainfall_(MaxAR),
+          min_absolute_annual_rainfall_(MinAR),
+          max_optimal_annual_rainfall_(MaxOR),
+          min_optimal_annual_rainfall_(MinOR),
+          cultivar_(cultivar),
+          gdd_thresholds_(Thresholds),
+          base_temp_(Base){ }
 
   std::string name() { return  name_; }
   int* gdd_thresholds() { return gdd_thresholds_; }
@@ -40,10 +42,10 @@ class PlantType {
   int min_optimal_temperature() { return min_optimal_temperature_; }
   int max_absolute_temperature() { return max_absolute_temperature_; }
   int min_absolute_temperature() { return min_absolute_temperature_; }
-  int max_absolute_annual_rainfall() { return max_absolute_rainfall_; }
-  int min_absolute_annual_rainfall() { return min_absolute_rainfall_;; }
-  int max_optimal_annual_rainfall() { return max_optimal_rainfall_; }
-  int min_optimal_annual_rainfall() { return min_optimal_rainfall_; }
+  int max_absolute_annual_rainfall() { return max_absolute_annual_rainfall_; }
+  int min_absolute_annual_rainfall() { return min_absolute_annual_rainfall_;; }
+  int max_optimal_annual_rainfall() { return max_optimal_annual_rainfall_; }
+  int min_optimal_annual_rainfall() { return min_optimal_annual_rainfall_; }
   bool cultivar() { return cultivar_; }
 
  private:
@@ -64,7 +66,7 @@ class PlantType {
 
     int max_absolute_annual_rainfall_;  // max absolute rainfall requirement for plant type
 
-    int min_absolute_anuual_rainfall_;  // min absolute rainfall requirement for plant type
+    int min_absolute_annual_rainfall_;  // min absolute rainfall requirement for plant type
 
     int max_optimal_annual_rainfall_;  // max optimal rainfall requirement for plant type
 
