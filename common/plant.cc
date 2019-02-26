@@ -2,7 +2,7 @@
 
 // TODO: Old code for CheckNeeds(), revive as needed and remove comment.
 bool Plant::CheckNeeds(int rainfall, int minTemp, int maxTemp){
-     if(rainfall >= type_.min_absolute_rainfall() && rainfall <= type_.max_absolute_rainfall() && 
+     if(rainfall >= type_.min_absolute_annual_rainfall() && rainfall <= type_.max_absolute_annual_rainfall() &&
         minTemp >= type_.min_absolute_temperature() && 
         maxTemp <= type_.max_absolute_temperature()){
          return true;
