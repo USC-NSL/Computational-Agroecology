@@ -20,10 +20,9 @@ void Plant::Stage(int[] thresholds){
      int stage = 0;
      for(int i = 0; i < 5; ++i){
           if(accumulated_gdd_ >= thresholds[i]{
-               stage = i;
+               maturity_++;
           }
      }
-     maturity_ = stages_[i];
 }
 
 // TODO: Incorporate this old Transition code into the below Transition function and then remove the commented code.
