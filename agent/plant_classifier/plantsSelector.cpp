@@ -6,13 +6,13 @@ std::vector<std::string> plantsSelector::getQualifiedPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < plantTypesVector.size(); i++) {
+    for(int i = 0; i < all_plants_record_.size(); i++) {
         PlantType plant = plantTypesVector[i];
 
-        if (plant.max_absolute_temperature() >= weather_.max_temperature_of_year() and
-        plant.min_absolute_temperature() <= weather_.min_temperature_of_year() and
-        plant.max_absolute_rainfall() >= weather_.max_rainfall_of_year() and
-        plant.min_absolute_rainfall() <= weather_.min_rainfall_of_year())
+        if (plant.max_absolute_annual_rainfall() >= weather_.max_temperature_of_year() and
+        plant.min_absolute_annual_temperature() <= weather_.min_temperature_of_year() and
+        plant.max_absolute_annual_rainfall() >= weather_.max_rainfall_of_year() and
+        plant.min_absolute_annual_rainfall() <= weather_.min_rainfall_of_year())
         {
             plantsString.push_back(plant.name());
         }
@@ -26,13 +26,13 @@ std::vector<std::string> plantsSelector::getOptimalPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < plantTypesVector.size(); i++) {
+    for(int i = 0; i < all_plants_record_.size(); i++) {
         PlantType plant = plantTypesVector[i];
         if (
-            plant.max_optimal_temperature() >= weather_.max_temperature_of_year() and
-            plant.min_optimal_temperature() <= weather_.min_temperature_of_year() and
-            plant.max_optimal_rainfall() >= weather_.max_rainfall_of_year() and
-            plant.min_optimal_rainfall() <= weather_.min_rainfall_of_year())
+            plant.max_annual_optimal_temperature() >= weather_.max_temperature_of_year() and
+            plant.min_annual_optimal_temperature() <= weather_.min_temperature_of_year() and
+            plant.max_annual_optimal_rainfall() >= weather_.max_rainfall_of_year() and
+            plant.min_annual_optimal_rainfall() <= weather_.min_rainfall_of_year())
         {
             plantsString.push_back(plant.name());
         }

@@ -40,10 +40,10 @@ class PlantType {
   int min_optimal_temperature() { return min_optimal_temperature_; }
   int max_absolute_temperature() { return max_absolute_temperature_; }
   int min_absolute_temperature() { return min_absolute_temperature_; }
-  int max_absolute_rainfall() { return max_absolute_rainfall_; }
-  int min_absolute_rainfall() { return min_absolute_rainfall_;; }
-  int max_optimal_rainfall() { return max_optimal_rainfall_; }
-  int min_optimal_rainfall() { return min_optimal_rainfall_; }
+  int max_absolute_annual_rainfall() { return max_absolute_rainfall_; }
+  int min_absolute_annual_rainfall() { return min_absolute_rainfall_;; }
+  int max_optimal_annual_rainfall() { return max_optimal_rainfall_; }
+  int min_optimal_annual_rainfall() { return min_optimal_rainfall_; }
   bool cultivar() { return cultivar_; }
 
  private:
@@ -62,13 +62,13 @@ class PlantType {
 
     int min_absolute_temperature_;  // min absolute temperature requirement for plant type
 
-    int max_absolute_rainfall_;  // max absolute rainfall requirement for plant type
+    int max_absolute_annual_rainfall_;  // max absolute rainfall requirement for plant type
 
-    int min_absolute_rainfall_;  // min absolute rainfall requirement for plant type
+    int min_absolute_anuual_rainfall_;  // min absolute rainfall requirement for plant type
 
-    int max_optimal_rainfall_;  // max optimal rainfall requirement for plant type
+    int max_optimal_annual_rainfall_;  // max optimal rainfall requirement for plant type
 
-    int min_optimal_rainfall_;  // max optimal rainfall requirement for plant type
+    int min_optimal_annual_rainfall_;  // max optimal rainfall requirement for plant type
 
     bool cultivar_;  //  specify whether this is a single species or single cultivar.
 
