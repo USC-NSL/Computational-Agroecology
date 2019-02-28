@@ -47,10 +47,10 @@ TEST(DataAdapterPlant, DataAdapterPlantOutputWithRainfall)
     std::vector<PlantType> plantTypesVector = getPlantTypes();
 
     EXPECT_EQ("Zoysia matrella", plantTypesVector[plantTypesVector.size() - 1].name());
-    EXPECT_EQ(1000, plantTypesVector[plantTypesVector.size() - 1].min_optimal_rainfall());
-    EXPECT_EQ(1700, plantTypesVector[plantTypesVector.size() - 1].max_optimal_rainfall());
-    EXPECT_EQ(700, plantTypesVector[plantTypesVector.size() - 1].min_absolute_rainfall());
-    EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].max_absolute_rainfall());
+    EXPECT_EQ(1000, plantTypesVector[plantTypesVector.size() - 1].min_optimal_annual_rainfall());
+    EXPECT_EQ(1700, plantTypesVector[plantTypesVector.size() - 1].max_optimal_annual_rainfall());
+    EXPECT_EQ(700, plantTypesVector[plantTypesVector.size() - 1].min_absolute_annual_rainfall());
+    EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].max_absolute_annual_rainfall());
 
 }
 
