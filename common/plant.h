@@ -19,7 +19,7 @@ class Plant {
   static const int MIN_HEALTH = 0;
 
   // Constructs a new plant instace of the given type.
-  Plant(const PlantType &type) :
+  explicit Plant(const PlantType &type) :
       health_(INITIAL_HEALTH),
       flowering_(false),
       accumulated_gdd_(0),

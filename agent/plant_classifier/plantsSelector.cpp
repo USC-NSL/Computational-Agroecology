@@ -6,9 +6,7 @@ std::vector<std::string> plantsSelector::getQualifiedPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < all_plants_record_.size(); i++) {
-        PlantType plant = all_plants_record_[i];
-
+    for (auto plant : all_plants_record_) {
         if (plant.max_absolute_temperature() >= weather_.max_temperature_of_year() and
         plant.min_absolute_temperature() <= weather_.min_temperature_of_year() and
         plant.max_absolute_annual_rainfall() >= weather_.max_rainfall_of_year() and
@@ -26,8 +24,7 @@ std::vector<std::string> plantsSelector::getOptimalPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < all_plants_record_.size(); i++) {
-        PlantType plant = all_plants_record_[i];
+    for (auto plant : all_plants_record_) {
         if (
             plant.max_optimal_temperature() >= weather_.max_temperature_of_year() and
             plant.min_optimal_temperature() <= weather_.min_temperature_of_year() and
