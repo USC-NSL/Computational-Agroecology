@@ -1,6 +1,7 @@
 // Copyright 2019
 
 #include "CSVReader.h"
+#include "../common/plant_type.h"
 
 /*
 * Parses through csv file line by line and returns the data
@@ -33,8 +34,8 @@ std::vector<std::vector<std::string> > CSVReader::getData() {
     return dataList;
 }
 
-std::vector<plantType> getPlantTypes() {
-    std::vector<plantType> plantTypesVector;
+std::vector<PlantType> getPlantTypes() {
+    std::vector<PlantType> plantTypesVector;
 
     // Information about plant and environment are in
     // "../data/PlantEnvironment.csv"
@@ -49,12 +50,14 @@ std::vector<plantType> getPlantTypes() {
     // Temperature, Min Optimal Temperature, Max Absolute Temperature,
     // Min Absolute Temperature, Max Absolute Rainfall,
     // Min Absolute Rainfall, Max Optimal Rainfall, Min Optimal Rainfall
+    int thres[5]; // added this to pass into constructor since unable find
+                  // a way to create it in plant_type.h
     for ( int i = 1; i != dataList.size(); i++ ) {
-        plantType plant(dataList[i][0], atoi(dataList[i][4].c_str()),
+        PlantType plant(dataList[i][0], atoi(dataList[i][4].c_str()),
                 atoi(dataList[i][3].c_str()), atoi(dataList[i][6].c_str()),
                 atoi(dataList[i][5].c_str()), atoi(dataList[i][10].c_str()),
                atoi(dataList[i][9].c_str()), atoi(dataList[i][8].c_str()),
-               atoi(dataList[i][7].c_str()));
+               atoi(dataList[i][7].c_str()), thres);
 
         plantTypesVector.push_back(plant);
     }

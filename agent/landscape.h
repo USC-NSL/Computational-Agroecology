@@ -1,6 +1,6 @@
 #ifndef AGROECOLOGY_LANDSCAPE_H_
 #define AGROECOLOGY_LANDSCAPE_H_
-#include "../sim/plant.h"
+#include "../common/plant.h"
 #include "../location.h"
 
 // This represents a grid cell in a land
@@ -14,6 +14,7 @@ public:
     std::string GetName();
     void SetName(std::string name);
     void SetArea(double area);
+    void SetAll(std::string name, double area);
     LandscapeCell(std::string , double);
     LandscapeCell();
     ~LandscapeCell();

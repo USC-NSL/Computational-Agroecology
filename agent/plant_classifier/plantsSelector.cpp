@@ -6,15 +6,13 @@ std::vector<std::string> plantsSelector::getQualifiedPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < plantTypesVector.size(); i++) {
-        plantType plant = plantTypesVector[i];
-
-        if (plant.maxAbsoluteTemperature >= weather_.MaxTemperatureOfYear_ and
-        plant.minAbsoluteTemperature <= weather_.MinTemperatureOfYear_ and
-        plant.maxAbsoluteRainfall >= weather_.MaxRainfall_ and
-        plant.minAbsoluteRainfall <= weather_.MinRainfall_)
+    for (auto plant : all_plants_record_) {
+        if (plant.max_absolute_temperature() >= weather_.max_temperature_of_year() and
+        plant.min_absolute_temperature() <= weather_.min_temperature_of_year() and
+        plant.max_absolute_annual_rainfall() >= weather_.max_rainfall_of_year() and
+        plant.min_absolute_annual_rainfall() <= weather_.min_rainfall_of_year())
         {
-            plantsString.push_back(plant.name);
+            plantsString.push_back(plant.name());
         }
     }
 
@@ -26,15 +24,14 @@ std::vector<std::string> plantsSelector::getOptimalPlants()
 {
     std::vector<std::string> plantsString;
 
-    for(int i = 0; i < plantTypesVector.size(); i++) {
-        plantType plant = plantTypesVector[i];
+    for (auto plant : all_plants_record_) {
         if (
-            plant.maxOptimalTemperature >= weather_.MaxTemperatureOfYear_ and
-            plant.minOptimalTemperature <= weather_.MinTemperatureOfYear_ and
-            plant.maxOptimalRainfall >= weather_.MaxRainfall_ and
-            plant.minOptimalRainfall <= weather_.MinRainfall_)
+            plant.max_optimal_temperature() >= weather_.max_temperature_of_year() and
+            plant.min_optimal_temperature() <= weather_.min_temperature_of_year() and
+            plant.max_optimal_annual_rainfall() >= weather_.max_rainfall_of_year() and
+            plant.min_optimal_annual_rainfall() <= weather_.min_rainfall_of_year())
         {
-            plantsString.push_back(plant.name);
+            plantsString.push_back(plant.name());
         }
     }
 
