@@ -20,8 +20,8 @@ class PlantType {
 
   PlantType(std::string plantName, int MaxOT, int MinOT, int MaxAT,
           int MinAT, int MaxAR, int MinAR,
-          int MaxOR, int MinOR, bool cultivar = false,
-          int Base = 0, int* Thresholds) :
+          int MaxOR, int MinOR, int* Threshold, bool cultivar = false,
+          int Base = 0) :
           name_(plantName),
           max_optimal_temperature_(MaxOT),
           min_optimal_temperature_(MinOT),
@@ -32,8 +32,10 @@ class PlantType {
           max_optimal_annual_rainfall_(MaxOR),
           min_optimal_annual_rainfall_(MinOR),
           cultivar_(cultivar),
-          gdd_thresholds_(Thresholds),
+          gdd_thresholds_(Threshold),
+          //std::array<int,5> gdd_thresholds_ = Thresholds, //gdd_thresholds_(Thresholds),
           base_temp_(Base){ }
+
 
   std::string name() { return  name_; }
   int* gdd_thresholds() { return gdd_thresholds_; }
@@ -52,7 +54,7 @@ class PlantType {
     // the name of the single species or single cultivar
     std::string name_;
  
-    int gdd_thresholds_[5];
+    int* gdd_thresholds_;
     
     int base_temp_; // base temperature for Growing Degree Day calculations
 
