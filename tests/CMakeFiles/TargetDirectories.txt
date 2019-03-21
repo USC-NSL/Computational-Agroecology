@@ -1,4 +1,0 @@
-/Users/juliaraquel/Documents/Agroecology Sim Tool/Computational-Agroecology/tests/CMakeFiles/rebuild_cache.dir
-/Users/juliaraquel/Documents/Agroecology Sim Tool/Computational-Agroecology/tests/CMakeFiles/edit_cache.dir
-/Users/juliaraquel/Documents/Agroecology Sim Tool/Computational-Agroecology/tests/CMakeFiles/runTests1.dir
-/Users/juliaraquel/Documents/Agroecology Sim Tool/Computational-Agroecology/tests/CMakeFiles/runTests.dir
