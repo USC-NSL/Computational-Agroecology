@@ -1,10 +1,15 @@
 #include "../location.h"
+#include "plant_type.h"
 
 class Config {
  public:
-  Location getLoc() { return loc; }
-  std::vector<PlantType> getPlants() { return plants; }
+  Config(Location loc, std::vector<PlantType> plants)
+      : location_(loc), plants_(plants) {}
+
+  Location location() { return location_; }
+  std::vector<PlantType> plants() { return plants_; }
 
  private:
-  Location loc_;                   // latitude and longitude of location
+  Location location_;              // latitude and longitude of location
   std::vector<PlantType> plants_;  // all available plants to use
+};

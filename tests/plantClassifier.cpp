@@ -11,7 +11,8 @@
 // Tests the plantTypeVector to see the weather passed in successfully
 TEST(PlantTypes, GetAllPlantTypes)
 {
-    Weather weather = Weather(0, 0, 0, 0, 0, 0, 0);
+    Location loc = Location(100, 100);
+    Weather weather = Weather(loc, 0, 0, 0, 0, 0, 0, 0);
     plantsSelector plSelector(weather);
     // Creating an object of CSVWriter
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
@@ -28,7 +29,8 @@ TEST(PlantTypes, GetAllPlantTypes)
 // See the function getTypesVector is actually working
 TEST(PlantTypes, WeatherPassingIn)
 {
-    Weather weather = Weather(100, -100, 0, 0, 0, 0, 0);
+    Location loc = Location(100, 100);
+    Weather weather = Weather(loc, 100, -100, 0, 0, 0, 0, 0);
     plantsSelector plSelector(weather);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
@@ -41,7 +43,8 @@ TEST(PlantTypes, WeatherPassingIn)
 // for rainfall and temperature
 TEST(PlantTypes, getQualifiedPlants)
 {
-    Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
+    Location loc = Location(100, 100);
+    Weather weather = Weather(loc, 20,15, 0, 0, 0, 1000, 800);
     plantsSelector plSelector(weather);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
@@ -53,13 +56,17 @@ TEST(PlantTypes, getQualifiedPlants)
 // for rainfall and temperature
 TEST(PlantTypes, getOptimalPlants)
 {
-    Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
+    Location loc = Location(100, 100);
+    Weather weather = Weather(loc, 20,15, 0, 0, 0, 1000, 800);
     plantsSelector plSelector(weather);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getOptimalPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
     EXPECT_NE(plants.size(),0);
 }
+
+
+
 
 int main(int argc, char **argv)
 {
