@@ -1,13 +1,15 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-class StateTerrainStructure {
+#include <common/cell.h>
+
+class Terrain {
  public:
-  StateTerrainStructure();
-  ~StateTerrainStructure();
+  Terrain();
+  ~Terrain();
 
  private:
-  int[10000][10000] terrain;
+  Cell terrain[10000][10000];
 };
 
 #endif
