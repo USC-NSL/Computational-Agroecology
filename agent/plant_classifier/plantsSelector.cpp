@@ -9,10 +9,10 @@ std::vector<std::string> plantsSelector::getQualifiedPlants()
     for(int i = 0; i < plantTypesVector.size(); i++) {
         plantType plant = plantTypesVector[i];
 
-        if (plant.maxAbsoluteTemperature >= weather_.MaxTemperatureOfYear_ and
-        plant.minAbsoluteTemperature <= weather_.MinTemperatureOfYear_ and
-        plant.maxAbsoluteRainfall >= weather_.MaxRainfall_ and
-        plant.minAbsoluteRainfall <= weather_.MinRainfall_)
+        if (plant.maxAbsoluteTemperature >= weather_.max_temp_year_ and
+        plant.minAbsoluteTemperature <= weather_.min_temp_year_ and
+        plant.maxAbsoluteRainfall >= weather_.max_rainfall_year_ and
+        plant.minAbsoluteRainfall <= weather_.min_rainfall_year_)
         {
             plantsString.push_back(plant.name);
         }
@@ -29,10 +29,10 @@ std::vector<std::string> plantsSelector::getOptimalPlants()
     for(int i = 0; i < plantTypesVector.size(); i++) {
         plantType plant = plantTypesVector[i];
         if (
-            plant.maxOptimalTemperature >= weather_.MaxTemperatureOfYear_ and
-            plant.minOptimalTemperature <= weather_.MinTemperatureOfYear_ and
-            plant.maxOptimalRainfall >= weather_.MaxRainfall_ and
-            plant.minOptimalRainfall <= weather_.MinRainfall_)
+            plant.maxOptimalTemperature >= weather_.max_temp_year_ and
+            plant.minOptimalTemperature <= weather_.min_temp_year_ and
+            plant.maxOptimalRainfall >= weather_.max_rainfall_year_ and
+            plant.minOptimalRainfall <= weather_.min_rainfall_year_)
         {
             plantsString.push_back(plant.name);
         }

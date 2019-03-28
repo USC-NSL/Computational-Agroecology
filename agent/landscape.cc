@@ -1,5 +1,5 @@
 #include "landscape.h"
-void LandScapeCell::SetAll(std::string name, double area){
+void LandscapeCell::SetAll(std::string name, double area){
     this -> name = name;
     this -> area = area;
 }

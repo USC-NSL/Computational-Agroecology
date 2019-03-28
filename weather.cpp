@@ -1,8 +1,9 @@
 // Copyright 2019
 
-#include <weather.h>
+#include "weather.h"
 
 // Allow user to get weather information according to their location
-void Weather::getWeatherByLocation() {
+Weather WeatherParser::GetWeatherByLocation(Location location) {
 // Todo(Xiao): Add impl.
+	return NULL; //
 }
