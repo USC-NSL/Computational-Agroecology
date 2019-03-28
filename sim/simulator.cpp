@@ -15,7 +15,7 @@ State SimulateTimeStep(const State& state, int days) {
     DoWeatherCycle(newState);
     // Any other necessary steps in advancing 1 day
 
-    newState.incrementDay();
+    newState.IncrementDay();
   }
 
   return newState;

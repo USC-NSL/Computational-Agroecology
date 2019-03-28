@@ -15,7 +15,7 @@ terrain_(other.terrain_), day_(other.day_) {
 }
 
 
-void State::incrementDay() {
+void State::IncrementDay() {
   day_++;
   if (day_ > 365) day_ = 1;
 }
