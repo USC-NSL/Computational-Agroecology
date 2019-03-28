@@ -2,7 +2,8 @@
 //  simulator.cpp
 //
 
-
+//TODO: DELETE this file. Before that, is there anything that should still be
+// integrated into the new simulator?
 
 #include <stdio.h>
 #include <ctime>

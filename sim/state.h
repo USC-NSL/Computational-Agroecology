@@ -19,9 +19,10 @@ class State {
 
   void incrementDay();
  private:
-  std::shared_ptr<Config> conf;
-  Terrain terrain;
-  unsigned int day;
+  std::shared_ptr<Config> conf_;
+  Terrain terrain_;
+  std::unique_ptr<Weather> weather_;
+  unsigned int day_;
 };
 
 #endif //COMPUTATIONAL_AGROECOLOGY_STATE_H
