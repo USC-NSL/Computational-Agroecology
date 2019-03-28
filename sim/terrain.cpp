@@ -1,6 +1,6 @@
 #include "terrain.h"
 
-StateTerrainStructure::StateTerrainStructure() {
-}
+Terrain::Terrain() {}
 
-StateTerrainStructure::~StateTerrainStructure(){}
+Terrain::~Terrain() {}
+

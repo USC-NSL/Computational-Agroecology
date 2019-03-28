@@ -3,13 +3,12 @@
 
 class Location {
  public:
-  double longitude() const {
-    return longitude_;
-  }
+  Location(int latitude, int longitude)
+      : latitude_(latitude), longitude_(longitude) {}
 
-  double latitude() const {
-    return latitude_;
-  }
+  double longitude() const { return longitude_; }
+
+  double latitude() const { return latitude_; }
 
  private:
   double longitude_;

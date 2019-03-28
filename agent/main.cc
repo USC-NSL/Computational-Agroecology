@@ -2,7 +2,7 @@
 #include <vector>
 #include "landscape.h"
 
-void SampleSimulator(vector<LandscapeCell> land_v);
+void SampleSimulator(std::vector<LandscapeCell> land_v);
 
 int main() {
 
@@ -15,7 +15,7 @@ int main() {
     return 0;
 }
 
-void SampleSimulator(vector<LandscapeCell> land_v) {
+void SampleSimulator(std::vector<LandscapeCell> land_v) {
     // TODO (Elizabeth)
 
 }
