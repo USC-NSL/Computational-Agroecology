@@ -22,31 +22,34 @@ enum ClimateZoneType {
     Boreal,
     Polar
 };
+//Describes the day during a individual day
 class DayWeather{ 
-    int CurrentTemperatureMax_;
-    int CurrentTemperatureMin_;
-    int CurrentRainfall_;
-    DayWeather( int CTMax = 0, int CTMin = 0,
-            int CRF = 0) :
-    CurrentTemperatureMax_(CTMax), CurrentTemperatureMin_(CTMin),
-    CurrentRainfall_(CRF) { }
+ 
+    DayWeather( int TMax = 0, int TMin = 0,
+            int RFall = 0) :
+    temp_min_(TMax), temp_max_(TMin),
+    rainfall_(RFall) { }
+    private : 
+    double temp_min_;
+    double temp_max_;
+    double rainfall_;
 };
 
-// Describe general weather information of the farm
+// Describe general full year weather information of the farm
 class Weather {
  public:
-    Weather(int MaxT = 0, int MinT = 0, int MaxRF = 0, int MinRF = 0) :
-    MaxTemperatureOfYear_(MaxT), MinTemperatureOfYear_(MinT),
-    MaxRainfallOfYear_(MaxRF), MinRainfallOfYear_(MinRF) { }
+    Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
+    max_temp_year_(MaxT), min_temp_year_(MinT),
+    max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) { }
 
  private: 
-    int MaxTemperatureOfYear_;
-    int MinTemperatureOfYear_;
-    int MaxRainfallOfYear_;
-    int MinRainfallOfYear_;
-    std::vector<DayWeather> DayWeatherList; //different temperatures for different days
+    int max_temp_year_;
+    int min_temp_year_;
+    int max_rainfall_year_;
+    int min_rainfall_year_;
+    std::vector<DayWeather> day_weather_list_; //different temperatures for different days
     Location location_;
-    ClimateZoneType ClimateZone_;
+    ClimateZoneType climate_zone_;
 
 
 };

@@ -11,7 +11,7 @@
 // Tests the plantTypeVector to see the weather passed in successfully
 TEST(PlantTypes, GetAllPlantTypes)
 {
-    Weather weather = Weather(0, 0, 0, 0, 0, 0, 0);
+    Weather weather = Weather(0, 0, 0, 0);
     plantsSelector plSelector(weather);
     // Creating an object of CSVWriter
     std::vector<plantType> plantTypesVector = plSelector.plantTypesVector;
@@ -28,7 +28,7 @@ TEST(PlantTypes, GetAllPlantTypes)
 // See the function getTypesVector is actually working
 TEST(PlantTypes, WeatherPassingIn)
 {
-    Weather weather = Weather(100, -100, 0, 0, 0, 0, 0);
+    Weather weather = Weather(100, -100, 0, 0);
     plantsSelector plSelector(weather);
     std::vector<plantType> plantTypesVector = plSelector.plantTypesVector;
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
@@ -41,7 +41,7 @@ TEST(PlantTypes, WeatherPassingIn)
 // for rainfall and temperature
 TEST(PlantTypes, getQualifiedPlants)
 {
-    Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
+    Weather weather = Weather(20,15, 0, 0, 0);
     plantsSelector plSelector(weather);
     std::vector<plantType> plantTypesVector = plSelector.plantTypesVector;
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
@@ -53,7 +53,7 @@ TEST(PlantTypes, getQualifiedPlants)
 // for rainfall and temperature
 TEST(PlantTypes, getOptimalPlants)
 {
-    Weather weather = Weather(20,15, 0, 0, 0, 1000, 800);
+    Weather weather = Weather(20,15, 0, 0);
     plantsSelector plSelector(weather);
     std::vector<plantType> plantTypesVector = plSelector.plantTypesVector;
     std::vector<std::string> plants = plSelector.getOptimalPlants();
