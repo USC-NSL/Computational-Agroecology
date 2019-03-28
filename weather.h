@@ -25,8 +25,9 @@ enum ClimateZoneType {
 // Describe general weather information of the farm
 class Weather {
  public:
-    Weather(int MaxT = 0, int MinT = 0, int CTMax = 0, int CTMin = 0,
+    Weather(Location location, int MaxT = 0, int MinT = 0, int CTMax = 0, int CTMin = 0,
             int CRF = 0, int MaxRF = 0, int MinRF = 0) :
+    location_(location),
     max_temperature_of_year_(MaxT),
     min_temperature_of_year_(MinT),
     today_max_temperature_(CTMax),

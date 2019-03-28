@@ -6,25 +6,19 @@
 // Represents a single plant instance.
 class Plant {
  public:
-  enum class Maturity {
-    SEED,
-    SEEDLING,
-    JUVENILE,
-    MATURE,
-    OLD
-  };
+  enum class Maturity { SEED, SEEDLING, JUVENILE, MATURE, OLD };
 
   static const int MAX_HEALTH = 10;
   static const int INITIAL_HEALTH = 10;
   static const int MIN_HEALTH = 0;
 
   // Constructs a new plant instace of the given type.
-  explicit Plant(const PlantType &type) :
-      health_(INITIAL_HEALTH),
-      flowering_(false),
-      accumulated_gdd_(0),
-      maturity_(Maturity::SEED),
-      type_(type) {}
+  explicit Plant(const PlantType &type)
+      : health_(INITIAL_HEALTH),
+        flowering_(false),
+        accumulated_gdd_(0),
+        maturity_(Maturity::SEED),
+        type_(type) {}
 
   int health() const { return health_; }
   bool flowering() const { return flowering_; }
@@ -34,12 +28,13 @@ class Plant {
 
   // Allows the plant to move to a new maturity state.
   // Returns true upon success.
-  bool transition(int rainfall, int minTemp, int maxTemp);
- 
+  bool Transition(int rainfall, int minTemp, int maxTemp);
+
   int CalcGDD(int minTemp, int maxTemp);
- 
-  void Stage(int thresholds[]);
-    
+
+  void Stage(int[] thresholds);
+
+
   bool CheckNeeds(int rainfall, int temperature);
 
  private:
@@ -49,7 +44,7 @@ class Plant {
 
   // Accumulated Growing Degree Days, to be used by simulator.
   int accumulated_gdd_;
- 
+
   // The plant's current maturity.
   Maturity maturity_;
 
