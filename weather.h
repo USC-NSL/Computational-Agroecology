@@ -1,9 +1,11 @@
+
 // Copyright 2019
 
 #ifndef WEATHER_H_
 #define WEATHER_H_
 
 #include "location.h"
+#include <vector>
 
 // Represent the climate zone
 enum ClimateZoneType {
@@ -21,54 +23,41 @@ enum ClimateZoneType {
     Boreal,
     Polar
 };
+//Describes the day during a individual day
+class DayWeather{ 
+ 
+    DayWeather( int TMax = 0, int TMin = 0,
+            int RFall = 0) :
+    temp_min_(TMax), temp_max_(TMin),
+    rainfall_(RFall) { }
+    private : 
+    double temp_min_;
+    double temp_max_;
+    double rainfall_;
+};
 
-// Describe general weather information of the farm
+// Describe general full year weather information of the farm
 class Weather {
  public:
-    Weather(Location location, int MaxT = 0, int MinT = 0, int CTMax = 0, int CTMin = 0,
-            int CRF = 0, int MaxRF = 0, int MinRF = 0) :
-    location_(location),
-    max_temperature_of_year_(MaxT),
-    min_temperature_of_year_(MinT),
-    today_max_temperature_(CTMax),
-    today_min_temperature_(CTMin),
-    max_rainfall_of_year_(MaxRF),
-    min_rainfall_of_year_(MinRF) { }
+    Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
+    max_temp_year_(MaxT), min_temp_year_(MinT),
+    max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) { }
 
-    Location location() { return location_; }  // the location of this weather information
-
-    int max_temperature_of_year() { return max_temperature_of_year_; }  // max temperature of the year
-
-    int min_temperature_of_year() { return min_temperature_of_year_; }  // min temperature of the year
-
-    int today_max_temperature() { return today_max_temperature_; }  // today's max temperature
-
-    int today_min_temperature() { return today_min_temperature_; }  // today's min temperature
-
-    int max_rainfall_of_year() { return max_rainfall_of_year_; }  // this year's max rainfall
-
-    int min_rainfall_of_year() { return min_rainfall_of_year_; }  // this year's min rainfall
+ private: 
+    int max_temp_year_;
+    int min_temp_year_;
+    int max_rainfall_year_;
+    int min_rainfall_year_;
+    std::vector<DayWeather> day_weather_list_; //different temperatures for different days
+    Location location_;
+    ClimateZoneType climate_zone_;
 
 
- private:
-    Location location_;  // the location of this weather information
+};
 
-    int max_temperature_of_year_;  // max temperature of the year
-
-    int min_temperature_of_year_;  // min temperature of the year
-
-    int today_max_temperature_;  // today's max temperature
-
-    int today_min_temperature_;  // today's min temperature
-
-    int max_rainfall_of_year_;  // this year's max rainfall
-
-    int min_rainfall_of_year_;  // this year's min rainfall
-
-    ClimateZoneType ClimateZone_;  // the climate zone
-
- protected:
-  void getWeatherByLocation() {};
+class WeatherParser{
+ public: 
+    Weather GetWeatherByLocation(Location location);
 };
 
 #endif  // WEATHER_H_
