@@ -34,6 +34,7 @@ class Plant {
 
   void Stage(int[] thresholds);
 
+
   bool CheckNeeds(int rainfall, int temperature);
 
  private:

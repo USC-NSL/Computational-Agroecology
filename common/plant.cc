@@ -30,7 +30,7 @@ void Plant::Stage(int[] thresholds){
 //    // if liveState reaches threshold then advance curState
 //    // if env does not fulfill needs of current state increment deadState
 //    // kill plant if dieState exceeds threshold
-void Plant::Transition(int rainfall, int minTemp, int maxTemp) {
+void Plant::transition(int rainfall, int minTemp, int maxTemp) {
   // TODO: Add checks here (e.g., call CheckNeeds()).
     if(health_ == 0){
          return;

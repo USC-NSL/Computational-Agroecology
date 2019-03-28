@@ -12,7 +12,7 @@
 #include "plant.h"
 
 struct Cell {
-    Plant plant;
+    Plant* plant;
     int plant_state;
 };
 

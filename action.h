@@ -20,40 +20,47 @@ class Action {
   }
 
  protected:
+
+  explicit Action(ActionType type) {
+    type_ = type;
+  }
+
   ActionType type_;
-  Location location_;
+
+  //TODO: Will this be refactored into landscape?
+  //Location location_;
 };
 
 // TODO(barath): Add comment.
 class AddCrop : public Action {
  public:
-  AddCrop() : type_(ADD_CROP) {}
+  AddCrop() : Action(ADD_CROP) {}
 
-  virtual int GetDuration() override;
+  int GetDuration() override;
 };
 
 // TODO(barath): Add comment.
 class RemoveCrop : public Action {
  public:
-  RemoveCrop() : type_(REMOVE_CROP) {}
+  RemoveCrop() : Action(REMOVE_CROP) {}
 
-  virtual int GetDuration() override;
+  int GetDuration() override;
 };
 
 // TODO(barath): Add comment.
 class ChangeTerrain : public Action {
  public:
-  ChangeTerrain() : type_(CHANGE_TERRAIN) {}
+  ChangeTerrain() : Action(CHANGE_TERRAIN) {}
 
-  virtual int GetDuration() override;
+  int GetDuration() override;
 };
 
 // TODO(barath): Add comment.
 class AddWater : public Action {
  public:
-  AddWater() : type_(ADD_WATER) {}
+  AddWater() : Action(ADD_WATER) {}
 
-  virtual int GetDuration() override;
+  int GetDuration() override;
 };
 
 #endif  // AGROECOLOGY_ACTION_H_
