@@ -40,8 +40,14 @@ class DayWeather{
 class Weather {
  public:
     Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
-    max_temp_year_(MaxT), min_temp_year_(MinT),
+    max_temp_year_(TMax), min_temp_year_(TMin),
     max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) { }
+
+    int max_temp_year() {return max_temp_year_;}
+    int min_temp_year() {return min_temp_year_;}
+    int max_rainfall_year() {return max_rainfall_year_;}
+    int min_rainfall_year() {return min_rainfall_year_;}
+    std::vector<DayWeather> day_weather_list() {return day_weather_list_;}
 
  private: 
     int max_temp_year_;
@@ -49,7 +55,7 @@ class Weather {
     int max_rainfall_year_;
     int min_rainfall_year_;
     std::vector<DayWeather> day_weather_list_; //different temperatures for different days
-    Location location_;
+    //Location location_; (Does this need to be here?)
     ClimateZoneType climate_zone_;
 
 

@@ -12,9 +12,9 @@
 #include "../../common/plant_type.h"
 #include <string>
 
-class plantsSelector {
+class PlantsSelector {
  public:
-  explicit plantsSelector(Weather weather,
+  explicit PlantsSelector(Weather weather,
             std::vector<PlantType> plantTV = getPlantTypes()) :
     weather_(weather),
     all_plants_record_(std::move(plantTV)) {}
