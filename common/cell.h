@@ -13,7 +13,7 @@
 
 struct Cell {
     Plant* plant;
-    int plant_state;
+    bool occupied;
 };
 
 #endif /* cell_hpp */
