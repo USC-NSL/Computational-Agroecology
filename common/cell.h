@@ -10,10 +10,12 @@
 
 #include <stdio.h>
 #include "plant.h"
+#include "soil.h"
 
 struct Cell {
-    Plant* plant;
-    bool occupied;
+    Plant* plant_;
+    bool occupied_;
+    Soil* soil_
 };
 
 #endif /* cell_hpp */
