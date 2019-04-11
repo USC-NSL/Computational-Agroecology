@@ -4,16 +4,14 @@
 class Soil {
 	public:
 		enum class Texture {
-			CLAY,
-			SILT,
-			SAND
+			CLAY = 0,
+			SILT = 1,
+			SAND = 2
 		};
 		
-
 		Soil(Texture texture, int pH, int salinity, int orgMat, int water)
 			: texture_(texture), pH_(pH), salinity_(salinity), organic_matter_(orgMat), water_content_(water)
 			{}
-
 		Texture texture() const { return texture_; }
 		double pH() const { return pH_; }
 		double salinity() const { return salinity_; }
