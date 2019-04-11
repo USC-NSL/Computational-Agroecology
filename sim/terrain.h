@@ -1,7 +1,7 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include <common/cell.h>
+#include "../common/cell.h"
 
 class Terrain {
  public:
