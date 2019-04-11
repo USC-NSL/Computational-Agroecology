@@ -9,16 +9,15 @@ class Soil {
 			SAND = 2
 		};
 		
-		Soil(int texture, int pH, int salinity, in orgMat, int water)
+		Soil(Texture texture, int pH, int salinity, int orgMat, int water)
 			: texture_(texture), pH_(pH), salinity_(salinity), organic_matter_(orgMat), water_content_(water)
 			{}
-		
 		Texture texture() const { return texture_; }
 		double pH() const { return pH_; }
 		double salinity() const { return salinity_; }
 		double organic_matter() const { return organic_matter_; }
-		double water_content() const { return water_content_; }
-		double* nutrients() const { return nutrients_; }
+        double water_content() const { return water_content_; }
+		const double* nutrients() const { return nutrients_; }
 		
 		void addWater(double quantity) { water_content_ += quantity; }
 		void addNitrogen(double quantity) { nutrients_[0] += quantity; }
