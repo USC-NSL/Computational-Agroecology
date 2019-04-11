@@ -32,7 +32,7 @@ class Plant {
 
   int CalcGDD(int minTemp, int maxTemp);
 
-  void Stage(int[] thresholds);
+  void Stage(int* thresholds);
 
 
   bool CheckNeeds(int rainfall, int temperature);
