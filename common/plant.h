@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef AGROECOLOGY_COMMON_PLANT_H_
 #define AGROECOLOGY_COMMON_PLANT_H_
 
@@ -12,13 +14,13 @@ class Plant {
   static const int INITIAL_HEALTH = 10;
   static const int MIN_HEALTH = 0;
 
-  // Constructs a new plant instace of the given type.
-  explicit Plant(const PlantType &type)
+  // Constructs a new plant instance of the given type.
+  explicit Plant(PlantType type)
       : health_(INITIAL_HEALTH),
         flowering_(false),
         accumulated_gdd_(0),
         maturity_(Maturity::SEED),
-        type_(type) {}
+        type_(std::move(type)) {}
 
   int health() const { return health_; }
   bool flowering() const { return flowering_; }

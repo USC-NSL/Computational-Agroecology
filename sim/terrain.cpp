@@ -1,9 +1,10 @@
 #include "terrain.h"
 
-Terrain::Terrain() {
-    for ( int i = 0; i < 10000; i++ ) {
-        for ( int j = 0; j < 10000; j++ ) {
-            terrain[i][j].occupied_ = false;
+Terrain::Terrain(unsigned long size) : terrain_(size) {
+    for ( int i = 0; i < size; i++ ) {
+        terrain_[i].resize(size);
+        for ( int j = 0; j < size; j++ ) {
+            terrain_[i][j].occupied_ = false;
         }
     }
 }
