@@ -1,5 +1,7 @@
 #include "terrain.h"
 
+using namespace std;
+
 Terrain::Terrain(unsigned long size) : terrain_(size) {
     for ( int i = 0; i < size; i++ ) {
         terrain_[i].resize(size);
@@ -10,3 +12,8 @@ Terrain::Terrain(unsigned long size) : terrain_(size) {
 }
 
 Terrain::~Terrain() {}
+
+
+vector< vector<Cell>> Terrain::terrain() {
+    return terrain_;
+}
