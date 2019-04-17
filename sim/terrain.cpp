@@ -14,6 +14,6 @@ Terrain::Terrain(unsigned long size) : terrain_(size) {
 Terrain::~Terrain() {}
 
 
-vector< vector<Cell>> Terrain::terrain() {
+vector< vector<Cell>>& Terrain::terrain() {
     return terrain_;
 }

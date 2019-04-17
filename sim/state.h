@@ -18,6 +18,9 @@ class State {
   State& operator=(const State& other);
 
   void IncrementDay();
+
+  Terrain& getTerrain();
+  Weather& getWeather();
  private:
   std::shared_ptr<Config> conf_;
   Terrain terrain_;
