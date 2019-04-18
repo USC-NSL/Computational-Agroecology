@@ -6,6 +6,20 @@
 
 #include "location.h"
 #include <vector>
+#include <algorithm>
+
+
+//Temporary enum for CSV implementaiton
+enum{
+    TMIN_INDEX = 7, 
+    TMAX_INDEX = 6, 
+    RAINFALL_INDEX = 5
+};
+
+
+
+
+
 
 // Represent the climate zone
 enum ClimateZoneType {
@@ -25,11 +39,15 @@ enum ClimateZoneType {
 };
 //Describes the day during a individual day
 class DayWeather{ 
- 
-    DayWeather( int TMax = 0, int TMin = 0,
-            int RFall = 0) :
+    public : 
+    DayWeather( double TMax = 0, double TMin = 0,
+            double RFall = 0) :
     temp_min_(TMax), temp_max_(TMin),
     rainfall_(RFall) { }
+    double temp_max() {return temp_max_;}
+    double temp_min() {return temp_min_;}
+    double rainfall() {return rainfall_;}
+
     private : 
     double temp_min_;
     double temp_max_;
@@ -42,18 +60,18 @@ class Weather {
     Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
     max_temp_year_(TMax), min_temp_year_(TMin),
     max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) { }
-
-    int max_temp_year() {return max_temp_year_;}
-    int min_temp_year() {return min_temp_year_;}
-    int max_rainfall_year() {return max_rainfall_year_;}
-    int min_rainfall_year() {return min_rainfall_year_;}
+    Weather(std::vector<DayWeather>); 
+    double max_temp_year() {return max_temp_year_;}
+    double min_temp_year() {return min_temp_year_;}
+    double max_rainfall_year() {return max_rainfall_year_;}
+    double min_rainfall_year() {return min_rainfall_year_;}
     std::vector<DayWeather> day_weather_list() {return day_weather_list_;}
 
  private: 
-    int max_temp_year_;
-    int min_temp_year_;
-    int max_rainfall_year_;
-    int min_rainfall_year_;
+    double max_temp_year_;
+    double min_temp_year_;
+    double max_rainfall_year_;
+    double min_rainfall_year_;
     std::vector<DayWeather> day_weather_list_; //different temperatures for different days
     //Location location_; (Does this need to be here?)
     ClimateZoneType climate_zone_;
