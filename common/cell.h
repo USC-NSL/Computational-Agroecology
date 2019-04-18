@@ -13,9 +13,9 @@
 #include "soil.h"
 
 struct Cell {
-    Plant* plant_;
-    bool occupied_;
-    Soil* soil_;
+    Plant* plant;
+    bool occupied;
+    Soil* soil;
 };
 
 #endif /* cell_hpp */

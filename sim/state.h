@@ -26,6 +26,8 @@ class State {
   Terrain terrain_;
   std::unique_ptr<Weather> weather_;
   unsigned int day_;
+ public:
+  unsigned int getCurrentDay() const;
 };
 
 #endif //COMPUTATIONAL_AGROECOLOGY_STATE_H

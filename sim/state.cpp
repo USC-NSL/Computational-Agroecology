@@ -46,5 +46,8 @@ Terrain& State::getTerrain() {
 Weather &State::getWeather() {
   return *weather_;
 }
+unsigned int State::getCurrentDay() const {
+  return day_;
+}
 
 

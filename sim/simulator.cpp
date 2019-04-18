@@ -23,16 +23,17 @@ State SimulateTimeStep(const State& state, int days) {
 
 void UpdatePlantGrowth(State& state) {
   //TODO: get accurate weather readings, currently weather only supports yearly
-  int rainfall = 0;
-  int minTemp = 0;
-  int maxTemp = 0;
+
+  DayWeather& dayWeather = state.getWeather()
+      .day_weather_list()[state.getCurrentDay()];
 
   std::vector<std::vector<Cell>>& terrain = state.getTerrain().terrain();
 
-  for (int i = 0; i < terrain.size(); ++i) {
-    for (int j = 0; j < terrain[i].size(); ++j) {
-      if (terrain[i][j].plant_ != nullptr) {
-        terrain[i][j].plant_->Transition(rainfall, minTemp, maxTemp);
+  for (auto& row : terrain) {
+    for (auto& cell : row) {
+      if (cell.plant != nullptr) {
+        cell.plant->Transition(dayWeather.getRainfall(),
+            dayWeather.getMinTemp(), dayWeather.getMaxTemp());
       }
     }
   }

@@ -30,14 +30,14 @@ class Plant {
 
   // Allows the plant to move to a new maturity state.
   // Returns true upon success.
-  bool Transition(int rainfall, int minTemp, int maxTemp);
+  bool Transition(double rainfall, double minTemp, double maxTemp);
 
-  int CalcGDD(int minTemp, int maxTemp);
+  int CalcGDD(double minTemp, double maxTemp);
 
   void Stage(int* thresholds);
 
 
-  bool CheckNeeds(int rainfall, int minTemp, int maxTemp);
+  bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.

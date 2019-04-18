@@ -25,11 +25,20 @@ enum ClimateZoneType {
 };
 //Describes the day during a individual day
 class DayWeather{
-
-  DayWeather( int TMax = 0, int TMin = 0,
-              int RFall = 0) :
+ public:
+  explicit DayWeather( int TMax = 0, int TMin = 0,
+                       int RFall = 0) :
       temp_min_(TMax), temp_max_(TMin),
       rainfall_(RFall) { }
+  double getMinTemp() const {
+    return temp_min_;
+  }
+  double getMaxTemp() const {
+    return temp_max_;
+  }
+  double getRainfall() const {
+    return rainfall_;
+  }
  private :
   double temp_min_;
   double temp_max_;
@@ -44,10 +53,10 @@ class Weather {
       max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) {}
 
   Weather(const Weather& other): max_temp_year_(other.max_temp_year_),
-      min_temp_year_(other.min_temp_year_),
-      max_rainfall_year_(other.max_rainfall_year_),
-      min_rainfall_year_(other.min_rainfall_year_),
-      climate_zone_(other.climate_zone_) {}
+                                 min_temp_year_(other.min_temp_year_),
+                                 max_rainfall_year_(other.max_rainfall_year_),
+                                 min_rainfall_year_(other.min_rainfall_year_),
+                                 climate_zone_(other.climate_zone_) {}
 
   int max_temp_year() {return max_temp_year_;}
   int min_temp_year() {return min_temp_year_;}
