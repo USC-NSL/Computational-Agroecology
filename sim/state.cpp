@@ -40,5 +40,14 @@ State &State::operator=(const State &other) {
 
   return (*this);
 }
+Terrain& State::getTerrain() {
+  return terrain_;
+}
+Weather &State::getWeather() {
+  return *weather_;
+}
+unsigned int State::getCurrentDay() const {
+  return day_;
+}
 
 

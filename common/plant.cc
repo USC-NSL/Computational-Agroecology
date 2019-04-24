@@ -1,15 +1,18 @@
 #include "plant.h"
+#include <math.h>
 
 // TODO: Old code for CheckNeeds(), revive as needed and remove comment.
-bool Plant::CheckNeeds(int rainfall, int minTemp, int maxTemp) {
+bool Plant::CheckNeeds(double rainfall, double minTemp, double maxTemp) {
   return (rainfall >= type_.min_absolute_annual_rainfall()
   && rainfall <= type_.max_absolute_annual_rainfall()
   && minTemp >= type_.min_absolute_temperature()
   && maxTemp <= type_.max_absolute_temperature());
 }
 
-int Plant::CalcGDD(int minTemp, int maxTemp){
-     return ((minTemp + maxTemp)/2 + - type_.base_temp());
+//TODO: All of the GDD and temperature measurements should be updated to
+// doubles, not just ints. This is still a W.I.P
+int Plant::CalcGDD(double minTemp, double maxTemp){
+     return (int) round((minTemp + maxTemp)/2 + - type_.base_temp());
 }
 
 void Plant::Stage(int* thresholds) {
@@ -25,7 +28,7 @@ void Plant::Stage(int* thresholds) {
 //    // if liveState reaches threshold then advance curState
 //    // if env does not fulfill needs of current state increment deadState
 //    // kill plant if dieState exceeds threshold
-bool Plant::Transition(int rainfall, int minTemp, int maxTemp) {
+bool Plant::Transition(double rainfall, double minTemp, double maxTemp) {
   // TODO: Add checks here (e.g., call CheckNeeds()).
     if(health_ == 0){
          return false;

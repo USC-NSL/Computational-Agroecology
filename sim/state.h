@@ -18,11 +18,16 @@ class State {
   State& operator=(const State& other);
 
   void IncrementDay();
+
+  Terrain& getTerrain();
+  Weather& getWeather();
  private:
   std::shared_ptr<Config> conf_;
   Terrain terrain_;
   std::unique_ptr<Weather> weather_;
   unsigned int day_;
+ public:
+  unsigned int getCurrentDay() const;
 };
 
 #endif //COMPUTATIONAL_AGROECOLOGY_STATE_H

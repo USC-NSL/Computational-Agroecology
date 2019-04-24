@@ -58,26 +58,32 @@ class DayWeather{
 // Describe general full year weather information of the farm
 class Weather {
  public:
-    Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
-    max_temp_year_(TMax), min_temp_year_(TMin),
-    max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) { }
-    Weather(std::vector<DayWeather>); 
-    double max_temp_year() {return max_temp_year_;}
-    double min_temp_year() {return min_temp_year_;}
-    double max_rainfall_year() {return max_rainfall_year_;}
-    double min_rainfall_year() {return min_rainfall_year_;}
-    std::vector<DayWeather> day_weather_list() {return day_weather_list_;}
 
- private: 
-    double max_temp_year_;
-    double min_temp_year_;
-    double max_rainfall_year_;
-    double min_rainfall_year_;
-    std::vector<DayWeather> day_weather_list_; //different temperatures for different days
-    //Location location_; (Does this need to be here?)
-    ClimateZoneType climate_zone_;
+  explicit Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
+      max_temp_year_(TMax), min_temp_year_(TMin),
+      max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) {}
 
+  Weather(const Weather& other): max_temp_year_(other.max_temp_year_),
+                                 min_temp_year_(other.min_temp_year_),
+                                 max_rainfall_year_(other.max_rainfall_year_),
+                                 min_rainfall_year_(other.min_rainfall_year_),
+                                 climate_zone_(other.climate_zone_) {}
 
+  int max_temp_year() {return max_temp_year_;}
+  int min_temp_year() {return min_temp_year_;}
+  int max_rainfall_year() {return max_rainfall_year_;}
+  int min_rainfall_year() {return min_rainfall_year_;}
+
+  std::vector<DayWeather> day_weather_list() {return day_weather_list_;}
+
+ private:
+  int max_temp_year_;
+  int min_temp_year_;
+  int max_rainfall_year_;
+  int min_rainfall_year_;
+  std::vector<DayWeather> day_weather_list_; //different temperatures for different days
+  //Location location_; (Does this need to be here?)
+  ClimateZoneType climate_zone_;
 };
 
 class WeatherParser{

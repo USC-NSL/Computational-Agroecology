@@ -1,15 +1,17 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include <vector>
 #include "../common/cell.h"
 
 class Terrain {
  public:
-  Terrain();
+  explicit Terrain(unsigned long size = 10000);
   ~Terrain();
+  std::vector<std::vector<Cell>>& terrain();
 
  private:
-  Cell terrain[10000][10000];
+  std::vector<std::vector<Cell>> terrain_;
 };
 
 

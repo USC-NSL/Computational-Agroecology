@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef AGROECOLOGY_COMMON_PLANT_H_
 #define AGROECOLOGY_COMMON_PLANT_H_
 
@@ -12,13 +14,13 @@ class Plant {
   static const int INITIAL_HEALTH = 10;
   static const int MIN_HEALTH = 0;
 
-  // Constructs a new plant instace of the given type.
-  explicit Plant(const PlantType &type)
+  // Constructs a new plant instance of the given type.
+  explicit Plant(PlantType type)
       : health_(INITIAL_HEALTH),
         flowering_(false),
         accumulated_gdd_(0),
         maturity_(Maturity::SEED),
-        type_(type) {}
+        type_(std::move(type)) {}
 
   int health() const { return health_; }
   bool flowering() const { return flowering_; }
@@ -28,14 +30,14 @@ class Plant {
 
   // Allows the plant to move to a new maturity state.
   // Returns true upon success.
-  bool Transition(int rainfall, int minTemp, int maxTemp);
+  bool Transition(double rainfall, double minTemp, double maxTemp);
 
-  int CalcGDD(int minTemp, int maxTemp);
+  int CalcGDD(double minTemp, double maxTemp);
 
   void Stage(int* thresholds);
 
 
-  bool CheckNeeds(int rainfall, int minTemp, int maxTemp);
+  bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
