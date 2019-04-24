@@ -6,6 +6,20 @@
 
 #include "location.h"
 #include <vector>
+#include <algorithm>
+
+
+//Temporary enum for CSV implementaiton
+enum{
+    TMIN_INDEX = 7, 
+    TMAX_INDEX = 6, 
+    RAINFALL_INDEX = 5
+};
+
+
+
+
+
 
 // Represent the climate zone
 enum ClimateZoneType {
@@ -24,30 +38,27 @@ enum ClimateZoneType {
   Polar
 };
 //Describes the day during a individual day
-class DayWeather{
- public:
-  explicit DayWeather( int TMax = 0, int TMin = 0,
-                       int RFall = 0) :
-      temp_min_(TMax), temp_max_(TMin),
-      rainfall_(RFall) { }
-  double getMinTemp() const {
-    return temp_min_;
-  }
-  double getMaxTemp() const {
-    return temp_max_;
-  }
-  double getRainfall() const {
-    return rainfall_;
-  }
- private :
-  double temp_min_;
-  double temp_max_;
-  double rainfall_;
+
+class DayWeather{ 
+    public : 
+    DayWeather( double TMax = 0, double TMin = 0,
+            double RFall = 0) :
+    temp_min_(TMax), temp_max_(TMin),
+    rainfall_(RFall) { }
+    double temp_max() {return temp_max_;}
+    double temp_min() {return temp_min_;}
+    double rainfall() {return rainfall_;}
+
+    private : 
+    double temp_min_;
+    double temp_max_;
+    double rainfall_;
 };
 
 // Describe general full year weather information of the farm
 class Weather {
  public:
+
   explicit Weather(int TMax = 0, int TMin = 0, int MaxRF = 0, int MinRF = 0) :
       max_temp_year_(TMax), min_temp_year_(TMin),
       max_rainfall_year_(MaxRF), min_rainfall_year_(MinRF) {}
@@ -73,8 +84,6 @@ class Weather {
   std::vector<DayWeather> day_weather_list_; //different temperatures for different days
   //Location location_; (Does this need to be here?)
   ClimateZoneType climate_zone_;
-
-
 };
 
 class WeatherParser{
