@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef AGROECOLOGY_COMMON_PLANT_TYPE_H_
 #define AGROECOLOGY_COMMON_PLANT_TYPE_H_
 
@@ -10,7 +12,7 @@ class PlantType {
   // TODO: Fix this class's format.
 
   PlantType(std::string name, int maxOT, int minOT, int maxAT, int minAT)
-      : name_(name),
+      : name_(std::move(name)),
         max_optimal_temperature_(maxOT),
         min_optimal_temperature_(minOT),
         max_absolute_temperature_(maxAT),

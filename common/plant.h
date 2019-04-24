@@ -32,10 +32,10 @@ class Plant {
 
   int CalcGDD(int minTemp, int maxTemp);
 
-  void Stage(int[] thresholds);
+  void Stage(int* thresholds);
 
 
-  bool CheckNeeds(int rainfall, int temperature);
+  bool CheckNeeds(int rainfall, int minTemp, int maxTemp);
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
@@ -50,6 +50,8 @@ class Plant {
 
   // The type of this plant (holds static properties).
   PlantType type_;
+
+  void IncrementMaturity();
 };
 
 #endif  // AGROECOLOGY_COMMON_PLANT_H_

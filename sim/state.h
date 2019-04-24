@@ -13,7 +13,7 @@
 class State {
  public:
   State() = delete;
-  State(Config* config, unsigned int day);
+  State(Config *config, unsigned int day, Weather weather);
   State(const State& other);
   State& operator=(const State& other);
 

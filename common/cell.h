@@ -15,7 +15,7 @@
 struct Cell {
     Plant* plant_;
     bool occupied_;
-    Soil* soil_
+    Soil* soil_;
 };
 
 #endif /* cell_hpp */

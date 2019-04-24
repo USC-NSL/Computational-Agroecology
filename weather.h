@@ -23,21 +23,22 @@ enum{
 
 // Represent the climate zone
 enum ClimateZoneType {
-    TropicalWerAndDry,
-    TropicalWet,
-    DesertOrArid,
-    SteppeOrSemiArid,
-    SubtropicalHumid,
-    SubtropicalDrySummer,
-    SubtropicalDryWinter,
-    TemperateOceanic,
-    TemperateContinental,
-    TemperateWithHumidWinters,
-    TemperateWithDryWinters,
-    Boreal,
-    Polar
+  TropicalWerAndDry,
+  TropicalWet,
+  DesertOrArid,
+  SteppeOrSemiArid,
+  SubtropicalHumid,
+  SubtropicalDrySummer,
+  SubtropicalDryWinter,
+  TemperateOceanic,
+  TemperateContinental,
+  TemperateWithHumidWinters,
+  TemperateWithDryWinters,
+  Boreal,
+  Polar
 };
 //Describes the day during a individual day
+
 class DayWeather{ 
     public : 
     DayWeather( double TMax = 0, double TMin = 0,
@@ -80,8 +81,8 @@ class Weather {
 };
 
 class WeatherParser{
- public: 
-    Weather GetWeatherByLocation(Location location);
+ public:
+  Weather GetWeatherByLocation(Location location);
 };
 
 #endif  // WEATHER_H_
