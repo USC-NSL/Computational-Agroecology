@@ -1,3 +1,5 @@
+// Copyright 2019
+
 #include <gtest/gtest.h>
 #include <iostream>
 #include "../agent/plant_classifier/plantsSelector.h"
@@ -11,8 +13,8 @@
 // Tests the plantTypeVector to see the weather passed in successfully
 TEST(PlantTypes, GetAllPlantTypes)
 {
-    Weather weather = Weather(0, 0, 0, 0);
-    PlantsSelector plSelector(weather);
+    Climate climate = Climate(0, 0, 0, 0);
+    PlantsSelector plSelector(climate);
     // Creating an object of CSVWriter
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
 
@@ -28,8 +30,8 @@ TEST(PlantTypes, GetAllPlantTypes)
 // See the function getTypesVector is actually working
 TEST(PlantTypes, WeatherPassingIn)
 {
-    Weather weather = Weather(100, -100, 0, 0);
-    PlantsSelector plSelector(weather);
+    Climate climate = Climate(100, -100, 0, 0);
+    PlantsSelector plSelector(climate);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
@@ -41,8 +43,8 @@ TEST(PlantTypes, WeatherPassingIn)
 // for rainfall and temperature
 TEST(PlantTypes, getQualifiedPlants)
 {
-    Weather weather = Weather(20,15, 0, 0);
-    PlantsSelector plSelector(weather);
+    Climate climate = Climate(20,15, 0, 0);
+    PlantsSelector plSelector(climate);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getQualifiedPlants();
     EXPECT_NE(plantTypesVector.size(), 0);
@@ -53,8 +55,8 @@ TEST(PlantTypes, getQualifiedPlants)
 // for rainfall and temperature
 TEST(PlantTypes, getOptimalPlants)
 {
-    Weather weather = Weather(20,15, 0, 0);
-    PlantsSelector plSelector(weather);
+    Climate climate = Climate(20,15, 0, 0);
+    PlantsSelector plSelector(climate);
     std::vector<PlantType> plantTypesVector = plSelector.all_plants_record();
     std::vector<std::string> plants = plSelector.getOptimalPlants();
     EXPECT_NE(plantTypesVector.size(), 0);

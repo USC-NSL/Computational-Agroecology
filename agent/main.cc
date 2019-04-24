@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include "landscape.h"
 
 void SampleSimulator(std::vector<LandscapeCell> land_v);
 

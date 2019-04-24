@@ -9,10 +9,10 @@ std::vector<std::string> PlantsSelector::getQualifiedPlants()
     for(int i = 0; i < all_plants_record_.size(); i++) {
         PlantType plant = all_plants_record_[i];
 
-        if (plant.max_absolute_temperature() >= weather_.max_temp_year() and
-        plant.min_absolute_temperature() <= weather_.min_temp_year() and
-        plant.max_absolute_annual_rainfall() >= weather_.max_rainfall_year() and
-        plant.min_absolute_annual_rainfall() <= weather_.min_rainfall_year())
+        if (plant.max_absolute_temperature() >= climate_.max_temp_year() and
+        plant.min_absolute_temperature() <= climate_.min_temp_year() and
+        plant.max_absolute_annual_rainfall() >= climate_.max_rainfall_year() and
+        plant.min_absolute_annual_rainfall() <= climate_.min_rainfall_year())
         {
             plantsString.push_back(plant.name());
         }
@@ -29,10 +29,10 @@ std::vector<std::string> PlantsSelector::getOptimalPlants()
     for(int i = 0; i < all_plants_record_.size(); i++) {
         PlantType plant = all_plants_record_[i];
         if (
-            plant.max_optimal_temperature() >= weather_.max_temp_year() and
-            plant.min_optimal_temperature() <= weather_.min_temp_year() and
-            plant.max_optimal_annual_rainfall() >= weather_.max_rainfall_year() and
-            plant.min_optimal_annual_rainfall() <= weather_.min_rainfall_year())
+            plant.max_optimal_temperature() >= climate_.max_temp_year() and
+            plant.min_optimal_temperature() <= climate_.min_temp_year() and
+            plant.max_optimal_annual_rainfall() >= climate_.max_rainfall_year() and
+            plant.min_optimal_annual_rainfall() <= climate_.min_rainfall_year())
         {
             plantsString.push_back(plant.name());
         }

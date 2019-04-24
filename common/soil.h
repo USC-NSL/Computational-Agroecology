@@ -1,3 +1,5 @@
+// Copyright 2019
+
 #ifndef AGROECOLOGY_SOIL_H_
 #define AGROECOLOGY_SOIL_H_
 
