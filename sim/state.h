@@ -1,6 +1,4 @@
-//
-// Created by Adam Egyed on 2019-03-27.
-//
+// Copyright 2019
 
 #ifndef COMPUTATIONAL_AGROECOLOGY_STATE_H
 #define COMPUTATIONAL_AGROECOLOGY_STATE_H

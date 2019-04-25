@@ -1,12 +1,11 @@
-#include <utility>
-
+// Copyright 2019
 #ifndef AGROECOLOGY_COMMON_PLANT_TYPE_H_
 #define AGROECOLOGY_COMMON_PLANT_TYPE_H_
 
 #include <string>
+#include <utility>
 
 // Represents a single type of plant.
-
 class PlantType {
  public:
   // TODO: Fix this class's format.

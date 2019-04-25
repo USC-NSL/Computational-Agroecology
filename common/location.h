@@ -1,3 +1,4 @@
+// Copyright 2019
 #ifndef AGROECOLOGY_LOCATION_H_
 #define AGROECOLOGY_LOCATION_H_
 

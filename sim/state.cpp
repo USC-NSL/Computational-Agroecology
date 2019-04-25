@@ -1,9 +1,6 @@
+// Copyright 2019
+
 #include <memory>
-
-//
-// Created by Adam Egyed on 2019-03-27.
-//
-
 #include "state.h"
 
 /**

@@ -1,10 +1,8 @@
-//
-// Created by Elizabeth Ondula on 2019-01-22.
-//
+// Copyright 2019
 
 #ifndef COMPUTATIONAL_AGROECOLOGY_AGENT_H
 #define COMPUTATIONAL_AGROECOLOGY_AGENT_H
-#include "landscape.h"
+
 
 class Agent {
 public:

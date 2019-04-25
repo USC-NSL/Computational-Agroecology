@@ -1,9 +1,10 @@
+// Copyright 2019
 #ifndef COMPUTATIONAL_AGROECOLOGY_CONFIG_H
 #define COMPUTATIONAL_AGROECOLOGY_CONFIG_H
 
 #include <vector>
 
-#include "weather.h"
+#include "climate.h"
 #include "location.h"
 #include "plant_type.h"
 

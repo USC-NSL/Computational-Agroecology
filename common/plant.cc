@@ -1,3 +1,4 @@
+// Copyright 2019
 #include "plant.h"
 #include <math.h>
 

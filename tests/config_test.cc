@@ -1,7 +1,9 @@
+// Copyright 2019
+
 #include <gtest/gtest.h>
 #include <iostream>
 #include "../common/config.h"
-#include "../location.h"
+#include "../common/location.h"
 
 
 /*

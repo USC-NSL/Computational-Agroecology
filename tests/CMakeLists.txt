@@ -10,7 +10,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(runTests dataReader.cpp)
 add_executable(runTests1 plantClassifier.cpp)
 add_executable(configTests config_test.cc)
-add_executable(terrainTests terrain_test.cpp)
+add_executable(terrainTests terrain.cpp)
 
 target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
 target_link_libraries(runTests1 ${GTEST_LIBRARIES} pthread)

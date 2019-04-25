@@ -1,9 +1,10 @@
-#include <utility>
-
+// Copyright 2019
 #ifndef AGROECOLOGY_COMMON_PLANT_H_
 #define AGROECOLOGY_COMMON_PLANT_H_
 
 #include "plant_type.h"
+#include <utility>
+
 
 // Represents a single plant instance.
 class Plant {
