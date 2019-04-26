@@ -6,7 +6,9 @@
 // Tests the plantTypeVector to see the weather passed in successfully
 TEST(Terrain, TerrainInitializer)
 {
-  Terrain newTerain(100, 100);
+  Terrain newTerrain(100, 100);
+  EXPECT_EQ(newTerrain.length(), 100);
+  EXPECT_EQ(newTerrain.width(), 100);
 }
 
 

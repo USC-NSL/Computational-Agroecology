@@ -22,6 +22,8 @@ class Terrain {
       tiles_.resize(width, std::vector<cellValue>(length, {false, 1, NULL, NULL}));
   }
   std::vector<std::vector<cellValue>> terrain() { return tiles_; }
+  int width() { return width_; }
+  int length() { return length_; }
 
  private:
   std::vector<std::vector<cellValue>> tiles_; //tiles specify all the cells in the terrain

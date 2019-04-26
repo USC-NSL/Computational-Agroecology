@@ -58,6 +58,19 @@ TEST(ConfigTest, ConfigLocation)
 
 }
 
+//Test the terrain in the config
+TEST(ConfigTest, ConfigTerrain)
+{
+    Location loc = Location(100, 200);
+
+    std::vector<PlantType> v;
+
+    Config config = Config(loc, v);
+
+    EXPECT_EQ(config.terrain().width(), 100);
+
+}
+
 
 int main(int argc, char **argv)
 {
