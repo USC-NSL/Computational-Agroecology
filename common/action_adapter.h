@@ -6,6 +6,8 @@
 #include "corn.h"
 #include "bean.h"
 #include "squash.h"
+#include <vector>
+#include "../sim/terrain.h"
 
 // Represents activities that can be done in a farm.
 enum ActionType {
@@ -30,9 +32,9 @@ public:
         x_ = x;
         y_ = y;
     }
-
+    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+    }
     ActionType type_;
-private:
     int x_;
     int y_;
 };
@@ -45,6 +47,11 @@ public:
         plantType_ = plantType;
     }
 
+    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+        terrain.tiles()[x_][y_].occupied = true;
+        plants.push_back(plantType_);
+        terrain.tiles()[x_][y_].plant = &plantType_;
+    }
 private:
     PlantType plantType_;
 };
@@ -53,6 +60,10 @@ private:
 class RemoveCrop : public ActionAdapter {
 public:
     RemoveCrop(int x, int y) : ActionAdapter(REMOVE_CROP, x, y) {}
+    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+        terrain.tiles()[x_][y_].occupied = false;
+        terrain.tiles()[x_][y_].plant = NULL;
+    }
 
 };
 
@@ -71,6 +82,9 @@ private:
 class HarvestCrop : public ActionAdapter {
 public:
     HarvestCrop(int x, int y) : ActionAdapter(HARVEST_CROP, x, y) {}
+    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+
+    }
 };
 
 #endif //COMPUTATIONAL_AGROECOLOGY_ACTION_ADAPTER_H

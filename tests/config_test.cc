@@ -75,10 +75,10 @@ Location loc = Location(100, 200);
 std::vector<PlantType> v;
 Config config = Config(loc, v);
 Corn corn;
-//AddCrop addCrop1 = AddCrop(corn, 0, 0);
+AddCrop addCrop1 = AddCrop(corn, 0, 0);
 
-//onfig.add_daily_action(addCrop1);
-//EXPECT_EQ(config.daily_actions().size(), 1);
+config.add_daily_action(addCrop1);
+EXPECT_EQ(config.daily_actions().size(), 1);
 
 }
 
@@ -93,6 +93,36 @@ EXPECT_EQ(config.terrain().width(), 100);
 EXPECT_EQ(config.terrain().width(), 100);
 
 }
+
+//Test the perform actions part in the config
+TEST(ConfigTest, PerformActions)
+{
+Location loc = Location(100, 200);
+std::vector<PlantType> v;
+Config config = Config(loc, v);
+Corn corn;
+AddCrop addCrop1 = AddCrop(corn, 0, 0);
+config.add_daily_action(addCrop1);
+EXPECT_EQ(1, config.perform_daily_actions());
+
+}
+
+//Test the action is actually configured
+TEST(ConfigTest, PerformAction)
+{
+Location loc = Location(100, 200);
+std::vector<PlantType> v;
+Config config = Config(loc, v);
+Corn corn;
+AddCrop addCrop1 = AddCrop(corn, 0, 0);
+config.add_daily_action(addCrop1);
+EXPECT_EQ(false, config.terrain().tiles()[0][0].occupied);
+EXPECT_EQ(1, config.perform_daily_actions());
+EXPECT_EQ(true, config.terrain().tiles()[0][0].occupied);
+
+
+}
+
 
 int main(int argc, char **argv)
 {

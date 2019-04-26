@@ -28,6 +28,16 @@ class Config {
   std::vector<Weather> yearly_weather() { return yearly_weather_; }
   std::vector<ActionAdapter> daily_actions() { return daily_actions_; }
   bool add_daily_action(ActionAdapter actionAdapter) { daily_actions_.push_back(actionAdapter); }
+  int perform_daily_actions() {
+      int success_action = 0;
+      while(!daily_actions_.empty()) {
+          success_action ++;
+          ActionAdapter action = daily_actions_.back();
+          daily_actions_.pop_back();
+          action.perform_action(*terrain_, plants_);
+      }
+      return success_action;
+  }
 
  private:
   Location location_;              // latitude and longitude of location

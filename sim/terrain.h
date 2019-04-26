@@ -6,12 +6,13 @@
 #include <vector>
 #include "../common/plant.h"
 #include "../common/soil.h"
+#include "../common/plant_type.h"
 
 // square cell that made up the smallest component in the terrain
 struct cellValue {
     bool occupied;
     int size; // in meter
-    Plant *plant;
+    PlantType *plant;
     Soil *soil;
 };
 
