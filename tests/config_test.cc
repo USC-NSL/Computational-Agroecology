@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../common/config.h"
 #include "../common/location.h"
+#include "../common/action_adapter.h"
 
 
 /*
@@ -48,9 +49,7 @@ TEST(ConfigTest, ConfigLocation)
 {
 
     Location loc = Location(100, 200);
-
     std::vector<PlantType> v;
-
     Config config = Config(loc, v);
 
     EXPECT_EQ(100, config.location().latitude());
@@ -58,19 +57,42 @@ TEST(ConfigTest, ConfigLocation)
 
 }
 
-//Test the terrain in the config
-TEST(ConfigTest, ConfigTerrain)
+//Test the weather vector in the config
+TEST(ConfigTest, ConfigYearlyWeather)
 {
-    Location loc = Location(100, 200);
+Location loc = Location(100, 200);
+std::vector<PlantType> v;
+Config config = Config(loc, v);
 
-    std::vector<PlantType> v;
-
-    Config config = Config(loc, v);
-
-    EXPECT_EQ(config.terrain().width(), 100);
+EXPECT_EQ(config.yearly_weather().size(), 365);
 
 }
 
+//Test add action function in the config
+TEST(ConfigTest, AddAction)
+{
+Location loc = Location(100, 200);
+std::vector<PlantType> v;
+Config config = Config(loc, v);
+Corn corn;
+//AddCrop addCrop1 = AddCrop(corn, 0, 0);
+
+//onfig.add_daily_action(addCrop1);
+//EXPECT_EQ(config.daily_actions().size(), 1);
+
+}
+
+//Test the terrain in the config
+TEST(ConfigTest, ConfigTerrain)
+{
+Location loc = Location(100, 200);
+std::vector<PlantType> v;
+Config config = Config(loc, v);
+
+EXPECT_EQ(config.terrain().width(), 100);
+EXPECT_EQ(config.terrain().width(), 100);
+
+}
 
 int main(int argc, char **argv)
 {

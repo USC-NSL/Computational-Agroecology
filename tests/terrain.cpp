@@ -11,6 +11,13 @@ TEST(Terrain, TerrainInitializer)
   EXPECT_EQ(newTerrain.width(), 100);
 }
 
+TEST(Terrain, TerrainCellInitializer)
+{
+    Terrain newTerrain(100, 100);
+    EXPECT_EQ(newTerrain.tiles()[0][0].occupied, false);
+}
+
+
 
 int main(int argc, char **argv)
 {

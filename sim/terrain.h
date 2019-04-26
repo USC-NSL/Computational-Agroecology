@@ -21,7 +21,7 @@ class Terrain {
     :width_(width), length_(length){
       tiles_.resize(width, std::vector<cellValue>(length, {false, 1, NULL, NULL}));
   }
-  std::vector<std::vector<cellValue>> terrain() { return tiles_; }
+  std::vector<std::vector<cellValue>> tiles() { return tiles_; }
   int width() { return width_; }
   int length() { return length_; }
 
