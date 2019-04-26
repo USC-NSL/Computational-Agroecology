@@ -10,6 +10,10 @@ class PlantType {
  public:
   // TODO: Fix this class's format.
 
+  PlantType(){
+      name_ = "";
+  }
+
   PlantType(std::string name, int maxOT, int minOT, int maxAT, int minAT)
       : name_(std::move(name)),
         max_optimal_temperature_(maxOT),

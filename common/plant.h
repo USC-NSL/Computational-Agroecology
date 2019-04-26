@@ -4,6 +4,7 @@
 
 #include "plant_type.h"
 #include <utility>
+#include <string>
 
 
 // Represents a single plant instance.
@@ -16,12 +17,12 @@ class Plant {
   static const int MIN_HEALTH = 0;
 
   // Constructs a new plant instance of the given type.
-  explicit Plant(PlantType type)
+  explicit Plant(PlantType plantType)
       : health_(INITIAL_HEALTH),
         flowering_(false),
         accumulated_gdd_(0),
         maturity_(Maturity::SEED),
-        type_(std::move(type)) {}
+        type_(std::move(plantType)){}
 
   int health() const { return health_; }
   bool flowering() const { return flowering_; }

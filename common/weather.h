@@ -6,7 +6,7 @@
 // Weather specify condition on everyday
 class Weather {
   public :
-    DayWeather( double TMax = 0, double TMin = 0,
+    Weather( double TMax = 0, double TMin = 0,
                 double RFall = 0) :
             temp_min_(TMax), temp_max_(TMin),
             rainfall_(RFall) { }
