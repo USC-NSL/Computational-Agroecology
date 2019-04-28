@@ -10,5 +10,9 @@ int main() {
 
     Config config = Config(loc, v);
 
+    while(1) {
+
+    }
+
     return 0;
 }

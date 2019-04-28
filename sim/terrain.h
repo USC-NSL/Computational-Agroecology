@@ -9,12 +9,12 @@
 #include "../common/plant_type.h"
 
 // square cell that made up the smallest component in the terrain
-struct cellValue {
+typedef struct {
     bool occupied;
     int size; // in meter
     PlantType *plant;
     Soil *soil;
-};
+} cellValue;
 
 class Terrain {
  public:
@@ -25,9 +25,8 @@ class Terrain {
   std::vector<std::vector<cellValue>> tiles() { return tiles_; }
   int width() { return width_; }
   int length() { return length_; }
-
- private:
   std::vector<std::vector<cellValue>> tiles_; //tiles specify all the cells in the terrain
+ private:
   int width_;
   int length_;
 };

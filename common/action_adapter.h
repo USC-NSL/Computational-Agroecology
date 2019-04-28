@@ -32,7 +32,8 @@ public:
         x_ = x;
         y_ = y;
     }
-    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+    //Return if the action perform successfully
+    virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
     }
     ActionType type_;
     int x_;
@@ -42,29 +43,29 @@ public:
 // This will allow agent to add crop to certain position in the terrain
 class AddCrop : public ActionAdapter {
 public:
-    AddCrop(PlantType plantType, int x, int y):
+    AddCrop(PlantType *plantType, int x, int y):
       ActionAdapter(ADD_CROP, x, y) {
         plantType_ = plantType;
     }
 
-    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
-        terrain.tiles()[x_][y_].occupied = true;
-        plants.push_back(plantType_);
-        terrain.tiles()[x_][y_].plant = &plantType_;
+    virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+        (*terrain).tiles_[x_][y_].occupied = true;
+        plants.push_back(*plantType_);
+        (*terrain).tiles_[x_][y_].plant = plantType_;
+        return true;
     }
 private:
-    PlantType plantType_;
+    PlantType *plantType_;
 };
 
 // This will allow agent to remove crop in certain position
 class RemoveCrop : public ActionAdapter {
 public:
     RemoveCrop(int x, int y) : ActionAdapter(REMOVE_CROP, x, y) {}
-    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
-        terrain.tiles()[x_][y_].occupied = false;
-        terrain.tiles()[x_][y_].plant = NULL;
+    virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+        (*terrain).tiles_[x_][y_].occupied = false;
+        (*terrain).tiles_[x_][y_].plant = NULL;
     }
-
 };
 
 // This will allow agent to add water to certain position
@@ -82,7 +83,7 @@ private:
 class HarvestCrop : public ActionAdapter {
 public:
     HarvestCrop(int x, int y) : ActionAdapter(HARVEST_CROP, x, y) {}
-    bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
+   virtual  bool perform_action(Terrain terrain, std::vector<PlantType> plants) {
 
     }
 };
