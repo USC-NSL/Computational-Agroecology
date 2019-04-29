@@ -84,9 +84,8 @@ TEST(ConfigTest, ConfigTerrain)
     Location loc = Location(100, 200);
     std::vector<PlantType> v;
     Config config = Config(loc, v);
-
-    EXPECT_EQ(config.terrain().width(), 100);
-    EXPECT_EQ(config.terrain().width(), 100);
+    EXPECT_EQ(config.terrain().width(), 10);
+    EXPECT_EQ(config.terrain().length(), 10);
 
 }
 

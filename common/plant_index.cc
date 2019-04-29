@@ -1,7 +1,8 @@
 // Copyright 2019
-#include "plant.h"
+#include "plant_index.h"
 #include <math.h>
 
+/*
 // TODO: Old code for CheckNeeds(), revive as needed and remove comment.
 bool Plant::CheckNeeds(double rainfall, double minTemp, double maxTemp) {
   return (rainfall >= type_.min_absolute_annual_rainfall()
@@ -54,3 +55,4 @@ void Plant::IncrementMaturity() {
   else if (maturity_ == Maturity::JUVENILE) maturity_ = Maturity::MATURE;
   else if (maturity_ == Maturity::MATURE) maturity_ = Maturity::OLD;
 }
+*/

@@ -49,6 +49,8 @@ public:
     }
 
     virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+        if ((*terrain).tiles_[x_][y_].occupied)
+            { return false; }
         (*terrain).tiles_[x_][y_].occupied = true;
         plants.push_back(*plantType_);
         (*terrain).tiles_[x_][y_].plant = plantType_;
@@ -63,8 +65,11 @@ class RemoveCrop : public ActionAdapter {
 public:
     RemoveCrop(int x, int y) : ActionAdapter(REMOVE_CROP, x, y) {}
     virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+        if (!(*terrain).tiles_[x_][y_].occupied)
+            { return false; }
         (*terrain).tiles_[x_][y_].occupied = false;
         (*terrain).tiles_[x_][y_].plant = NULL;
+        return true;
     }
 };
 
@@ -74,7 +79,6 @@ public:
     AddWater(int x, int y, int amount) : ActionAdapter(ADD_WATER, x, y) {
         amount_ = amount;
     }
-
 private:
     int amount_;
 };

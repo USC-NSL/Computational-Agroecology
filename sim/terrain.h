@@ -4,7 +4,7 @@
 #define TERRAIN_H
 
 #include <vector>
-#include "../common/plant.h"
+#include "../common/plant_index.h"
 #include "../common/soil.h"
 #include "../common/plant_type.h"
 

@@ -56,23 +56,7 @@ TEST(DataAdapterPlant, DataAdapterPlantOutputWithRainfall)
     EXPECT_EQ(2600, plantTypesVector[plantTypesVector.size() - 1].max_absolute_annual_rainfall());
 
 }
-/*//Test initializing weather
-TEST(WeatherTest, InitializeWeather)
-{
-    WeatherParser weather_parser; 
-    Location loc(34.0522,118.2437);
-    auto weather = weather_parser.GetWeatherByLocation(loc);//currently  does it only for LA
-    // std::cout<<"weather max rainfall "<<weather.max_rainfall_year()<<std::endl;
-    // std::cout<<"weather min rainfall "<<weather.min_rainfall_year()<<std::endl;
-     // std::cout<<"weather max temp "<<weather.min_temp_year()<<std::endl;
-  // std::cout<<"weather min temp "<<weather.max_temp_year()<<std::endl;
 
-    EXPECT_EQ(weather.max_rainfall_year(), 52.3);
-    EXPECT_EQ(weather.min_rainfall_year(), 0);
-   EXPECT_EQ(weather.min_temp_year(), .6);
-   EXPECT_EQ(weather.max_temp_year(), 44.4);
-
-}*/
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

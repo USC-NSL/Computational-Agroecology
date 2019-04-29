@@ -5,11 +5,13 @@
 #include <string>
 #include <utility>
 
+#include "plant_index.h"
+#include "plant_index.cc"
+
 // Represents a single type of plant.
 class PlantType {
  public:
   // TODO: Fix this class's format.
-
   PlantType(){
       name_ = "";
   }
@@ -27,7 +29,9 @@ class PlantType {
             min_optimal_temperature_(minOT),
             max_absolute_temperature_(maxAT),
             min_absolute_temperature_(minAT),
-            display_symbol_(display_symbol){}
+            display_symbol_(display_symbol) {
+      plant_index_ = new PlantIndex();
+  }
 
   PlantType(std::string plantName, int maxOT, int minOT, int maxAT, int minAT,
             int maxAR, int minAR, int maxOR, int minOR, int* threshold,
@@ -60,12 +64,15 @@ class PlantType {
   int min_optimal_annual_rainfall() { return min_optimal_annual_rainfall_; }
   bool cultivar() { return cultivar_; }
   char display_symbol() { return display_symbol_; }
+  PlantIndex* plant_index() { return plant_index_; }
 
  private:
   // the name of the single species or single cultivar
   std::string name_;
 
   int* gdd_thresholds_;
+
+  PlantIndex *plant_index_; // describe the index for individual plant to track their status
 
   int base_temp_;  // base temperature for Growing Degree Day calculations
 

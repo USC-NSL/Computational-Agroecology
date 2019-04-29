@@ -1,10 +1,8 @@
 // Copyright 2019
 #include <gtest/gtest.h>
 #include <iostream>
-#include "../common/plant.h"
-#include "../common/plant.cc"
-#include "../data/CSVReader.h"
-#include "../data/CSVReader.cpp"
+#include "../common/plant_index.h"
+#include "../common/plant_index.cc"
 #include "../common/corn.h"
 #include "../common/squash.h"
 #include "../common/bean.h"
@@ -14,17 +12,6 @@
 /*
  * This test suites is for testing Plant and plant functionality
 */
-
-// Test the initialization of Plant
-TEST(Plant, PlantInitialization)
-{
-
-  CSVReader reader("../data/PlantEnvironment.csv");
-  // Creating an object of CSVWriter
-  std::vector<PlantType> plantTypesVector = getPlantTypes();
-  Plant p(plantTypesVector[0]);
-  EXPECT_EQ(p.health(), 10);
-}
 
 TEST(Plant, Corn)
 {

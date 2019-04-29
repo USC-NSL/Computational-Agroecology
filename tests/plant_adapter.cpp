@@ -26,6 +26,29 @@ TEST(PlantAdapter, ActionPerform) {
     EXPECT_EQ((*terrain).tiles_[0][0].plant, corn);
 }
 
+//Test the perform add crop action function validation
+TEST(PlantAdapter, AddActionValidation) {
+Corn *corn = new Corn();
+AddCrop addCrop = AddCrop(corn, 0, 0);
+Terrain *terrain = new Terrain(100, 100);
+std::vector<PlantType> plants;
+EXPECT_EQ(addCrop.perform_action(terrain, plants), true);
+EXPECT_EQ(addCrop.perform_action(terrain, plants), false);
+}
+
+//Test the perform remove crop action function validation
+TEST(PlantAdapter, RemoveActionValidation) {
+Corn *corn = new Corn();
+AddCrop addCrop = AddCrop(corn, 0, 0);
+RemoveCrop removeCrop = RemoveCrop(0, 0);
+RemoveCrop removeCrop1 = RemoveCrop(0, 1);
+Terrain *terrain = new Terrain(100, 100);
+std::vector<PlantType> plants;
+EXPECT_EQ(addCrop.perform_action(terrain, plants), true);
+EXPECT_EQ(removeCrop.perform_action(terrain, plants), true);
+EXPECT_EQ(removeCrop1.perform_action(terrain, plants), false);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
