@@ -1,20 +1,17 @@
 // Copyright 2019
 #include "terrain.h"
-
-using namespace std;
-
-Terrain::Terrain(unsigned long size) : terrain_(size) {
-    for ( int i = 0; i < size; i++ ) {
-        terrain_[i].resize(size);
-        for ( int j = 0; j < size; j++ ) {
-            terrain_[i][j].occupied = false;
+void Terrain::terrain_display() {
+    for(int i = 0; i < tiles_.size(); i++)
+    {
+        for (int j = 0; j < tiles_[0].size(); j++)
+        {
+            if(tiles_[i][j].plant) {
+                PlantType *plant = tiles_[i][j].plant;
+                printf("%c", (*plant).display_symbol());
+            } else {
+                printf("*");
+            }
         }
+        printf("\n");
     }
-}
-
-Terrain::~Terrain() {}
-
-
-vector< vector<Cell>>& Terrain::terrain() {
-    return terrain_;
 }

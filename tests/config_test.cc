@@ -4,6 +4,8 @@
 #include <iostream>
 #include "../common/config.h"
 #include "../common/location.h"
+#include "../common/action_adapter.h"
+#include "../common/config.cpp"
 
 
 /*
@@ -38,9 +40,6 @@ TEST(ConfigTest, ConfigPlants)
     EXPECT_EQ("plant 3", config.plants()[2].name());
     EXPECT_EQ("plant 4", config.plants()[3].name());
     EXPECT_EQ("plant 5", config.plants()[4].name());
-
-
-
 }
 
 //Tests the Location in the Config object
@@ -48,9 +47,7 @@ TEST(ConfigTest, ConfigLocation)
 {
 
     Location loc = Location(100, 200);
-
     std::vector<PlantType> v;
-
     Config config = Config(loc, v);
 
     EXPECT_EQ(100, config.location().latitude());
@@ -58,6 +55,132 @@ TEST(ConfigTest, ConfigLocation)
 
 }
 
+//Test the weather vector in the config
+TEST(ConfigTest, ConfigYearlyWeather)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    EXPECT_EQ(config.yearly_weather().size(), 365);
+}
+
+//Test add action function in the config
+TEST(ConfigTest, AddAction)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn;
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+
+    config.add_daily_action(addCrop1);
+    EXPECT_EQ(config.daily_actions().size(), 1);
+
+}
+
+//Test the terrain in the config
+TEST(ConfigTest, ConfigTerrain)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    EXPECT_EQ(config.terrain().width(), 10);
+    EXPECT_EQ(config.terrain().length(), 10);
+
+}
+
+//Test the perform actions part in the config
+TEST(ConfigTest, PerformActionsAddActions)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn;
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+    EXPECT_EQ(0, config.daily_actions().size());
+    config.add_daily_action(addCrop1);
+    EXPECT_EQ(1, config.daily_actions().size());
+}
+
+//Test the action is actually configured without passing it into function
+TEST(ConfigTest, PerformActionWithoutFunction)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn;
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+    config.add_daily_action(addCrop1);
+    Terrain *newTerrainPtr = config.terrain_;
+    EXPECT_EQ(false, config.terrain().tiles()[0][0].occupied);
+    (*newTerrainPtr).tiles_[0][0].occupied = true;
+    EXPECT_EQ(true, config.terrain().tiles()[0][0].occupied);
+}
+
+//Test the perform action function without config
+TEST(ConfigTest, ActionPerformInConfig) {
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn = new Corn();
+    AddCrop *addCrop = new AddCrop(corn, 0, 0);
+    std::vector<ActionAdapter*> daily_actions;
+    daily_actions.push_back(addCrop);
+    EXPECT_EQ(daily_actions.size(), 1);
+    Terrain *terrain = new Terrain(100, 100);
+    std::vector<PlantType> plants;
+    EXPECT_EQ(false, config.terrain().tiles()[0][0].occupied);
+    EXPECT_EQ((*terrain).tiles_[0][0].occupied, false);
+    (*daily_actions.back()).perform_action(terrain, plants);
+    EXPECT_EQ((*terrain).tiles_[0][0].occupied, true);
+    EXPECT_EQ((*terrain).tiles_[0][0].plant, corn);
+    (*daily_actions.back()).perform_action(config.terrain_, config.plants());
+    EXPECT_EQ(true, config.terrain_->tiles()[0][0].occupied);
+    EXPECT_EQ(config.terrain_->tiles()[0][0].plant, corn);
+}
+
+//Test the perform daily function functionality
+TEST(ConfigTest, PerformDailyActionsFunctionArray)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn;
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+    config.add_daily_action(addCrop1);
+    EXPECT_EQ(false, config.terrain().tiles()[0][0].occupied);
+    (*config.daily_actions_.back()).perform_action(config.terrain_, v);
+    EXPECT_EQ(true, config.terrain_->tiles()[0][0].occupied);
+}
+
+//Test the action is actually configured
+TEST(ConfigTest, PerformDailyAction)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn = new Corn();
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+    config.add_daily_action(addCrop1);
+    EXPECT_EQ(false, config.terrain().tiles()[0][0].occupied);
+    EXPECT_EQ(nullptr, config.terrain().tiles()[0][0].plant);
+    EXPECT_EQ(1, config.perform_daily_actions());
+    EXPECT_EQ(true, config.terrain().tiles_[0][0].occupied);
+    EXPECT_EQ(corn, config.terrain().tiles()[0][0].plant);
+}
+
+//Test the state display function
+TEST(ConfigTest, StateDisplay)
+{
+    Location loc = Location(100, 200);
+    std::vector<PlantType> v;
+    Config config = Config(loc, v);
+    Corn *corn = new Corn();
+    AddCrop *addCrop1 = new AddCrop(corn, 0, 0);
+    config.add_daily_action(addCrop1);
+    EXPECT_EQ(1, config.perform_daily_actions());
+    config.state_display(0);
+}
 
 int main(int argc, char **argv)
 {
