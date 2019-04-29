@@ -21,21 +21,15 @@ class PlantIndex {
         flowering_(false),
         accumulated_gdd_(0),
         maturity_(Maturity::SEED) {}
-
+  bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
+  void Stage(int* thresholds);
+  bool Transition(double rainfall, double minTemp, double maxTemp);
+  int CalcGDD(double minTemp, double maxTemp);
   int health() const { return health_; }
   bool flowering() const { return flowering_; }
   int accumulated_gdd() const { return accumulated_gdd_; }
   Maturity maturity() const { return maturity_; }
-
-  // Allows the plant to move to a new maturity state.
-  // Returns true upon success.
-  bool Transition(double rainfall, double minTemp, double maxTemp);
-
-  int CalcGDD(double minTemp, double maxTemp);
-
-  void Stage(int* thresholds);
-
-  bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
+  int base_temperature() { return base_temperature_; }
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
@@ -49,6 +43,10 @@ class PlantIndex {
   Maturity maturity_;
 
   void IncrementMaturity();
+
+  int base_temperature_;
+
+  int gdd_thresholds_[5];
 };
 
 #endif  // AGROECOLOGY_COMMON_PLANT_H_

@@ -79,6 +79,10 @@ public:
     AddWater(int x, int y, int amount) : ActionAdapter(ADD_WATER, x, y) {
         amount_ = amount;
     }
+    virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+        (*terrain).tiles_[x_][y_].soil->addWater(amount_);
+        return true;
+    }
 private:
     int amount_;
 };

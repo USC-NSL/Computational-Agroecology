@@ -19,7 +19,8 @@ TEST(Terrain, TerrainCellInitializer)
     Terrain newTerrain(100, 100);
     EXPECT_EQ(newTerrain.tiles()[0][0].occupied, false);
     EXPECT_EQ(newTerrain.tiles()[0][0].plant, nullptr);
-    EXPECT_EQ(newTerrain.tiles()[0][0].soil, nullptr);
+    EXPECT_NE(newTerrain.tiles()[0][0].soil, nullptr);
+    EXPECT_EQ(newTerrain.tiles()[0][0].soil->pH(), 7);
 }
 
 

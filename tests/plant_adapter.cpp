@@ -49,6 +49,16 @@ EXPECT_EQ(removeCrop.perform_action(terrain, plants), true);
 EXPECT_EQ(removeCrop1.perform_action(terrain, plants), false);
 }
 
+//Test the perform remove crop action function validation
+TEST(PlantAdapter, AddWaterAction) {
+Corn *corn = new Corn();
+AddCrop addCrop = AddCrop(corn, 0, 0);
+AddWater addWater = AddWater(0, 0, 1);
+Terrain *terrain = new Terrain(100, 100);
+std::vector<PlantType> plants;
+EXPECT_EQ(addWater.perform_action(terrain, plants), true);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

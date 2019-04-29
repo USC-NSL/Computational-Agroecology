@@ -20,7 +20,7 @@ class Terrain {
  public:
   Terrain(int width, int length)
     :width_(width), length_(length){
-      tiles_.resize(width, std::vector<cellValue>(length, {false, 1, NULL, NULL}));
+      tiles_.resize(width, std::vector<cellValue>(length, {false, 1, NULL, new Soil()}));
   }
   std::vector<std::vector<cellValue>> tiles() { return tiles_; }
   int width() { return width_; }

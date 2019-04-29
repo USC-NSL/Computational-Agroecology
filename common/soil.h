@@ -14,6 +14,8 @@ class Soil {
 		Soil(Texture texture, int pH, int salinity, int orgMat, int water)
 			: texture_(texture), pH_(pH), salinity_(salinity), organic_matter_(orgMat), water_content_(water)
 			{}
+		// with fix soil type and other information
+		Soil() : texture_(Texture::CLAY), pH_(7), water_content_(0.03) {}
 		Texture texture() const { return texture_; }
 		double pH() const { return pH_; }
 		double salinity() const { return salinity_; }

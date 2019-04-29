@@ -6,7 +6,6 @@
 #include <utility>
 
 #include "plant_index.h"
-#include "plant_index.cc"
 
 // Represents a single type of plant.
 class PlantType {
@@ -50,6 +49,7 @@ class PlantType {
         // std::array<int,5> gdd_thresholds_ = Thresholds,
         // //gdd_thresholds_(Thresholds),
         base_temp_(base) {}
+  // Returns true upon success.
 
   std::string name() { return name_; }
   int* gdd_thresholds() { return gdd_thresholds_; }
