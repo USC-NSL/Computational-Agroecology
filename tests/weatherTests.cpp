@@ -4,6 +4,7 @@
 #include <iostream>
 #include "vector"
 #include "../common/weather.h"
+#include "../common/weather.cpp"
 
 /*
  * This test suites is for testing all the tests related to data
@@ -20,6 +21,13 @@ TEST(Weather, MakeWeatherArray)
        yearlyWeather.push_back(weather);
     }
    EXPECT_EQ(yearlyWeather.size(), 365);
+}
+
+// Tests the plantTypeVector to see the weather display
+TEST(Weather, WeatherDisplay)
+{
+    Weather weather(15, 26, 1);
+    weather.weather_display();
 }
 
 

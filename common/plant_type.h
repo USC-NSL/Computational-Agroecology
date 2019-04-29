@@ -21,6 +21,14 @@ class PlantType {
         max_absolute_temperature_(maxAT),
         min_absolute_temperature_(minAT) {}
 
+  PlantType(std::string name, int maxOT, int minOT, int maxAT, int minAT, char display_symbol)
+          : name_(std::move(name)),
+            max_optimal_temperature_(maxOT),
+            min_optimal_temperature_(minOT),
+            max_absolute_temperature_(maxAT),
+            min_absolute_temperature_(minAT),
+            display_symbol_(display_symbol){}
+
   PlantType(std::string plantName, int maxOT, int minOT, int maxAT, int minAT,
             int maxAR, int minAR, int maxOR, int minOR, int* threshold,
             bool cultivar = false, int base = 0)
@@ -47,13 +55,11 @@ class PlantType {
   int max_absolute_temperature() { return max_absolute_temperature_; }
   int min_absolute_temperature() { return min_absolute_temperature_; }
   int max_absolute_annual_rainfall() { return max_absolute_annual_rainfall_; }
-  int min_absolute_annual_rainfall() {
-    return min_absolute_annual_rainfall_;
-    ;
-  }
+  int min_absolute_annual_rainfall() { return min_absolute_annual_rainfall_; }
   int max_optimal_annual_rainfall() { return max_optimal_annual_rainfall_; }
   int min_optimal_annual_rainfall() { return min_optimal_annual_rainfall_; }
   bool cultivar() { return cultivar_; }
+  char display_symbol() { return display_symbol_; }
 
  private:
   // the name of the single species or single cultivar
@@ -86,6 +92,8 @@ class PlantType {
 
   int min_optimal_annual_rainfall_;  // max optimal rainfall requirement for
                                      // plant type
+
+  char display_symbol_; //symbol for displaying
 
   bool cultivar_;  //  specify whether this is a single species or single
                    //  cultivar.

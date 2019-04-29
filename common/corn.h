@@ -6,9 +6,7 @@
 
 class Corn : public PlantType {
 public:
-    Corn() : PlantType("corn", 0, 0, 0, 0){
-
-    }
+    Corn() : PlantType("corn", 0, 0, 0, 0, '|'){}
 };
 
 

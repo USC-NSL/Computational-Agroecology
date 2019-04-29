@@ -6,9 +6,7 @@
 
 class Squash : public PlantType {
 public:
-    Squash() : PlantType("squash", 0, 0, 0, 0){
-
-    }
+    Squash() : PlantType("squash", 0, 0, 0, 0,'-'){}
 };
 
 

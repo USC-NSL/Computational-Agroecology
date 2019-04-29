@@ -4,8 +4,7 @@
 #include "../common/action_adapter.h"
 
 /*
- * This test suites is for testing all the tests related to data
- * handling in ../data.
+ * This test suites is for testing all the tests related to plant adapter to perform action
 */
 
 // Test the output of the Data handler that transfer csv file to 2-d array

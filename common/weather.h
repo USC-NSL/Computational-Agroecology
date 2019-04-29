@@ -3,6 +3,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_WEATHER_H
 #define COMPUTATIONAL_AGROECOLOGY_WEATHER_H
 
+#include <stdio.h>
+
 // Weather specify condition on everyday
 class Weather {
   public :
@@ -13,6 +15,7 @@ class Weather {
     double temp_max() {return temp_max_;}
     double temp_min() {return temp_min_;}
     double rainfall() {return rainfall_;}
+    void weather_display();
 
   private :
     double temp_min_;

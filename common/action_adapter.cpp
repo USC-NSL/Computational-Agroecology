@@ -1,5 +1,3 @@
-//
-// Created by xiao on 4/25/19.
-//
+//Copyright 2019
 
 #include "action_adapter.h"

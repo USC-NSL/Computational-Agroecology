@@ -25,6 +25,7 @@ class Terrain {
   std::vector<std::vector<cellValue>> tiles() { return tiles_; }
   int width() { return width_; }
   int length() { return length_; }
+  void terrain_display();
   std::vector<std::vector<cellValue>> tiles_; //tiles specify all the cells in the terrain
  private:
   int width_;
