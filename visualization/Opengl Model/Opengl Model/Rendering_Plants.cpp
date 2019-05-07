@@ -22,7 +22,7 @@ Corn::Corn(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity): Plants("Corn",
 void Corn::Rendering(GLdouble baseRadius, GLdouble topRadius, GLdouble height, GLint slices, GLint stacks) {
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 0);
-	glTranslatef(getX(), getY(), 0.0);	
+	glTranslatef(getX(), getY(), 1.0);	
 	gluCylinder(pObj, baseRadius, topRadius, height, slices, stacks);
 	glPopMatrix();
 }
@@ -39,7 +39,7 @@ Squash::Squash(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity) : Plants("S
 void Squash::Rendering(GLdouble radius, GLint slices, GLint stacks) {
 	glPushMatrix();
 	glColor3f(0.0, 1.0, 0.0);
-	glTranslatef(getX(), getY(), 0.0);
+	glTranslatef(getX(), getY(), 1.0);
 	gluSphere(pObj, radius, slices, stacks);	
 	glPopMatrix();
 }
@@ -56,7 +56,7 @@ Bean::Bean(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity) : Plants("Bean"
 void Bean::Rendering(GLdouble radius, GLdouble height, GLint slices, GLint stacks) {
 	glPushMatrix();
 	glColor3f(0.0, 0.5, 0.6);
-	glTranslatef(getX(), getY(), 0.0);
+	glTranslatef(getX(), getY(), 1.0);
 	gluCylinder(pObj, 0, radius, height, slices, stacks);
 	glPopMatrix();
 }

@@ -13,10 +13,12 @@ void initScene(void)
 	Corn *newcorn = new Corn(1, 1, 0);
 	Bean *newbean = new Bean(4, 4, 2);
 	Squash *newsquash = new Squash(8, 8, 3);
+	mrc.Init();
 	mrc.AddCrop(newcorn);
 	mrc.AddCrop(newbean);
 	mrc.AddCrop(newsquash);
 	//mrc.DelCrop(2);
+	mrc.Modify_Sun(1, 0.0, 0.0, 100.0, 80);
 	mrc.AddWater(0, 0);
 }
 void keyboard(unsigned char key, int x, int y) { 
@@ -67,7 +69,7 @@ void keyboard(unsigned char key, int x, int y) {
 }
 void Rendering(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity(); 
 	gluLookAt(camera[0], camera[1], camera[2], camera[3], camera[4], camera[5], 1.0, 0.0, 0.0);
 	mrc.Rendering();
