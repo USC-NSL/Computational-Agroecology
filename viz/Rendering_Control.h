@@ -3,6 +3,9 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
+#ifndef _RENDERING_WEATHER_H_
+#include "Rendering_Weather.h"
+#endif
 #ifndef _RENDERING_PLANTS_H_
 #include "Rendering_Plants.h"
 #endif
@@ -12,12 +15,16 @@
 class Rendering_Control {
 private:
 	Grids grids;
+	Weather weather;
 	std::vector<Plants*> Crops;
 public:
 	Rendering_Control(int length, int width);
+	void Init();
 	void AddCrop(Plants* plant);
 	void DelCrop(int index);
 	void AddWater(int x, int y);
+	void Modify_Sun(int state, float dir_x, float dir_y, float dir_z, int strength);
+	void Modify_Rain(int state, float dir_x, float dir_y, float dir_z, int strength);
 	void Rendering(int debug=0);
 };
 #endif // !_RENDERING_CONTROL_H_

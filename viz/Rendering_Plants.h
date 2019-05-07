@@ -4,9 +4,15 @@
 #include<string>
 #endif
 #ifndef __glut_h__
-#include <GL/gl.h>
-#include <GL/glut.h>
-// #include "glut\glut.h"
+#ifdef __linux__
+#include "GL/glut.h"
+#endif
+#ifdef __APPLE__
+#include "GL/glut.h"
+#endif
+#ifdef _WIN32
+#include "glut\glut.h"
+#endif
 #endif
 class Plants {
 private:

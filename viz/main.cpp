@@ -1,11 +1,17 @@
 
 #include "Rendering_Control.h"
 #ifndef __glut_h__
-// #include "glut\glut.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+#ifdef __linux__
+#include "GL/glut.h"
 #endif
+#ifdef __APPLE__
+#include "GL/glut.h"
+#endif
+#ifdef _WIN32
+#include "glut\glut.h"
 #pragma comment(lib, "glut32.lib")
+#endif
+#endif
 Rendering_Control mrc(10, 10);
 static int mainWindow;
 static GLdouble camera[6] = { 0.0, 0.0, 50.0, 0.0, 0.0, 0.0 };

@@ -1,6 +1,4 @@
 #include "Rendering_Grids.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
 Grids::Grids(int length, int width) {
 	grid_length = length;
 	grid_width = width;
@@ -18,11 +16,22 @@ Grids::Grids(int length, int width) {
 }
 void Grids::RenderingOne(int x, int y) {
 	glPushMatrix();
-	glColor3f(colors[grid_state[x][y]][0], colors[grid_state[x][y]][1], colors[grid_state[x][y]][2]);
 	glTranslatef((grid_height + 0) * x, (grid_height + 0) * y, 0);
+	GLfloat mat_ambient[] = { 0.0f,	1.0f, 0.0f, 1.0f };
+	GLfloat mat_diffuse[] = { 0.0f,	1.0f, 0.0f, 1.0f };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat mat_shininess[] = { 80.0f };
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, colors[grid_state[x][y]]);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, colors[grid_state[x][y]]);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glScalef(grid_height, grid_height, 1.0);
 	glutSolidCube(1.0);
-	glColor3f(0.0, 1.0, 0.0);
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glLineWidth(2.0);
 	glutWireCube(1.0);
 	glPopMatrix();
