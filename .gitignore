@@ -3,3 +3,6 @@ cmake-build-debug
 
 CMakeLists.txt
 
+# Visual Studio Code cache directory
+.vscode
+
