@@ -26,18 +26,23 @@ public:
         return type_;
     }
 
-    ActionAdapter(ActionType type, int x = 0, int y = 0)
+    ActionAdapter(ActionType type, int x = 0, int y = 0, int time_elapse_to_perform = 0, int duration = 0)
     {
-        type_ = type,
+        type_ = type;
         x_ = x;
         y_ = y;
+        time_elapse_to_perform_ = time_elapse_to_perform;
+        duration_ = duration;
     }
     //Return if the action perform successfully
     virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
     }
-    ActionType type_;
-    int x_;
-    int y_;
+
+    ActionType type_; // the type of action got performed
+    int x_; // the coordination of the action got performed
+    int y_; // the coordination of the action got performed
+    int time_elapse_to_perform_; // the elapse of time before action get performed
+    int duration_; // the duration of each action
 };
 
 // This will allow agent to add crop to certain position in the terrain
