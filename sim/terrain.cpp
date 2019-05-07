@@ -23,7 +23,7 @@ void Terrain::terrain_display()
 PlantType *Terrain::get_plant_status(int date, int x, int y)
 {
     // TODO: add date info or hour info
-    assert(x >= 0 && x < width);
-    assert(y >= 0 && y < length);
+    assert(x >= 0 && x < width_);
+    assert(y >= 0 && y < length_);
     return tiles_[x][y].plant;
 };

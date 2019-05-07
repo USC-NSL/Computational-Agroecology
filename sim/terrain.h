@@ -46,11 +46,11 @@ public:
   int length() { return length_; }
   void terrain_display();
   PlantType *get_plant_status(int date, int x, int y); // get plant status by cell coordinate and date info
+  std::vector<std::vector<cellValue>> tiles_; // tiles specify all the cells in the terrain
 
 private:
   int width_;
   int length_;
-  std::vector<std::vector<cellValue>> tiles_; // tiles specify all the cells in the terrain
 };
 
 #endif
