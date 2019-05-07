@@ -6,7 +6,7 @@
 #pragma comment(lib, "glut32.lib")
 Rendering_Control mrc(10, 10);
 static int mainWindow;
-static GLdouble camera[6] = { 0.0, 0.0, 50.0, 0.0, 0.0, 0.0 };
+static GLdouble camera[6] = { 20.0, 20.0, 100.0, 20.0, 20.0, 0.0 };
 void initScene(void)
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -18,7 +18,7 @@ void initScene(void)
 	mrc.AddCrop(newbean);
 	mrc.AddCrop(newsquash);
 	//mrc.DelCrop(2);
-	mrc.Modify_Sun(1, 0.0, 0.0, 100.0, 80);
+	mrc.Modify_Sun(1, 0.0, 0.0, 100.0, 50);
 	mrc.AddWater(0, 0);
 }
 void keyboard(unsigned char key, int x, int y) { 
