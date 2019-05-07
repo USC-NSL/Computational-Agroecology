@@ -1,8 +1,8 @@
 .idea
 cmake-build-debug
 
-CMakeLists.txt
+CMakeCache.txt
+CMakeFiles
 
 # Visual Studio Code cache directory
 .vscode
-

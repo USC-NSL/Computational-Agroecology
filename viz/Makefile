@@ -5,3 +5,6 @@ DEPS = Rendering_Control.cpp Rendering_Control.h Rendering_Grids.cpp Rendering_G
 
 opengl: $(DEPS)
 	$(CC)  -o opengl $(DEPS)  $(CFLAGS) 
+
+clean: 
+	rm -rf *.o opengl
