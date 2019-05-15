@@ -10,9 +10,9 @@ Grids::Grids(int length, int width) {
 		}
 	}
 	colors = new float*[3];
-	colors[0] = new float[3]{ (float)0.1,(float)0.05,0 };
-	colors[1] = new float[3]{ (float)0.3,(float)0.15,0 };
-	colors[2] = new float[3]{ (float)0.5,(float)0.25,0 };
+	colors[0] = new float[4]{ 0.1f,0.05f,0.02f, 1.0f };
+	colors[1] = new float[4]{ 0.2f,0.15f,0.01f, 1.0f };
+	colors[2] = new float[4]{ 0.3f,0.25f,0.01f, 1.0f };
 }
 void Grids::RenderingOne(int x, int y) {
 	glPushMatrix();
@@ -21,11 +21,11 @@ void Grids::RenderingOne(int x, int y) {
 	GLfloat mat_diffuse[] = { 0.0f,	1.0f, 0.0f, 1.0f };
 	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat mat_shininess[] = { 80.0f };
+	glScalef(grid_height, grid_height, 1.0);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, colors[grid_state[x][y]]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, colors[grid_state[x][y]]);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-	glScalef(grid_height, grid_height, 1.0);
 	glutSolidCube(1.0);
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);

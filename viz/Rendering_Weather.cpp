@@ -30,7 +30,7 @@ void Weather::modify_Rain(int state, float dir_x, float dir_y, float dir_z, int 
 }
 
 void Weather::Init() {
-	GLfloat light_position[] = { 0.0f, 0.0f, 100.0f, 0.0f };
+	GLfloat light_position[] = { Sun_Direction[0],Sun_Direction[1],Sun_Direction[2], 0.0f };
 	GLfloat light_ambient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	GLfloat light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat Light_Model_Ambient[] = { 0.5f , 0.5f , 0.5f , 1.0f };
@@ -44,7 +44,8 @@ void Weather::Init() {
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); 
+	//glEnable(GL_COLOR_MATERIAL);
 }
 
 void Weather::Rendering() {

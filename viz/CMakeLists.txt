@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 
 set(CMAKE_CXX_STANDARD 14)
-set(SOURCES Rendering_Control.cpp
+set(SOURCES stdafx.h
+	    Rendering_Control.cpp
             Rendering_Control.h 
             Rendering_Grids.cpp 
             Rendering_Grids.h 
@@ -9,6 +10,9 @@ set(SOURCES Rendering_Control.cpp
             Rendering_Plants.h 
             Rendering_Weather.h 
             Rendering_Weather.cpp 
+	    stb_image.h
+	    tiny_obj_loader.h
+	    tiny_obj_loader.cc
             main.cpp)
 
 # Locate GTest
