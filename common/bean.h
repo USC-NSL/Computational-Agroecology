@@ -6,7 +6,7 @@
 
 class Bean : public PlantType {
 public:
-    Bean() : PlantType("bean", 0, 0, 0, 0, 'o'){}
+  Bean() : PlantType("bean", 0, 0, 0, 0, 'o') {}
 };
 
-#endif //COMPUTATIONAL_AGROECOLOGY_BEAN_H
+#endif // COMPUTATIONAL_AGROECOLOGY_BEAN_H

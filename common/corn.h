@@ -6,8 +6,7 @@
 
 class Corn : public PlantType {
 public:
-    Corn() : PlantType("corn", 0, 0, 0, 0, '|'){}
+  Corn() : PlantType("corn", 0, 0, 0, 0, '|') {}
 };
 
-
-#endif //COMPUTATIONAL_AGROECOLOGY_CORN_H
+#endif // COMPUTATIONAL_AGROECOLOGY_CORN_H

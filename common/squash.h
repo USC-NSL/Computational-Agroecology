@@ -6,8 +6,7 @@
 
 class Squash : public PlantType {
 public:
-    Squash() : PlantType("squash", 0, 0, 0, 0,'-'){}
+  Squash() : PlantType("squash", 0, 0, 0, 0, '-') {}
 };
 
-
-#endif //COMPUTATIONAL_AGROECOLOGY_SQUASH_H
+#endif // COMPUTATIONAL_AGROECOLOGY_SQUASH_H
