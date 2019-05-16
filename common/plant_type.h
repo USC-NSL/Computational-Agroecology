@@ -56,6 +56,10 @@ public:
   char display_symbol() { return display_symbol_; }
   PlantIndex *plant_index() { return plant_index_; }
 
+  // JUST ADDED ON 5/16/19 TO ACCOUNT FOR FRUITS HARVESTED AND GROWN ON AN INDIVIDUAL TREE
+  void growFruit(int number) { this->quantityOnTree = this->quantityOnPlant + number; };
+  void harvestFruit() { this->quantityHarvested += this->quantityOnPlant; this->quantityOnPlant=0;};
+
 private:
   // the name of the single species or single cultivar
   std::string name_;
@@ -95,6 +99,12 @@ private:
 
   bool cultivar_; //  specify whether this is a single species or single
                   //  cultivar.
+
+
+
+  // JUST ADDED ON 5/16/19 TO ACCOUNT FOR FRUITS HARVESTED AND GROWN ON AN INDIVIDUAL TREE
+  int quantityOnPlant;
+  int quantityHarvested;
 };
 
 #endif // AGROECOLOGY_COMMON_PLANT_TYPE_H_

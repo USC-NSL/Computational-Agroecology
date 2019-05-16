@@ -27,8 +27,7 @@ public:
     duration_ = duration;
   }
   // Return if the action perform successfully
-  virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
-  }
+  virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) = 0;
 
   ActionType type_;            // the type of action got performed
   int x_;                      // the coordination of the action got performed
@@ -79,6 +78,9 @@ public:
     amount_ = amount;
   }
   virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+    if (!(*terrain).tiles_[x_][y_].occupied) {
+      return false;
+    }
     (*terrain).tiles_[x_][y_].soil->addWater(amount_);
     return true;
   }
@@ -91,7 +93,13 @@ private:
 class HarvestCrop : public ActionAdapter {
 public:
   HarvestCrop(int x, int y) : ActionAdapter(HARVEST_CROP, x, y) {}
-  virtual bool perform_action(Terrain terrain, std::vector<PlantType> plants) {}
+  virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+    if(!(*terrain).tiles_[x_][y_].occupied) {
+      return false;
+    }
+    // calls function to harvest the fruit
+    (*terrain).tiles_[x_][y_].plant->harvestFruit();
+  }
 };
 
 #endif // COMPUTATIONAL_AGROECOLOGY_ACTION_ADAPTER_H
