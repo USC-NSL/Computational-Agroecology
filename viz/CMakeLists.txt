@@ -15,17 +15,15 @@ set(SOURCES stdafx.h
 	    tiny_obj_loader.cc
             main.cpp)
 
-# Locate GTest
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
 
-# Locate OpenGL
+# Locate OpenGL GLUT GLEW
+find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 
 # Link vizTest with what we want to test and the GTest and pthread library
 add_executable(vizTest ${SOURCES})
 
 target_link_libraries(vizTest ${GTEST_LIBRARIES} pthread)
-target_link_libraries(vizTest ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+target_link_libraries(vizTest ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARY})

@@ -462,9 +462,9 @@ void Plants::modifyPos(int x, int y) {
 
 Corn::Corn(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity): Plants("Corn", Plant_Pos_X, Plant_Pos_Y, Plant_Maturity){
 	switch (Plant_Maturity) {
-	case 0: LoadObjModel("E://model/Corn1.obj"); break;
-	case 1: LoadObjModel("E://model/Corn2.obj"); break;
-	case 2: LoadObjModel("E://model/Corn3.obj"); break;
+	case 0: LoadObjModel("model/Corn1.obj"); break;
+	case 1: LoadObjModel("model/Corn2.obj"); break;
+	case 2: LoadObjModel("model/Corn3.obj"); break;
 	default: std::cout << "no such maturity!" << std::endl;
 	}
 }
@@ -490,9 +490,9 @@ Corn::~Corn() {
 
 Squash::Squash(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity) : Plants("Squash", Plant_Pos_X, Plant_Pos_Y, Plant_Maturity) {
 	switch (Plant_Maturity) {
-	case 0: LoadObjModel("E://model/Squash1.obj"); break;
-	case 1: LoadObjModel("E://model/Squash2.obj"); break;
-	case 2: LoadObjModel("E://model/Squash3.obj"); break;
+	case 0: LoadObjModel("model/Squash1.obj"); break;
+	case 1: LoadObjModel("model/Squash2.obj"); break;
+	case 2: LoadObjModel("model/Squash3.obj"); break;
 	default: std::cout << "no such maturity!" << std::endl;
 	}
 }
