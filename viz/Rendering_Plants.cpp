@@ -419,7 +419,7 @@ void Plants::LoadObjModel(const char* filename) {
 	}
 }
 
-void Plants::Render() {
+void Plants::Rendering() {
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_FILL);
 
@@ -462,9 +462,9 @@ void Plants::modifyPos(int x, int y) {
 
 Corn::Corn(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity): Plants("Corn", Plant_Pos_X, Plant_Pos_Y, Plant_Maturity){
 	switch (Plant_Maturity) {
-	case 0: LoadObjModel("E://model/Corn1.obj"); break;
-	case 1: LoadObjModel("E://model/Corn2.obj"); break;
-	case 2: LoadObjModel("E://model/Corn3.obj"); break;
+	case 0: LoadObjModel("model/Corn1.obj"); break;
+	case 1: LoadObjModel("model/Corn2.obj"); break;
+	case 2: LoadObjModel("model/Corn3.obj"); break;
 	default: std::cout << "no such maturity!" << std::endl;
 	}
 }
@@ -480,7 +480,7 @@ void Corn::Rendering(){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glTranslatef(getX(), getY(), 1.0);
-	Plants::Render();
+	Plants::Rendering();
 	glPopMatrix();
 }
 
@@ -490,9 +490,9 @@ Corn::~Corn() {
 
 Squash::Squash(int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity) : Plants("Squash", Plant_Pos_X, Plant_Pos_Y, Plant_Maturity) {
 	switch (Plant_Maturity) {
-	case 0: LoadObjModel("E://model/Squash1.obj"); break;
-	case 1: LoadObjModel("E://model/Squash2.obj"); break;
-	case 2: LoadObjModel("E://model/Squash3.obj"); break;
+	case 0: LoadObjModel("model/Squash1.obj"); break;
+	case 1: LoadObjModel("model/Squash2.obj"); break;
+	case 2: LoadObjModel("model/Squash3.obj"); break;
 	default: std::cout << "no such maturity!" << std::endl;
 	}
 }
@@ -508,7 +508,7 @@ void Squash::Rendering() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glTranslatef(getX(), getY(), 1.0);
-	Plants::Render();
+	Plants::Rendering();
 	glPopMatrix();
 }
 
@@ -531,7 +531,7 @@ void Bean::Rendering() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glTranslatef(getX(), getY(), 1.0);
-	Plants::Render();
+	Plants::Rendering();
 	glPopMatrix();
 }
 

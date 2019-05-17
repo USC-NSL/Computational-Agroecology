@@ -29,6 +29,8 @@ void Rendering_Control::Modify_Rain(int state, float dir_x, float dir_y, float d
 }
 
 void Rendering_Control::Rendering(int debug) {
+    weather.Rendering();
+    grids.Rendering();
 	for (auto t : Crops) {
 		if (t->Type() == "Corn") {
 			((Corn*)t)->Rendering();
@@ -40,6 +42,4 @@ void Rendering_Control::Rendering(int debug) {
 			((Bean*)t)->Rendering();
 		}
 	}
-	weather.Rendering();
-	grids.Rendering();
 }

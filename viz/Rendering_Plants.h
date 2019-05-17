@@ -27,7 +27,7 @@ public:
 	Plants(std::string Plant_Type, int Plant_Pos_X, int Plant_Pos_Y, int Plant_Maturity);
 	~Plants();
 	void LoadObjModel(const char* filename);
-	void Render();
+	virtual void Rendering();
 	int getX() const { return Plant_Pos_X; }
 	int getY() const { return Plant_Pos_Y; }
 	void modifyPos(int x, int y);
