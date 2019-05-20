@@ -2,10 +2,12 @@
 #ifndef AGROECOLOGY_COMMON_PLANT_TYPE_H_
 #define AGROECOLOGY_COMMON_PLANT_TYPE_H_
 
+#include <iostream>
 #include <string>
 #include <utility>
-
+#include <vector>
 #include "plant_index.h"
+#include "produce.h"
 
 // Represents a single type of plant.
 class PlantType {
@@ -64,9 +66,21 @@ class PlantType {
   int min_optimal_annual_rainfall() { return min_optimal_annual_rainfall_; }
   bool cultivar() { return cultivar_; }
   char display_symbol() { return display_symbol_; }
-  PlantIndex* plant_index() { return plant_index_; }
+  PlantIndex *plant_index() { return plant_index_; }
 
- private:
+  // NEWER ADDITIONS
+  std::vector<Produce*> getProduceOnPlant() { return produceOnPlant; };
+  std::vector<Produce*> getHarvestedProduce() { return harvestedProduce; };
+  void addProduce(bool ripeP, bool poisonedP, double weightP);
+  void harvestProduce();
+  // given an index in vector, increase its weight
+  void updateProduceWeight(int index, double increase);
+  // update number of produce to new status from the vector on tree
+  void updateRipeStatus(bool status, int numberChanged);
+  void updateRottenStatus(bool status, int numberChanged);
+
+
+protected:
   // the name of the single species or single cultivar
   std::string name_;
 
@@ -102,8 +116,20 @@ class PlantType {
 
   char display_symbol_; //symbol for displaying
 
+
   bool cultivar_;  //  specify whether this is a single species or single
                    //  cultivar.
+
+  // JUST ADDED ON 5/16/19 TO ACCOUNT FOR FRUITS HARVESTED AND GROWN ON AN INDIVIDUAL TREE
+
+  std::vector<Produce*>produceOnPlant; // produce on tree
+
+  std::vector<Produce*>harvestedProduce; // produce harvested from tree
+
+  double produceWeight;
 };
 
-#endif  // AGROECOLOGY_COMMON_PLANT_TYPE_H_
+
+
+#endif // AGROECOLOGY_COMMON_PLANT_TYPE_H_
+>>>>>>> a6b0d2b... added harvest capabilities
