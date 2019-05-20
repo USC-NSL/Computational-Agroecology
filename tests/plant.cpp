@@ -1,12 +1,10 @@
 // Copyright 2019
 #include <gtest/gtest.h>
-#include <iostream>
+#include "../common/plant_type.cc"
 #include "../common/plant_index.h"
-#include "../common/plant_index.cc"
 #include "../common/corn.h"
 #include "../common/squash.h"
 #include "../common/bean.h"
-#include <string>
 
 
 /*
@@ -31,6 +29,42 @@ TEST(Plant, Bean)
   EXPECT_EQ(bean.name(),"bean");
 }
 
+TEST(Produce,  One_Produce)
+{
+    Corn *corn = new Corn();
+
+    corn->addProduce(true, false, 0.8);
+    // checking sizes of vectors when one added 
+    EXPECT_EQ(1, corn->getProduceOnPlant().size());
+    EXPECT_EQ(0, corn->getHarvestedProduce().size());
+    delete corn;
+}
+
+TEST(Produce, Produce_Information)
+{
+    Corn *corn = new Corn();
+
+    corn->addProduce(true, false, 0.8);
+    // double checking contents of fruit object
+    EXPECT_EQ(true, corn->getProduceOnPlant()[0]->ripened);
+    EXPECT_EQ(false, corn->getProduceOnPlant()[0]->rotten);
+    EXPECT_EQ(0.8, corn->getProduceOnPlant()[0]->weight);
+}
+TEST(Produce, Adding_Two_Produce)
+{
+    Corn *corn = new Corn();
+
+    corn->addProduce(true, false, 0.8);
+    // tree now has two produce on it
+    corn->addProduce(true, true, 1.9);
+    EXPECT_EQ(2, corn->getProduceOnPlant().size());
+    EXPECT_EQ(0, corn->getHarvestedProduce().size());
+
+    corn->harvestProduce();
+    EXPECT_EQ(0, corn->getProduceOnPlant().size());
+    EXPECT_EQ(2, corn->getHarvestedProduce().size());
+
+}
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
