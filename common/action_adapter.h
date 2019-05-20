@@ -98,7 +98,7 @@ public:
       return false;
     }
     // calls function to harvest the fruit
-    (*terrain).tiles_[x_][y_].plant->harvestFruit();
+    (*terrain).tiles_[x_][y_].plant->harvestProduce();
   }
 };
 
