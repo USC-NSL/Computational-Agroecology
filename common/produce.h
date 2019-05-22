@@ -14,21 +14,33 @@ public:
 	bool ripened; // true if ripe, false if not
 	bool rotten; // true if rotten, false if not
 /*	bool onTree; // true if on tree, false if not*/
-	double weight;
+	double weight; // WEIGHTS ARE ALWAYS IN POUNDS, POUNDS ARE USED IN YIELD CALCULATIONS
 };
 
 // corn is inputted in cobs mostly, but cobs contain kernels
 class CornProduce : public Produce {
 public:
-	CornProduce(bool ripe, bool poison, double Pweight)
+	CornProduce(bool ripe, bool poison, double Pweight, double moisture)
 	{
 		ripened=ripe;
 		rotten=poison;
 		/*this->onTree = locationOnPlant;*/
+		kernelMoistureLevels = moisture; // used to calculate the yield for
 		weight = Pweight;
+		numBushels = this->calculateBushels(Pweight);
+	};
+	// for corn yield, got info from this site: http://corn.agronomy.wisc.edu/AA/pdfs/A033.pdf
+	double calculateBushels(double weights)
+	{
+		double temp = weights*(1-kernelMoistureLevels);
+		temp /= 0.845; // get the weight if 15.5% kernel moisture (i guess its the standard?)
+		temp /= 56; // gets you the number of bushels
+		return temp; 
 	};
 
 private:
+	double kernelMoistureLevels;
+	double numBushels;
 };
 
 // squash class derived from Produce class

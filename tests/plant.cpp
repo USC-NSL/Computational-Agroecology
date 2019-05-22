@@ -33,7 +33,7 @@ TEST(Produce,  One_Produce)
 {
     Corn *corn = new Corn();
 
-    corn->addProduce(true, false, 0.8);
+    corn->addProduce(true, false, 0.8, 0.7);
     // checking sizes of vectors when one added 
     EXPECT_EQ(1, corn->getProduceOnPlant().size());
     EXPECT_EQ(0, corn->getHarvestedProduce().size());
@@ -44,7 +44,7 @@ TEST(Produce, Produce_Information)
 {
     Corn *corn = new Corn();
 
-    corn->addProduce(true, false, 0.8);
+    corn->addProduce(true, false, 0.8, 0.7);
     // double checking contents of fruit object
     EXPECT_EQ(true, corn->getProduceOnPlant()[0]->ripened);
     EXPECT_EQ(false, corn->getProduceOnPlant()[0]->rotten);
@@ -54,9 +54,9 @@ TEST(Produce, Adding_Two_Produce)
 {
     Corn *corn = new Corn();
 
-    corn->addProduce(true, false, 0.8);
+    corn->addProduce(true, false, 0.8, 0.7);
     // tree now has two produce on it
-    corn->addProduce(true, true, 1.9);
+    corn->addProduce(true, true, 1.9, 0.7);
     EXPECT_EQ(2, corn->getProduceOnPlant().size());
     EXPECT_EQ(0, corn->getHarvestedProduce().size());
 
@@ -65,6 +65,17 @@ TEST(Produce, Adding_Two_Produce)
     EXPECT_EQ(2, corn->getHarvestedProduce().size());
 
 }
+
+TEST(Produce, GettingWeight)
+{
+	Corn *corn = new Corn();
+
+	corn->addProduce(true, false, 0.8, 0.7);
+	corn->addProduce(true, true, 1.9, 0.7);
+	corn->harvestProduce();
+	EXPECT_EQ(corn->getProduceWeight(), 2.7);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

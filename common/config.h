@@ -7,7 +7,8 @@
 #include "action_adapter.h"
 #include "climate.h"
 #include "location.h"
-#include "plant_type.h"
+#include "plant_type.cc"
+#include "plant_index.h"
 #include "weather.cpp"
 #include "weather.h"
 #include <stdio.h>
@@ -27,6 +28,7 @@ public:
     daily_actions_.push_back(actionAdapter);
   }
   int perform_daily_actions();
+  double calculateYield();
 
   Terrain *terrain_; // current terrain
   std::vector<ActionAdapter *>

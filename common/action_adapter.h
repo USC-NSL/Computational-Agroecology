@@ -10,7 +10,7 @@
 #include <vector>
 
 // Represents activities that can be done in a farm.
-enum ActionType { ADD_CROP, REMOVE_CROP, ADD_WATER, HARVEST_CROP };
+enum ActionType { ADD_CROP, REMOVE_CROP, ADD_WATER, GROW_PRODUCE, HARVEST_CROP };
 
 // Describes an action to be taken on a piece of land.
 class ActionAdapter {
@@ -28,6 +28,7 @@ public:
   }
   // Return if the action perform successfully
   virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) = 0;
+  double calculateTotalYield(Terrain *terrain);
 
   ActionType type_;            // the type of action got performed
   int x_;                      // the coordination of the action got performed
@@ -99,6 +100,18 @@ public:
     }
     // calls function to harvest the fruit
     (*terrain).tiles_[x_][y_].plant->harvestProduce();
+    return true;
+  }
+};
+// grows produce on tree given the coordinates 
+class GrowProduce : public ActionAdapter {
+public:
+  GrowProduce(int x, int y) : ActionAdapter(GROW_PRODUCE, x, y) {}
+  virtual bool perform_action(Terrain *terrain, std::vector<PlantType> plants) {
+    if(!(*terrain).tiles_[x_][y_].occupied) { return false; } // if plant isnt in location
+    // call the addProduce function on the plant to grow another fruit/veggie
+    (*terrain).tiles_[x_][y_].plant->addProduce(true, false, 1.1, 0.2);
+    return true;
   }
 };
 
