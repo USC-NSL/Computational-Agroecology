@@ -32,6 +32,18 @@ class PlantType {
             min_absolute_temperature_(minAT),
             display_symbol_(display_symbol) {
       plant_index_ = new PlantIndex();
+
+      : name_(std::move(name)), max_optimal_temperature_(maxOT),
+        min_optimal_temperature_(minOT), max_absolute_temperature_(maxAT),
+        min_absolute_temperature_(minAT) { produceWeight = 0.0;}
+
+  PlantType(std::string name, int maxOT, int minOT, int maxAT, int minAT,
+            char display_symbol)
+      : name_(std::move(name)), max_optimal_temperature_(maxOT),
+        min_optimal_temperature_(minOT), max_absolute_temperature_(maxAT),
+        min_absolute_temperature_(minAT), display_symbol_(display_symbol) {
+    plant_index_ = new PlantIndex();
+    produceWeight = 0.0;
   }
 
   PlantType(std::string plantName, int maxOT, int minOT, int maxAT, int minAT,
@@ -50,7 +62,7 @@ class PlantType {
         gdd_thresholds_(threshold),
         // std::array<int,5> gdd_thresholds_ = Thresholds,
         // //gdd_thresholds_(Thresholds),
-        base_temp_(base) {}
+        base_temp_(base) { produceWeight = 0.0;}
   // Returns true upon success.
 
   std::string name() { return name_; }
@@ -68,17 +80,19 @@ class PlantType {
   char display_symbol() { return display_symbol_; }
   PlantIndex *plant_index() { return plant_index_; }
 
-  // NEWER ADDITIONS
+
   std::vector<Produce*> getProduceOnPlant() { return produceOnPlant; };
   std::vector<Produce*> getHarvestedProduce() { return harvestedProduce; };
-  void addProduce(bool ripeP, bool poisonedP, double weightP);
+
+  void addProduce(bool ripeP, bool poisonedP, double weightP, double yieldFactor);
   void harvestProduce();
+  void increasePWeight(double weights) { this->produceWeight += weights; };
   // given an index in vector, increase its weight
   void updateProduceWeight(int index, double increase);
   // update number of produce to new status from the vector on tree
   void updateRipeStatus(bool status, int numberChanged);
   void updateRottenStatus(bool status, int numberChanged);
-
+  double getProduceWeight() { return this->produceWeight; };
 
 protected:
   // the name of the single species or single cultivar
@@ -130,6 +144,4 @@ protected:
 };
 
 
-
 #endif // AGROECOLOGY_COMMON_PLANT_TYPE_H_
->>>>>>> a6b0d2b... added harvest capabilities
