@@ -1,6 +1,6 @@
 # Computational AgroEcology Project
 
-# Organization of Plant / Soil Modeling
+## Organization of Plant / Soil Modeling
 
 ## Data Structures
 
