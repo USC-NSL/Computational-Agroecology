@@ -70,19 +70,26 @@ int main()
         AddCrop *addCrop1 = new AddCrop(corn, day, day);
         config.add_daily_action(addCrop1);
         day++;
-        std::cout << "Input all the actions for the day:"
-        << std::endl << "(format: actiontype/plantType/coordination_x/coordination_y,time_tick/duration)" << std::endl
-        << "Action Type options:AddCrop/RemoveCrop/WaterCrop/HarvestCrop" << std::endl <<
-        "Plant Type option:Corn/Bean/Squash" <<std::endl << "coordination <= 10"
-        "time tick <= 23, " << "duration <=24"
-        << std::endl;
-        std::cin >> action_input;
-        std::vector<std::string> string_vector = split(action_input, "/");
-        config.add_daily_action(chooseAction(string_vector[0], string_vector[1], std::stoi(string_vector[2]),
-                std::stoi(string_vector[3]), std::stoi(string_vector[4]), std::stoi(string_vector[5])));
-        std::cout << string_vector[0];
+        while(true){
+            std::cout << "Input all the actions for the day:"
+                      << std::endl << "(format: actiontype/plantType/coordination_x/coordination_y,time_tick/duration)" << std::endl
+                      << "Action Type options:AddCrop/RemoveCrop/WaterCrop/HarvestCrop" << std::endl <<
+                      "Plant Type option:Corn/Bean/Squash" <<std::endl << "coordination <= 10"
+                                                                          "time tick <= 23, " << "duration <=24"
+                      << std::endl;
+            std::cin >> action_input;
+            if (action_input == "end")
+            {
+                break;
+            }
+            std::vector<std::string> string_vector = split(action_input, "/");
+            config.add_daily_action(chooseAction(string_vector[0], string_vector[1], std::stoi(string_vector[2]),
+                                                 std::stoi(string_vector[3]), std::stoi(string_vector[4]), std::stoi(string_vector[5])));
+            std::cout << string_vector[0];
+        }
         config.perform_daily_actions();
         config.state_display(day);
+
     }
 
 }

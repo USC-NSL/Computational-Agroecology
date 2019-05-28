@@ -20,7 +20,8 @@ class PlantIndex {
       : health_(INITIAL_HEALTH),
         flowering_(false),
         accumulated_gdd_(0),
-        maturity_(Maturity::SEED) {}
+        maturity_(Maturity::SEED),
+        height_(0) {}
   bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
   void Stage(int* thresholds);
   bool Transition(double rainfall, double minTemp, double maxTemp);
@@ -30,6 +31,8 @@ class PlantIndex {
   int accumulated_gdd() const { return accumulated_gdd_; }
   Maturity maturity() const { return maturity_; }
   int base_temperature() { return base_temperature_; }
+  int height() { return height_; }
+  void update_height() { height_++; }
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
@@ -47,6 +50,8 @@ class PlantIndex {
   int base_temperature_;
 
   int gdd_thresholds_[5];
+
+  int height_;
 };
 
 #endif  // AGROECOLOGY_COMMON_PLANT_H_
