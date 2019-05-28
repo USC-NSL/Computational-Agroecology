@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+// This file is temporarily here to represent the game which allow user to interact with component
 void sleepcp(int milliseconds) // Cross-platform sleep function
 {
     clock_t time_end;
@@ -14,15 +15,12 @@ void sleepcp(int milliseconds) // Cross-platform sleep function
     {
     }
 }
+
 enum PlantOption {
     CORN,
     BEAN,
     SQUASH
 };
-void action_input_analyzer(std::string action_input)
-{
-
-}
 
 std::vector<std::string> split(const std::string& s, const std::string& delimiter)
 {
