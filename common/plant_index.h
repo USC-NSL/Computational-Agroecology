@@ -21,7 +21,9 @@ class PlantIndex {
         flowering_(false),
         accumulated_gdd_(0),
         maturity_(Maturity::SEED),
-        height_(0) {}
+        height_(0),
+        growing_day_(0),
+        produce_(0){}
   bool CheckNeeds(double rainfall, double minTemp, double maxTemp);
   void Stage(int* thresholds);
   bool Transition(double rainfall, double minTemp, double maxTemp);
@@ -32,7 +34,25 @@ class PlantIndex {
   Maturity maturity() const { return maturity_; }
   int base_temperature() { return base_temperature_; }
   int height() { return height_; }
-  void update_height() { height_++; }
+  int produce() { return  produce_; }
+  void update_height()
+  {
+      height_++;
+      growing_day_++;
+      if (growing_day_==7)
+      {
+          produce_ = 10;
+      } else if ( growing_day_ > 7 )
+      {
+          produce_ ++;
+      }
+  } // update height each day
+  int harvest()
+  {
+      int total = produce_;
+      produce_ = 0;
+      return total;
+  }
 
  private:
   int health_;  // [0,10] where 0 is dead and 10 is most healthy.
@@ -52,6 +72,10 @@ class PlantIndex {
   int gdd_thresholds_[5];
 
   int height_;
+
+  int produce_;
+
+  int growing_day_;
 };
 
 #endif  // AGROECOLOGY_COMMON_PLANT_H_

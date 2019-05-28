@@ -45,6 +45,7 @@ bool PlantIndex::Transition(double rainfall, double minTemp, double maxTemp) {
     return true;
 }
 
+
 void PlantIndex::IncrementMaturity() {
   if (maturity_ == Maturity::SEED) maturity_ = Maturity::SEEDLING;
   else if (maturity_ == Maturity::SEEDLING) maturity_ = Maturity::JUVENILE;

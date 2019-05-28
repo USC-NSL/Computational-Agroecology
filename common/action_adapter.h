@@ -96,8 +96,10 @@ private:
 class HarvestCrop : public ActionAdapter {
 public:
     HarvestCrop(int x, int y) : ActionAdapter(HARVEST_CROP, x, y) {}
-   virtual  bool perform_action(Terrain terrain, std::vector<PlantType> *plants) {
-
+   virtual  bool perform_action(Terrain *terrain, std::vector<PlantType> *plants) {
+       if (!(*terrain).tiles_[x_][y_].occupied)
+       { return false; }
+       (*terrain).tiles_[x_][y_].plant->plant_index()->harvest();
     }
 };
 

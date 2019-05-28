@@ -6,6 +6,7 @@ Config::Config(Location loc, std::vector<PlantType> plants) : location_(loc)
     plants_ = new std::vector<PlantType>();
     Weather weather(15, 26, 1); // set up temporary weather component
     terrain_ = new Terrain(10, 10);
+    total_produce_ = 0;
     for (int i = 0; i < 365; i++)
     {
         yearly_weather_.push_back(weather);
@@ -24,7 +25,19 @@ int Config::perform_daily_actions()
         (*action).perform_action(terrain_, plants_);
     }
     simulate_plant_growth();
+
     return success_action;
+}
+
+int Config::harvest_produce()
+{
+    std::vector<PlantType>::iterator plant_vector;
+    for(plant_vector = (*plants_).begin(); plant_vector != (*plants_).end(); plant_vector++ )    {
+        std::cout << "plant produce:" << plant_vector->plant_index()->produce() << "kg" << std::endl;
+        total_produce_ += plant_vector->plant_index()->harvest();
+    }
+    std::cout << "total produce:" << total_produce_ << "kg" << std::endl;
+    return  total_produce_;
 }
 
 int Config::simulate_plant_growth()

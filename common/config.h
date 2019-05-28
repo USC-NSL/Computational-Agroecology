@@ -24,9 +24,11 @@ public:
   Terrain terrain() { return *terrain_; }
   std::vector<Weather> yearly_weather() { return yearly_weather_; }
   std::vector<ActionAdapter *> daily_actions() { return daily_actions_; }
+  int total_produce() { return total_produce_; }
   bool add_daily_action(ActionAdapter *actionAdapter) { daily_actions_.push_back(actionAdapter); }
   int perform_daily_actions();
   int simulate_plant_growth();
+  int harvest_produce();
 
   Terrain *terrain_;                           // current terrain
   std::vector<ActionAdapter *> daily_actions_; // all actions that's going to perform in a day
@@ -35,6 +37,7 @@ private:
   std::vector<PlantType> *plants_;       // all available plants in the field
   Climate climate_;                     // climate of the location
   std::vector<Weather> yearly_weather_; // weather simulating for location all year round
+  int total_produce_;
 };
 
 #endif //COMPUTATIONAL_AGROECOLOGY_CONFIG_H

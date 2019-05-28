@@ -82,6 +82,11 @@ int main()
             {
                 break;
             }
+            if (action_input == "harvest")
+            {
+                config.harvest_produce();
+                break;
+            }
             std::vector<std::string> string_vector = split(action_input, "/");
             config.add_daily_action(chooseAction(string_vector[0], string_vector[1], std::stoi(string_vector[2]),
                                                  std::stoi(string_vector[3]), std::stoi(string_vector[4]), std::stoi(string_vector[5])));
