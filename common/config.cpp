@@ -22,9 +22,23 @@ int Config::perform_daily_actions() {
     return success_action;
 }
 
-void Config::state_display(int current_day)
+void Config::state_display(int current_day) {
+  printf("==================Day %d==================\n", current_day);
+  yearly_weather_[current_day].weather_display();
+  terrain_->terrain_display();
+}
+
+PlantType *Config::get_plant_status(int date, int x, int y) {
+  return terrain_->get_plant_status(date, x, y);
+}
+
+// used to calculate Yield
+double Config::calculateYield()
 {
-    printf("==================Day %d==================\n",current_day);
-    yearly_weather_[current_day].weather_display();
-    terrain_->terrain_display();
+  double weight = 0;
+  for(int i = 0; i < this->plants_.size(); i++)
+  {
+    weight+=(plants_[i].getProduceWeight()); // add each plant's produceWeight
+  }
+  return weight/((terrain_->width())*(terrain_->length()));
 }
