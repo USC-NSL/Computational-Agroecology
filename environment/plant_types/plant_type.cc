@@ -6,7 +6,7 @@ namespace environment {
 
 namespace plant_type {
 
-PlantType::PlantType(const type_id id, const std::string& name,
+PlantType::PlantType(const TypeId id, const std::string& name,
                      const std::string& display_symbol, const bool cultivar,
                      const double base_temperature,
                      const MaxMinTemperature& optimal_temperature,

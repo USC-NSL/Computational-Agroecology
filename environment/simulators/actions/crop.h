@@ -13,29 +13,29 @@ namespace action {
 namespace crop {
 
 struct Add : public Action {
-  const environment::plant_type::type_id crop_type;
+  const environment::plant_type::TypeId crop_type;
 
   Add(const environment::Coordinate& target,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::type_id crop_type);
+      const environment::plant_type::TypeId crop_type);
 
   Add(const std::vector<environment::Coordinate>& applied_range,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::type_id crop_type);
+      const environment::plant_type::TypeId crop_type);
 
   Add(const environment::Coordinate& target,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::type_id crop_type,
-      const std::vector<std::pair<resource_type, size_t>>& cost);
+      const environment::plant_type::TypeId crop_type,
+      const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   Add(const std::vector<environment::Coordinate>& applied_range,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::type_id crop_type,
-      const std::vector<std::pair<resource_type, size_t>>& cost);
+      const environment::plant_type::TypeId crop_type,
+      const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   void Execute(environment::Terrain* terrain) const override;
 };

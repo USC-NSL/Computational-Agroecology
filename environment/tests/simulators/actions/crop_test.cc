@@ -23,15 +23,15 @@ class AddTest : public ::testing::Test {
     duration = std::chrono::minutes(10);
 
     cost.push_back(
-        std::make_pair<resource_type, size_t>(resource_type::MONEY, 20));
+        std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
     cost.push_back(
-        std::make_pair<resource_type, size_t>(resource_type::TIME, 40));
+        std::make_pair<ResourceType, size_t>(ResourceType::TIME, 40));
   }
 
   std::vector<Coordinate> applied_range;
   std::chrono::system_clock::time_point time;
   std::chrono::duration<int> duration;
-  std::vector<std::pair<resource_type, size_t>> cost;
+  std::vector<std::pair<ResourceType, size_t>> cost;
 };
 
 TEST_F(AddTest, ConstrcutorTest_1) {

@@ -8,9 +8,9 @@ using namespace environment::plant_type;
 
 TEST(SquashTest, GlobalVariableTest) {
   const Squash& squash =
-      *(reinterpret_cast<const Squash*>(plant_type_to_plant[type_id::SQUASH]));
+      *(reinterpret_cast<const Squash*>(plant_type_to_plant[TypeId::SQUASH]));
 
-  EXPECT_EQ(type_id::SQUASH, squash.id);
+  EXPECT_EQ(TypeId::SQUASH, squash.id);
   EXPECT_EQ("squash", squash.name);
   EXPECT_EQ("-", squash.display_symbol);
   EXPECT_EQ(true, squash.cultivar);
@@ -23,10 +23,10 @@ TEST(SquashTest, GlobalVariableTest) {
 
 TEST(SquashTest, GenerateTest) {
   const Squash& squash =
-      *(reinterpret_cast<const Squash*>(plant_type_to_plant[type_id::SQUASH]));
+      *(reinterpret_cast<const Squash*>(plant_type_to_plant[TypeId::SQUASH]));
   auto plant = squash.GeneratePlantInstance();
 
-  EXPECT_EQ(type_id::SQUASH, plant->type);
+  EXPECT_EQ(TypeId::SQUASH, plant->type);
 }
 
 int main(int argc, char** argv) {

@@ -12,34 +12,34 @@ namespace simulator {
 
 namespace action {
 
-enum action_type { CROP_ADD = 0 };
+enum ActionType { CROP_ADD = 0 };
 
 struct Action {
-  Action(const action_type type, const environment::Coordinate& target,
+  Action(const ActionType type, const environment::Coordinate& target,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration);
 
-  Action(const action_type type,
+  Action(const ActionType type,
          const std::vector<environment::Coordinate>& applied_range,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration);
 
-  Action(const action_type type, const environment::Coordinate& target,
+  Action(const ActionType type, const environment::Coordinate& target,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<resource_type, size_t>>& cost);
+         const std::vector<std::pair<ResourceType, size_t>>& cost);
 
-  Action(const action_type type,
+  Action(const ActionType type,
          const std::vector<environment::Coordinate>& applied_range,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<resource_type, size_t>>& cost);
-  const action_type type;
+         const std::vector<std::pair<ResourceType, size_t>>& cost);
+  const ActionType type;
 
   const std::vector<environment::Coordinate> applied_range;
   const std::chrono::system_clock::time_point start_time;
   const std::chrono::duration<int> duration;
-  const std::vector<std::pair<resource_type, size_t>> cost;
+  const std::vector<std::pair<ResourceType, size_t>> cost;
 
   virtual void Execute(environment::Terrain* terrain) const = 0;
 };

@@ -8,9 +8,9 @@ using namespace environment::plant_type;
 
 TEST(BeanTest, GlobalVariableTest) {
   const Bean& bean =
-      *(reinterpret_cast<const Bean*>(plant_type_to_plant[type_id::BEAN]));
+      *(reinterpret_cast<const Bean*>(plant_type_to_plant[TypeId::BEAN]));
 
-  EXPECT_EQ(type_id::BEAN, bean.id);
+  EXPECT_EQ(TypeId::BEAN, bean.id);
   EXPECT_EQ("bean", bean.name);
   EXPECT_EQ("o", bean.display_symbol);
   EXPECT_EQ(true, bean.cultivar);
@@ -23,10 +23,10 @@ TEST(BeanTest, GlobalVariableTest) {
 
 TEST(BeanTest, GenerateTest) {
   const Bean& bean =
-      *(reinterpret_cast<const Bean*>(plant_type_to_plant[type_id::BEAN]));
+      *(reinterpret_cast<const Bean*>(plant_type_to_plant[TypeId::BEAN]));
   auto plant = bean.GeneratePlantInstance();
 
-  EXPECT_EQ(type_id::BEAN, plant->type);
+  EXPECT_EQ(TypeId::BEAN, plant->type);
 }
 
 int main(int argc, char** argv) {

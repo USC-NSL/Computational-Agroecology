@@ -14,10 +14,10 @@ class Plant;
 
 namespace plant_type {
 
-enum type_id { BEAN = 0, CORN, SQUASH };
+enum TypeId { BEAN = 0, CORN, SQUASH };
 
 struct PlantType {
-  PlantType(const type_id id, const std::string& name,
+  PlantType(const TypeId id, const std::string& name,
             const std::string& display_symbol, const bool cultivar,
             const double base_temperature,
             const MaxMinTemperature& optimal_temperature,
@@ -29,7 +29,7 @@ struct PlantType {
   void Register();
   virtual environment::Plant* GeneratePlantInstance() const = 0;
 
-  const type_id id;
+  const TypeId id;
   const std::string name;
   const std::string display_symbol;
   const bool cultivar;

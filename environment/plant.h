@@ -9,11 +9,11 @@ namespace environment {
 class Plant {
  public:
   // TODO: define some other constructors
-  Plant(const plant_type::type_id type);
+  Plant(const plant_type::TypeId type);
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
-  const plant_type::type_id type;
+  const plant_type::TypeId type;
 
   // TODO: add other member functions to complete this model
 

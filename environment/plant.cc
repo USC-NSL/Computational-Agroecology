@@ -4,7 +4,7 @@ namespace environment {
 
 const int kInitialHealth = 10;
 
-Plant::Plant(const plant_type::type_id type)
+Plant::Plant(const plant_type::TypeId type)
     : type(type),
       health_(kInitialHealth),
       flowering_(false),

@@ -3,7 +3,7 @@
 
 namespace simulator {
 
-enum resource_type { MONEY = 0, TIME, MAN_POWER };
+enum ResourceType { MONEY = 0, TIME, MAN_POWER };
 
 }
 
