@@ -1,4 +1,4 @@
-
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -7,8 +7,9 @@
 using namespace environment;
 
 TEST(PlantTest, ConstructorTest) {
-  Plant plant(plant_type::CORN);
-  EXPECT_EQ(plant_type::CORN, plant.type);
+  const std::string kCornTypeName = "Corn";
+  Plant plant(kCornTypeName);
+  EXPECT_EQ(kCornTypeName, plant.type_name);
 }
 
 int main(int argc, char **argv) {

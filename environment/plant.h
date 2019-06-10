@@ -1,23 +1,28 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
 
+#include <string>
+
 #include "plant_types/plant_type.h"
 
 namespace environment {
 
 // Represents a single plant instance.
+// TODO: consider to define this as a `struct` instead of `class`
 class Plant {
  public:
   // TODO: define some other constructors
-  Plant(const plant_type::TypeId type);
+  Plant(const std::string& type_name);
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
-  const plant_type::TypeId type;
+  const std::string type_name;
 
   // TODO: add other member functions to complete this model
 
  private:
+  void IncrementMaturity();
+
   // [0,10] where 0 is dead and 10 is most healthy.
   int health_;
 
@@ -29,7 +34,6 @@ class Plant {
 
   // The plant's current maturity.
   Maturity maturity_;
-  void IncrementMaturity();
 
   int base_temperature_;
 

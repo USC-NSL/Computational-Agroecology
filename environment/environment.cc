@@ -17,16 +17,15 @@ Environment::Environment(const Config& config,
 void Environment::JumpToTime(
     const std::chrono::system_clock::time_point& time) {
   main_simulator_.SimulateToTime(this, time);
-  this->timestamp_ = time;
+  timestamp_ = time;
 }
 
 void Environment::JumpDuration(const std::chrono::duration<int>& duration) {
-  this->JumpToTime(this->timestamp_ + duration);
+  JumpToTime(timestamp_ + duration);
 }
 
 void Environment::ReceiveAction(const simulator::action::Action* action) {
-  this->ReceiveActions(
-      std::vector<const simulator::action::Action*>(1, action));
+  ReceiveActions(std::vector<const simulator::action::Action*>(1, action));
 }
 
 void Environment::ReceiveActions(

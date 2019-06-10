@@ -20,7 +20,7 @@ void ActionList::CROP_ADD_execute(environment::Terrain* const terrain,
   // TODO: fully implement this
   for (const auto& c : action->applied_range) {
     terrain->tiles().get(c).plant =
-        plant_type_to_plant[add_crop->crop_type]->GeneratePlantInstance();
+        plant_type_to_plant[add_crop->crop_type_name]->GeneratePlantInstance();
   }
 }
 
@@ -29,31 +29,32 @@ namespace crop {
 Add::Add(const environment::Coordinate& target,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const environment::plant_type::TypeId crop_type)
-    : Action(CROP_ADD, target, start_time, duration), crop_type(crop_type) {}
+         const std::string& crop_type_name)
+    : Action(CROP_ADD, target, start_time, duration),
+      crop_type_name(crop_type_name) {}
 
 Add::Add(const std::vector<environment::Coordinate>& applied_range,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const environment::plant_type::TypeId crop_type)
+         const std::string& crop_type_name)
     : Action(CROP_ADD, applied_range, start_time, duration),
-      crop_type(crop_type) {}
+      crop_type_name(crop_type_name) {}
 
 Add::Add(const environment::Coordinate& target,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const environment::plant_type::TypeId crop_type,
+         const std::string& crop_type_name,
          const std::vector<std::pair<ResourceType, size_t>>& cost)
     : Action(CROP_ADD, target, start_time, duration, cost),
-      crop_type(crop_type) {}
+      crop_type_name(crop_type_name) {}
 
 Add::Add(const std::vector<environment::Coordinate>& applied_range,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration,
-         const environment::plant_type::TypeId crop_type,
+         const std::string& crop_type_name,
          const std::vector<std::pair<ResourceType, size_t>>& cost)
     : Action(CROP_ADD, applied_range, start_time, duration, cost),
-      crop_type(crop_type) {}
+      crop_type_name(crop_type_name) {}
 
 void Add::Execute(environment::Terrain* terrain) const {
   simulator::action::ActionList::CROP_ADD_execute(terrain, this);

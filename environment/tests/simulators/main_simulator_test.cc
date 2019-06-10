@@ -1,3 +1,4 @@
+#include <string>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -30,10 +31,11 @@ class MainSimulatorTest : public ::testing::Test {
     Terrain terrain(kTerrainSize);
     env = new Environment(config, time, terrain);
 
+    const std::string kCornTypeName = "Corn";
     auto duration = std::chrono::minutes(5);
     for (size_t i = 0; i < kNumberOfActions; ++i) {
       actions.push_back(
-          new crop::Add(Coordinate(i, i), time, duration, plant_type::CORN));
+          new crop::Add(Coordinate(i, i), time, duration, kCornTypeName));
       time += std::chrono::minutes(10);
     }
   }

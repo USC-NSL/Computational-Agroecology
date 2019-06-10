@@ -9,7 +9,7 @@ namespace environment {
 // Moved from the origin code base
 struct Climate {
   enum ZoneType {
-    TropicalWerAndDry,
+    TropicalWetAndDry,
     TropicalWet,
     DesertOrArid,
     SteppeOrSemiArid,
@@ -24,6 +24,7 @@ struct Climate {
     Polar
   };
 
+  // Construct this based on the `config`
   Climate(const environment::Config& config);
 
   Climate(const double temp_max, const double temp_min, const double rain_max,

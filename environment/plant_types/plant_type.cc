@@ -6,15 +6,14 @@ namespace environment {
 
 namespace plant_type {
 
-PlantType::PlantType(const TypeId id, const std::string& name,
+PlantType::PlantType(const std::string& type_name,
                      const std::string& display_symbol, const bool cultivar,
                      const double base_temperature,
                      const MaxMinTemperature& optimal_temperature,
                      const MaxMinTemperature& absolute_temperature,
                      const MaxMinRainfall& optimal_annual_rainfall,
                      const MaxMinRainfall& absolute_annual_rainfall)
-    : id(id),
-      name(name),
+    : type_name(type_name),
       display_symbol(display_symbol),
       cultivar(cultivar),
       base_temperature(base_temperature),
@@ -23,13 +22,13 @@ PlantType::PlantType(const TypeId id, const std::string& name,
       optimal_annual_rainfall(optimal_annual_rainfall),
       absolute_annual_rainfall(absolute_annual_rainfall) {
   // register this type to the map
-  this->Register();
+  Register();
 }
 
-void PlantType::Register() { plant_type_to_plant[this->id] = this; }
+void PlantType::Register() { plant_type_to_plant[type_name] = this; }
 
 // definition
-std::unordered_map<int, const PlantType*> plant_type_to_plant;
+std::map<std::string, const PlantType*> plant_type_to_plant;
 
 }  // namespace plant_type
 

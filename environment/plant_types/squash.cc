@@ -1,18 +1,22 @@
 #include "squash.h"
 
+#include <string>
+
 #include "utility.h"
 
 namespace environment {
 
 namespace plant_type {
 
+const std::string kSquashTypeName = "Squash";
+
 Squash::Squash()
-    : PlantType(SQUASH, "squash", "-", true, 0.0, MaxMinTemperature(0, 0),
+    : PlantType(kSquashTypeName, "-", true, 0.0, MaxMinTemperature(0, 0),
                 MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
                 MaxMinRainfall(0, 0)) {}
 
 environment::Plant* Squash::GeneratePlantInstance() const {
-  return new Plant(SQUASH);
+  return new Plant(kSquashTypeName);
 }
 
 Squash __squash_type__;

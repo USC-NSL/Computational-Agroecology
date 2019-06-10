@@ -1,5 +1,3 @@
-
-
 #include <gtest/gtest.h>
 
 #include "climate.h"
@@ -16,7 +14,7 @@ TEST(ClimateConstructorTest, Constructor_1) {
   EXPECT_EQ(0, climate.yearly_temperature.min);
   EXPECT_EQ(0, climate.yearly_rainfall.max);
   EXPECT_EQ(0, climate.yearly_rainfall.min);
-  EXPECT_EQ(Climate::TropicalWerAndDry, climate.climate_zone);
+  EXPECT_EQ(Climate::TropicalWetAndDry, climate.climate_zone);
 }
 
 TEST(ClimateConstructorTest, Constructor_2) {

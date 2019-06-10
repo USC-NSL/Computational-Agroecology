@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_ENVIRONMENT_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_ENVIRONMENT_H_
 
 #include <chrono>
 #include <iostream>
@@ -13,19 +13,30 @@
 
 namespace environment {
 
+// The main data structure which stores most of the data about this environment
 class Environment {
  public:
+  // Constructor
   Environment(const Config& config,
               const std::chrono::system_clock::time_point& time,
               const Terrain& terrain);
 
+  // This tells its internal simulator to simulate to the specified time
   void JumpToTime(const std::chrono::system_clock::time_point& time);
+
+  // This tells its internal simulator to move forward some time period
   void JumpDuration(const std::chrono::duration<int>& duration);
 
+  // This receives an action from either an agent or a human
+  // telling the internal simulator to schedule a task
   void ReceiveAction(const simulator::action::Action* action);
+
+  // This is identical to the member function above except that a list of
+  // actions are received here
   void ReceiveActions(
       const std::vector<const simulator::action::Action*>& actions);
 
+  // Accessors
   inline const Config& config() { return config_; }
 
   inline const Climate& climate() { return climate_; }
@@ -39,9 +50,14 @@ class Environment {
   inline const Weather& weather() { return weather_; }
 
  private:
+  friend std::ostream& operator<<(std::ostream& os, const Environment& env);
+  friend struct simulator::action::ActionList;
+  friend class simulator::MainSimulator;
+
   Config config_;
   const Climate climate_;
 
+  // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;
   Terrain terrain_;
   Weather weather_;
@@ -49,16 +65,10 @@ class Environment {
   // TODO: define a class for light information
 
   simulator::MainSimulator main_simulator_;
-
-  friend std::ostream& operator<<(std::ostream& os, const Environment& env);
-
-  friend struct simulator::action::ActionList;
-
-  friend class simulator::MainSimulator;
 };
 
 std::ostream& operator<<(std::ostream& os, const Environment& env);
 
 }  // namespace environment
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_ENVIRONMENT_H_

@@ -1,4 +1,4 @@
-
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -6,12 +6,13 @@
 
 using namespace environment::plant_type;
 
+const std::string kBeanTypeName = "Bean";
+
 TEST(BeanTest, GlobalVariableTest) {
   const Bean& bean =
-      *(reinterpret_cast<const Bean*>(plant_type_to_plant[TypeId::BEAN]));
+      *(reinterpret_cast<const Bean*>(plant_type_to_plant[kBeanTypeName]));
 
-  EXPECT_EQ(TypeId::BEAN, bean.id);
-  EXPECT_EQ("bean", bean.name);
+  EXPECT_EQ(kBeanTypeName, bean.type_name);
   EXPECT_EQ("o", bean.display_symbol);
   EXPECT_EQ(true, bean.cultivar);
   EXPECT_EQ(0.0, bean.base_temperature);
@@ -23,10 +24,10 @@ TEST(BeanTest, GlobalVariableTest) {
 
 TEST(BeanTest, GenerateTest) {
   const Bean& bean =
-      *(reinterpret_cast<const Bean*>(plant_type_to_plant[TypeId::BEAN]));
+      *(reinterpret_cast<const Bean*>(plant_type_to_plant[kBeanTypeName]));
   auto plant = bean.GeneratePlantInstance();
 
-  EXPECT_EQ(TypeId::BEAN, plant->type);
+  EXPECT_EQ(kBeanTypeName, plant->type_name);
 }
 
 int main(int argc, char** argv) {

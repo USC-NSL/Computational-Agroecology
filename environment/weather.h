@@ -12,6 +12,8 @@ namespace environment {
 // Moved from the original code base
 // Weather specify condition on everyday
 struct Weather {
+  // We should be able to get the weather data from the climate and a specific
+  // time point
   Weather(const environment::Climate& climate,
           const std::chrono::system_clock::time_point& time);
 

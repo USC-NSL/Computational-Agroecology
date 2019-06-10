@@ -7,6 +7,7 @@
 
 namespace environment {
 
+// The configuration of this place
 struct Config {
   Config(const std::string& name, const Location& location);
 

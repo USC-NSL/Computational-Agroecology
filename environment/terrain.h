@@ -9,6 +9,7 @@
 
 namespace environment {
 
+// A wrapper to represent the position on the `Tiles`
 struct Coordinate {
   Coordinate(const size_t x, const size_t y);
 
@@ -29,6 +30,7 @@ struct Cell {
 
 bool operator==(const Cell& lhs, const Cell& rhs);
 
+// A collection of 2D `Cell`s
 class Tiles : public std::vector<std::vector<Cell>> {
  public:
   Tiles();
@@ -37,15 +39,15 @@ class Tiles : public std::vector<std::vector<Cell>> {
     return (*this)[coordinate.x][coordinate.y];
   }
 
-  inline const size_t width() const { return this->size(); }
-  inline const size_t length() const {
-    return this->empty() ? 0 : this->front().size();
-  }
+  inline const size_t width() const { return size(); }
+  inline const size_t length() const { return empty() ? 0 : front().size(); }
 };
 
 // TODO: think about whether it is necessary to define a `class Tiles`
+// The data structure that stores the data of the crop field
 class Terrain {
  public:
+  // Constructor
   // TODO: add more constructors to import different kinds of terrain
   // currently, this is just a dumb constructor which ignores lots of details
   Terrain(const size_t size);
@@ -53,7 +55,7 @@ class Terrain {
   // TODO: define it
   const int score();
 
-  // accessors
+  // Accessors
   inline const size_t width() const { return tiles_.width(); }
   inline const size_t length() const { return tiles_.length(); }
   inline Tiles& tiles() { return tiles_; }

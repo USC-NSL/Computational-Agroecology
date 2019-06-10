@@ -1,7 +1,8 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_SIMULATOR_ACTIONS_CROP_H_
-#define COMPUTATIONAL_AGROECOLOGY_SIMULATOR_ACTIONS_CROP_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
 
 #include <chrono>
+#include <string>
 
 #include "action.h"
 #include "plant_types/plant_type.h"
@@ -12,29 +13,30 @@ namespace action {
 
 namespace crop {
 
+// Plant a crop
 struct Add : public Action {
-  const environment::plant_type::TypeId crop_type;
+  const std::string crop_type_name;
 
   Add(const environment::Coordinate& target,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::TypeId crop_type);
+      const std::string& crop_type_name);
 
   Add(const std::vector<environment::Coordinate>& applied_range,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::TypeId crop_type);
+      const std::string& crop_type_name);
 
   Add(const environment::Coordinate& target,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::TypeId crop_type,
+      const std::string& crop_type_name,
       const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   Add(const std::vector<environment::Coordinate>& applied_range,
       const std::chrono::system_clock::time_point& start_time,
       const std::chrono::duration<int>& duration,
-      const environment::plant_type::TypeId crop_type,
+      const std::string& crop_type_name,
       const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   void Execute(environment::Terrain* terrain) const override;
@@ -46,4 +48,4 @@ struct Add : public Action {
 
 }  // namespace simulator
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_SIMULATOR_ACTIONS_CROP_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_

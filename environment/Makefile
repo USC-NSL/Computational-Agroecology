@@ -48,6 +48,12 @@ all: $(ALL_OBJ)
 
 all_test: $(TEST_ALL)
 
+all_test_run: $(TEST_ALL)
+	@for var in $(TEST_ALL); do \
+		echo $$var; \
+		$$var; \
+	done
+
 clean:
 	rm -f $(ALL_OBJ) $(TEST_OBJ) $(TEST_ALL)
 	rm -f main

@@ -14,12 +14,9 @@ class Plant;
 
 namespace plant_type {
 
-enum TypeId { BEAN = 0, CORN, SQUASH };
-
 struct PlantType {
-  PlantType(const TypeId id, const std::string& name,
-            const std::string& display_symbol, const bool cultivar,
-            const double base_temperature,
+  PlantType(const std::string& type_name, const std::string& display_symbol,
+            const bool cultivar, const double base_temperature,
             const MaxMinTemperature& optimal_temperature,
             const MaxMinTemperature& absolute_temperature,
             const MaxMinRainfall& optimal_annual_rainfall,
@@ -29,8 +26,7 @@ struct PlantType {
   void Register();
   virtual environment::Plant* GeneratePlantInstance() const = 0;
 
-  const TypeId id;
-  const std::string name;
+  const std::string type_name;
   const std::string display_symbol;
   const bool cultivar;
 
@@ -43,7 +39,9 @@ struct PlantType {
 };
 
 // global map declaration
-extern std::unordered_map<int, const PlantType*> plant_type_to_plant;
+// This global map maps from a type name to its corresponding `PlantType` object
+// pointer
+extern std::map<std::string, const PlantType*> plant_type_to_plant;
 
 }  // namespace plant_type
 

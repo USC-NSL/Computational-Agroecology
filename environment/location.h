@@ -3,6 +3,7 @@
 
 namespace environment {
 
+// Geographical location
 struct Location {
   Location(const double longitude_left, const double longitude_right,
            const double latitude_top, const double latitude_bottom);

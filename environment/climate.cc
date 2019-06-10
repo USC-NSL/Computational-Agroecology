@@ -4,7 +4,7 @@ namespace environment {
 
 // TODO: do some magical things to implement this.
 Climate::Climate(const Config& config)
-    : Climate(0, 0, 0, 0, TropicalWerAndDry) {}
+    : Climate(0, 0, 0, 0, TropicalWetAndDry) {}
 
 Climate::Climate(const double temp_max, const double temp_min,
                  const double rain_max, const double rain_min,
