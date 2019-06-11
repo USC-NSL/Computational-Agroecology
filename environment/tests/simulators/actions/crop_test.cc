@@ -79,13 +79,13 @@ TEST_F(AddTest, ExecuteTest_1) {
   crop::Add action(applied_range.front(), time, duration, kCornTypeName);
   Terrain terrain(kNumberOfRange);
 
-  ActionList::CROP_ADD_execute(&terrain, &action);
+  ActionExecutorList::CROP_ADD_execute(&terrain, &action);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name());
       } else {
         EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
@@ -97,7 +97,7 @@ TEST_F(AddTest, ExecuteTest_2) {
   crop::Add action(applied_range, time, duration, kCornTypeName);
   Terrain terrain(kNumberOfRange);
 
-  ActionList::CROP_ADD_execute(&terrain, &action);
+  ActionExecutorList::CROP_ADD_execute(&terrain, &action);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
@@ -106,7 +106,7 @@ TEST_F(AddTest, ExecuteTest_2) {
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
         EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name());
       } else {
         EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }

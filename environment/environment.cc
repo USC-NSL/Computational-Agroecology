@@ -25,11 +25,10 @@ void Environment::JumpDuration(const std::chrono::duration<int>& duration) {
 }
 
 void Environment::ReceiveAction(const simulator::action::Action* action) {
-  ReceiveActions(std::vector<const simulator::action::Action*>(1, action));
+  ReceiveActions(simulator::action::ActionList(1, action));
 }
 
-void Environment::ReceiveActions(
-    const std::vector<const simulator::action::Action*>& actions) {
+void Environment::ReceiveActions(const simulator::action::ActionList& actions) {
   main_simulator_.ReceiveActions(actions);
 }
 

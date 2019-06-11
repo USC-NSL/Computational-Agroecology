@@ -1,8 +1,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_PLANT_TYPE_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_PLANT_TYPE_H_
 
+#include <map>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include "utility.h"

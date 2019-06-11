@@ -40,8 +40,8 @@ struct Action {
          const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   // This should directly call its corresponding function in `struct
-  // ActionList`. We should not write anything functional here since this is not
-  // a friend of the `environment::Environment`.
+  // ActionExecutorList`. We should not write anything functional here since
+  // this is not a friend of the `environment::Environment`.
   virtual void Execute(environment::Terrain* terrain) const = 0;
 
   const ActionType type;
@@ -56,10 +56,12 @@ struct Action {
 // Here we declare the names of executors which will be called from an action
 // object. The definitions of them should be written in their corresponding *.cc
 // files.
-struct ActionList {
+struct ActionExecutorList {
   static void CROP_ADD_execute(environment::Terrain* const terrain,
                                const Action* action);
 };
+
+using ActionList = std::vector<const Action*>;
 
 // Custom comparator for `struct Action`
 // These two custom comparators are used for the priority queues in the

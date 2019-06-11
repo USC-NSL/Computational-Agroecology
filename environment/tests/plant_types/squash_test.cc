@@ -27,7 +27,7 @@ TEST(SquashTest, GenerateTest) {
       *(reinterpret_cast<const Squash*>(plant_type_to_plant[kSquashTypeName]));
   auto plant = squash.GeneratePlantInstance();
 
-  EXPECT_EQ(kSquashTypeName, plant->type_name);
+  EXPECT_EQ(kSquashTypeName, plant->type_name());
 }
 
 int main(int argc, char** argv) {

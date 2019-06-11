@@ -27,6 +27,8 @@ struct Climate {
   // Construct this based on the `config`
   Climate(const environment::Config& config);
 
+  // TODO: include other existing libraries to replace the current types with
+  // unit types
   Climate(const double temp_max, const double temp_min, const double rain_max,
           const double rain_min, const ZoneType type);
   Climate(const MaxMinTemperature& yearly_temperature,

@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os, const Terrain& terrain) {
     for (const auto& cell : row) {
       if (cell.plant != nullptr) {
         auto& plant_type =
-            plant_type::plant_type_to_plant[cell.plant->type_name];
+            plant_type::plant_type_to_plant[cell.plant->type_name()];
         os << plant_type->display_symbol;
       } else {
         os << " ";

@@ -16,12 +16,14 @@ class Plant {
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
-  const std::string type_name;
-
   // TODO: add other member functions to complete this model
+
+  inline const std::string& type_name() { return type_name_; }
 
  private:
   void IncrementMaturity();
+
+  const std::string type_name_;
 
   // [0,10] where 0 is dead and 10 is most healthy.
   int health_;

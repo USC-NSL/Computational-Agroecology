@@ -9,7 +9,7 @@ using namespace environment;
 TEST(PlantTest, ConstructorTest) {
   const std::string kCornTypeName = "Corn";
   Plant plant(kCornTypeName);
-  EXPECT_EQ(kCornTypeName, plant.type_name);
+  EXPECT_EQ(kCornTypeName, plant.type_name());
 }
 
 int main(int argc, char **argv) {

@@ -9,8 +9,8 @@ namespace simulator {
 
 namespace action {
 
-void ActionList::CROP_ADD_execute(environment::Terrain* const terrain,
-                                  const Action* action) {
+void ActionExecutorList::CROP_ADD_execute(environment::Terrain* const terrain,
+                                          const Action* action) {
   using environment::plant_type::plant_type_to_plant;
   const crop::Add* add_crop = reinterpret_cast<const crop::Add*>(action);
 
@@ -57,7 +57,7 @@ Add::Add(const std::vector<environment::Coordinate>& applied_range,
       crop_type_name(crop_type_name) {}
 
 void Add::Execute(environment::Terrain* terrain) const {
-  simulator::action::ActionList::CROP_ADD_execute(terrain, this);
+  simulator::action::ActionExecutorList::CROP_ADD_execute(terrain, this);
 }
 
 }  // namespace crop

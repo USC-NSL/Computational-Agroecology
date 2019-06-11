@@ -14,9 +14,9 @@
 namespace environment {
 
 // The main data structure which stores most of the data about this environment
+// TODO: Copy-on-Write
 class Environment {
  public:
-  // Constructor
   Environment(const Config& config,
               const std::chrono::system_clock::time_point& time,
               const Terrain& terrain);
@@ -33,8 +33,7 @@ class Environment {
 
   // This is identical to the member function above except that a list of
   // actions are received here
-  void ReceiveActions(
-      const std::vector<const simulator::action::Action*>& actions);
+  void ReceiveActions(const simulator::action::ActionList& actions);
 
   // Accessors
   inline const Config& config() { return config_; }
@@ -51,7 +50,7 @@ class Environment {
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Environment& env);
-  friend struct simulator::action::ActionList;
+  friend struct simulator::action::ActionExecutorList;
   friend class simulator::MainSimulator;
 
   Config config_;
