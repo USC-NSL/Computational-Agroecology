@@ -1,5 +1,7 @@
 #include "agent.h"
 
+#include "plant_types/plant_type.h"
+
 namespace agent {
 
 Agent::Agent(const std::string& name, environment::Environment* env)
@@ -32,10 +34,48 @@ Agent::ReturnCodes Agent::TakeAction(const simulator::action::Action* action) {
     return NOT_ENOUGH_RESOURCES;
   }
 
-  DeductResources(action->cost);
   env_->ReceiveAction(action);
+  DeductResources(action->cost);
 
   return SUCCESS;
+}
+
+std::vector<std::string> Agent::GetQualifiedPlants() {
+  std::vector<std::string> qualified_plants;
+
+  for (const auto& plant_type : environment::plant_type::plant_type_to_plant) {
+    if (plant_type.second->absolute_temperature.max >=
+            env_->climate().yearly_temperature.max &&
+        plant_type.second->absolute_temperature.min <=
+            env_->climate().yearly_temperature.min &&
+        plant_type.second->absolute_annual_rainfall.max >=
+            env_->climate().yearly_rainfall.max &&
+        plant_type.second->absolute_annual_rainfall.min <=
+            env_->climate().yearly_rainfall.min) {
+      qualified_plants.push_back(plant_type.first);
+    }
+  }
+
+  return qualified_plants;
+}
+
+std::vector<std::string> Agent::GetOptimalPlants() {
+  std::vector<std::string> optimal_plants;
+
+  for (const auto& plant_type : environment::plant_type::plant_type_to_plant) {
+    if (plant_type.second->optimal_temperature.max >=
+            env_->climate().yearly_temperature.max &&
+        plant_type.second->optimal_temperature.min <=
+            env_->climate().yearly_temperature.min &&
+        plant_type.second->optimal_annual_rainfall.max >=
+            env_->climate().yearly_rainfall.max &&
+        plant_type.second->optimal_annual_rainfall.min <=
+            env_->climate().yearly_rainfall.min) {
+      optimal_plants.push_back(plant_type.first);
+    }
+  }
+
+  return optimal_plants;
 }
 
 bool Agent::CheckEnoughResources(const ResourceList& resources) const {

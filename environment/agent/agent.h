@@ -29,6 +29,9 @@ class Agent {
   void AddResource(const simulator::ResourceType& resource, size_t quantity);
   ReturnCodes TakeAction(const simulator::action::Action* action);
 
+  std::vector<std::string> GetQualifiedPlants();
+  std::vector<std::string> GetOptimalPlants();
+
   // accessors
   inline const std::string& name() const { return name_; }
 

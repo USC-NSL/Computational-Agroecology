@@ -4,7 +4,7 @@
 namespace simulator {
 
 // This defines the types of resources that an agent/human has.
-enum class ResourceType { MONEY = 0, TIME, LABOR };
+enum class ResourceType { MONEY = 0, LABOR };
 
 }  // namespace simulator
 

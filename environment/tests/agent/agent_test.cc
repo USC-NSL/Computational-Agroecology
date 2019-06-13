@@ -4,11 +4,13 @@
 
 #include "agent/agent.h"
 #include "environment.h"
+#include "plant_types/plant_type.h"
 #include "simulators/actions/crop.h"
 #include "simulators/resource.h"
 
 using namespace agent;
 using namespace environment;
+using namespace environment::plant_type;
 using namespace simulator;
 using namespace simulator::action;
 
@@ -104,6 +106,36 @@ TEST_F(AgentTest, TakeActionTest) {
   EXPECT_EQ(Agent::SUCCESS, ret_code);
   auto find_money = agent->owned_resource().find(ResourceType::MONEY);
   EXPECT_EQ(90, find_money->second);
+}
+
+struct FakePlantType : public PlantType {
+  FakePlantType()
+      : PlantType("Fake", "F", true, 0.0, MaxMinTemperature(0, 0),
+                  MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
+                  MaxMinRainfall(0, 0)) {}
+  environment::Plant* GeneratePlantInstance() const override {
+    return new Plant("Fake");
+  }
+};
+
+TEST_F(AgentTest, GetQualifiedPlantsTest) {
+  FakePlantType fake_plant_type;
+
+  auto ret = agent->GetQualifiedPlants();
+
+  ASSERT_FALSE(ret.empty());
+  EXPECT_NE(ret.end(),
+            std::find(ret.begin(), ret.end(), fake_plant_type.type_name));
+}
+
+TEST_F(AgentTest, GetOptimalPlantsTest) {
+  FakePlantType fake_plant_type;
+
+  auto ret = agent->GetOptimalPlants();
+
+  ASSERT_FALSE(ret.empty());
+  EXPECT_NE(ret.end(),
+            std::find(ret.begin(), ret.end(), fake_plant_type.type_name));
 }
 
 int main(int argc, char** argv) {
