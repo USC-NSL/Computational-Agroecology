@@ -32,7 +32,7 @@ Agent::ReturnCodes Agent::TakeAction(const simulator::action::Action* action) {
     return NOT_ENOUGH_RESOURCES;
   }
 
-  DeduceResources(action->cost);
+  DeductResources(action->cost);
   env_->ReceiveAction(action);
 
   return SUCCESS;
@@ -51,7 +51,7 @@ bool Agent::CheckEnoughResources(const ResourceList& resources) const {
   return ret;
 }
 
-void Agent::DeduceResources(const ResourceList& cost) {
+void Agent::DeductResources(const ResourceList& cost) {
   for (const auto& resource : cost) {
     owned_resource_[resource.first] -= resource.second;
   }

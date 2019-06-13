@@ -51,7 +51,7 @@ class Agent {
 
   bool CheckEnoughResources(const ResourceList& resources) const;
 
-  void DeduceResources(const ResourceList& cost);
+  void DeductResources(const ResourceList& cost);
 };
 
 }  // namespace agent
