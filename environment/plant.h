@@ -41,6 +41,7 @@ struct Plant {
 };
 
 extern const int kInitialHealth;
+bool operator==(const Plant& lhs, const Plant& rhs);
 
 }  // namespace environment
 

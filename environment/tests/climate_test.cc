@@ -40,6 +40,16 @@ TEST(ClimateTest, ConstructorTest_3) {
   EXPECT_EQ(Climate::Polar, climate.climate_zone);
 }
 
+TEST(ClimateTest, OperatorTest) {
+  Climate lhs(1.0, 2.0, 3.0, 4.0, Climate::Polar);
+  Climate rhs(1.0, 2.0, 3.0, 4.0, Climate::Polar);
+
+  EXPECT_TRUE(lhs == rhs);
+
+  Climate new_rhs(1.0, 2.0, 3.0, 4.0, Climate::DesertOrArid);
+  EXPECT_FALSE(lhs == new_rhs);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

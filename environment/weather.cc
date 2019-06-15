@@ -14,6 +14,10 @@ Weather::Weather(const double temp_max, const double temp_min,
 Weather::Weather(const MaxMinTemperature& temperature, const double rainfall)
     : temperature(temperature), rainfall(rainfall) {}
 
+bool operator==(const Weather& lhs, const Weather& rhs) {
+  return (lhs.temperature == rhs.temperature) && (lhs.rainfall == rhs.rainfall);
+}
+
 std::ostream& operator<<(std::ostream& os, const Weather& weather) {
   os << "Max temperature for today: " << weather.temperature.max << "\n";
   os << "Min temperature for today: " << weather.temperature.min << "\n";

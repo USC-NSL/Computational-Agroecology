@@ -39,6 +39,8 @@ struct Climate {
   const MaxMinRainfall yearly_rainfall;
 };
 
+bool operator==(const Climate& lhs, const Climate& rhs);
+
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CLIMATE_H_

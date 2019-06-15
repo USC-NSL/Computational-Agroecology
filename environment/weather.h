@@ -24,6 +24,7 @@ struct Weather {
   const double rainfall;
 };
 
+bool operator==(const Weather& lhs, const Weather& rhs);
 std::ostream& operator<<(std::ostream& os, const Weather& weather);
 
 }  // namespace environment

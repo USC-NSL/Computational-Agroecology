@@ -29,6 +29,16 @@ TEST(WeatherTest, ConstructorTest_3) {
   EXPECT_EQ(2.0, weather.rainfall);
 }
 
+TEST(WeatherTest, OperatorTest) {
+  Weather lhs(0.0, 1.0, 2.0);
+  Weather rhs(0.0, 1.0, 2.0);
+
+  EXPECT_TRUE(lhs == rhs);
+
+  Weather new_rhs(0.0, 1.0, 3.0);
+  EXPECT_FALSE(lhs == new_rhs);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

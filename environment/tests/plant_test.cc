@@ -18,6 +18,17 @@ TEST(PlantTest, ConstructorTest) {
   EXPECT_TRUE(plant.gdd_thresholds.empty());
 }
 
+TEST(PlantTest, OperatorTest) {
+  const std::string kCornTypeName = "Corn";
+  Plant lhs(kCornTypeName);
+  Plant rhs(kCornTypeName);
+
+  EXPECT_TRUE(lhs == rhs);
+
+  rhs.accumulated_gdd = 1;
+  EXPECT_FALSE(lhs == rhs);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

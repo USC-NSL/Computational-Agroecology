@@ -20,11 +20,8 @@ Cell::Cell(const size_t size, const Soil& soil)
     : size(size), plant(nullptr), soil(soil) {}
 
 bool operator==(const Cell& lhs, const Cell& rhs) {
-  bool ret = true;
-  ret &= (lhs.size == rhs.size);
-  ret &= (lhs.plant == rhs.plant);
-  ret &= (lhs.soil == rhs.soil);
-  return ret;
+  return (lhs.size == rhs.size) && (lhs.plant == rhs.plant) &&
+         (lhs.soil == rhs.soil);
 }
 
 // `class Tiles`

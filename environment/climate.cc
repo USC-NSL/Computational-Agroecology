@@ -19,4 +19,10 @@ Climate::Climate(const MaxMinTemperature& yearly_temperature,
       yearly_rainfall(yearly_rainfall),
       climate_zone(type) {}
 
+bool operator==(const Climate& lhs, const Climate& rhs) {
+  return (lhs.climate_zone == rhs.climate_zone) &&
+         (lhs.yearly_temperature == rhs.yearly_temperature) &&
+         (lhs.yearly_rainfall == rhs.yearly_rainfall);
+}
+
 }  // namespace environment
