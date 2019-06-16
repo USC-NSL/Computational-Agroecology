@@ -2,7 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
 
 #include <string>
-
+#include "produce.h"
 #include "plant_types/plant_type.h"
 
 namespace environment {
@@ -16,11 +16,21 @@ class Plant {
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
+  void growProduce() { this->produce_.push_back(new Produce); }
+
+  void incrementProduceGrowth(Produce* temp) { temp->IncrementMaturity(); }
+
+  void updateProduceWeight(Produce* temp, double value) { temp->UpdateWeight(value); }
+
+  void increaseProduceWeight(Produce* temp, double additional) { temp->IncreaseWeight(additional); }
+
+  void harvestReadyProduce();
   // TODO: add other member functions to complete this model
 
   inline const std::string& type_name() { return type_name_; }
 
  private:
+
   void IncrementMaturity();
 
   const std::string type_name_;
@@ -39,7 +49,12 @@ class Plant {
 
   int base_temperature_;
 
+  // USED FOR PRODUCE IMPLEMENTATION --RASTAAR
   const std::vector<int> gdd_thresholds_;
+
+  std::vector < Produce* > produce_;
+  double produceWeightProduced;
+
 };
 
 }  // namespace environment

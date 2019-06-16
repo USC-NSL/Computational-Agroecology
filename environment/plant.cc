@@ -21,5 +21,18 @@ void Plant::IncrementMaturity() {
   else if (maturity_ == Plant::MATURE)
     maturity_ = Plant::OLD;
 }
+// harvest only the ready produce from the plant
+void Plant::harvestReadyProduce()
+{
+  for(unsigned int i = 0; i < this->produce_.size(); i++)
+  {
+    if(this->produce_[i]->getMaturity() == Produce::RIPE)
+    {
+      this->produceWeightProduced += this->produce_[i]->getWeight();
+      delete this->produce_[i];
+      this->produce_.erase(this->produce_.begin()+i); // remove index from vector
+    }
+  }
+}
 
 }  // namespace environment

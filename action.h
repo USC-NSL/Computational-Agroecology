@@ -6,7 +6,9 @@ enum ActionType {
   ADD_CROP,
   REMOVE_CROP,
   CHANGE_TERRAIN,
-  ADD_WATER
+  ADD_WATER,
+  GROW_PRODUCE, // added by rastaar
+  HARVEST_PRODUCE //
 };
 
 // Describes an action to be taken on a piece of land.
