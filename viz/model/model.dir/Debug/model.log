@@ -1,0 +1,11 @@
+﻿  face.cpp
+  mesh.cpp
+D:\Source\Computational-Agroecology\viz\model\mesh.cpp(130): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  model.cpp
+D:\Source\Computational-Agroecology\viz\model\model.cpp(173): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\Source\Computational-Agroecology\viz\model\model.cpp(261): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\Source\Computational-Agroecology\viz\model\model.cpp(263): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\Source\Computational-Agroecology\viz\model\model.cpp(265): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\Source\Computational-Agroecology\viz\model\model.cpp(274): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码...
+  model.vcxproj -> D:\Source\Computational-Agroecology\viz\model\Debug\model.lib

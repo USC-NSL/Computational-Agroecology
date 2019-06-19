@@ -1,0 +1,7 @@
+﻿  main.cpp
+  map_control.cpp
+D:\Source\Computational-Agroecology\viz\map_control.cpp(55): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  photon_control.cpp
+  正在生成代码...
+D:\Source\Computational-Agroecology\viz\model\model.h(56): warning C4715: “Model::getTextureInfo”: 不是所有的控件路径都返回值
+  photon.vcxproj -> D:\Source\Computational-Agroecology\viz\Debug\photon.exe
