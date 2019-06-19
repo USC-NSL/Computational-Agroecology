@@ -28,6 +28,7 @@ class Plant {
   // TODO: add other member functions to complete this model
 
   inline const std::string& type_name() { return type_name_; }
+  std::vector<Produce*> getProduce_() { return this->produce_; }
 
  private:
 
@@ -53,6 +54,7 @@ class Plant {
   const std::vector<int> gdd_thresholds_;
 
   std::vector < Produce* > produce_;
+  std::vector < Produce*> produceHarvested;
   double produceWeightProduced;
 
 };

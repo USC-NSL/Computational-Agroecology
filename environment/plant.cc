@@ -26,10 +26,16 @@ void Plant::harvestReadyProduce()
 {
   for(unsigned int i = 0; i < this->produce_.size(); i++)
   {
-    if(this->produce_[i]->getMaturity() == Produce::RIPE)
+    // if old, dump 
+    if(this->produce_[i]->getMaturity() == Produce::OLD)
     {
-      this->produceWeightProduced += this->produce_[i]->getWeight();
+      this->produce_.erase(this->produce_.begin()+i);
       delete this->produce_[i];
+    } // if ripe, harvest
+    else if(this->produce_[i]->getMaturity() == Produce::RIPE)
+    {
+      this->produceWeightProduced += this->produce_[i]->getWeight(); // add weight to total harvested
+      this->produceHarvested.push_back(produce_[i]); // add to harvested vector
       this->produce_.erase(this->produce_.begin()+i); // remove index from vector
     }
   }
