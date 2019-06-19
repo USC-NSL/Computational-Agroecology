@@ -21,20 +21,29 @@ void Plant::IncrementMaturity() {
   else if (maturity_ == Plant::MATURE)
     maturity_ = Plant::OLD;
 }
+
+void Plant::IncrementProduceMaturity(Produce* temp) {
+  if (temp->maturity_ == Produce::FLOWER)
+    temp->maturity_ = Produce::YOUNG;
+  else if (temp->maturity_ == Produce::YOUNG)
+    temp->maturity_ = Produce::RIPE;
+  else if (temp->maturity_ == Produce::RIPE)
+    temp->maturity_ = Produce::OLD;
+}
+
 // harvest only the ready produce from the plant
 void Plant::harvestReadyProduce() {
-  for(unsigned int i = 0; i < produce_.size(); i++)
-  {
-    // if old, dump 
-    if(produce_[i]->getMaturity() == Produce::OLD) {
-      produce_.erase(produce_.begin()+i);
-      delete produce_[i];
-    } // if ripe, harvest
-    else if(produce_[i]->getMaturity() == Produce::RIPE)
-    {
-      produceWeightProduced += produce_[i]->getWeight(); // add weight to total harvested
-      produceHarvested.push_back(produce_[i]); // add to harvested vector
-      produce_.erase(produce_.begin()+i); // remove index from vector
+  std::set<Produce*>::iterator it = produce_.begin();
+  // go through each element in set and see maturity for harvesting purposes
+  for(it; it != produce_.end(); it++) {
+    // if ripe, remove from plant and add to harvested set
+    if( (*it)->maturity_ == Produce::RIPE) {
+      produceHarvested.insert(*it);
+      produce_.erase(*it);
+    }
+    // if old, just remove from plant
+    else if((*it)->maturity_ == Produce::OLD) {
+      produce_.erase(*it);
     }
   }
 }

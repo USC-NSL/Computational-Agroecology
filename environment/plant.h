@@ -2,6 +2,8 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
 
 #include <string>
+#include <list>
+#include <set>
 #include "produce.h"
 #include "plant_types/plant_type.h"
 
@@ -16,19 +18,20 @@ class Plant {
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
-  void growProduce() { this->produce_.push_back(new Produce); }
+  void growProduce() { this->produce_.insert(new Produce); }
 
-  void incrementProduceGrowth(Produce* temp) { temp->IncrementMaturity(); }
+  void IncrementProduceMaturity(Produce* temp);
 
-  void updateProduceWeight(Produce* temp, double value) { temp->UpdateWeight(value); }
+  void updateProduceWeight(Produce* temp, double value) { temp->weight_ = value; }
 
-  void increaseProduceWeight(Produce* temp, double additional) { temp->IncreaseWeight(additional); }
+  void increaseProduceWeight(Produce* temp, double additional) { temp->weight_ += additional; }
 
   void harvestReadyProduce();
   // TODO: add other member functions to complete this model
 
   inline const std::string& type_name() { return type_name_; }
-  std::vector<Produce*> getProduce_() { return this->produce_; }
+
+  std::set<Produce*> getProduce_() { return produce_; }
 
  private:
   void IncrementMaturity();
@@ -49,11 +52,15 @@ class Plant {
 
   int base_temperature_;
 
-  // USED FOR PRODUCE IMPLEMENTATION --RASTAAR
   const std::vector<int> gdd_thresholds_;
 
-  std::list<Produce*> produce_;
-  std::list<Produce*> produceHarvested;
+  // list for the produce on a plant
+  std::set<Produce*> produce_;
+
+  // list for the produce harvested from a plant
+  std::set<Produce*> produceHarvested;
+
+  // total weight of produce made from a plant (more statistically important)
   double totalProduceWeight;
 
 };

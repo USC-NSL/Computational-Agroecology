@@ -1,16 +1,15 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PRODUCE_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PRODUCE_H_
 
-
 namespace environment {
 
-enum Maturity { FLOWER, YOUNG, RIPE, OLD};
-
 struct Produce {
-
-  double weight_;
-  Maturity maturity_;
-
+  // enum to describe plant's individual fruit/produce maturities
+  enum Maturity { FLOWER = 0, YOUNG = 1, RIPE = 2, OLD = 3};
+  // initialize weight at 0
+  double weight_ = 0.0;
+  // initialize maturity to flower
+  Maturity maturity_ = Produce::FLOWER;
 };
 
 } // namespace environment
@@ -42,5 +41,3 @@ struct Produce {
 
 } // namespace environment
 */
-
-#endif
