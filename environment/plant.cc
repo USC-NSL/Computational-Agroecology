@@ -22,21 +22,19 @@ void Plant::IncrementMaturity() {
     maturity_ = Plant::OLD;
 }
 // harvest only the ready produce from the plant
-void Plant::harvestReadyProduce()
-{
-  for(unsigned int i = 0; i < this->produce_.size(); i++)
+void Plant::harvestReadyProduce() {
+  for(unsigned int i = 0; i < produce_.size(); i++)
   {
     // if old, dump 
-    if(this->produce_[i]->getMaturity() == Produce::OLD)
-    {
-      this->produce_.erase(this->produce_.begin()+i);
-      delete this->produce_[i];
+    if(produce_[i]->getMaturity() == Produce::OLD) {
+      produce_.erase(produce_.begin()+i);
+      delete produce_[i];
     } // if ripe, harvest
-    else if(this->produce_[i]->getMaturity() == Produce::RIPE)
+    else if(produce_[i]->getMaturity() == Produce::RIPE)
     {
-      this->produceWeightProduced += this->produce_[i]->getWeight(); // add weight to total harvested
-      this->produceHarvested.push_back(produce_[i]); // add to harvested vector
-      this->produce_.erase(this->produce_.begin()+i); // remove index from vector
+      produceWeightProduced += produce_[i]->getWeight(); // add weight to total harvested
+      produceHarvested.push_back(produce_[i]); // add to harvested vector
+      produce_.erase(produce_.begin()+i); // remove index from vector
     }
   }
 }

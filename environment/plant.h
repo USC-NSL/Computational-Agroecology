@@ -31,7 +31,6 @@ class Plant {
   std::vector<Produce*> getProduce_() { return this->produce_; }
 
  private:
-
   void IncrementMaturity();
 
   const std::string type_name_;
@@ -53,9 +52,9 @@ class Plant {
   // USED FOR PRODUCE IMPLEMENTATION --RASTAAR
   const std::vector<int> gdd_thresholds_;
 
-  std::vector < Produce* > produce_;
-  std::vector < Produce*> produceHarvested;
-  double produceWeightProduced;
+  std::list<Produce*> produce_;
+  std::list<Produce*> produceHarvested;
+  double totalProduceWeight;
 
 };
 
