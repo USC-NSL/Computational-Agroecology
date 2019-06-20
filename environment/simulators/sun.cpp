@@ -82,8 +82,6 @@ void Sun::first_step() {
 	delta = PI / 12.0f * (th - 12);
 	lamda = _degree_to_radians(_latitude);
 	beta = asin(sin(sigma) * sin(lamda) + cos(sigma) * cos(lamda) * cos(delta));
-	/*debug information*/
-	std::cout << beta * 180.0f / PI << std::endl;
 	alpha = acos((sin(lamda) * sin(beta) - sin(sigma)) / (cos(lamda) * cos(beta)));
 	if (_hour < 12) {
 		alpha *= -1.0f;
