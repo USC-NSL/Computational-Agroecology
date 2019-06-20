@@ -1,10 +1,15 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
-#include <iostream>
-#include <cassert>
-class Sun {
+#include "simulator.h"
+namespace simulator {
+class SunSimulator : public Simulator{
 public:
-	Sun(int year, int month, int day, int hour, int minute, int second, float longitude, float latitude);
+	SunSimulator(int year = 0, int month = 0, int day = 0, int hour = 0, int minute = 0, int second = 0, float longitude = 0.0f, float latitude = 0.0f);
+	void SimulateToTime(
+		environment::Environment* env,
+		const std::chrono::system_clock::time_point& time) override;
+private:
+	void check();
 	void updateTime(int year, int month, int day, int hour, int minute, int second);
 	void updatePosition(float longitude, float latitude);
 	void getResult();
@@ -13,7 +18,6 @@ public:
 	float get_hourlyIrradiance() const;
 	float _degree_to_radians(float _degree) const;
 	float _radians_to_degree(float _radians) const;
-private:
 	const float PI = 3.14159265359f;
 	int _year, _month, _day, _hour, _minute, _second;
 	float _longitude, _latitude;
@@ -38,4 +42,6 @@ private:
 
 	float R, K, I_df, I_dr;
 };
-#endif
+
+} // namespace simulator
+#endif COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
