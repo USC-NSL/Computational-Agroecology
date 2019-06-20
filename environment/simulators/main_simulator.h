@@ -5,6 +5,7 @@
 
 #include "actions/action.h"
 #include "simulator.h"
+#include "sun_simulator.h"
 
 namespace simulator {
 
@@ -45,6 +46,7 @@ class MainSimulator : public Simulator {
   std::priority_queue<const action::Action*, std::vector<const action::Action*>,
                       action::ActionEndTimeComparator>
       pending_action_pq_;
+  SunSimulator sunsimulator_;
 };
 
 }  // namespace simulator

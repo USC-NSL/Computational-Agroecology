@@ -1,21 +1,38 @@
 #include <iostream>
+#include <gtest/gtest.h>
 #include "../../simulators/sun_simulator.h"
+#include "../../environment.h"
+
 using namespace simulator;
-int main() {
-	SunSimulator sun_test(2019, 6, 21, 12, 0, 0, 0.0f, 23.5f);/*
-	sun_test.getResult();
-	std::cout << sun_test._radians_to_degree(sun_test.get_solarAltitude()) << std::endl;
-	std::cout << sun_test._radians_to_degree(sun_test.get_sunAzimuth()) << std::endl;
-	std::cout << sun_test.get_hourlyIrradiance() << std::endl;
-	sun_test.updateTime(2019, 5, 19, 12, 0, 0);
-	sun_test.getResult();
-	std::cout << sun_test._radians_to_degree(sun_test.get_solarAltitude()) << std::endl;
-	std::cout << sun_test._radians_to_degree(sun_test.get_sunAzimuth()) << std::endl;
-	std::cout << sun_test.get_hourlyIrradiance() << std::endl;
-	sun_test.updatePosition(-118.2722f, 34.0279f);
-	sun_test.getResult();
-	std::cout << sun_test._radians_to_degree(sun_test.get_solarAltitude()) << std::endl;
-	std::cout << sun_test._radians_to_degree(sun_test.get_sunAzimuth()) << std::endl;
-	std::cout << sun_test.get_hourlyIrradiance() << std::endl;*/
-	return 0;
+using namespace environment;
+const size_t kTerrainSize = 5;
+
+class SunSimulatorTest : public ::testing::Test {
+public:
+	~SunSimulatorTest() {
+	}
+
+protected:
+	void SetUp() override {
+		auto time = std::chrono::system_clock::now();
+
+		Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
+		Terrain terrain(kTerrainSize);
+		env = new Environment(config, time, terrain);
+	}
+
+	Environment* env;
+	SunSimulator simulator;
+};
+
+TEST_F(SunSimulatorTest, SimulateToTimeTest) {
+	for (size_t i = 0; i < 5; i++) {
+		auto now_time = env->timestamp() + std::chrono::hours(1);
+		simulator.SimulateToTime(env, time);
+	}
+}
+
+int main(int argc, char** argv) {
+	::testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
 }

@@ -58,7 +58,7 @@ class Environment {
   Config config_;
   const Climate climate_;
 
-  //Current (longitude, latitude) pair
+  //Current (longitude, latitude) pair and variables just for the sun simulator
   float longitude_, latitude_;
   float sunAzimuth, solarAltitude, hourlyIrradiance;
 
