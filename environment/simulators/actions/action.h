@@ -13,7 +13,7 @@ namespace simulator {
 namespace action {
 
 // This defines the types of actions that an agent/human can take.
-enum ActionType { CROP_ADD = 0 };
+enum ActionType { CROP_ADD = 0, CROP_REMOVE };
 
 // An agent or a human can set up this `Action` object and pass it to the
 // environment to schedule the action.
@@ -68,6 +68,7 @@ struct ActionEndTimeComparator {
 // forward declaration all actions
 namespace crop {
 struct Add;
+struct Remove;
 }
 
 }  // namespace action

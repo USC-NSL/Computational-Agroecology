@@ -42,6 +42,29 @@ struct Add : public Action {
   void Execute(environment::Terrain* terrain) const override;
 };
 
+// Remove a crop
+struct Remove : public Action {
+    Remove(const environment::Coordinate& target,
+        const std::chrono::system_clock::time_point& start_time,
+        const std::chrono::duration<int>& duration);
+
+    Remove(const std::vector<environment::Coordinate>& applied_range,
+        const std::chrono::system_clock::time_point& start_time,
+        const std::chrono::duration<int>& duration);
+
+    Remove(const environment::Coordinate& target,
+        const std::chrono::system_clock::time_point& start_time,
+        const std::chrono::duration<int>& duration,
+        const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+    Remove(const std::vector<environment::Coordinate>& applied_range,
+        const std::chrono::system_clock::time_point& start_time,
+        const std::chrono::duration<int>& duration,
+        const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+    void Execute(environment::Terrain* terrain) const override;
+};
+
 }  // namespace crop
 
 }  // namespace action
