@@ -9,6 +9,7 @@
 #include "config.h"
 #include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
+#include "simulators/sun_simulator.h"
 #include "terrain.h"
 #include "weather.h"
 
@@ -55,6 +56,7 @@ class Environment {
  private:
   friend std::ostream& operator<<(std::ostream& os, const Environment& env);
   friend class simulator::MainSimulator;
+  friend class simulator::SunSimulator;
 
   // befriend with a list of actions
   friend class simulator::action::crop::Add;
@@ -64,11 +66,14 @@ class Environment {
   Config config_;
   const Climate climate_;
 
+  //Current (longitude, latitude) pair
+  float longitude_, latitude_;
+  float sunAzimuth, solarAltitude, hourlyIrradiance;
+
   // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;
   Terrain terrain_;
   Weather weather_;
-
   // TODO: define a class for light information
 
   simulator::MainSimulator main_simulator_;
