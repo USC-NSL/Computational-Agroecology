@@ -1,7 +1,10 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
+
 #include "simulator.h"
+
 namespace simulator {
+
 class SunSimulator : public Simulator{
 public:
 	SunSimulator(int year = 0, int month = 0, int day = 0, int hour = 0, int minute = 0, int second = 0, float longitude = 0.0f, float latitude = 0.0f);
@@ -28,18 +31,24 @@ private:
 	void fifth_step();
 	void sixth_step();
 
+	//variables for the first step
 	bool is_leapYear;
 	int t_d;
 	float sigma, gama_standard_meridian, th, delta, B, EoT, solar_angel_radians, lamda, beta, alpha;
 
+	//variables for the second step
 	float t_ss, t_sr, DL;
 
+	//varibales for the third step
 	float Ic, epsilon_0, Ic_prime, a, b, I_et_d, b_0, b_1, I_t_d, s;
 
+	//variables for the fourth step
 	float I_df_d, I_dr_d;
 
+	//variables for the fifth step
 	float psi, A_prime, B_prime, I_t, I_et;
 
+	//variables for the sixth step
 	float R, K, I_df, I_dr;
 };
 
