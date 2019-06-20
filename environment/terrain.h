@@ -52,19 +52,19 @@ class Terrain {
   // currently, this is just a dumb constructor which ignores lots of details
   Terrain(const size_t size);
 
-  // TODO: define it
-  const int score();
-
   // Accessors
   inline const size_t width() const { return tiles_.width(); }
   inline const size_t length() const { return tiles_.length(); }
   inline Tiles& tiles() { return tiles_; }
+  inline int yield() { return yield_; }
   inline const Tiles& tiles() const { return tiles_; }
+  void add_yield(int produce) { yield_ += produce; }
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Terrain& terrain);
 
   Tiles tiles_;
+  int yield_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain);

@@ -1,8 +1,5 @@
 #include "crop.h"
 
-#include <iostream>
-#include <unordered_map>
-
 namespace simulator {
 
 namespace action {
@@ -61,6 +58,28 @@ Remove::Remove(const std::vector<environment::Coordinate>& applied_range,
          const std::vector<std::pair<ResourceType, size_t>>& cost)
     : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
 
+Harvest::Harvest(const environment::Coordinate& target,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration)
+    : Action(CROP_REMOVE, target, start_time, duration) {}
+
+Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration)
+    : Action(CROP_REMOVE, applied_range, start_time, duration) {}
+
+Harvest::Harvest(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const std::vector<std::pair<ResourceType, size_t>>& cost)
+    : Action(CROP_REMOVE, target, start_time, duration, cost) {}
+
+Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
+           const std::chrono::system_clock::time_point& start_time,
+           const std::chrono::duration<int>& duration,
+           const std::vector<std::pair<ResourceType, size_t>>& cost)
+    : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
+
 void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
@@ -85,6 +104,19 @@ void Remove::Execute(environment::Terrain* terrain) const {
   for (const auto& c : applied_range) {
     terrain->tiles().get(c).plant = nullptr;
   }
+}
+
+void Harvest::Execute(environment::Terrain* terrain) const {
+    using environment::plant_type::plant_type_to_plant;
+
+    // The following standard outputs should be replaced by GLOGS
+    environment::Plant* plant = terrain->tiles().get(applied_range[0]).plant;
+    int produce = plant->produce;
+    std::cout << "Harvesting crop from " << applied_range.size() << " cell(s) with "
+      << produce << "kg." << std::endl;
+    terrain->add_yield(produce);
+    plant->produce = 0;
+    std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
 }
 
 }  // namespace crop

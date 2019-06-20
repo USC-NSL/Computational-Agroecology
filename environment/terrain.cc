@@ -33,6 +33,7 @@ Tiles::Tiles(const size_t width, const size_t length, const Soil& soil)
 Terrain::Terrain(const size_t size) : tiles_() {
   Soil dumb_soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0);
   tiles_ = Tiles(size, size, dumb_soil);
+  yield_ = 0;
 }
 
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain) {

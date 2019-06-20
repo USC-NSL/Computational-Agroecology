@@ -11,7 +11,8 @@ Plant::Plant(const std::string& type_name)
       accumulated_gdd(0),
       maturity(SEED),
       base_temperature(0.0),
-      gdd_thresholds() {}
+      gdd_thresholds(),
+      produce(0) {}
 
 bool operator==(const Plant& lhs, const Plant& rhs) {
   return (lhs.type_name == rhs.type_name) && (lhs.health == rhs.health) &&

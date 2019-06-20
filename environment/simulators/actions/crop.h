@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include <string>
+#include <iostream>
+#include <unordered_map>
 
 #include "action.h"
 #include "../../plant.h"
@@ -62,6 +64,29 @@ struct Remove : public Action {
         const std::chrono::system_clock::time_point& start_time,
         const std::chrono::duration<int>& duration,
         const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+    void Execute(environment::Terrain* terrain) const override;
+};
+
+// Harvest a crop
+struct Harvest : public Action {
+    Harvest(const environment::Coordinate& target,
+           const std::chrono::system_clock::time_point& start_time,
+           const std::chrono::duration<int>& duration);
+
+    Harvest(const std::vector<environment::Coordinate>& applied_range,
+           const std::chrono::system_clock::time_point& start_time,
+           const std::chrono::duration<int>& duration);
+
+    Harvest(const environment::Coordinate& target,
+           const std::chrono::system_clock::time_point& start_time,
+           const std::chrono::duration<int>& duration,
+           const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+    Harvest(const std::vector<environment::Coordinate>& applied_range,
+           const std::chrono::system_clock::time_point& start_time,
+           const std::chrono::duration<int>& duration,
+           const std::vector<std::pair<ResourceType, size_t>>& cost);
 
     void Execute(environment::Terrain* terrain) const override;
 };
