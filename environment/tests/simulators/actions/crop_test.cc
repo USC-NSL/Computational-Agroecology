@@ -26,7 +26,7 @@ class AddTest : public ::testing::Test {
     cost.push_back(
         std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
     cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::TIME, 40));
+        std::make_pair<ResourceType, size_t>(ResourceType::LABOR, 40));
   }
 
   std::vector<Coordinate> applied_range;
