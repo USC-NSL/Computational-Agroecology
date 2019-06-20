@@ -65,12 +65,13 @@ void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   // The following standard outputs should be replaced by GLOGS
-  std::cout << "Adding " << applied_range.size() << " crop(s)." << std::endl;
+  std::cout << "Adding " << crop_type_name << " to " <<
+          applied_range.size() << " cell(s)"<< std::endl;
+  environment::Plant* plant = plant_type_to_plant[crop_type_name]->GeneratePlantInstance();
 
-  // TODO: fully implement this
+    // TODO: fully implement this
   for (const auto& c : applied_range) {
-    terrain->tiles().get(c).plant =
-        plant_type_to_plant[crop_type_name]->GeneratePlantInstance();
+    terrain->tiles().get(c).plant = plant;
   }
 }
 
@@ -78,7 +79,7 @@ void Remove::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   // The following standard outputs should be replaced by GLOGS
-  std::cout << "Removing " << applied_range.size() << " crop(s)." << std::endl;
+  std::cout << "Removing crop from " << applied_range.size() << " cell(s)." << std::endl;
 
   // TODO: fully implement this
   for (const auto& c : applied_range) {
