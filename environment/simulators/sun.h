@@ -4,23 +4,19 @@
 #include <cassert>
 class Sun {
 public:
-	Sun(int year, int month, int day, int hour, int minute, int second, float longitude, float latitude)
-		:_year(year), _month(month), _day(day), _hour(hour), _second(second), _longitude(longitude, _latitude(latitude){
-		assert(year > 0);
-		assert(month > 0 && month <= 12);
-		assert(day > 0 && day <= 31);
-		assert(hour >= 0 && hour <= 23);
-		assert(minute >= 0 && minute <= 59);
-		assert(second >= 0 && second <= 59);
-		assert(longitude > -180.0f && longtitude <= 180.0f);
-		assert(latitude >= -90.0f && latitude <= 90.0f);
-	}
+	Sun(int year, int month, int day, int hour, int minute, int second, float longitude, float latitude);
+	void updateTime(int year, int month, int day, int hour, int minute, int second);
+	void updatePosition(float longitude, float latitude);
+	void getResult();
+	float get_sunAzimuth() const;
+	float get_solarAltitude() const;
+	float get_hourlyIrradiance() const;
+	float _degree_to_radians(float _degree) const;
+	float _radians_to_degree(float _radians) const;
 private:
 	const float PI = 3.14159265359f;
 	int _year, _month, _day, _hour, _minute, _second;
 	float _longitude, _latitude;
-	float _degree_to_radians const (float _degree);
-	float _radians_to_degree const (float _radians);
 	void first_step();
 	void second_step();
 	void third_step();
@@ -34,13 +30,12 @@ private:
 
 	float t_ss, t_sr, DL;
 
-	float Ic, epsilon_0, Ic_prime, a, b, I_et_d, b_0, b_1, I_t_d;
-	int s;
+	float Ic, epsilon_0, Ic_prime, a, b, I_et_d, b_0, b_1, I_t_d, s;
 
 	float I_df_d, I_dr_d;
 
-	float psi, A, B, I_t, I_et;
+	float psi, A_prime, B_prime, I_t, I_et;
 
 	float R, K, I_df, I_dr;
-}
+};
 #endif

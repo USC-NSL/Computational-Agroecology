@@ -14,5 +14,11 @@ cmake_install.cmake
 .vscode
 .vs
 .DS_Store
+*.sln
+*.vcxproj
+*.filters
+*.user
+environment/tests/simulators/Debug
+
 # binary file
 photon
