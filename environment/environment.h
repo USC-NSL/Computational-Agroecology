@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "simulators/actions/action.h"
 #include "climate.h"
 #include "config.h"
 #include "simulators/main_simulator.h"
@@ -50,8 +51,10 @@ class Environment {
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Environment& env);
-  friend struct simulator::action::ActionExecutorList;
   friend class simulator::MainSimulator;
+
+  // befriend with a list of actions
+  friend class simulator::action::crop::Add;
 
   Config config_;
   const Climate climate_;

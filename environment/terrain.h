@@ -62,9 +62,9 @@ class Terrain {
   inline const Tiles& tiles() const { return tiles_; }
 
  private:
-  Tiles tiles_;
-
   friend std::ostream& operator<<(std::ostream& os, const Terrain& terrain);
+
+  Tiles tiles_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain);

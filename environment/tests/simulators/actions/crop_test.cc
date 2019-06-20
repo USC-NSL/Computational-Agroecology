@@ -79,7 +79,7 @@ TEST_F(AddTest, ExecuteTest_1) {
   crop::Add action(applied_range.front(), time, duration, kCornTypeName);
   Terrain terrain(kNumberOfRange);
 
-  ActionExecutorList::CROP_ADD_execute(&terrain, &action);
+  action.Execute(&terrain);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
@@ -97,7 +97,7 @@ TEST_F(AddTest, ExecuteTest_2) {
   crop::Add action(applied_range, time, duration, kCornTypeName);
   Terrain terrain(kNumberOfRange);
 
-  ActionExecutorList::CROP_ADD_execute(&terrain, &action);
+  action.Execute(&terrain);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {

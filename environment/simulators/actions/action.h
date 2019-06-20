@@ -74,6 +74,11 @@ struct ActionEndTimeComparator {
   bool operator()(const Action* const lhs, const Action* const rhs) const;
 };
 
+// forward declaration all actions
+namespace crop {
+struct Add;
+}
+
 }  // namespace action
 
 }  // namespace simulator
