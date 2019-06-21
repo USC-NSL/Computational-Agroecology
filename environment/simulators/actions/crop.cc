@@ -84,14 +84,12 @@ void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   // The following standard outputs should be replaced by GLOGS
-  std::cout << "Adding " << crop_type_name << " to " << applied_range.size()
-            << " cell(s)" << std::endl;
-  environment::Plant* plant =
-      plant_type_to_plant[crop_type_name]->GeneratePlantInstance();
+  std::cout << "Adding " << applied_range.size() << " crop(s)." << std::endl;
 
   // TODO: fully implement this
   for (const auto& c : applied_range) {
-    terrain->tiles().get(c).plant = plant;
+    terrain->tiles().get(c).plant =
+        plant_type_to_plant[crop_type_name]->GeneratePlantInstance();
   }
 }
 
@@ -99,8 +97,7 @@ void Remove::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   // The following standard outputs should be replaced by GLOGS
-  std::cout << "Removing crop from " << applied_range.size() << " cell(s)."
-            << std::endl;
+  std::cout << "Removing " << applied_range.size() << " crop(s)." << std::endl;
 
   // TODO: fully implement this
   for (const auto& c : applied_range) {
@@ -111,13 +108,17 @@ void Remove::Execute(environment::Terrain* terrain) const {
 void Harvest::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
+  environment::Plant* plant;
+
   // The following standard outputs should be replaced by GLOGS
-  environment::Plant* plant = terrain->tiles().get(applied_range[0]).plant;
-  int produce = plant->produce;
-  std::cout << "Harvesting crop from " << applied_range.size()
-            << " cell(s) with " << produce << "kg." << std::endl;
-  terrain->add_yield(produce);
-  plant->produce = 0;
+  std::cout << "Harvesting crop from " << applied_range.size() << " crop(s)."
+            << std::endl;
+
+  for (const auto& c : applied_range) {
+    plant = terrain->tiles().get(c).plant;
+    terrain->addYield(plant->produce);
+    plant->produce = 0;
+  }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
 }
 
