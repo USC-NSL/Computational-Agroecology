@@ -5,27 +5,18 @@
 
 using namespace simulator;
 using namespace environment;
-const size_t kTerrainSize = 5;
-
+const double PI = 3.14159265359;
 class SunSimulatorTest : public ::testing::Test {
-protected:
-  void SetUp() override {
-    auto time = std::chrono::system_clock::now();
-
-    Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
-    Terrain terrain(kTerrainSize);
-    env = new Environment(config, time, terrain);
-  }
-private:
-  Environment* env;
-  SunSimulator simulator;
 };
 
-TEST_F(SunSimulatorTest, SimulateToTimeTest) {
-  for (size_t i = 0; i < 5; i++) {
-    auto now_time = env->timestamp() + std::chrono::hours(1);
-    simulator.SimulateToTime(env, time);
-  }
+TEST_F(SunSimulatorTest, SimulateSunTest) {
+	SunSimulator simulator;
+	struct SunInfo info1= simulator.get_sunInfo_for_test(2019, 6, 21, 12, 0.0, 23.45);
+	EXPECT_TRUE((PI / 2.0 - info1._solarAltitude) <= 0.02);
+	struct SunInfo info2 = simulator.get_sunInfo_for_test(2019, 12, 21, 12, 0.0, -23.45);
+	EXPECT_TRUE((PI / 2.0 - info2._solarAltitude) <= 0.02);
+	struct SunInfo info3 = simulator.get_sunInfo_for_test(2019, 3, 22, 12, 0.0, 0.0);
+	EXPECT_TRUE((PI / 2.0 - info3._solarAltitude) <= 0.02);
 }
 
 int main(int argc, char** argv) {
