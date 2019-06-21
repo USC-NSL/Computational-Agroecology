@@ -65,4 +65,4 @@ class SunSimulator : public Simulator {
 };
 
 }  // namespace simulator
-#endif COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
