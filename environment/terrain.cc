@@ -17,7 +17,7 @@ bool operator==(const Coordinate& lhs, const Coordinate& rhs) {
 Cell::Cell(const Soil& soil) : Cell(1, soil) {}
 
 Cell::Cell(const size_t size, const Soil& soil)
-    : size(size), plant(nullptr), soil(soil) {}
+    : size(size), plant(std::nullopt), soil(soil) {}
 
 bool operator==(const Cell& lhs, const Cell& rhs) {
   return (lhs.size == rhs.size) && (lhs.plant == rhs.plant) &&
@@ -38,7 +38,7 @@ Terrain::Terrain(const size_t size) : tiles_(), yield_(0) {
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain) {
   for (const auto& row : terrain.tiles_) {
     for (const auto& cell : row) {
-      if (cell.plant != nullptr) {
+      if (cell.plant != std::nullopt) {
         auto& plant_type =
             plant_type::plant_type_to_plant[cell.plant->type_name];
         os << plant_type->display_symbol;

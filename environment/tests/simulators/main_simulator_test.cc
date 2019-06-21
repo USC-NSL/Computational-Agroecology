@@ -75,7 +75,7 @@ TEST_F(MainSimulatorTest, SimulateToTimeTest) {
 
     // since the action has completed
     // we should see its effect in the `terrain`
-    EXPECT_NE(nullptr, env->terrain().tiles()[i][i].plant);
+    EXPECT_NE(std::nullopt, env->terrain().tiles()[i][i].plant);
   }
 }
 

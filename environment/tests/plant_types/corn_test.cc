@@ -27,7 +27,7 @@ TEST(CornTest, GenerateTest) {
       *(reinterpret_cast<const Corn*>(plant_type_to_plant[kCornTypeName]));
   auto plant = corn.GeneratePlantInstance();
 
-  EXPECT_EQ(kCornTypeName, plant->type_name);
+  EXPECT_EQ(kCornTypeName, plant.type_name);
 }
 
 int main(int argc, char** argv) {

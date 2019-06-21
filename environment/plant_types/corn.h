@@ -12,7 +12,7 @@ namespace plant_type {
 struct Corn : public PlantType {
   Corn();
 
-  environment::Plant* GeneratePlantInstance() const override;
+  environment::Plant GeneratePlantInstance() const override;
 };
 
 }  // namespace plant_type

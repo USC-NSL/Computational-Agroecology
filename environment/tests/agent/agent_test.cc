@@ -1,5 +1,5 @@
-#include <string>
 #include <algorithm>
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -114,8 +114,8 @@ struct FakePlantType : public PlantType {
       : PlantType("Fake", "F", true, 0.0, MaxMinTemperature(0, 0),
                   MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
                   MaxMinRainfall(0, 0)) {}
-  environment::Plant* GeneratePlantInstance() const override {
-    return new Plant("Fake");
+  environment::Plant GeneratePlantInstance() const override {
+    return Plant("Fake");
   }
 };
 
