@@ -66,7 +66,7 @@ class Environment {
   Config config_;
   const Climate climate_;
 
-  //Current (longitude, latitude) pair and variables just for the sun simulator
+  //the information of sun from the simulator
   struct SunInfo sunInfo_;
 
   // Current time in this environment
