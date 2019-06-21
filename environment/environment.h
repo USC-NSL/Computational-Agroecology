@@ -59,7 +59,7 @@ class Environment {
   const Climate climate_;
 
   //Current (longitude, latitude) pair and variables just for the sun simulator
-  struct simulator::SunInfo sun_info;
+  struct SunInfo sunInfo_;
 
   // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;

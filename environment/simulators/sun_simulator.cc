@@ -24,7 +24,7 @@ namespace simulator {
       (env->config_.location.longitude_left + env->config_.location.longitude_right) / 2.0,
       (env->config_.location.latitude_bottom + env->config_.location.latitude_top) / 2.0
     );
-    env->sun_info = get_sunInfo();
+    env->sunInfo_ = get_sunInfo();
   }
 
   void SunSimulator::getResult(int _year, int _month, int _day, int _hour, double _longitude, double _latitude) {
@@ -36,8 +36,8 @@ namespace simulator {
     sixth_step();
   }
 
-  struct SunInfo SunSimulator::get_sunInfo() const {
-    struct SunInfo t;
+  struct environment::SunInfo SunSimulator::get_sunInfo() const {
+    struct environment::SunInfo t;
     t._sunAzimuth = alpha + PI;
     t._solarAltitude = PI / 2.0 - beta;
     t._hourlyIrradiance = I_t;
@@ -68,7 +68,7 @@ namespace simulator {
     case 3:t_d += 28 + is_leapYear;
     case 2:t_d += 31;
     case 1:break;
-    deault:break;
+    default:break;
     }
     sigma = -23.45 * PI / 180.0 * cos(2.0 * PI * (t_d + 10) / (365 + is_leapYear));
     gama_standard_meridian = ((int)(_longitude / PI * 12)) * PI / 12;
