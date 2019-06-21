@@ -2,7 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
 
 #include "simulator.h"
-#include "../suninfo.h"
+#include "suninfo.h"
 
 namespace simulator {
 

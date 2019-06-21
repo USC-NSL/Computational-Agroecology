@@ -10,8 +10,8 @@
 #pragma comment(lib, "gtest.lib")
 #endif
 #endif
-#include "../../environment.h"
-#include "../../simulators/sun_simulator.h"
+#include "environment.h"
+#include "simulators/sun_simulator.h"
 using namespace simulator;
 using namespace environment;
 const double PI = 3.14159265359;

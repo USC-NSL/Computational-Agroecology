@@ -5,7 +5,7 @@
 #include <ctime>
 #include <iostream>
 
-#include "../environment.h"  // if you make sure that relative path is not needed, you can remove it, but on Windos I need it.
+#include "environment.h"  // if you make sure that relative path is not needed, you can remove it, but on Windos I need it.
 
 namespace simulator {
 
