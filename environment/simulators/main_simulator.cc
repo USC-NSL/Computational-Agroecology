@@ -11,8 +11,8 @@ MainSimulator::MainSimulator() : action_pq_(), sunsimulator_() {}
 void MainSimulator::SimulateToTime(
     environment::Environment* env,
     const std::chrono::system_clock::time_point& time) {
-	//run the sun simulator
-	sunsimulator_.SimulateToTime(env, time);
+  //run the sun simulator
+  sunsimulator_.SimulateToTime(env, time);
 
   // collect actions which should have started before the specific time
   while (!action_pq_.empty() && action_pq_.top()->start_time < time) {
