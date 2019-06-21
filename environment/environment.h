@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "simulators/actions/action.h"
 #include "climate.h"
 #include "config.h"
 #include "simulators/main_simulator.h"
@@ -36,22 +37,24 @@ class Environment {
   void ReceiveActions(const simulator::action::ActionList& actions);
 
   // Accessors
-  inline const Config& config() { return config_; }
+  inline const Config& config() const { return config_; }
 
-  inline const Climate& climate() { return climate_; }
+  inline const Climate& climate() const { return climate_; }
 
-  inline const std::chrono::system_clock::time_point& timestamp() {
+  inline const std::chrono::system_clock::time_point& timestamp() const {
     return timestamp_;
   }
 
-  inline const Terrain& terrain() { return terrain_; }
+  inline const Terrain& terrain() const { return terrain_; }
 
-  inline const Weather& weather() { return weather_; }
+  inline const Weather& weather() const { return weather_; }
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Environment& env);
-  friend struct simulator::action::ActionExecutorList;
   friend class simulator::MainSimulator;
+
+  // befriend with a list of actions
+  friend class simulator::action::crop::Add;
 
   Config config_;
   const Climate climate_;

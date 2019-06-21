@@ -11,13 +11,10 @@ Soil::Soil(const Texture texture, const double pH, const double salinity,
       water_content(water_content) {}
 
 bool operator==(const Soil& lhs, const Soil& rhs) {
-  bool ret = true;
-  ret &= (lhs.texture == rhs.texture);
-  ret &= (lhs.pH == rhs.pH);
-  ret &= (lhs.salinity == rhs.salinity);
-  ret &= (lhs.organic_matter == rhs.organic_matter);
-  ret &= (lhs.water_content == rhs.water_content);
-  return ret;
+  return (lhs.texture == rhs.texture) && (lhs.pH == rhs.pH) &&
+         (lhs.salinity == rhs.salinity) &&
+         (lhs.organic_matter == rhs.organic_matter) &&
+         (lhs.water_content == rhs.water_content);
 }
 
 }  // namespace environment

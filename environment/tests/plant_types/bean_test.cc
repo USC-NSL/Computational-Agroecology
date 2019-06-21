@@ -27,7 +27,7 @@ TEST(BeanTest, GenerateTest) {
       *(reinterpret_cast<const Bean*>(plant_type_to_plant[kBeanTypeName]));
   auto plant = bean.GeneratePlantInstance();
 
-  EXPECT_EQ(kBeanTypeName, plant->type_name());
+  EXPECT_EQ(kBeanTypeName, plant->type_name);
 }
 
 int main(int argc, char** argv) {

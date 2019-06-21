@@ -20,11 +20,8 @@ Cell::Cell(const size_t size, const Soil& soil)
     : size(size), plant(nullptr), soil(soil) {}
 
 bool operator==(const Cell& lhs, const Cell& rhs) {
-  bool ret = true;
-  ret &= (lhs.size == rhs.size);
-  ret &= (lhs.plant == rhs.plant);
-  ret &= (lhs.soil == rhs.soil);
-  return ret;
+  return (lhs.size == rhs.size) && (lhs.plant == rhs.plant) &&
+         (lhs.soil == rhs.soil);
 }
 
 // `class Tiles`
@@ -43,7 +40,7 @@ std::ostream& operator<<(std::ostream& os, const Terrain& terrain) {
     for (const auto& cell : row) {
       if (cell.plant != nullptr) {
         auto& plant_type =
-            plant_type::plant_type_to_plant[cell.plant->type_name()];
+            plant_type::plant_type_to_plant[cell.plant->type_name];
         os << plant_type->display_symbol;
       } else {
         os << " ";

@@ -16,6 +16,16 @@ TEST(ConfigTest, ConstructorTest) {
   EXPECT_EQ(config.location, location);
 }
 
+TEST(ConfigTest, OperatorTest) {
+  Config lhs("place name", Location(100, 100, 200, 200));
+  Config rhs("place name", Location(100, 100, 200, 200));
+
+  EXPECT_TRUE(lhs == rhs);
+
+  Config new_rhs("place name", Location(100, 100, 200, 500));
+  EXPECT_FALSE(lhs == new_rhs);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

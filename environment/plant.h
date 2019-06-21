@@ -8,39 +8,40 @@
 namespace environment {
 
 // Represents a single plant instance.
-// TODO: consider to define this as a `struct` instead of `class`
-class Plant {
- public:
+struct Plant {
   // TODO: define some other constructors
   Plant(const std::string& type_name);
 
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
-  // TODO: add other member functions to complete this model
+  // TODO: may need to add other member functions to complete this model
+  // probably those functions should not be put here
+  // instead they should be put in the simulator
 
-  inline const std::string& type_name() { return type_name_; }
+  // Remove `void IncrementMaturity()`;
+  // I think it is better to put it in the simulator
 
- private:
-  void IncrementMaturity();
-
-  const std::string type_name_;
+  const std::string type_name;
 
   // [0,10] where 0 is dead and 10 is most healthy.
-  int health_;
+  int health;
 
   // Is the plant currently flowering?
-  bool flowering_;
+  bool flowering;
 
   // Accumulated Growing Degree Days, to be used by simulator.
-  int accumulated_gdd_;
+  int accumulated_gdd;
 
   // The plant's current maturity.
-  Maturity maturity_;
+  Maturity maturity;
 
-  int base_temperature_;
+  double base_temperature;
 
-  const std::vector<int> gdd_thresholds_;
+  std::vector<int> gdd_thresholds;
 };
+
+extern const int kInitialHealth;
+bool operator==(const Plant& lhs, const Plant& rhs);
 
 }  // namespace environment
 

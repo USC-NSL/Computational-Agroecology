@@ -4,7 +4,7 @@
 
 using namespace environment;
 
-TEST(ClimateConstructorTest, Constructor_1) {
+TEST(ClimateTest, ConstructorTest_1) {
   Location location(100, 100, 200, 200);
   Config config("name", location);
 
@@ -17,7 +17,7 @@ TEST(ClimateConstructorTest, Constructor_1) {
   EXPECT_EQ(Climate::TropicalWetAndDry, climate.climate_zone);
 }
 
-TEST(ClimateConstructorTest, Constructor_2) {
+TEST(ClimateTest, ConstructorTest_2) {
   Climate climate(1.0, 2.0, 3.0, 4.0, Climate::Polar);
 
   EXPECT_EQ(1.0, climate.yearly_temperature.max);
@@ -27,7 +27,7 @@ TEST(ClimateConstructorTest, Constructor_2) {
   EXPECT_EQ(Climate::Polar, climate.climate_zone);
 }
 
-TEST(ClimateConstructorTest, Constructor_3) {
+TEST(ClimateTest, ConstructorTest_3) {
   MaxMinTemperature yearly_temp(1.0, 2.0);
   MaxMinRainfall yearly_rainfall(3.0, 4.0);
 
@@ -38,6 +38,16 @@ TEST(ClimateConstructorTest, Constructor_3) {
   EXPECT_EQ(3.0, climate.yearly_rainfall.max);
   EXPECT_EQ(4.0, climate.yearly_rainfall.min);
   EXPECT_EQ(Climate::Polar, climate.climate_zone);
+}
+
+TEST(ClimateTest, OperatorTest) {
+  Climate lhs(1.0, 2.0, 3.0, 4.0, Climate::Polar);
+  Climate rhs(1.0, 2.0, 3.0, 4.0, Climate::Polar);
+
+  EXPECT_TRUE(lhs == rhs);
+
+  Climate new_rhs(1.0, 2.0, 3.0, 4.0, Climate::DesertOrArid);
+  EXPECT_FALSE(lhs == new_rhs);
 }
 
 int main(int argc, char **argv) {

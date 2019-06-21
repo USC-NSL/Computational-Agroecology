@@ -52,15 +52,6 @@ struct Action {
   const std::vector<std::pair<ResourceType, size_t>> cost;
 };
 
-// Just declarations here
-// Here we declare the names of executors which will be called from an action
-// object. The definitions of them should be written in their corresponding *.cc
-// files.
-struct ActionExecutorList {
-  static void CROP_ADD_execute(environment::Terrain* const terrain,
-                               const Action* action);
-};
-
 using ActionList = std::vector<const Action*>;
 
 // Custom comparator for `struct Action`
@@ -73,6 +64,11 @@ struct ActionStartTimeComparator {
 struct ActionEndTimeComparator {
   bool operator()(const Action* const lhs, const Action* const rhs) const;
 };
+
+// forward declaration all actions
+namespace crop {
+struct Add;
+}
 
 }  // namespace action
 

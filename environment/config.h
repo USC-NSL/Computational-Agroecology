@@ -17,6 +17,8 @@ struct Config {
   // TODO: define plant type set
 };
 
+bool operator==(const Config& lhs, const Config& rhs);
+
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CONFIG_H_
