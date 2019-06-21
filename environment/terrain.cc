@@ -30,7 +30,7 @@ Tiles::Tiles(const size_t width, const size_t length, const Soil& soil)
     : std::vector<std::vector<Cell>>(width, std::vector<Cell>(length, soil)) {}
 
 // `class Terrain`
-Terrain::Terrain(const size_t size) : tiles_() {
+Terrain::Terrain(const size_t size) : tiles_(), yield_(0) {
   Soil dumb_soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0);
   tiles_ = Tiles(size, size, dumb_soil);
 }

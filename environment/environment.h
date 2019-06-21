@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 
-#include "simulators/actions/action.h"
 #include "climate.h"
 #include "config.h"
+#include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
 #include "terrain.h"
 #include "weather.h"
@@ -36,6 +36,9 @@ class Environment {
   // actions are received here
   void ReceiveActions(const simulator::action::ActionList& actions);
 
+  // TODO: define it
+  const int score();
+
   // Accessors
   inline const Config& config() const { return config_; }
 
@@ -55,6 +58,8 @@ class Environment {
 
   // befriend with a list of actions
   friend class simulator::action::crop::Add;
+  friend class simulator::action::crop::Remove;
+  friend class simulator::action::crop::Harvest;
 
   Config config_;
   const Climate climate_;
