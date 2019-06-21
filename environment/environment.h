@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 
-#include "simulators/actions/action.h"
 #include "climate.h"
 #include "config.h"
+#include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
 #include "terrain.h"
 #include "weather.h"

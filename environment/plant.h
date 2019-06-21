@@ -35,7 +35,8 @@ struct Plant {
   // The plant's current maturity.
   Maturity maturity;
 
-  // The current total weight of ripen fruit/vegetable/special crop in the single crop in kg
+  // The current total weight of ripen fruit/vegetable/special crop in the
+  // single crop in kg
   // TODO: Allow smaller granularity of produce process to happen
   int produce;
 

@@ -2,8 +2,8 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
 
 #include <chrono>
-#include <string>
 #include <iostream>
+#include <string>
 #include <unordered_map>
 
 #include "action.h"
