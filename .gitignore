@@ -15,6 +15,8 @@ cmake_install.cmake
 .vs
 .DS_Store
 environment/tests/simulators/Debug
+environment/tests/simulators/gtest
+*.lib
 *.sln
 *.vcxproj
 *.filters

@@ -1,8 +1,17 @@
 #include <iostream>
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
+
+#ifdef _WIN32
+#ifdef _DEBUG
+#pragma comment(lib,"gtest_maind.lib")
+#pragma comment(lib,"gtestd.lib")
+#else
+#pragma comment(lib,"gtest_main.lib")
+#pragma comment(lib,"gtest.lib")
+#endif
+#endif
 #include "../../simulators/sun_simulator.h"
 #include "../../environment.h"
-
 using namespace simulator;
 using namespace environment;
 const double PI = 3.14159265359;
@@ -12,14 +21,14 @@ class SunSimulatorTest : public ::testing::Test {
 TEST_F(SunSimulatorTest, SimulateSunTest) {
 	SunSimulator simulator;
 	struct SunInfo info1= simulator.get_sunInfo_for_test(2019, 6, 21, 12, 0.0, 23.45);
-	EXPECT_TRUE((PI / 2.0 - info1._solarAltitude) <= 0.02);
+	EXPECT_TRUE(info1._solarAltitude <= 0.04);
 	struct SunInfo info2 = simulator.get_sunInfo_for_test(2019, 12, 21, 12, 0.0, -23.45);
-	EXPECT_TRUE((PI / 2.0 - info2._solarAltitude) <= 0.02);
-	struct SunInfo info3 = simulator.get_sunInfo_for_test(2019, 3, 22, 12, 0.0, 0.0);
-	EXPECT_TRUE((PI / 2.0 - info3._solarAltitude) <= 0.02);
+	EXPECT_TRUE(info2._solarAltitude <= 0.04);
+	struct SunInfo info3 = simulator.get_sunInfo_for_test(2019, 3, 21, 12, 0.0, 0.0);
+	EXPECT_TRUE(info3._solarAltitude <= 0.04);
 }
 
 int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
+  testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
