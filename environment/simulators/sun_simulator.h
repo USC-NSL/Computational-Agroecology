@@ -2,12 +2,13 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_H
 
 #include "simulator.h"
+namespace environment {
+	struct SunInfo {
+		double _sunAzimuth, _solarAltitude, _hourlyIrradiance;
+	};
+}
 
 namespace simulator {
-
-  struct SunInfo {
-    double _sunAzimuth, _solarAltitude, _hourlyIrradiance;
-  };
 
   class SunSimulator : public Simulator {
   public:
@@ -16,12 +17,12 @@ namespace simulator {
       environment::Environment* env,
       const std::chrono::system_clock::time_point& time) override;
 	//the following function just for test
-	struct SunInfo get_sunInfo_for_test(int _year, int _month, int _day, int _hour, double _longitude, double _latitude) {
+	struct environment::SunInfo get_sunInfo_for_test(int _year, int _month, int _day, int _hour, double _longitude, double _latitude) {
 		getResult(_year, _month, _day, _hour, _longitude, _latitude);
 		return get_sunInfo();
 	}
   private:
-    struct SunInfo get_sunInfo() const;
+    struct environment::SunInfo get_sunInfo() const;
 
     void getResult(int _year, int _month, int _day, int _hour, double _longitude, double _latitude);
     void first_step(int _year, int _month, int _day, int _hour, double _longitude, double _latitude);
