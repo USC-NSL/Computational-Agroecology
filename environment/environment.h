@@ -7,6 +7,7 @@
 
 #include "climate.h"
 #include "config.h"
+#include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
 #include "simulators/sun_simulator.h"
 #include "terrain.h"
@@ -36,6 +37,9 @@ class Environment {
   // actions are received here
   void ReceiveActions(const simulator::action::ActionList& actions);
 
+  // TODO: define it
+  const int score();
+
   // Accessors
   inline const Config& config() const { return config_; }
 
@@ -51,9 +55,13 @@ class Environment {
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Environment& env);
-  friend struct simulator::action::ActionExecutorList;
   friend class simulator::MainSimulator;
   friend class simulator::SunSimulator;
+
+  // befriend with a list of actions
+  friend class simulator::action::crop::Add;
+  friend class simulator::action::crop::Remove;
+  friend class simulator::action::crop::Harvest;
 
   Config config_;
   const Climate climate_;
