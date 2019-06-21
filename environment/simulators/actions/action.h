@@ -70,7 +70,7 @@ namespace crop {
 struct Add;
 struct Remove;
 struct Harvest;
-}
+}  // namespace crop
 
 }  // namespace action
 
