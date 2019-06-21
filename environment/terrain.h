@@ -56,15 +56,15 @@ class Terrain {
   inline const size_t width() const { return tiles_.width(); }
   inline const size_t length() const { return tiles_.length(); }
   inline Tiles& tiles() { return tiles_; }
-  inline const int yield() { return yield_; }
+  inline const double yield() { return yield_; }
   inline const Tiles& tiles() const { return tiles_; }
-  inline void AddYield(int produce) { yield_ += produce; }
+  inline void AddYield(double produce) { yield_ += produce; }
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Terrain& terrain);
 
   Tiles tiles_;
-  int yield_;
+  double yield_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain);

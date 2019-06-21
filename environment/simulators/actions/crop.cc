@@ -116,7 +116,22 @@ void Harvest::Execute(environment::Terrain* terrain) const {
 
   for (const auto& c : applied_range) {
     plant = terrain->tiles().get(c).plant;
-    terrain->AddYield(plant->produce);
+
+    // go through each plant's produce still on tree and "pick them", adding to plant's yield
+    Produce* onTree = plant->produce.front();
+    while(onTree != nullptr) {
+
+      // add produce's weight to plant yield
+      plant->yield += onTree->weight_;
+
+      // remove plant from tree
+      plant->produce.pop_front();
+
+      // update front pointer
+      onTree = produce.front();
+    }
+
+    terrain->AddYield(plant->yield);
     plant->produce = 0;
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
