@@ -17,9 +17,9 @@ class SunSimulator : public Simulator {
                                                    double _longitude,
                                                    double _latitude) {
     GetResult(_year, _month, _day, _hour, _longitude, _latitude); 
-	struct environment::SunInfo suninfo;
+    struct environment::SunInfo suninfo;
     GetSunInfo(suninfo);
-	return suninfo;
+    return suninfo;
   }
 
  private:
