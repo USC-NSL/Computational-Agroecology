@@ -2,8 +2,10 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
 
 #include <string>
+#include <list>
 
 #include "plant_types/plant_type.h"
+#include "produce.h"
 
 namespace environment {
 
@@ -38,7 +40,8 @@ struct Plant {
   // The current total weight of ripen fruit/vegetable/special crop in the
   // single crop in kg
   // TODO: Allow smaller granularity of produce process to happen
-  int produce;
+  std::list<Produce*> produce;
+  double yield;
 
   double base_temperature;
 
