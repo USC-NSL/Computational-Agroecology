@@ -2,17 +2,12 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
 
 #include "simulator.h"
-namespace environment {
-struct SunInfo {
-  double _sunAzimuth, _solarAltitude, _hourlyIrradiance;
-};
-}  // namespace environment
+#include "../suninfo.h"
 
 namespace simulator {
 
 class SunSimulator : public Simulator {
  public:
-  SunSimulator();
   void SimulateToTime(
       environment::Environment* env,
       const std::chrono::system_clock::time_point& time) override;
@@ -21,12 +16,14 @@ class SunSimulator : public Simulator {
                                                    int _day, int _hour,
                                                    double _longitude,
                                                    double _latitude) {
-    GetResult(_year, _month, _day, _hour, _longitude, _latitude);
-    return GetSunInfo();
+    GetResult(_year, _month, _day, _hour, _longitude, _latitude); 
+	struct environment::SunInfo suninfo;
+    GetSunInfo(suninfo);
+	return suninfo;
   }
 
  private:
-  struct environment::SunInfo GetSunInfo() const;
+  void GetSunInfo(struct environment::SunInfo& suninfo) const;
 
   void GetResult(int _year, int _month, int _day, int _hour, double _longitude,
                  double _latitude);
@@ -43,7 +40,7 @@ class SunSimulator : public Simulator {
   const double kPI = 3.14159265359;
 
   // variables for the first step
-  bool is_leapYear;
+  bool is_leapYear_;
   int t_d_;
   double sigma_, gama_standard_meridian_, th_, delta_, B_, EoT_, lamda_, beta_,
       alpha_;

@@ -21,16 +21,16 @@ TEST_F(SunSimulatorTest, SimulateSunTest) {
   SunSimulator simulator;
   struct SunInfo info1 =
       simulator.get_sunInfo_for_test(2019, 6, 21, 12, 0.0, 23.45);
-  EXPECT_TRUE(info1._solarAltitude <= 0.04);
+  EXPECT_TRUE(info1.SolarAltitude <= 0.04);
   struct SunInfo info2 =
       simulator.get_sunInfo_for_test(2019, 12, 21, 12, 0.0, -23.45);
-  EXPECT_TRUE(info2._solarAltitude <= 0.04);
+  EXPECT_TRUE(info2.SolarAltitude <= 0.04);
   struct SunInfo info3 =
       simulator.get_sunInfo_for_test(2019, 3, 21, 12, 0.0, 0.0);
-  EXPECT_TRUE(info3._solarAltitude <= 0.04);
+  EXPECT_TRUE(info3.SolarAltitude <= 0.04);
   struct SunInfo info4 =
       simulator.get_sunInfo_for_test(2019, 9, 21, 12, 0.0, 0.0);
-  EXPECT_TRUE(info4._solarAltitude <= 0.04);
+  EXPECT_TRUE(info4.SolarAltitude <= 0.04);
 }
 
 int main(int argc, char** argv) {

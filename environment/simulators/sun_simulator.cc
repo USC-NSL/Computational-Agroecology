@@ -9,8 +9,6 @@
 
 namespace simulator {
 
-SunSimulator::SunSimulator() {}
-
 void SunSimulator::SimulateToTime(
     environment::Environment* env,
     const std::chrono::system_clock::time_point& time) {
@@ -23,7 +21,7 @@ void SunSimulator::SimulateToTime(
             (env->config_.location.latitude_bottom +
              env->config_.location.latitude_top) /
                 2.0);
-  env->sunInfo_ = GetSunInfo();
+  GetSunInfo(env->sunInfo_);
 }
 
 void SunSimulator::GetResult(int _year, int _month, int _day, int _hour,
@@ -36,12 +34,10 @@ void SunSimulator::GetResult(int _year, int _month, int _day, int _hour,
   SixthStep();
 }
 
-struct environment::SunInfo SunSimulator::GetSunInfo() const {
-  struct environment::SunInfo t;
-  t._sunAzimuth = alpha_ + kPI;
-  t._solarAltitude = kPI / 2.0 - beta_;
-  t._hourlyIrradiance = I_t_;
-  return t;
+void SunSimulator::GetSunInfo(struct environment::SunInfo& suninfo) const {
+  suninfo.SunAzimuth = alpha_ + kPI;
+  suninfo.SolarAltitude = kPI / 2.0 - beta_;
+  suninfo.HourlyIrradiance = I_t_;
 }
 
 double SunSimulator::DegreeToRadians(double _degree) const {
@@ -54,7 +50,7 @@ double SunSimulator::RadiansToDegree(double _radians) const {
 
 void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,
                              double _longitude, double _latitude) {
-  is_leapYear = (((_year % 4 == 0) && (_year % 100 != 0)) || _year % 400 == 0);
+  is_leapYear_ = (((_year % 4 == 0) && (_year % 100 != 0)) || _year % 400 == 0);
   t_d_ = _day;
   switch (_month) {
     case 12:
@@ -76,7 +72,7 @@ void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,
     case 4:
       t_d_ += 31;
     case 3:
-      t_d_ += 28 + is_leapYear;
+      t_d_ += 28 + is_leapYear_;
     case 2:
       t_d_ += 31;
     case 1:
@@ -85,9 +81,9 @@ void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,
       break;
   }
   sigma_ =
-      -23.45 * kPI / 180.0 * cos(2.0 * kPI * (t_d_ + 10) / (365 + is_leapYear));
+      -23.45 * kPI / 180.0 * cos(2.0 * kPI * (t_d_ + 10) / (365 + is_leapYear_));
   gama_standard_meridian_ = ((int)(_longitude / kPI * 12)) * kPI / 12;
-  B_ = 2.0 * kPI * (t_d_ - 81) / (364 + is_leapYear);
+  B_ = 2.0 * kPI * (t_d_ - 81) / (364 + is_leapYear_);
   EoT_ = 9.87 * sin(2 * B_) - 7.53 * cos(B_) - 1.5 * sin(B_);
   th_ = _hour +
         (gama_standard_meridian_ - DegreeToRadians(_longitude)) / kPI * 12 +
@@ -113,7 +109,7 @@ void SunSimulator::SecondStep() {
 
 void SunSimulator::ThirdStep() {
   Ic_ = 1370.0;
-  epsilon_0_ = 1.0 + 0.033 * cos(2.0 * kPI * (t_d_ - 10) / (365 + is_leapYear));
+  epsilon_0_ = 1.0 + 0.033 * cos(2.0 * kPI * (t_d_ - 10) / (365 + is_leapYear_));
   Ic_prime_ = Ic_ * epsilon_0_;
   a_ = sin(lamda_) * sin(sigma_);
   b_ = cos(lamda_) * cos(sigma_);
