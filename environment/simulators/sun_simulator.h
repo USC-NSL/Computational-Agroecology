@@ -16,11 +16,11 @@ namespace simulator {
     void SimulateToTime(
       environment::Environment* env,
       const std::chrono::system_clock::time_point& time) override;
-  //the following function just for test
-  struct environment::SunInfo get_sunInfo_for_test(int _year, int _month, int _day, int _hour, double _longitude, double _latitude) {
-    getResult(_year, _month, _day, _hour, _longitude, _latitude);
-    return get_sunInfo();
-  }
+    //the following function just for test
+    struct environment::SunInfo get_sunInfo_for_test(int _year, int _month, int _day, int _hour, double _longitude, double _latitude) {
+      getResult(_year, _month, _day, _hour, _longitude, _latitude);
+      return get_sunInfo();
+    }
   private:
     struct environment::SunInfo get_sunInfo() const;
 
