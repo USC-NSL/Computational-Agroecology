@@ -58,7 +58,7 @@ class Terrain {
   inline Tiles& tiles() { return tiles_; }
   inline const int yield() { return yield_; }
   inline const Tiles& tiles() const { return tiles_; }
-  inline void addYield(int produce) { yield_ += produce; }
+  inline void AddYield(int produce) { yield_ += produce; }
 
  private:
   friend std::ostream& operator<<(std::ostream& os, const Terrain& terrain);

@@ -116,7 +116,7 @@ void Harvest::Execute(environment::Terrain* terrain) const {
 
   for (const auto& c : applied_range) {
     plant = terrain->tiles().get(c).plant;
-    terrain->addYield(plant->produce);
+    terrain->AddYield(plant->produce);
     plant->produce = 0;
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
