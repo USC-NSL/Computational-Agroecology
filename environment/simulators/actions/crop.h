@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "action.h"
-#include "../../plant.h"
+#include "plant.h"
 #include "plant_types/plant_type.h"
 
 namespace simulator {
@@ -47,48 +47,48 @@ struct Add : public Action {
 
 // Remove a crop
 struct Remove : public Action {
-    Remove(const environment::Coordinate& target,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration);
+  Remove(const environment::Coordinate& target,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration);
 
-    Remove(const std::vector<environment::Coordinate>& applied_range,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration);
+  Remove(const std::vector<environment::Coordinate>& applied_range,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration);
 
-    Remove(const environment::Coordinate& target,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration,
-        const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Remove(const environment::Coordinate& target,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration,
+         const std::vector<std::pair<ResourceType, size_t>>& cost);
 
-    Remove(const std::vector<environment::Coordinate>& applied_range,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration,
-        const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Remove(const std::vector<environment::Coordinate>& applied_range,
+         const std::chrono::system_clock::time_point& start_time,
+         const std::chrono::duration<int>& duration,
+         const std::vector<std::pair<ResourceType, size_t>>& cost);
 
-    void Execute(environment::Terrain* terrain) const override;
+  void Execute(environment::Terrain* terrain) const override;
 };
 
 // Harvest a crop
 struct Harvest : public Action {
-    Harvest(const environment::Coordinate& target,
-           const std::chrono::system_clock::time_point& start_time,
-           const std::chrono::duration<int>& duration);
+  Harvest(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration);
 
-    Harvest(const std::vector<environment::Coordinate>& applied_range,
-           const std::chrono::system_clock::time_point& start_time,
-           const std::chrono::duration<int>& duration);
+  Harvest(const std::vector<environment::Coordinate>& applied_range,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration);
 
-    Harvest(const environment::Coordinate& target,
-           const std::chrono::system_clock::time_point& start_time,
-           const std::chrono::duration<int>& duration,
-           const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Harvest(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const std::vector<std::pair<ResourceType, size_t>>& cost);
 
-    Harvest(const std::vector<environment::Coordinate>& applied_range,
-           const std::chrono::system_clock::time_point& start_time,
-           const std::chrono::duration<int>& duration,
-           const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Harvest(const std::vector<environment::Coordinate>& applied_range,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const std::vector<std::pair<ResourceType, size_t>>& cost);
 
-    void Execute(environment::Terrain* terrain) const override;
+  void Execute(environment::Terrain* terrain) const override;
 };
 
 }  // namespace crop
