@@ -21,12 +21,12 @@ void SunSimulator::SimulateToTime(
             (env->config_.location.latitude_bottom +
              env->config_.location.latitude_top) /
                 2.0);
-  GetSunInfo(env->sunInfo_);
+  GetSunInfo(&env->sunInfo_);
 }
 
-void SunSimulator::GetResult(int _year, int _month, int _day, int _hour,
-                             double _longitude, double _latitude) {
-  FirstStep(_year, _month, _day, _hour, _longitude, _latitude);
+void SunSimulator::GetResult(int year, int month, int day, int hour,
+                             double longitude, double latitude) {
+  FirstStep(year, month, day, hour, longitude, latitude);
   SecondStep();
   ThirdStep();
   FourthStep();
@@ -34,18 +34,18 @@ void SunSimulator::GetResult(int _year, int _month, int _day, int _hour,
   SixthStep();
 }
 
-void SunSimulator::GetSunInfo(struct environment::SunInfo& suninfo) const {
-  suninfo.SunAzimuth = alpha_ + kPI;
-  suninfo.SolarAltitude = kPI / 2.0 - beta_;
-  suninfo.HourlyIrradiance = I_t_;
+void SunSimulator::GetSunInfo(struct environment::SunInfo* suninfo) {
+  suninfo->SunAzimuth = alpha_ + kPI;
+  suninfo->SolarAltitude = kPI / 2.0 - beta_;
+  suninfo->HourlyIrradiance = I_t_;
 }
 
-double SunSimulator::DegreeToRadians(double _degree) const {
-  return _degree * kPI / 180.0;
+double SunSimulator::DegreeToRadians(double degree) const {
+  return degree * kPI / 180.0;
 }
 
-double SunSimulator::RadiansToDegree(double _radians) const {
-  return _radians / kPI * 180.0;
+double SunSimulator::RadiansToDegree(double radians) const {
+  return radians / kPI * 180.0;
 }
 
 void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,

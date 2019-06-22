@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_SUN_SIMULATOR_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_SUN_SIMULATOR_H_
 
 #include "simulator.h"
 #include "suninfo.h"
@@ -11,31 +11,21 @@ class SunSimulator : public Simulator {
   void SimulateToTime(
       environment::Environment* env,
       const std::chrono::system_clock::time_point& time) override;
-  // the following function just for test
-  struct environment::SunInfo get_sunInfo_for_test(int _year, int _month,
-                                                   int _day, int _hour,
-                                                   double _longitude,
-                                                   double _latitude) {
-    GetResult(_year, _month, _day, _hour, _longitude, _latitude); 
-    struct environment::SunInfo suninfo;
-    GetSunInfo(suninfo);
-    return suninfo;
-  }
 
  private:
-  void GetSunInfo(struct environment::SunInfo& suninfo) const;
+  void GetSunInfo(struct environment::SunInfo* suninfo);
 
-  void GetResult(int _year, int _month, int _day, int _hour, double _longitude,
-                 double _latitude);
-  void FirstStep(int _year, int _month, int _day, int _hour, double _longitude,
-                 double _latitude);
+  void GetResult(int year, int month, int day, int hour, double longitude,
+                 double latitude);
+  void FirstStep(int year, int month, int day, int hour, double longitude,
+                 double latitude);
   void SecondStep();
   void ThirdStep();
   void FourthStep();
   void FifthStep();
   void SixthStep();
-  double DegreeToRadians(double _degree) const;
-  double RadiansToDegree(double _radians) const;
+  double DegreeToRadians(double degree) const;
+  double RadiansToDegree(double radians) const;
 
   const double kPI = 3.14159265359;
 
@@ -62,4 +52,4 @@ class SunSimulator : public Simulator {
 };
 
 }  // namespace simulator
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_SIMULATOR_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_SUN_SIMULATOR_H_
