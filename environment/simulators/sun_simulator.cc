@@ -48,11 +48,11 @@ double SunSimulator::RadiansToDegree(double radians) const {
   return radians / kPI * 180.0;
 }
 
-void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,
-                             double _longitude, double _latitude) {
-  is_leapYear_ = (((_year % 4 == 0) && (_year % 100 != 0)) || _year % 400 == 0);
-  t_d_ = _day;
-  switch (_month) {
+void SunSimulator::FirstStep(int year, int month, int day, int hour,
+                             double longitude, double latitude) {
+  is_leapYear_ = (((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0);
+  t_d_ = day;
+  switch (month) {
     case 12:
       t_d_ += 30;
     case 11:
@@ -82,19 +82,19 @@ void SunSimulator::FirstStep(int _year, int _month, int _day, int _hour,
   }
   sigma_ =
       -23.45 * kPI / 180.0 * cos(2.0 * kPI * (t_d_ + 10) / (365 + is_leapYear_));
-  gama_standard_meridian_ = ((int)(_longitude / kPI * 12)) * kPI / 12;
+  gama_standard_meridian_ = ((int)(longitude / kPI * 12)) * kPI / 12;
   B_ = 2.0 * kPI * (t_d_ - 81) / (364 + is_leapYear_);
   EoT_ = 9.87 * sin(2 * B_) - 7.53 * cos(B_) - 1.5 * sin(B_);
-  th_ = _hour +
-        (gama_standard_meridian_ - DegreeToRadians(_longitude)) / kPI * 12 +
+  th_ = hour +
+        (gama_standard_meridian_ - DegreeToRadians(longitude)) / kPI * 12 +
         EoT_ / 60;
   delta_ = kPI / 12.0 * (th_ - 12);
-  lamda_ = DegreeToRadians(_latitude);
+  lamda_ = DegreeToRadians(latitude);
   beta_ =
       asin(sin(sigma_) * sin(lamda_) + cos(sigma_) * cos(lamda_) * cos(delta_));
   alpha_ = acos((sin(lamda_) * sin(beta_) - sin(sigma_)) /
                 (cos(lamda_) * cos(beta_)));
-  if (_hour < 12) {
+  if (hour < 12) {
     alpha_ *= -1.0;
   }
 }
