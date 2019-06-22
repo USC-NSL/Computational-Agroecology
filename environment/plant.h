@@ -21,7 +21,7 @@ struct Plant {
   // Remove `void IncrementMaturity()`;
   // I think it is better to put it in the simulator
 
-  // This variable is not supposed to modify after initialization
+  // This variable is not supposed to be modified after initialization.
   std::string type_name;
 
   // [0,10] where 0 is dead and 10 is most healthy.
