@@ -21,7 +21,7 @@ void SunSimulator::SimulateToTime(
             (env->config_.location.latitude_bottom +
              env->config_.location.latitude_top) /
                 2.0);
-  GetSunInfo(&env->sunInfo_);
+  GetSunInfo(&env->sun_info_);
 }
 
 void SunSimulator::GetResult(int year, int month, int day, int hour,
@@ -80,8 +80,8 @@ void SunSimulator::FirstStep(int year, int month, int day, int hour,
     default:
       break;
   }
-  sigma_ =
-      -23.45 * kPI / 180.0 * cos(2.0 * kPI * (t_d_ + 10) / (365 + is_leapYear_));
+  sigma_ = -23.45 * kPI / 180.0 *
+           cos(2.0 * kPI * (t_d_ + 10) / (365 + is_leapYear_));
   gama_standard_meridian_ = ((int)(longitude / kPI * 12)) * kPI / 12;
   B_ = 2.0 * kPI * (t_d_ - 81) / (364 + is_leapYear_);
   EoT_ = 9.87 * sin(2 * B_) - 7.53 * cos(B_) - 1.5 * sin(B_);
@@ -109,7 +109,8 @@ void SunSimulator::SecondStep() {
 
 void SunSimulator::ThirdStep() {
   Ic_ = 1370.0;
-  epsilon_0_ = 1.0 + 0.033 * cos(2.0 * kPI * (t_d_ - 10) / (365 + is_leapYear_));
+  epsilon_0_ =
+      1.0 + 0.033 * cos(2.0 * kPI * (t_d_ - 10) / (365 + is_leapYear_));
   Ic_prime_ = Ic_ * epsilon_0_;
   a_ = sin(lamda_) * sin(sigma_);
   b_ = cos(lamda_) * cos(sigma_);

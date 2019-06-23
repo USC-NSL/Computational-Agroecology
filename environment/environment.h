@@ -48,7 +48,7 @@ class Environment {
   inline const std::chrono::system_clock::time_point& timestamp() const {
     return timestamp_;
   }
-  inline const SunInfo& suninfo() const { return sunInfo_; }
+  inline const SunInfo& sun_info() const { return sun_info_; }
   inline const Terrain& terrain() const { return terrain_; }
 
   inline const Weather& weather() const { return weather_; }
@@ -67,7 +67,7 @@ class Environment {
   const Climate climate_;
 
   // the information of sun from the simulator
-  SunInfo sunInfo_;
+  SunInfo sun_info_;
 
   // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;

@@ -46,7 +46,7 @@ class MainSimulator : public Simulator {
   std::priority_queue<const action::Action*, std::vector<const action::Action*>,
                       action::ActionEndTimeComparator>
       pending_action_pq_;
-  SunSimulator sunsimulator_;
+  SunSimulator sun_simulator_;
 };
 
 }  // namespace simulator
