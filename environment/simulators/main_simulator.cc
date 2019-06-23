@@ -6,11 +6,14 @@
 
 namespace simulator {
 
-MainSimulator::MainSimulator() : action_pq_() {}
+MainSimulator::MainSimulator() : action_pq_(), sun_simulator_() {}
 
 void MainSimulator::SimulateToTime(
     environment::Environment* env,
     const std::chrono::system_clock::time_point& time) {
+  // run the sun simulator
+  sun_simulator_.SimulateToTime(env, time);
+
   // collect actions which should have started before the specific time
   while (!action_pq_.empty() && action_pq_.top()->start_time < time) {
     auto action = action_pq_.top();

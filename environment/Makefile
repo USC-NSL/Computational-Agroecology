@@ -14,7 +14,7 @@ PLANT_TYPE_OBJ := $(PLANT_TYPE_PATH)/plant_type.o $(PLANT_TYPE_PATH)/bean.o $(PL
 
 SIMULATOR_PATH := ./simulators
 ACTION_PATH := ./simulators/actions
-SIMULATOR_OBJ := $(SIMULATOR_PATH)/main_simulator.o $(ACTION_PATH)/action.o $(ACTION_PATH)/crop.o
+SIMULATOR_OBJ := $(SIMULATOR_PATH)/main_simulator.o  $(SIMULATOR_PATH)/sun_simulator.o $(ACTION_PATH)/action.o $(ACTION_PATH)/crop.o
 
 TEST_PATH := ./tests
 TEST_AGENT_PATH := $(TEST_PATH)/agent
@@ -24,8 +24,8 @@ TEST_PLANT_TYPES_PATH := $(TEST_PATH)/plant_types
 TEST_PLANT_TYPES_OBJ := $(TEST_PLANT_TYPES_PATH)/bean_test.o $(TEST_PLANT_TYPES_PATH)/corn_test.o $(TEST_PLANT_TYPES_PATH)/squash_test.o
 TEST_PLANT_TYPES := $(TEST_PLANT_TYPES_PATH)/bean_test $(TEST_PLANT_TYPES_PATH)/corn_test $(TEST_PLANT_TYPES_PATH)/squash_test
 TEST_SIMULATORS_PATH := $(TEST_PATH)/simulators
-TEST_SIMULATORS_OBJ := $(TEST_SIMULATORS_PATH)/main_simulator_test.o
-TEST_SIMULATORS := $(TEST_SIMULATORS_PATH)/main_simulator_test
+TEST_SIMULATORS_OBJ := $(TEST_SIMULATORS_PATH)/main_simulator_test.o $(TEST_SIMULATORS_PATH)/sun_simulator_test.o
+TEST_SIMULATORS := $(TEST_SIMULATORS_PATH)/main_simulator_test $(TEST_SIMULATORS_PATH)/sun_simulator_test
 TEST_SIMULATORS_ACTIONS_PATH := $(TEST_SIMULATORS_PATH)/actions
 TEST_SIMULATORS_ACTIONS_OBJ := $(TEST_SIMULATORS_ACTIONS_PATH)/crop_test.o
 TEST_SIMULATORS_ACTIONS := $(TEST_SIMULATORS_ACTIONS_PATH)/crop_test
