@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_UTILITY_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_UTILITY_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_UTIL_MAX_MIN_PAIR_H_
+#define COMPUTATIONAL_AGROECOLOGY_UTIL_MAX_MIN_PAIR_H_
 
 #include <initializer_list>
 #include <utility>
@@ -33,4 +33,4 @@ bool operator!=(const MaxMinPair<T>& lhs, const MaxMinPair<T>& rhs) {
 using MaxMinTemperature = MaxMinPair<double>;
 using MaxMinRainfall = MaxMinPair<double>;
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_UTILITY_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_UTIL_MAX_MIN_PAIR_H_
