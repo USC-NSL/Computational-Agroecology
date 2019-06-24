@@ -24,7 +24,7 @@ TEST(CellTest, ConstructorTest_1) {
 
   Cell cell(soil);
   EXPECT_EQ(1, cell.size);
-  EXPECT_EQ(nullptr, cell.plant);
+  EXPECT_EQ(std::nullopt, cell.plant);
   EXPECT_EQ(soil, cell.soil);
 }
 
@@ -33,7 +33,7 @@ TEST(CellTest, ConstructorTest_2) {
 
   Cell cell(2, soil);
   EXPECT_EQ(2, cell.size);
-  EXPECT_EQ(nullptr, cell.plant);
+  EXPECT_EQ(std::nullopt, cell.plant);
   EXPECT_EQ(soil, cell.soil);
 }
 

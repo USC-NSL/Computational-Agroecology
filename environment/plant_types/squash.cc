@@ -15,8 +15,8 @@ Squash::Squash()
                 MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
                 MaxMinRainfall(0, 0)) {}
 
-environment::Plant* Squash::GeneratePlantInstance() const {
-  return new Plant(kSquashTypeName);
+environment::Plant Squash::GeneratePlantInstance() const {
+  return Plant(kSquashTypeName);
 }
 
 Squash __squash_type__;

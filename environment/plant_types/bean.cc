@@ -15,8 +15,8 @@ Bean::Bean()
                 MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
                 MaxMinRainfall(0, 0)) {}
 
-environment::Plant* Bean::GeneratePlantInstance() const {
-  return new Plant(kBeanTypeName);
+environment::Plant Bean::GeneratePlantInstance() const {
+  return Plant(kBeanTypeName);
 }
 
 Bean __bean_type__;

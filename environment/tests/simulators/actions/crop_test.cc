@@ -129,10 +129,10 @@ TEST_F(AddTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
+        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
       } else {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -150,10 +150,10 @@ TEST_F(AddTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
+        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
       } else {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -206,10 +206,10 @@ TEST_F(RemoveTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
+        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
       } else {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -220,7 +220,7 @@ TEST_F(RemoveTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -238,10 +238,10 @@ TEST_F(RemoveTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_NE(nullptr, terrain.tiles()[i][j].plant);
+        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
       } else {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -255,7 +255,7 @@ TEST_F(RemoveTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -303,8 +303,9 @@ TEST_F(HarvestTest, ExecuteTest_1) {
   crop::Add action(applied_range, time, duration, kCornTypeName);
   Terrain* terrain = new Terrain(kNumberOfRange);
   action.Execute(terrain);
-  environment::Plant* plant = terrain->tiles().get(applied_range[0]).plant;
-  plant->produce = 5;
+  ASSERT_TRUE(terrain->tiles().get(applied_range[0]).plant.has_value());
+  environment::Plant& plant = *(terrain->tiles().get(applied_range[0]).plant);
+  plant.produce = 5;
 
   crop::Harvest harvest_action(applied_range.front(), time, duration);
   harvest_action.Execute(terrain);

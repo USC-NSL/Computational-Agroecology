@@ -24,7 +24,7 @@ struct PlantType {
 
   // register itself to the map
   void Register();
-  virtual environment::Plant* GeneratePlantInstance() const = 0;
+  virtual environment::Plant GeneratePlantInstance() const = 0;
 
   const std::string type_name;
   const std::string display_symbol;

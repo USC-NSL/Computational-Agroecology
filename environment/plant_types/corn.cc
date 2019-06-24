@@ -15,8 +15,8 @@ Corn::Corn()
                 MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
                 MaxMinRainfall(0, 0)) {}
 
-environment::Plant* Corn::GeneratePlantInstance() const {
-  return new Plant(kCornTypeName);
+environment::Plant Corn::GeneratePlantInstance() const {
+  return Plant(kCornTypeName);
 }
 
 Corn __corn_type__;

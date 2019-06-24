@@ -101,23 +101,23 @@ void Remove::Execute(environment::Terrain* terrain) const {
 
   // TODO: fully implement this
   for (const auto& c : applied_range) {
-    terrain->tiles().get(c).plant = nullptr;
+    terrain->tiles().get(c).plant = std::nullopt;
   }
 }
 
 void Harvest::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
-  environment::Plant* plant;
-
   // The following standard outputs should be replaced by GLOGS
   std::cout << "Harvesting crop from " << applied_range.size() << " crop(s)."
             << std::endl;
 
   for (const auto& c : applied_range) {
-    plant = terrain->tiles().get(c).plant;
-    terrain->AddYield(plant->produce);
-    plant->produce = 0;
+    if (terrain->tiles().get(c).plant.has_value()) {
+      environment::Plant& plant = *(terrain->tiles().get(c).plant);
+      terrain->AddYield(plant.produce);
+      plant.produce = 0;
+    }
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
 }
