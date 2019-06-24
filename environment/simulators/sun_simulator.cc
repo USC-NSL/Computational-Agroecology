@@ -14,7 +14,7 @@ void SunSimulator::SimulateToTime(
     const std::chrono::system_clock::time_point& time) {
   time_t tt = std::chrono::system_clock::to_time_t(time);
   struct tm* tm = localtime(&tt);
-  GetResult(tm->tm_year, tm->tm_mon, tm->tm_mday, tm->tm_hour,
+  GetResult(tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour,
             (env->config_.location.longitude_left +
              env->config_.location.longitude_right) /
                 2.0,
