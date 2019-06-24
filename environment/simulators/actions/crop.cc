@@ -80,6 +80,28 @@ Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
                  const std::vector<std::pair<ResourceType, size_t>>& cost)
     : Action(CROP_HARVEST, applied_range, start_time, duration, cost) {}
 
+Water::Water(const environment::Coordinate& target,
+                 const std::chrono::system_clock::time_point& start_time,
+                 const std::chrono::duration<int>& duration)
+    : Action(CROP_REMOVE, target, start_time, duration) {}
+
+Water::Water(const std::vector<environment::Coordinate>& applied_range,
+                 const std::chrono::system_clock::time_point& start_time,
+                 const std::chrono::duration<int>& duration)
+    : Action(CROP_REMOVE, applied_range, start_time, duration) {}
+
+Water::Water(const environment::Coordinate& target,
+                 const std::chrono::system_clock::time_point& start_time,
+                 const std::chrono::duration<int>& duration,
+                 const std::vector<std::pair<ResourceType, size_t>>& cost)
+    : Action(CROP_REMOVE, target, start_time, duration, cost) {}
+
+Water::Water(const std::vector<environment::Coordinate>& applied_range,
+                 const std::chrono::system_clock::time_point& start_time,
+                 const std::chrono::duration<int>& duration,
+                 const std::vector<std::pair<ResourceType, size_t>>& cost)
+    : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
+
 void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
@@ -120,6 +142,14 @@ void Harvest::Execute(environment::Terrain* terrain) const {
     }
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
+}
+
+void Water::Execute(environment::Terrain* terrain) const {
+  using environment::plant_type::plant_type_to_plant;
+
+  for (const auto& c : applied_range) {
+    terrain->tiles().get(c).soil.water_content(10.0); // random number,
+  }
 }
 
 bool operator==(const Add& lhs, const Add& rhs) {

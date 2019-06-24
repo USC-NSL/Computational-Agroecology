@@ -97,6 +97,29 @@ struct Harvest : public Action {
 
 bool operator==(const Harvest& lhs, const Harvest& rhs);
 
+// Water a crop
+struct Water : public Action {
+  Water(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration);
+
+  Water(const std::vector<environment::Coordinate>& applied_range,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration);
+
+  Water(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+  Water(const std::vector<environment::Coordinate>& applied_range,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const std::vector<std::pair<ResourceType, size_t>>& cost);
+
+  void Execute(environment::Terrain* terrain) const override;
+};
+
 }  // namespace crop
 
 }  // namespace action
