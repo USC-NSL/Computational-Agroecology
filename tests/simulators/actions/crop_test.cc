@@ -5,8 +5,8 @@
 
 #include <gtest/gtest.h>
 
+#include "environment/terrain.h"
 #include "simulators/actions/crop.h"
-#include "terrain.h"
 
 using namespace simulator;
 using namespace simulator::action;

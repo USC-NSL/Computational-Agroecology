@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "environment.h"
+#include "environment/environment.h"
 #include "simulators/resource.h"
 
 namespace agent {

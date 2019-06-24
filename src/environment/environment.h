@@ -5,13 +5,13 @@
 #include <iostream>
 #include <vector>
 
-#include "climate.h"
-#include "config.h"
+#include "environment/climate.h"
+#include "environment/config.h"
+#include "environment/terrain.h"
+#include "environment/weather.h"
 #include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
 #include "simulators/sun_simulator.h"
-#include "terrain.h"
-#include "weather.h"
 
 namespace environment {
 

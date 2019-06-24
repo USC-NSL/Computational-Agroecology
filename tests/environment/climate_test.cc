@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "climate.h"
+#include "environment/climate.h"
 
 using namespace environment;
 

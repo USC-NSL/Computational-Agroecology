@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "plant_types/squash.h"
+#include "environment/plant_types/squash.h"
 
 using namespace environment::plant_type;
 

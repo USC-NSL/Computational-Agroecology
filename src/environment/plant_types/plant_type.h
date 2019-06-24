@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "utility.h"
+#include "util/max_min_pair.h"
 
 namespace environment {
 

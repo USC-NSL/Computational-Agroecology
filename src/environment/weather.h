@@ -4,8 +4,8 @@
 #include <chrono>
 #include <iostream>
 
-#include "climate.h"
-#include "utility.h"
+#include "environment/climate.h"
+#include "util/max_min_pair.h"
 
 namespace environment {
 

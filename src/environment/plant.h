@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "plant_types/plant_type.h"
+#include "environment/plant_types/plant_type.h"
 
 namespace environment {
 

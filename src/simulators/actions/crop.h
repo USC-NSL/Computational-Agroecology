@@ -6,9 +6,9 @@
 #include <string>
 #include <unordered_map>
 
-#include "action.h"
-#include "plant.h"
-#include "plant_types/plant_type.h"
+#include "environment/plant.h"
+#include "environment/plant_types/plant_type.h"
+#include "simulators/actions/action.h"
 
 namespace simulator {
 

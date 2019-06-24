@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "plant_types/bean.h"
+#include "environment/plant_types/bean.h"
 
 using namespace environment::plant_type;
 

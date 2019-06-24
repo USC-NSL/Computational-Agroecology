@@ -11,7 +11,7 @@
 #pragma comment(lib, "gtest.lib")
 #endif
 #endif
-#include "environment.h"
+#include "environment/environment.h"
 #include "simulators/sun_simulator.h"
 using namespace simulator;
 using namespace environment;

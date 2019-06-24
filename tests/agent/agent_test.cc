@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 
 #include "agent/agent.h"
-#include "environment.h"
-#include "plant_types/plant_type.h"
+#include "environment/environment.h"
+#include "environment/plant_types/plant_type.h"
 #include "simulators/actions/crop.h"
 #include "simulators/resource.h"
 

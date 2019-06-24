@@ -1,8 +1,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_BEAN_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_BEAN_H_
 
-#include "plant.h"
-#include "plant_type.h"
+#include "environment/plant.h"
+#include "environment/plant_types/plant_type.h"
 
 namespace environment {
 

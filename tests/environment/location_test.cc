@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "location.h"
+#include "environment/location.h"
 
 using namespace environment;
 

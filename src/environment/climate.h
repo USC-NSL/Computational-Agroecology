@@ -1,8 +1,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CLIMATE_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CLIMATE_H_
 
-#include "config.h"
-#include "utility.h"
+#include "environment/config.h"
+#include "util/max_min_pair.h"
 
 namespace environment {
 

@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "plant_types/corn.h"
+#include "environment/plant_types/corn.h"
 
 using namespace environment::plant_type;
 

@@ -3,9 +3,9 @@
 
 #include <queue>
 
-#include "actions/action.h"
-#include "simulator.h"
-#include "sun_simulator.h"
+#include "simulators/actions/action.h"
+#include "simulators/simulator.h"
+#include "simulators/sun_simulator.h"
 
 namespace simulator {
 

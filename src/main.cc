@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "environment.h"
+#include "environment/environment.h"
 #include "simulators/actions/crop.h"
 
 // This is an experimental main

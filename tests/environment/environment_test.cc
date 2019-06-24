@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "environment.h"
+#include "environment/environment.h"
 #include "simulators/actions/crop.h"
 
 using namespace environment;

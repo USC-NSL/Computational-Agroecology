@@ -5,8 +5,8 @@
 #include <utility>
 #include <vector>
 
+#include "environment/terrain.h"
 #include "simulators/resource.h"
-#include "terrain.h"
 
 namespace simulator {
 
