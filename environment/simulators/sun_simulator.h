@@ -15,20 +15,27 @@ class SunSimulator : public Simulator {
  private:
   void GetSunInfo(struct environment::SunInfo* suninfo);
 
-  void GetResult(int year, int month, int day, int hour, double longitude,
+  void GetResult(int yday, int hour, double longitude,
                  double latitude);
-  void FirstStep(int year, int month, int day, int hour, double longitude,
+  void GetSolarPosition(int yday, int hour, double longitude,
                  double latitude);
-  void SecondStep();
-  void ThirdStep();
-  void FourthStep();
-  void FifthStep();
-  void SixthStep();
+  void GetDayLength();
+  void GetDailyIrradiance();
+  void GetDailyDiffuseIrradiance();
+  void GetHourlyIrradiance();
+  void GetHourlyDiffuseIrradiance();
   double DegreeToRadians(double degree) const;
   double RadiansToDegree(double radians) const;
 
   const double kPI = 3.14159265359;
-
+  const double kPIforDegree = 180.0;
+  const double kTropic = -23.45;
+  const int kDaysPerYear = 365;
+  const int kHoursPerDay = 24;
+  const int kDaysLeftPerYear = 10;
+  const int kHalfDaysPerDay = 12;
+  const int kMinsPerHour = 60;
+  const int kSecsPerMin = 60;
   // variables for the first step
   bool is_leapYear_;
   int t_d_;
