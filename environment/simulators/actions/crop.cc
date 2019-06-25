@@ -148,7 +148,7 @@ void Water::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   for (const auto& c : applied_range) {
-    terrain->tiles().get(c).soil.water_content(10.0); // random number,
+    terrain->tiles().get(c).soil.water_content += 10.0; // random number,
   }
 }
 
