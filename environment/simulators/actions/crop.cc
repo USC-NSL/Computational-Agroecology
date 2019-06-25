@@ -61,24 +61,24 @@ Remove::Remove(const std::vector<environment::Coordinate>& applied_range,
 Harvest::Harvest(const environment::Coordinate& target,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration)
-    : Action(CROP_REMOVE, target, start_time, duration) {}
+    : Action(CROP_HARVEST, target, start_time, duration) {}
 
 Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration)
-    : Action(CROP_REMOVE, applied_range, start_time, duration) {}
+    : Action(CROP_HARVEST, applied_range, start_time, duration) {}
 
 Harvest::Harvest(const environment::Coordinate& target,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration,
                  const std::vector<std::pair<ResourceType, size_t>>& cost)
-    : Action(CROP_REMOVE, target, start_time, duration, cost) {}
+    : Action(CROP_HARVEST, target, start_time, duration, cost) {}
 
 Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration,
                  const std::vector<std::pair<ResourceType, size_t>>& cost)
-    : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
+    : Action(CROP_HARVEST, applied_range, start_time, duration, cost) {}
 
 void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
