@@ -25,7 +25,7 @@ INCLUDES := -I ../ -I ../environment -I ./
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTFLAGS) -c $< -o $@
 
 %_test: %_test.o agent_server_service
-	$(CXX) $< agent_server.o message_convertor.o ../environment/environment.o ../environment/agent/agent.o ../environment/simulators/main_simulator.o ../environment/plant_types/plant_type.o ../environment/location.o ../environment/plant.o ../environment/soil.o ../environment/terrain.o ../environment/climate.o ../environment/weather.o ../environment/config.o ../environment/simulators/actions/action.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o -o $@ $(TESTLD) $(LDFLAGS)
+	$(CXX) $< agent_server.o message_convertor.o ../environment/environment.o ../environment/agent/agent.o ../environment/simulators/main_simulator.o ../environment/simulators/sun_simulator.o ../environment/plant_types/plant_type.o ../environment/location.o ../environment/plant.o ../environment/soil.o ../environment/terrain.o ../environment/climate.o ../environment/weather.o ../environment/config.o ../environment/simulators/actions/action.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o -o $@ $(TESTLD) $(LDFLAGS)
 
 agent_server_service: $(PROTO_PATH)/environment.pb.o $(PROTO_PATH)/agent_server.pb.o $(PROTO_PATH)/agent_server.grpc.pb.o agent_server.o agent_server_grpc_service.o message_convertor.o
 

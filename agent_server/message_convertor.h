@@ -27,7 +27,7 @@ environment::Config FromProtobuf(const data_format::Config& protobuf_config);
 data_format::Config ToProtobuf(const environment::Config& config);
 
 // plant convertor
-environment::Plant* FromProtobuf(const data_format::Plant& protobuf_plant);
+environment::Plant FromProtobuf(const data_format::Plant& protobuf_plant);
 data_format::Plant ToProtobuf(const environment::Plant& plant);
 
 // soil convertor

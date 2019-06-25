@@ -35,7 +35,7 @@ TEST(MessageConvertorTest, PlantConvertorTest) {
   Plant plant("Corn");
 
   auto plant_protobuf = ToProtobuf(plant);
-  EXPECT_EQ(plant, *(FromProtobuf(plant_protobuf)));
+  EXPECT_EQ(plant, FromProtobuf(plant_protobuf));
 }
 
 TEST(MessageConvertorTest, SoilConvertorTest) {

@@ -42,33 +42,33 @@ data_format::Config ToProtobuf(const environment::Config& config) {
   return config_protobuf;
 }
 
-environment::Plant* FromProtobuf(const data_format::Plant& protobuf_plant) {
-  auto plant = new environment::Plant(protobuf_plant.type_name());
+environment::Plant FromProtobuf(const data_format::Plant& protobuf_plant) {
+  environment::Plant plant(protobuf_plant.type_name());
 
-  plant->health = protobuf_plant.health();
-  plant->flowering = protobuf_plant.flowering();
-  plant->accumulated_gdd = protobuf_plant.accumulated_gdd();
+  plant.health = protobuf_plant.health();
+  plant.flowering = protobuf_plant.flowering();
+  plant.accumulated_gdd = protobuf_plant.accumulated_gdd();
 
   switch (protobuf_plant.maturity()) {
     case data_format::Plant_Maturity_SEED:
-      plant->maturity = environment::Plant::SEED;
+      plant.maturity = environment::Plant::SEED;
       break;
     case data_format::Plant_Maturity_SEEDLING:
-      plant->maturity = environment::Plant::SEEDLING;
+      plant.maturity = environment::Plant::SEEDLING;
       break;
     case data_format::Plant_Maturity_JUVENILE:
-      plant->maturity = environment::Plant::JUVENILE;
+      plant.maturity = environment::Plant::JUVENILE;
       break;
     case data_format::Plant_Maturity_MATURE:
-      plant->maturity = environment::Plant::MATURE;
+      plant.maturity = environment::Plant::MATURE;
       break;
     case data_format::Plant_Maturity_OLD:
-      plant->maturity = environment::Plant::OLD;
+      plant.maturity = environment::Plant::OLD;
       break;
   }
 
-  plant->base_temperature = protobuf_plant.base_temperature();
-  plant->gdd_thresholds = std::vector<int>(protobuf_plant.gdd_thresholds().begin(), protobuf_plant.gdd_thresholds().end());
+  plant.base_temperature = protobuf_plant.base_temperature();
+  plant.gdd_thresholds = std::vector<int>(protobuf_plant.gdd_thresholds().begin(), protobuf_plant.gdd_thresholds().end());
 
   return plant;
 }
@@ -152,11 +152,9 @@ environment::Cell FromProtobuf(const data_format::Terrain_Cell& protobuf_cell) {
   environment::Soil soil = FromProtobuf(protobuf_cell.soil());
   environment::Cell cell(protobuf_cell.size(), soil);
   if (protobuf_cell.has_plant()) {
-    if (cell.plant != nullptr) {
-      delete cell.plant;
-    }
-
     cell.plant = FromProtobuf(protobuf_cell.plant());
+  } else {
+    cell.plant = std::nullopt;
   }
 
   return cell;
@@ -167,7 +165,7 @@ data_format::Terrain_Cell ToProtobuf(const environment::Cell& cell) {
 
   cell_protobuf.set_size(cell.size);
   *(cell_protobuf.mutable_soil()) = ToProtobuf(cell.soil);
-  if (cell.plant != nullptr) {
+  if (cell.plant.has_value()) {
     *(cell_protobuf.mutable_plant()) = ToProtobuf(*(cell.plant));
   }
 
