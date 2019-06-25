@@ -99,22 +99,28 @@ bool operator==(const Harvest& lhs, const Harvest& rhs);
 
 // Water a crop
 struct Water : public Action {
-  Water(const environment::Coordinate& target,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration);
-
-  Water(const std::vector<environment::Coordinate>& applied_range,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration);
+  double water_amount;
 
   Water(const environment::Coordinate& target,
           const std::chrono::system_clock::time_point& start_time,
           const std::chrono::duration<int>& duration,
+          const double& water_amount);
+
+  Water(const std::vector<environment::Coordinate>& applied_range,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const double& water_amount);
+
+  Water(const environment::Coordinate& target,
+          const std::chrono::system_clock::time_point& start_time,
+          const std::chrono::duration<int>& duration,
+          const double& water_amount,
           const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   Water(const std::vector<environment::Coordinate>& applied_range,
           const std::chrono::system_clock::time_point& start_time,
           const std::chrono::duration<int>& duration,
+          const double& water_amount,
           const std::vector<std::pair<ResourceType, size_t>>& cost);
 
   void Execute(environment::Terrain* terrain) const override;

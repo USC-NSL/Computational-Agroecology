@@ -364,14 +364,14 @@ TEST_F(AddWaterTest, AddToRange) {
   Terrain terrain(kNumberOfRange);
   action.Execute(&terrain);
   // add water to terrain
-  crop::Water water_action(applied_range.front(), time, duration);
+  crop::Water water_action(applied_range.front(), time, duration, 15.0);
   water_action.Execute(&terrain);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(10.0, terrain.tiles()[i][j].soil.water_content);
+        EXPECT_EQ(15.0, terrain.tiles()[i][j].soil.water_content);
       } else {
         EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
       }

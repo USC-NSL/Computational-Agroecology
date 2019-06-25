@@ -82,25 +82,33 @@ Harvest::Harvest(const std::vector<environment::Coordinate>& applied_range,
 
 Water::Water(const environment::Coordinate& target,
                  const std::chrono::system_clock::time_point& start_time,
-                 const std::chrono::duration<int>& duration)
-    : Action(CROP_REMOVE, target, start_time, duration) {}
+                 const std::chrono::duration<int>& duration,
+                 const double& water_amount)
+    : Action(WATER_CROP, target, start_time, duration),
+      water_amount(water_amount) {}
 
 Water::Water(const std::vector<environment::Coordinate>& applied_range,
                  const std::chrono::system_clock::time_point& start_time,
-                 const std::chrono::duration<int>& duration)
-    : Action(CROP_REMOVE, applied_range, start_time, duration) {}
+                 const std::chrono::duration<int>& duration,
+                 const double& water_amount)
+    : Action(WATER_CROP, applied_range, start_time, duration),
+      water_amount(water_amount) {}
 
 Water::Water(const environment::Coordinate& target,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration,
+                 const double& water_amount,
                  const std::vector<std::pair<ResourceType, size_t>>& cost)
-    : Action(CROP_REMOVE, target, start_time, duration, cost) {}
+    : Action(WATER_CROP, target, start_time, duration, cost),
+      water_amount(water_amount) {}
 
 Water::Water(const std::vector<environment::Coordinate>& applied_range,
                  const std::chrono::system_clock::time_point& start_time,
                  const std::chrono::duration<int>& duration,
+                 const double& water_amount,
                  const std::vector<std::pair<ResourceType, size_t>>& cost)
-    : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
+    : Action(WATER_CROP, applied_range, start_time, duration, cost),
+      water_amount(water_amount) {}
 
 void Add::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
@@ -148,7 +156,7 @@ void Water::Execute(environment::Terrain* terrain) const {
   using environment::plant_type::plant_type_to_plant;
 
   for (const auto& c : applied_range) {
-    terrain->tiles().get(c).soil.water_content += 10.0; // random number,
+    terrain->tiles().get(c).soil.water_content += water_amount; // random number,
   }
 }
 
