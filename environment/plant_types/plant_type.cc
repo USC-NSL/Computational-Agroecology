@@ -6,8 +6,9 @@ namespace environment {
 
 namespace plant_type {
 
-PlantType::PlantType(const std::string& type_name, const std::string& display_symbol,
-                     const bool cultivar, const double base_temperature,
+PlantType::PlantType(const std::string& type_name,
+                     const std::string& display_symbol, const bool cultivar,
+                     const double base_temperature,
                      const MaxMinTemperature& optimal_temperature,
                      const MaxMinTemperature& absolute_temperature,
                      const MaxMinRainfall& optimal_annual_rainfall,
@@ -37,13 +38,13 @@ PlantType::PlantType(const std::string& type_name, const std::string& display_sy
       optimal_soil_condition(optimal_soil_condition),
       absolute_soil_condition(absolute_soil_condition),
       optimal_light_condition(optimal_light_condition),
-      absolute_light_condition(absolute_light_condition){
+      absolute_light_condition(absolute_light_condition) {
   // register this type to the map
   Register();
 }
 
 environment::Plant PlantType::GeneratePlantInstance() const {
-    return environment::Plant(type_name);
+  return environment::Plant(type_name);
 }
 
 void PlantType::Register() { plant_type_to_plant[type_name] = this; }
