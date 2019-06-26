@@ -20,8 +20,7 @@ bundle.js
 .vscode
 .vs
 .DS_Store
-environment/tests/simulators/Debug
-environment/tests/simulators/gtest
+environment/tests/gtest
 *.lib
 *.sln
 *.vcxproj
