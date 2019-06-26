@@ -12,6 +12,9 @@ TESTLD := -lgtest -lpthread
 
 INCLUDES := -I ../ -I ../environment -I ./
 
+ENV_PATH := ../environment
+ENV_OBJS := $(ENV_PATH)/environment.o $(ENV_PATH)/agent/agent.o $(ENV_PATH)/simulators/main_simulator.o $(ENV_PATH)/simulators/sun_simulator.o $(ENV_PATH)/plant_types/plant_type.o $(ENV_PATH)/location.o $(ENV_PATH)/plant.o $(ENV_PATH)/soil.o $(ENV_PATH)/terrain.o $(ENV_PATH)/climate.o $(ENV_PATH)/weather.o $(ENV_PATH)/config.o $(ENV_PATH)/simulators/actions/action.o $(ENV_PATH)/simulators/actions/crop.o
+
 %.pb.cc: %.proto
 	$(PROTOC) $(PROTO_FLAGS) $<
 
@@ -25,13 +28,13 @@ INCLUDES := -I ../ -I ../environment -I ./
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTFLAGS) -c $< -o $@
 
 %_test: %_test.o agent_server_service
-	$(CXX) $< agent_server.o message_convertor.o ../environment/environment.o ../environment/agent/agent.o ../environment/simulators/main_simulator.o ../environment/simulators/sun_simulator.o ../environment/plant_types/plant_type.o ../environment/location.o ../environment/plant.o ../environment/soil.o ../environment/terrain.o ../environment/climate.o ../environment/weather.o ../environment/config.o ../environment/simulators/actions/action.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o -o $@ $(TESTLD) $(LDFLAGS)
+	$(CXX) $< $(ENV_OBJS) agent_server.o message_convertor.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o -o $@ $(TESTLD) $(LDFLAGS)
 
 agent_server_service: $(PROTO_PATH)/environment.pb.o $(PROTO_PATH)/agent_server.pb.o $(PROTO_PATH)/agent_server.grpc.pb.o agent_server.o agent_server_grpc_service.o message_convertor.o
 
 all: agent_server_service
 # tempprarily hard code them
-	$(CXX) agent_server.o agent_server_grpc_service.o message_convertor.o ../environment/environment.o ../environment/agent/agent.o ../environment/simulators/main_simulator.o ../environment/plant_types/plant_type.o ../environment/location.o ../environment/plant.o ../environment/soil.o ../environment/terrain.o ../environment/climate.o ../environment/weather.o ../environment/config.o ../environment/simulators/actions/action.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o $(LDFLAGS) -o agent_server
+	$(CXX) $(ENV_OBJS) agent_server.o agent_server_grpc_service.o message_convertor.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o $(LDFLAGS) -o agent_server
 
 all_test: tests/agent_server_test tests/message_convertor_test
 

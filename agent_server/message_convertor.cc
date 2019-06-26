@@ -68,7 +68,9 @@ environment::Plant FromProtobuf(const data_format::Plant& protobuf_plant) {
   }
 
   plant.base_temperature = protobuf_plant.base_temperature();
-  plant.gdd_thresholds = std::vector<int>(protobuf_plant.gdd_thresholds().begin(), protobuf_plant.gdd_thresholds().end());
+  plant.gdd_thresholds =
+      std::vector<int>(protobuf_plant.gdd_thresholds().begin(),
+                       protobuf_plant.gdd_thresholds().end());
 
   return plant;
 }
@@ -100,7 +102,8 @@ data_format::Plant ToProtobuf(const environment::Plant& plant) {
   }
 
   plant_protobuf.set_base_temperature(plant.base_temperature);
-  *(plant_protobuf.mutable_gdd_thresholds()) = {plant.gdd_thresholds.begin(), plant.gdd_thresholds.end()};
+  *(plant_protobuf.mutable_gdd_thresholds()) = {plant.gdd_thresholds.begin(),
+                                                plant.gdd_thresholds.end()};
 
   return plant_protobuf;
 }
@@ -146,6 +149,21 @@ data_format::Soil ToProtobuf(const environment::Soil& soil) {
   soil_protobuf.set_water_content(soil.water_content);
 
   return soil_protobuf;
+}
+
+environment::Coordinate FromProtobuf(
+    const data_format::Terrain_Coordinate& protobuf_coordinate) {
+  return environment::Coordinate(protobuf_coordinate.x(),
+                                 protobuf_coordinate.y());
+}
+
+data_format::Terrain_Coordinate ToProtobuf(
+    const environment::Coordinate& coordinate) {
+  data_format::Terrain_Coordinate coordinate_protobuf;
+  coordinate_protobuf.set_x(coordinate.x);
+  coordinate_protobuf.set_y(coordinate.y);
+
+  return coordinate_protobuf;
 }
 
 environment::Cell FromProtobuf(const data_format::Terrain_Cell& protobuf_cell) {
@@ -350,4 +368,121 @@ data_format::Environment ToProtobuf(
   *(env_protobuf.mutable_weather()) = ToProtobuf(environment.weather());
 
   return env_protobuf;
+}
+
+void FromProtobuf(
+    const agent_server::service::AgentActionConfig& config_protobuf,
+    std::vector<environment::Coordinate>* applied_range,
+    std::chrono::system_clock::time_point* start_time,
+    std::chrono::duration<int>* duration,
+    std::vector<std::pair<simulator::ResourceType, size_t>>* cost) {
+  applied_range->clear();
+  for (const auto& protobuf_coordinate : config_protobuf.applied_range()) {
+    applied_range->push_back(FromProtobuf(protobuf_coordinate));
+  }
+
+  *start_time = FromProtobuf(config_protobuf.start_time_epoch_count());
+  std::chrono::system_clock::time_point end_time =
+      FromProtobuf(config_protobuf.end_time_epoch_count());
+  *duration = std::chrono::duration_cast<std::chrono::duration<int>>(
+      end_time - *start_time);
+
+  for (const auto& protobuf_cost : config_protobuf.cost()) {
+    simulator::ResourceType type;
+    switch (protobuf_cost.resource_type()) {
+      case (::agent_server::service::AgentActionConfig_Cost_ResourceType_MONEY):
+        type = simulator::ResourceType::MONEY;
+        break;
+      case (::agent_server::service::AgentActionConfig_Cost_ResourceType_LABOR):
+        type = simulator::ResourceType::LABOR;
+        break;
+    }
+    cost->push_back(std::make_pair(type, protobuf_cost.count()));
+  }
+}
+
+agent_server::service::AgentActionConfig ToProtobuf(
+    const std::vector<environment::Coordinate>& applied_range,
+    const std::chrono::system_clock::time_point& start_time,
+    const std::chrono::duration<int>& duration,
+    const std::vector<std::pair<simulator::ResourceType, size_t>>& cost) {
+  agent_server::service::AgentActionConfig agent_action_config;
+
+  for (const auto& coordinate : applied_range) {
+    *(agent_action_config.add_applied_range()) = ToProtobuf(coordinate);
+  }
+
+  agent_action_config.set_start_time_epoch_count(ToProtobuf(start_time));
+  agent_action_config.set_end_time_epoch_count(
+      ToProtobuf(start_time + duration));
+
+  for (const auto& c : cost) {
+    auto cost_ptr = agent_action_config.add_cost();
+    ::agent_server::service::AgentActionConfig_Cost_ResourceType type;
+    switch (c.first) {
+      case simulator::ResourceType::MONEY:
+        type =
+            ::agent_server::service::AgentActionConfig_Cost_ResourceType_MONEY;
+        break;
+      case simulator::ResourceType::LABOR:
+        type =
+            ::agent_server::service::AgentActionConfig_Cost_ResourceType_LABOR;
+        break;
+    }
+
+    cost_ptr->set_resource_type(type);
+    cost_ptr->set_count(c.second);
+  }
+
+  return agent_action_config;
+}
+
+simulator::action::crop::Add FromProtobuf(
+    const agent_server::service::AgentAddCropRequest& add_crop_protobuf) {
+  std::vector<environment::Coordinate> applied_range;
+  std::chrono::system_clock::time_point start_time;
+  std::chrono::duration<int> duration;
+  std::vector<std::pair<simulator::ResourceType, size_t>> cost;
+
+  FromProtobuf(add_crop_protobuf.action_config(), &applied_range, &start_time,
+               &duration, &cost);
+
+  return simulator::action::crop::Add(applied_range, start_time, duration,
+                                      add_crop_protobuf.crop_type_name(), cost);
+}
+
+agent_server::service::AgentAddCropRequest ToProtobuf(
+    const simulator::action::crop::Add& action) {
+  agent_server::service::AgentAddCropRequest agent_add_crop_request;
+
+  *(agent_add_crop_request.mutable_action_config()) = ToProtobuf(
+      action.applied_range, action.start_time, action.duration, action.cost);
+
+  agent_add_crop_request.set_crop_type_name(action.crop_type_name);
+
+  return agent_add_crop_request;
+}
+
+simulator::action::crop::Remove FromProtobuf(
+    const agent_server::service::AgentRemoveCropRequest& remove_crop_protobuf) {
+  std::vector<environment::Coordinate> applied_range;
+  std::chrono::system_clock::time_point start_time;
+  std::chrono::duration<int> duration;
+  std::vector<std::pair<simulator::ResourceType, size_t>> cost;
+
+  FromProtobuf(remove_crop_protobuf.action_config(), &applied_range,
+               &start_time, &duration, &cost);
+
+  return simulator::action::crop::Remove(applied_range, start_time, duration,
+                                         cost);
+}
+
+agent_server::service::AgentRemoveCropRequest ToProtobuf(
+    const simulator::action::crop::Remove& action) {
+  agent_server::service::AgentRemoveCropRequest agent_remove_crop_request;
+
+  *(agent_remove_crop_request.mutable_action_config()) = ToProtobuf(
+      action.applied_range, action.start_time, action.duration, action.cost);
+
+  return agent_remove_crop_request;
 }

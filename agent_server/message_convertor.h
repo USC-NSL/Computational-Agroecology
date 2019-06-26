@@ -7,9 +7,11 @@
 #include "environment/config.h"
 #include "environment/environment.h"
 #include "environment/location.h"
+#include "environment/simulators/actions/crop.h"
 #include "environment/soil.h"
 #include "environment/terrain.h"
 #include "environment/weather.h"
+#include "proto/agent_server.pb.h"
 #include "proto/environment.pb.h"
 
 // time convertor
@@ -34,6 +36,12 @@ data_format::Plant ToProtobuf(const environment::Plant& plant);
 environment::Soil FromProtobuf(const data_format::Soil& protobuf_soil);
 data_format::Soil ToProtobuf(const environment::Soil& soil);
 
+// coordinate convertor
+environment::Coordinate FromProtobuf(
+    const data_format::Terrain_Coordinate& protobuf_coordinate);
+data_format::Terrain_Coordinate ToProtobuf(
+    const environment::Coordinate& coordinate);
+
 // cell convertor
 environment::Cell FromProtobuf(const data_format::Terrain_Cell& protobuf_cell);
 data_format::Terrain_Cell ToProtobuf(const environment::Cell& cell);
@@ -53,5 +61,26 @@ data_format::Weather ToProtobuf(const environment::Weather& weather);
 // environment convertor
 data_format::Environment ToProtobuf(
     const environment::Environment& environment);
+
+// action convertor
+void FromProtobuf(
+    const agent_server::service::AgentActionConfig& config_protobuf,
+    std::vector<environment::Coordinate>* applied_range,
+    std::chrono::system_clock::time_point* start_time,
+    std::chrono::duration<int>* duration,
+    std::vector<std::pair<simulator::ResourceType, size_t>>* cost);
+agent_server::service::AgentActionConfig ToProtobuf(
+    const std::vector<environment::Coordinate>& applied_range,
+    const std::chrono::system_clock::time_point& start_time,
+    const std::chrono::duration<int>& duration,
+    const std::vector<std::pair<simulator::ResourceType, size_t>>& cost);
+simulator::action::crop::Add FromProtobuf(
+    const agent_server::service::AgentAddCropRequest& add_crop_protobuf);
+agent_server::service::AgentAddCropRequest ToProtobuf(
+    const simulator::action::crop::Add& action);
+simulator::action::crop::Remove FromProtobuf(
+    const agent_server::service::AgentRemoveCropRequest& remove_crop_protobuf);
+agent_server::service::AgentRemoveCropRequest ToProtobuf(
+    const simulator::action::crop::Remove& action);
 
 #endif

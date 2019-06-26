@@ -19,6 +19,15 @@ class AgentServerGrpcService final : public AgentServer::Service {
   ::grpc::Status GetEnvironment(::grpc::ServerContext* context,
                                 const GetEnvironmentRequest* request,
                                 GetEnvironmentResponse* response) override;
+  ::grpc::Status SimulateToTime(::grpc::ServerContext* context,
+                                const SimulateToTimeRequest* request,
+                                SimulateToTimeResponse* response) override;
+  ::grpc::Status AgentAddCrop(::grpc::ServerContext* context,
+                              const AgentAddCropRequest* request,
+                              AgentAddCropResponse* response) override;
+  ::grpc::Status AgentRemoveCrop(::grpc::ServerContext* context,
+                                 const AgentRemoveCropRequest* request,
+                                 AgentRemoveCropResponse* response) override;
 
  private:
   agent_server::AgentServer agent_server_;
