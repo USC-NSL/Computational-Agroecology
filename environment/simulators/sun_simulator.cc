@@ -70,7 +70,7 @@ void SunSimulator::GetSolarPosition(const int yday, const int hour,
       asin(sin(sigma_) * sin(lamda_) + cos(sigma_) * cos(lamda_) * cos(delta_));
   alpha_ = acos((sin(lamda_) * sin(beta_) - sin(sigma_)) /
                 (cos(lamda_) * cos(beta_)));
-  if (hour < kHalfDaysPerDay) {
+  if (hour < kHoursHalfDay) {
     alpha_ *= -1.0;
   }
 }
