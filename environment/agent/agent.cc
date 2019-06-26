@@ -25,6 +25,14 @@ void Agent::AddResource(const simulator::ResourceType& resource,
   owned_resource_[resource] += quantity;
 }
 
+
+ simulator::action::ActionType Agent::RandomAction(){
+   simulator::action::ActionType randomActionType = static_cast<simulator::action::ActionType>(rand() % simulator::action::COUNT);
+   return randomActionType;
+  }
+ 
+
+
 Agent::ReturnCodes Agent::TakeAction(const simulator::action::Action* action) {
   if (action == nullptr) {
     return INVALID_ARGUMENT;

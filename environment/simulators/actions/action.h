@@ -13,12 +13,16 @@ namespace simulator {
 namespace action {
 
 // This defines the types of actions that an agent/human can take.
+
 enum ActionType { CROP_ADD = 0, CROP_REMOVE, CROP_HARVEST, WATER_CROP };
+
 
 // An agent or a human can set up this `Action` object and pass it to the
 // environment to schedule the action.
 // The simulator will then execute this action on the scheduled time.
 struct Action {
+
+
   Action(const ActionType type, const environment::Coordinate& target,
          const std::chrono::system_clock::time_point& start_time,
          const std::chrono::duration<int>& duration);
