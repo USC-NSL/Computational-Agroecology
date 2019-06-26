@@ -62,7 +62,7 @@ void SunSimulator::GetSolarPosition(const int yday, const int hour,
   // Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
   t_h_ = hour +
          (gama_standard_meridian_ - DegreeToRadians(longitude)) / kPI *
-             kHalfDaysPerDay +
+             kHoursHalfDay +
          EoT_ / kMinsPerHour;
   delta_ = kPI / kHoursHalfDay * (t_h_ - kHoursHalfDay);
   lamda_ = DegreeToRadians(latitude);
@@ -76,8 +76,8 @@ void SunSimulator::GetSolarPosition(const int yday, const int hour,
 }
 
 void SunSimulator::GetDayLength() {
-  t_ss_ = kHalfDaysPerDay +
-          kHalfDaysPerDay / kPI *
+  t_ss_ = kHoursHalfDay +
+          kHoursHalfDay / kPI *
               acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
   t_sr_ = kHoursPerDay - t_ss_;
   DL_ = 2 * (t_ss_ - kHoursHalfDay);
