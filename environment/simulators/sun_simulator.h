@@ -18,7 +18,7 @@ class SunSimulator : public Simulator {
   void GetResult(const int yday, const int hour, const double longitude,
                  const double latitude);
   void GetSolarPosition(const int yday, const int hour, const double longitude,
-                 const double latitude);
+                        const double latitude);
   void GetDayLength();
   void GetDailyIrradiance();
   void GetDailyDiffuseIrradiance();
@@ -38,7 +38,7 @@ class SunSimulator : public Simulator {
   const int kSecsPerMin = 60;
 
   // variables for the GetSolarPosition() function
-  int t_d_; 
+  int t_d_;
   // the index of the day in the whole year
   double sigma_, gama_standard_meridian_, t_h_, delta_, B_, EoT_, lamda_, beta_,
       alpha_;

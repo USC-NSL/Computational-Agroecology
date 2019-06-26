@@ -49,18 +49,21 @@ double SunSimulator::RadiansToDegree(const double radians) const {
 }
 
 void SunSimulator::GetSolarPosition(const int yday, const int hour,
-                             const double longitude, const double latitude) {
+                                    const double longitude,
+                                    const double latitude) {
   t_d_ = yday;
   sigma_ = -kTropic * kPI / kPIforDegree *
            cos(2.0 * kPI * (t_d_ + kDaysLeftPerYear) / kDaysPerYear);
-  gama_standard_meridian_ = ((int)(longitude / kPI * kHalfDaysPerDay)) * kPI / kHalfDaysPerDay;
+  gama_standard_meridian_ =
+      ((int)(longitude / kPI * kHalfDaysPerDay)) * kPI / kHalfDaysPerDay;
   B_ = 2.0 * kPI * (t_d_ - 81) / (kDaysPerYear - 1);
-  //Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
+  // Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
   EoT_ = 9.87 * sin(2 * B_) - 7.53 * cos(B_) - 1.5 * sin(B_);
-  //Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
+  // Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
   t_h_ = hour +
-        (gama_standard_meridian_ - DegreeToRadians(longitude)) / kPI * kHalfDaysPerDay +
-        EoT_ / kMinsPerHour;
+         (gama_standard_meridian_ - DegreeToRadians(longitude)) / kPI *
+             kHalfDaysPerDay +
+         EoT_ / kMinsPerHour;
   delta_ = kPI / kHalfDaysPerDay * (t_h_ - kHalfDaysPerDay);
   lamda_ = DegreeToRadians(latitude);
   beta_ =
@@ -73,19 +76,19 @@ void SunSimulator::GetSolarPosition(const int yday, const int hour,
 }
 
 void SunSimulator::GetDayLength() {
-  t_ss_ =
-      kHalfDaysPerDay + kHalfDaysPerDay / kPI *
-               acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
+  t_ss_ = kHalfDaysPerDay +
+          kHalfDaysPerDay / kPI *
+              acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
   t_sr_ = kHoursPerDay - t_ss_;
   DL_ = 2 * (t_ss_ - kHalfDaysPerDay);
 }
 
 void SunSimulator::GetDailyIrradiance() {
-  Ic_ = 1370.0; 
-  //Introduction to mathematical modeling of crop growth p.36 formulat [2.18]
+  Ic_ = 1370.0;
+  // Introduction to mathematical modeling of crop growth p.36 formulat [2.18]
   epsilon_0_ =
       1.0 + 0.033 * cos(2.0 * kPI * (t_d_ - kDaysLeftPerYear) / kDaysPerYear);
-  //Introduction to mathematical modeling of crop growth p.37 formulat [2.21]
+  // Introduction to mathematical modeling of crop growth p.37 formulat [2.21]
   Ic_prime_ = Ic_ * epsilon_0_;
   a_ = sin(lamda_) * sin(sigma_);
   b_ = cos(lamda_) * cos(sigma_);
@@ -99,7 +102,7 @@ void SunSimulator::GetDailyIrradiance() {
 }
 
 void SunSimulator::GetDailyDiffuseIrradiance() {
-  //Introduction to mathematical modeling of crop growth p.38 formulat [2.25]
+  // Introduction to mathematical modeling of crop growth p.38 formulat [2.25]
   if (I_t_d_ / I_et_d_ < 0.07)
     I_df_d_ = I_t_d_;
   else if (I_t_d_ / I_et_d_ < 0.35)
@@ -118,13 +121,13 @@ void SunSimulator::GetHourlyIrradiance() {
   A_prime_ = -b_ * psi_;
   B_prime_ = a_ * psi_;
   I_t_ =
-	  kSecsPerMin * kMinsPerHour * kHoursPerDay / kPI *
+      kSecsPerMin * kMinsPerHour * kHoursPerDay / kPI *
       (B_prime_ * acos(-a_ / b_) - A_prime_ * sqrt(1 - (a_ / b_) * (a_ / b_)));
   I_et_ = Ic_prime_ * sin(beta_);
 }
 
 void SunSimulator::GetHourlyDiffuseIrradiance() {
-  //Introduction to mathematical modeling of crop growth p.40 formulat [2.31]
+  // Introduction to mathematical modeling of crop growth p.40 formulat [2.31]
   R_ = (0.847 - 1.61 * sin(beta_) + 1.04 * sin(beta_) * sin(beta_));
   K_ = (1.47 - R_) / 1.66;
   if (I_t_ / I_et_ <= 0.22)
