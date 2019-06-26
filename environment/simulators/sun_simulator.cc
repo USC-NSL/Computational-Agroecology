@@ -100,9 +100,9 @@ void SunSimulator::FirstStep(int year, int month, int day, int hour,
 }
 
 void SunSimulator::SecondStep() {
-  t_ss_ =
-      12 + 12 / kPI *
-               acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
+  t_ss_ = 12 +
+          12 / kPI *
+              acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
   t_sr_ = 24 - t_ss_;
   DL_ = 2 * (t_ss_ - 12);
 }
@@ -141,9 +141,8 @@ void SunSimulator::FifthStep() {
          (a_ * acos(-a_ / b_) + b_ * sqrt(1 - (a_ / b_) * (a_ / b_)));
   A_prime_ = -b_ * psi_;
   B_prime_ = a_ * psi_;
-  I_t_ =
-      86400 / kPI *
-      (B_prime_ * acos(-a_ / b_) - A_prime_ * sqrt(1 - (a_ / b_) * (a_ / b_)));
+  I_t_ = 86400 / kPI * (B_prime_ * acos(-a_ / b_) -
+                        A_prime_ * sqrt(1 - (a_ / b_) * (a_ / b_)));
   I_et_ = Ic_prime_ * sin(beta_);
 }
 
