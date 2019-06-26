@@ -1,16 +1,7 @@
 #include <iostream>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#ifdef _WIN32
-#ifdef _DEBUG
-#pragma comment(lib, "gtest_maind.lib")
-#pragma comment(lib, "gtestd.lib")
-#else
-#pragma comment(lib, "gtest_main.lib")
-#pragma comment(lib, "gtest.lib")
-#endif
-#endif
 #include "environment.h"
 #include "simulators/sun_simulator.h"
 using namespace simulator;
