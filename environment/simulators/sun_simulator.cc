@@ -116,6 +116,8 @@ void SunSimulator::GetDailyDiffuseIrradiance() {
 }
 
 void SunSimulator::GetHourlyIrradiance() {
+  double a_ = sin(lamda_) * sin(sigma_);
+  double b_ = cos(lamda_) * cos(sigma_);
   double psi_ = kPI * I_t_d_ / kSecsPerMin / kMinsPerHour / kHoursPerDay /
          (a_ * acos(-a_ / b_) + b_ * sqrt(1 - (a_ / b_) * (a_ / b_)));
   double A_prime_ = -b_ * psi_;
