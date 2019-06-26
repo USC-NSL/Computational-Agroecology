@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "utility.h"
-#include "soil.h"
 #include "light.h"
 #include "plant.h"
+#include "soil.h"
+#include "utility.h"
 
 namespace environment {
 
@@ -66,7 +66,6 @@ struct PlantType {
 
   // The growth cycle for plant
   const MaxMinPair<int> crop_cycle;
-
 };
 
 // global map declaration

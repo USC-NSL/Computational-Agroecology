@@ -5,7 +5,7 @@ namespace environment {
 
 struct Soil {
   enum Texture { CLAY = 0, SILT, SAND };
-  enum SoilIndex { HIGH = 0, MODERATE, LOW};
+  enum SoilIndex { HIGH = 0, MODERATE, LOW };
 
   Soil(const Texture texture, const double pH, const double salinity,
        const double organic_matter, const double water_content,
