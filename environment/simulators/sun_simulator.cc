@@ -24,8 +24,8 @@ void SunSimulator::SimulateToTime(
   GetSunInfo(&env->sun_info_);
 }
 
-void SunSimulator::GetResult(int yday, int hour,
-                             double longitude, double latitude) {
+void SunSimulator::GetResult(const int yday, const int hour,
+                             const double longitude, const double latitude) {
   GetSolarPosition(yday, hour, longitude, latitude);
   GetDayLength();
   GetDailyIrradiance();
@@ -40,16 +40,16 @@ void SunSimulator::GetSunInfo(struct environment::SunInfo* suninfo) {
   suninfo->HourlyIrradiance = I_t_;
 }
 
-double SunSimulator::DegreeToRadians(double degree) const {
+double SunSimulator::DegreeToRadians(const double degree) const {
   return degree * kPI / kPIforDegree;
 }
 
-double SunSimulator::RadiansToDegree(double radians) const {
+double SunSimulator::RadiansToDegree(const double radians) const {
   return radians / kPI * kPIforDegree;
 }
 
-void SunSimulator::GetSolarPosition(int yday, int hour,
-                             double longitude, double latitude) {
+void SunSimulator::GetSolarPosition(const int yday, const int hour,
+                             const double longitude, const double latitude) {
   t_d_ = yday;
   sigma_ = -kTropic * kPI / kPIforDegree *
            cos(2.0 * kPI * (t_d_ + kDaysLeftPerYear) / kDaysPerYear);

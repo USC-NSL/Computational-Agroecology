@@ -15,17 +15,17 @@ class SunSimulator : public Simulator {
  private:
   void GetSunInfo(struct environment::SunInfo* suninfo);
 
-  void GetResult(int yday, int hour, double longitude,
-                 double latitude);
-  void GetSolarPosition(int yday, int hour, double longitude,
-                 double latitude);
+  void GetResult(const int yday, const int hour, const double longitude,
+                 const double latitude);
+  void GetSolarPosition(const int yday, const int hour, const double longitude,
+                 const double latitude);
   void GetDayLength();
   void GetDailyIrradiance();
   void GetDailyDiffuseIrradiance();
   void GetHourlyIrradiance();
   void GetHourlyDiffuseIrradiance();
-  double DegreeToRadians(double degree) const;
-  double RadiansToDegree(double radians) const;
+  double DegreeToRadians(const double degree) const;
+  double RadiansToDegree(const double radians) const;
 
   const double kPI = 3.14159265359;
   const double kPIforDegree = 180.0;
