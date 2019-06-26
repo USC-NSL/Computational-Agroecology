@@ -29,6 +29,8 @@ class Agent {
   void AddResource(const simulator::ResourceType& resource, size_t quantity);
   ReturnCodes TakeAction(const simulator::action::Action* action);
 
+  simulator::action::ActionType RandomAction();
+
   std::vector<std::string> GetQualifiedPlants();
   std::vector<std::string> GetOptimalPlants();
 
