@@ -37,9 +37,9 @@ class SunSimulator : public Simulator {
   const int kMinsPerHour = 60;
   const int kSecsPerMin = 60;
   // variables for the first step
-  bool is_leapYear_;
+
   int t_d_;
-  double sigma_, gama_standard_meridian_, th_, delta_, B_, EoT_, lamda_, beta_,
+  double sigma_, gama_standard_meridian_, t_h_, delta_, B_, EoT_, lamda_, beta_,
       alpha_;
 
   // variables for the second step

@@ -14,7 +14,7 @@ void SunSimulator::SimulateToTime(
     const std::chrono::system_clock::time_point& time) {
   time_t tt = std::chrono::system_clock::to_time_t(time);
   struct tm* tm = localtime(&tt);
-  GetResult(tm->tm_yday, tm->tm_hour,
+  GetResult(tm->tm_yday + 1, tm->tm_hour,
             (env->config_.location.longitude_left +
              env->config_.location.longitude_right) /
                 2.0,
@@ -28,8 +28,8 @@ void SunSimulator::GetResult(int yday, int hour,
                              double longitude, double latitude) {
   GetSolarPosition(yday, hour, longitude, latitude);
   GetDayLength();
+  GetDailyIrradiance();
   GetDailyDiffuseIrradiance();
-  GetDiffuseIrradiance();
   GetHourlyIrradiance();
   GetHourlyDiffuseIrradiance();
 }
@@ -58,16 +58,16 @@ void SunSimulator::GetSolarPosition(int yday, int hour,
   //Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
   EoT_ = 9.87 * sin(2 * B_) - 7.53 * cos(B_) - 1.5 * sin(B_);
   //Introduction to mathematical modeling of crop growth p.29 formulat [2.6]
-  th_ = hour +
+  t_h_ = hour +
         (gama_standard_meridian_ - DegreeToRadians(longitude)) / kPI * kHalfDaysPerDay +
         EoT_ / kMinsPerHour;
-  delta_ = kPI / kHalfDaysPerDay * (th_ - kHoursPerDay);
+  delta_ = kPI / kHalfDaysPerDay * (t_h_ - kHalfDaysPerDay);
   lamda_ = DegreeToRadians(latitude);
   beta_ =
       asin(sin(sigma_) * sin(lamda_) + cos(sigma_) * cos(lamda_) * cos(delta_));
   alpha_ = acos((sin(lamda_) * sin(beta_) - sin(sigma_)) /
                 (cos(lamda_) * cos(beta_)));
-  if (hour < kHalfDaysInDay) {
+  if (hour < kHalfDaysPerDay) {
     alpha_ *= -1.0;
   }
 }
