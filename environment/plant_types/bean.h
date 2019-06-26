@@ -3,6 +3,8 @@
 
 #include "plant.h"
 #include "plant_type.h"
+#include "utility.h"
+#include <string>
 
 namespace environment {
 
