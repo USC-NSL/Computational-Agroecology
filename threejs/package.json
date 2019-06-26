@@ -1,0 +1,29 @@
+{
+  "name": "threejs",
+  "version": "1.0.0",
+  "description": "web visualizer for computational agroecology project",
+  "main": "scripts.js",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "browserify ./js/maincontrol.js -p esmify > ./public/bundle.js",
+    "start": "node index.js",
+    "client": "node js/client.js"
+  },
+  "author": "wym",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.1",
+    "express": "^4.17.1",
+    "grpc": "^1.21.1"
+  },
+  "devDependencies": {
+    "@types/dat.gui": "^0.7.2",
+    "babel-preset-es2015": "^6.24.1",
+    "browser-resolve": "^1.11.3",
+    "browserify": "^16.2.3",
+    "dat.gui": "^0.7.6",
+    "esmify": "^2.1.1",
+    "three": "^0.105.2",
+    "typescript": "^3.5.1"
+  }
+}

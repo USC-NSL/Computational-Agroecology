@@ -7,6 +7,12 @@ CMakeFiles
 Makefile
 cmake_install.cmake
 
+# threejs
+node_modules
+package-lock.json
+js
+bundle.js
+
 *.a
 *.o
 

@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+#loader {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #AAAAAA;
+}
+
+.loader {
+    border: 20px solid #f3f3f3;
+    /* Light grey */
+    border-top: 20px solid #3498db;
+    /* Blue */
+    border-radius: 100%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    top: 50%;
+    position: relative;
+    margin: -60px auto auto auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

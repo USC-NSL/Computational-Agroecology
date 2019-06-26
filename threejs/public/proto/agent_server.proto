@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "environment.proto";
+
+package agent_server.service;
+
+message CreateEnvironmentRequest {
+  string name = 1;
+  data_format.Config config = 2;
+  fixed64 timestamp_epoch_count = 3;
+  data_format.Terrain terrain = 4;
+}
+
+message CreateEnvironmentResponse {}
+
+message CreateAgentRequest {
+  string agent_name = 1;
+  string environment_name = 2;
+}
+
+message CreateAgentResponse {}
+
+message GetEnvironmentRequest {
+  string name = 1;
+}
+
+message GetEnvironmentResponse {
+  data_format.Environment environment = 1;
+}
+
+service AgentServer {
+  rpc CreateEnvironment (CreateEnvironmentRequest) returns (CreateEnvironmentResponse);
+  rpc CreateAgent (CreateAgentRequest) returns (CreateAgentResponse);
+  rpc GetEnvironment (GetEnvironmentRequest) returns (GetEnvironmentResponse);
+}
