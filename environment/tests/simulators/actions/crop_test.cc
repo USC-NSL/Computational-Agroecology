@@ -159,6 +159,14 @@ TEST_F(AddTest, ExecuteTest_2) {
   }
 }
 
+TEST_F(AddTest, OperatorTest) {
+  crop::Add lhs(applied_range, time, duration, kCornTypeName);
+  EXPECT_TRUE(lhs == lhs);
+
+  crop::Add rhs(applied_range, time, duration, "Bean");
+  EXPECT_FALSE(lhs == rhs);
+}
+
 TEST_F(RemoveTest, ConstrcutorTest_1) {
   crop::Remove action(applied_range.front(), time, duration);
 
@@ -261,6 +269,14 @@ TEST_F(RemoveTest, ExecuteTest_2) {
   }
 }
 
+TEST_F(RemoveTest, OperatorTest) {
+  crop::Remove lhs(applied_range, time, duration);
+  EXPECT_TRUE(lhs == lhs);
+
+  crop::Remove rhs(applied_range, time, std::chrono::hours(10));
+  EXPECT_FALSE(lhs == rhs);
+}
+
 TEST_F(HarvestTest, ConstrcutorTest_1) {
   crop::Harvest action(applied_range.front(), time, duration);
 
@@ -310,6 +326,14 @@ TEST_F(HarvestTest, ExecuteTest_1) {
   crop::Harvest harvest_action(applied_range.front(), time, duration);
   harvest_action.Execute(terrain);
   EXPECT_EQ(5, terrain->yield());
+}
+
+TEST_F(HarvestTest, OperatorTest) {
+  crop::Harvest lhs(applied_range, time, duration);
+  EXPECT_TRUE(lhs == lhs);
+
+  crop::Harvest rhs(applied_range, time, std::chrono::hours(10));
+  EXPECT_FALSE(lhs == rhs);
 }
 
 int main(int argc, char** argv) {

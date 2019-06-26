@@ -48,6 +48,12 @@ Action::Action(const simulator::action::ActionType type,
       duration(duration),
       cost(cost) {}
 
+bool operator==(const Action& lhs, const Action& rhs) {
+  return (lhs.type == rhs.type) && (lhs.applied_range == rhs.applied_range) &&
+         (lhs.start_time == rhs.start_time) && (lhs.duration == rhs.duration) &&
+         (lhs.cost == rhs.cost);
+}
+
 bool ActionStartTimeComparator::operator()(const Action* const lhs,
                                            const Action* const rhs) const {
   return lhs->start_time > rhs->start_time;
