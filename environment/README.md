@@ -28,7 +28,7 @@ $ target_link_libraries(YOUR_EXECUTABLE_FILE plant_types simulators YOUR_LIB_NAM
 ```
 **Also, Add the lines of code in the CMakeLists.txt in the subdirectory /tests/**
 ```shell
-$ add_library(tests_simulators_sun_simulator ./simulators/sun_simulator_test.cc)
+$ add_library(YOUR_LIB_NAME YOUR_TEST_SOURCE.cc)
 ```
 ***If the platform is Windows***
 ```shell
