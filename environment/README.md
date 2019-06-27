@@ -5,7 +5,9 @@ The following instructions are mainly for **Ubuntu 18.04 LTS**.
 ```shell
 $ [sudo] apt update
 $ [sudo] apt install gcc g++ make
+```
 **If you want to use CMake tools**
+```shell
 $ [sudo] apt-get install cmake
 ```
 ## gtest
