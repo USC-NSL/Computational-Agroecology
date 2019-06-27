@@ -21,12 +21,12 @@ $ [sudo] make
 $ [sudo] cp *.a /usr/lib
 ```
 ## Add tests using CMake tools
-**Add the lines of code in the CMakeLists.txt in the directory environment**
+**Add the lines of code in the CMakeLists.txt in the directory environment/**
 ```shell
 $ add_executable(YOUR_EXECUTABLE_FILE ${DIR_ENVIRONMENT_SRCS})
 $ target_link_libraries(YOUR_EXECUTABLE_FILE plant_types simulators YOUR_LIB_NAME)
 ```
-**Also, Add the lines of code in the CMakeLists.txt in the subdirectory tests**
+**Also, Add the lines of code in the CMakeLists.txt in the subdirectory /tests/**
 ```shell
 $ add_library(tests_simulators_sun_simulator ./simulators/sun_simulator_test.cc)
 ```
