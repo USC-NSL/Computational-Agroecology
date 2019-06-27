@@ -37,13 +37,6 @@ public:
   void LoadObjModel(const char *filename);
   void render(std::vector<tinyobj::material_t> &materials, Vector3 pos);
   void addFace(Face face) { faces.push_back(face); }
-  void setDrawObject(GLuint vb_id_, int numTriangles_, size_t material_id_)
-  {
-    vb_id = vb_id_;
-    numTriangles = numTriangles_;
-    material_id = material_id_;
-  }
-  Face &operator[](int index) { return faces[index]; }
 
   //OpenGL rendering
   void writeOpenGLBuffer(const std::vector<Vector3> &vertices,
@@ -52,7 +45,6 @@ public:
   void deleteOpenGLBuffer();
 
   // functions for photon mapping
-  const int size() const { return faces.size(); }
   void addOnePhoton(int index) { faces[index].photons++; }
   int getPhotons();
 

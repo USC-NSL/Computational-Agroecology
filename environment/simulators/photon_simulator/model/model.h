@@ -8,58 +8,58 @@
 #include "stdafx.h"
 #include "mesh.h"
 
-namespace simulator{
+namespace simulator
+{
 
-namespace photonsimulator{
+namespace photonsimulator
+{
 
 class Texture
 {
 public:
-    GLuint texture_id;
-    unsigned char *texture;
-    int w, h;
-    int comp; // 3 = rgb, 4 = rgba
-    Texture() = delete;
-    Texture(GLuint texture_id_, unsigned char *texture_, int w_, int h_, int comp_)
-        : texture_id(texture_id_), texture(texture_), w(w_), h(h_), comp(comp_) {}
+  GLuint texture_id;
+  unsigned char *texture;
+  int w, h;
+  int comp; // 3 = rgb, 4 = rgba
+  Texture() = delete;
+  Texture(GLuint texture_id_, unsigned char *texture_, int w_, int h_, int comp_)
+      : texture_id(texture_id_), texture(texture_), w(w_), h(h_), comp(comp_) {}
 };
 
 class Model
 {
 public:
-    // keep everything public for simplicity
-    std::vector<Vector3> vertices;
-    std::vector<Vector3> normals;
-    std::vector<Vector2> texcoords;
-    std::vector<Mesh> meshes;
-    std::map<std::string, GLuint> textures;
-    std::vector<tinyobj::material_t> materials;
-    std::vector<Texture> texture_infos;
+  // keep everything public for simplicity
+  std::vector<Vector3> vertices;
+  std::vector<Vector3> normals;
+  std::vector<Vector2> texcoords;
+  std::vector<Mesh> meshes;
+  std::map<std::string, GLuint> textures;
+  std::vector<tinyobj::material_t> materials;
+  std::vector<Texture> texture_infos;
 
-    Vector3 rel_pos;
-    void setRelativePos(Vector3 pos) { rel_pos = pos; }
+  Vector3 rel_pos;
+  void setRelativePos(Vector3 pos) { rel_pos = pos; }
 
-    Model() = delete;
-    void LoadObjModel(const char *filename);
-    int size() { return meshes.size(); }
-    Mesh &operator[](int index) { return meshes[index]; }
-    Model(const char *filename, Vector3 pos = Vector3(0.0, 0.0, 0.0)) : rel_pos(pos) { LoadObjModel(filename); }
-    ~Model();
-    int getPhotons();
+  Model() = delete;
+  void LoadObjModel(const char *filename);
+  Model(const char *filename, Vector3 pos = Vector3(0.0, 0.0, 0.0)) : rel_pos(pos) { LoadObjModel(filename); }
+  ~Model();
+  int getPhotons();
 
-    // add to buffer for OpenGL rendering
-    void writeBuffer();
-    void deleteBuffer();
-    void render();
-    Texture getTextureInfo(GLuint texture_id)
+  // add to buffer for OpenGL rendering
+  void writeBuffer();
+  void deleteBuffer();
+  void render();
+  Texture getTextureInfo(GLuint texture_id)
+  {
+    for (auto &texture_info : texture_infos)
     {
-        for (auto &texture_info : texture_infos)
-        {
-            if (texture_info.texture_id == texture_id)
-                return texture_info;
-        }
-        assert(0);
+      if (texture_info.texture_id == texture_id)
+        return texture_info;
     }
+    assert(0);
+  }
 
 private:
 };

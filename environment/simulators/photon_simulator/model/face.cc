@@ -22,6 +22,9 @@ Vector2 Face::getTexcoord(Vector3 pos, const std::vector<Vector3> &vertices,
   texcoord = (k12 + k13) * texcoords[vertex1.vti] +
              (1 - k12) * texcoords[vertex2.vti] +
              (1 - k13) * texcoords[vertex3.vti];
+  // flip x y coord
+  texcoord.y = 1 - texcoord.y;
+  texcoord.x = 1 - texcoord.x;
   return texcoord;
 }
 
