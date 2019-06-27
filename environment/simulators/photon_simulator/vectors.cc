@@ -5,7 +5,7 @@
  * @author Eric Butler (edbutler)
  */
 #include "stdafx.h"
-#include "vectors.hpp"
+#include "vectors.h"
 
 namespace simulator
 {

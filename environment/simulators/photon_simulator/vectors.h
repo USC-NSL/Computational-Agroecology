@@ -1,12 +1,12 @@
 /**
- * @file vectors.hpp
+ * @file vectors.h
  * @brief Vector classes.
  *
  * @author Eric Butler (edbutler)
  */
 
-#ifndef __VECTORS_HPP__
-#define __VECTORS_HPP__
+#ifndef __VECTORS_H__
+#define __VECTORS_H__
 
 #include <algorithm>
 #include <cassert>
@@ -786,5 +786,5 @@ std::ostream& operator<<( std::ostream& os, const Vector4& rhs );
 
 } // namespace photonsimulator
 } // namespace simulator
-#endif /* __VECTORS_HPP__ */
+#endif /* __VECTORS_H__ */
 
