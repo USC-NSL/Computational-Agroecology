@@ -83,6 +83,11 @@ message Soil {
 }
 
 message Terrain {
+  message Coordinate {
+    uint64 x = 1;
+    uint64 y = 2;
+  }
+
   message Cell {
     uint64 size = 1;
     oneof oneof_plant {
