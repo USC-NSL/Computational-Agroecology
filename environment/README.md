@@ -42,7 +42,9 @@ $ target_link_libraries(YOUR_LIB_NAME ${GTEST_LIBRARY})
 ## Build
 ```shell
 $ make all_test
+```
 **If you want to use Cmake tools**
+```shell
 $ cmake CMakeLists.txt
 ```
 
