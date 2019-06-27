@@ -52,6 +52,8 @@ struct Action {
   const std::vector<std::pair<ResourceType, size_t>> cost;
 };
 
+bool operator==(const Action& lhs, const Action& rhs);
+
 using ActionList = std::vector<const Action*>;
 
 // Custom comparator for `struct Action`

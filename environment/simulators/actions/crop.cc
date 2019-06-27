@@ -122,6 +122,24 @@ void Harvest::Execute(environment::Terrain* terrain) const {
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
 }
 
+bool operator==(const Add& lhs, const Add& rhs) {
+  const auto& tmp_lhs = reinterpret_cast<const simulator::action::Action&>(lhs);
+  const auto& tmp_rhs = reinterpret_cast<const simulator::action::Action&>(rhs);
+  return (tmp_lhs == tmp_rhs) && (lhs.crop_type_name == rhs.crop_type_name);
+}
+
+bool operator==(const Remove& lhs, const Remove& rhs) {
+  const auto& tmp_lhs = reinterpret_cast<const simulator::action::Action&>(lhs);
+  const auto& tmp_rhs = reinterpret_cast<const simulator::action::Action&>(rhs);
+  return tmp_lhs == tmp_rhs;
+}
+
+bool operator==(const Harvest& lhs, const Harvest& rhs) {
+  const auto& tmp_lhs = reinterpret_cast<const simulator::action::Action&>(lhs);
+  const auto& tmp_rhs = reinterpret_cast<const simulator::action::Action&>(rhs);
+  return tmp_lhs == tmp_rhs;
+}
+
 }  // namespace crop
 
 }  // namespace action

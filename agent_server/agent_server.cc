@@ -28,7 +28,7 @@ AgentServer::ReturnCodes AgentServer::CreateAgent(const std::string& agent_name,
 
   auto env_result = name_to_env_.find(env_name);
   if (env_result == name_to_env_.end()) {
-    return NOT_FOUND;
+    return ENV_NOT_FOUND;
   }
 
   name_to_agent_.emplace(std::make_pair(
@@ -41,10 +41,41 @@ std::pair<AgentServer::ReturnCodes, std::optional<environment::Environment>>
 AgentServer::GetEnvironment(const std::string& name) {
   auto result = name_to_env_.find(name);
   if (result == name_to_env_.end()) {
-    return std::make_pair(NOT_FOUND, std::nullopt);
+    return std::make_pair(ENV_NOT_FOUND, std::nullopt);
   }
 
   return std::make_pair(OK, result->second);
+}
+
+AgentServer::ReturnCodes AgentServer::SimulateToTime(
+    const std::string& env_name,
+    const std::chrono::system_clock::time_point& time) {
+  auto env_it = name_to_env_.find(env_name);
+  if (env_it == name_to_env_.end()) {
+    return ENV_NOT_FOUND;
+  }
+
+  env_it->second.JumpToTime(time);
+
+  return OK;
+}
+
+AgentServer::ReturnCodes AgentServer::AgentTakeAction(
+    const std::string& agent_name, const simulator::action::Action* action) {
+  auto agent_it = name_to_agent_.find(agent_name);
+  if (agent_it == name_to_agent_.end()) {
+    return AGENT_NOT_FOUND;
+  }
+
+  auto action_ret = agent_it->second.TakeAction(action);
+
+  if (action_ret == agent::Agent::NOT_ENOUGH_RESOURCES) {
+    return ACTION_NOT_ENOUGH_RESOURCES;
+  } else if (action_ret == agent::Agent::SUCCESS) {
+    return OK;
+  }
+
+  return UNKNOWN_ERROR;
 }
 
 }  // namespace agent_server

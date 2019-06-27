@@ -45,6 +45,8 @@ struct Add : public Action {
   void Execute(environment::Terrain* terrain) const override;
 };
 
+bool operator==(const Add& lhs, const Add& rhs);
+
 // Remove a crop
 struct Remove : public Action {
   Remove(const environment::Coordinate& target,
@@ -68,6 +70,8 @@ struct Remove : public Action {
   void Execute(environment::Terrain* terrain) const override;
 };
 
+bool operator==(const Remove& lhs, const Remove& rhs);
+
 // Harvest a crop
 struct Harvest : public Action {
   Harvest(const environment::Coordinate& target,
@@ -90,6 +94,8 @@ struct Harvest : public Action {
 
   void Execute(environment::Terrain* terrain) const override;
 };
+
+bool operator==(const Harvest& lhs, const Harvest& rhs);
 
 }  // namespace crop
 

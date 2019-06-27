@@ -62,7 +62,7 @@ namespace service {
   auto ret = agent_server_.CreateAgent(request->agent_name(),
                                        request->environment_name());
 
-  if (ret == ::agent_server::AgentServer::NOT_FOUND) {
+  if (ret == ::agent_server::AgentServer::ENV_NOT_FOUND) {
     return ::grpc::Status(::grpc::NOT_FOUND,
                           request->environment_name() + " is not found.");
   } else if (ret == ::agent_server::AgentServer::ALREADY_EXISTS) {
@@ -84,12 +84,89 @@ namespace service {
 
   auto result = agent_server_.GetEnvironment(request->name());
 
-  if (result.first == ::agent_server::AgentServer::NOT_FOUND) {
+  if (result.first == ::agent_server::AgentServer::ENV_NOT_FOUND) {
     return ::grpc::Status(::grpc::NOT_FOUND,
                           request->name() + " is not found.");
   }
 
   *(response->mutable_environment()) = ToProtobuf(*(result.second));
+  return ::grpc::Status::OK;
+}
+
+::grpc::Status AgentServerGrpcService::SimulateToTime(
+    ::grpc::ServerContext* context, const SimulateToTimeRequest* request,
+    SimulateToTimeResponse* response) {
+  if (context == nullptr || request == nullptr) {
+    return ::grpc::Status(
+        ::grpc::FAILED_PRECONDITION,
+        "`ServerContext` or `SimulateToTimeRequest` is nullptr.");
+  }
+
+  auto result = agent_server_.SimulateToTime(
+      request->environment_name(),
+      FromProtobuf(request->timestamp_epoch_count()));
+
+  if (result == ::agent_server::AgentServer::ENV_NOT_FOUND) {
+    return ::grpc::Status(::grpc::NOT_FOUND, std::string("Environment ") +
+                                                 request->environment_name() +
+                                                 " is not found.");
+  }
+  return ::grpc::Status::OK;
+}
+
+::grpc::Status AgentServerGrpcService::AgentAddCrop(
+    ::grpc::ServerContext* context, const AgentAddCropRequest* request,
+    AgentAddCropResponse* response) {
+  if (context == nullptr || request == nullptr) {
+    return ::grpc::Status(
+        ::grpc::FAILED_PRECONDITION,
+        "`ServerContext` or `AgentAddCropRequest` is nullptr.");
+  }
+
+  // Using default copy constructor
+  simulator::action::crop::Add action(FromProtobuf(*request));
+
+  auto result = agent_server_.AgentTakeAction(request->agent_name(), &action);
+
+  if (result == ::agent_server::AgentServer::AGENT_NOT_FOUND) {
+    return ::grpc::Status(
+        ::grpc::NOT_FOUND,
+        std::string("Agent ") + request->agent_name() + " is not found.");
+  } else if (result ==
+             ::agent_server::AgentServer::ACTION_NOT_ENOUGH_RESOURCES) {
+    return ::grpc::Status(::grpc::RESOURCE_EXHAUSTED, "Not enough resources.");
+  } else if (result == ::agent_server::AgentServer::UNKNOWN_ERROR) {
+    return ::grpc::Status(::grpc::UNKNOWN, "");
+  }
+
+  return ::grpc::Status::OK;
+}
+
+::grpc::Status AgentServerGrpcService::AgentRemoveCrop(
+    ::grpc::ServerContext* context, const AgentRemoveCropRequest* request,
+    AgentRemoveCropResponse* response) {
+  if (context == nullptr || request == nullptr) {
+    return ::grpc::Status(
+        ::grpc::FAILED_PRECONDITION,
+        "`ServerContext` or `AgentRemoveCropRequest` is nullptr.");
+  }
+
+  // Using default move constructor
+  simulator::action::crop::Remove action(FromProtobuf(*request));
+
+  auto result = agent_server_.AgentTakeAction(request->agent_name(), &action);
+
+  if (result == ::agent_server::AgentServer::AGENT_NOT_FOUND) {
+    return ::grpc::Status(
+        ::grpc::NOT_FOUND,
+        std::string("Agent ") + request->agent_name() + " is not found.");
+  } else if (result ==
+             ::agent_server::AgentServer::ACTION_NOT_ENOUGH_RESOURCES) {
+    return ::grpc::Status(::grpc::RESOURCE_EXHAUSTED, "Not enough resources.");
+  } else if (result == ::agent_server::AgentServer::UNKNOWN_ERROR) {
+    return ::grpc::Status(::grpc::UNKNOWN, "");
+  }
+
   return ::grpc::Status::OK;
 }
 
