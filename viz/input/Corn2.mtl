@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# Create time:10.05.2019 09:45:18
+# File Created: 10.05.2019 09:45:18
 
 newmtl 01___Default
 	Ns 10.0000
@@ -12,5 +12,5 @@ newmtl 01___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka input/Corn.tga
-	map_Kd input/Corn.tga
+	map_Ka Corn.tga
+	map_Kd Corn.tga

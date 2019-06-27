@@ -1,43 +1,6 @@
 #include "photon_control.h"
 
-Vector3 Photon_Control::get_Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
-	real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
-	real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
-	real_t c = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
-	return Vector3(a, b, c);
-}
-
-Vector3 Photon_Control::get_Intersact(const Vector3& plane_normal, const Vector3& plane_point, const Vector3& line_point, const Vector3& line_dir) {
-	real_t d = dotresult(plane_point - line_point, plane_normal) / dotresult(line_dir, plane_normal);
-	normalize(line_dir);
-	return d * line_dir + line_point;
-}
-
-bool Photon_Control::in_Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p)
-{
-	Vector3 v0 = c - a;
-	Vector3 v1 = b - a;
-	Vector3 v2 = p - a;
-	real_t dot00 = dotresult(v0, v0);
-	real_t dot01 = dotresult(v0, v1);
-	real_t dot02 = dotresult(v0, v2);
-	real_t dot11 = dotresult(v1, v1);
-	real_t dot12 = dotresult(v1, v2);
-	real_t inverDeno = 1 / (dot00 * dot11 - dot01 * dot01);
-	real_t u = (dot11 * dot02 - dot01 * dot12) * inverDeno;
-	if (u < 0 || u > 1) // if u out of range, return directly
-	{
-		return false;
-	}
-	real_t v = (dot00 * dot12 - dot01 * dot02) * inverDeno;
-	if (v < 0 || v > 1) // if v out of range, return directly
-	{
-		return false;
-	}
-	return u + v <= 1;
-}
-
-void Photon_Control::photon_add(Vector3 dir, Vector3 pos, Vector3 power) {
+void Photon_Control::photon_add(const Vector3& dir, const Vector3& pos, const Vector3& power) {
 	photons.push_back(Photon(dir, pos, power));
 	photons_num++;
 }
@@ -56,7 +19,7 @@ void Photon_Control::construct_kdtree(unsigned int begin, unsigned int end) {
 	unsigned median = begin + (end - begin) / 2;
 	real_t x_avg = 0.0, y_avg = 0.0, z_avg = 0.0;
 	real_t x_var = 0.0, y_var = 0.0, z_var = 0.0;
-	real_t n = end - begin;
+	real_t n = (real_t)(end - begin);
 	std::vector<Photon>::iterator a = photons.begin() + begin;
 	std::vector<Photon>::iterator b = photons.begin() + end;
 	std::vector<Photon>::iterator it;
@@ -109,35 +72,19 @@ void Photon_Control::photon_emit(Vector3 dir, Vector3 pos, Vector3 power) {
 	photon_add(dir, pos, power);
 }
 
-bool Photon_Control::photon_intersect(int index, Vector3 normal, Vector3 a, Vector3 b, Vector3 c) {
-	intersect = get_Intersact(normal, a, photons[index].pos, photons[index].dir);
-	bool ifin = in_Triangle(a, b, c, intersect);
-	if (ifin) return true;
-	else return false;
-}
-
-Vector3 Photon_Control::photon_reflect(int index, Vector3 normal) {
-	normal = normalize(normal);
-	return (photons[index].dir - 2 * dot((dot(photons[index].dir, normal)), normal));
-}
-
-Vector3 Photon_Control::photon_refract(int index, Vector3 normal, real_t coef) {
-	Vector3& dir = photons[index].dir;
-	return Vector3(-sqrt(1 - coef * coef * (1 - squared_length(dot(dir, normal)) * squared_length(dot(dir, normal)))) * normal + coef * (dir + squared_length(dot(dir, normal)) * normal));
-}
-
 void Photon_Control::photon_absorb(int index) {
 	photon_del(index);
 }
 
-Neighbor* Photon_Control::lookup_kdtree(Vector3 pos, Vector3 normal, real_t* distance, int* size, int num) {
+Neighbor* Photon_Control::lookup_kdtree(const Vector3& pos, const Vector3& normal, real_t max_d,  real_t& distance,  int& size, int num) {
 	Neighbor* res = new Neighbor[num];
+	EPSILON = max_d;
 	NUM_PHOTON_RADIANCE = num;
 	lookup_kdtree(pos, normal, res, 0, photons_num, distance, size);
 	return res;
 }
 
-void Photon_Control::lookup_kdtree(Vector3 p, Vector3 norm, Neighbor* neighbors, unsigned int begin, unsigned int end, real_t* D, int* size) {
+void Photon_Control::lookup_kdtree(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int begin, unsigned int end, real_t& D, int& size) {
 	if (begin == end)
 		return;
 	if (begin + 1 == end)
@@ -157,7 +104,7 @@ void Photon_Control::lookup_kdtree(Vector3 p, Vector3 norm, Neighbor* neighbors,
 		add_neighbor(p, norm, neighbors, median, D, size);
 		// return if neighbors heap is full and all nodes in the
 	// right sub-tree is further than those in neighbors heap
-		if (*size >= NUM_PHOTON_RADIANCE && (p_value - split_value) * (p_value - split_value) > * D) {
+		if (size >= NUM_PHOTON_RADIANCE && (p_value - split_value) * (p_value - split_value) > D) {
 			return;
 		}
 		// traverse right sub-tree
@@ -170,8 +117,8 @@ void Photon_Control::lookup_kdtree(Vector3 p, Vector3 norm, Neighbor* neighbors,
 		add_neighbor(p, norm, neighbors, median, D, size);
 		// return if neighbors heap is full and all nodes in the
 	// left sub-tree is further than those in neighbors heap
-		if (*size >= NUM_PHOTON_RADIANCE &&
-			(p_value - split_value) * (p_value - split_value) > * D) {
+		if (size >= NUM_PHOTON_RADIANCE &&
+			(p_value - split_value) * (p_value - split_value) > D) {
 			return;
 		}
 		// traverse left sub-tree
@@ -189,12 +136,12 @@ void Photon_Control::heap_swap(Neighbor* neighbors, int a, int b) {
 	 (neighbors[b]).sq_dis = a_s;
  }
 
-void Photon_Control::heap_remove(Neighbor* neighbors, int* size) {
+void Photon_Control::heap_remove(Neighbor* neighbors,  int& size) {
 	 // move the last element to the root node so that
 	 // the max element is replaced
-	 (neighbors[0]).i = (neighbors[*size - 1]).i;
-	 (neighbors[0]).sq_dis = (neighbors[*size - 1]).sq_dis;
-	 *size = *size - 1;
+	 (neighbors[0]).i = (neighbors[size - 1]).i;
+	 (neighbors[0]).sq_dis = (neighbors[size - 1]).sq_dis;
+	 size--;
 
 	 int i = 0;
 	 int left, right, bigger;
@@ -204,13 +151,13 @@ void Photon_Control::heap_remove(Neighbor* neighbors, int* size) {
 	 while (1) {
 		 left = 2 * i + 1;
 		 right = 2 * i + 2;
-		 if (left >= *size && right >= *size) {
+		 if (left >= size && right >= size) {
 			 // i is a leaf node (has no child)
 			 return;
 		 }
 		 i_val = (neighbors[i]).sq_dis;
-		 left_val = (left < *size) ? (neighbors[left]).sq_dis : -1.0;
-		 right_val = (right < *size) ? (neighbors[right]).sq_dis : -1.0;
+		 left_val = (left < size) ? (neighbors[left]).sq_dis : -1.0f;
+		 right_val = (right < size) ? (neighbors[right]).sq_dis : -1.0f;
 		 if (i_val >= left_val && i_val >= right_val) {
 			 // i is bigger than both children
 			 return;
@@ -236,12 +183,12 @@ void Photon_Control::heap_remove(Neighbor* neighbors, int* size) {
 	 return;
  }
 
-void Photon_Control::heap_add(Neighbor* neighbors, int* size, unsigned int e, real_t e_dis) {
+void Photon_Control::heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
 	// insert a new element to the last element of max heap 
-	int i = *size;
+	int i = size;
 	(neighbors[i]).i = e;
 	(neighbors[i]).sq_dis = e_dis;
-	*size = *size + 1;
+	size++;
 
 	int parent;
 	real_t i_val, parent_val;
@@ -267,24 +214,21 @@ void Photon_Control::heap_add(Neighbor* neighbors, int* size, unsigned int e, re
 	return;
 }
 
-void Photon_Control::add_neighbor(Vector3 p, Vector3 norm, Neighbor* neighbors, unsigned int e, real_t* D, int* size) {
-	// disk check
-	real_t dist = abs(dotresult(normalize(norm), normalize(p - photons[e].pos)));
-	if (dist > EPSILON) {
+void Photon_Control::add_neighbor(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int e, real_t& D, int& size) {
+	if (dotresult(norm, photons[e].dir) < 0.0f) {
 		return;
 	}
-
 	real_t e_dis = squared_distance(p, (photons[e]).pos);
-	if (*size < NUM_PHOTON_RADIANCE || e_dis < *D) {
+	if (e_dis <= EPSILON && (size < NUM_PHOTON_RADIANCE || e_dis < D)) {
 		// maintain the size of the max heap 
-		if (*size == NUM_PHOTON_RADIANCE) {
+		if (size == NUM_PHOTON_RADIANCE) {
 			heap_remove(neighbors, size);
 		}
 
 		heap_add(neighbors, size, e, e_dis);
 
 		// update the maximum square distance
-		*D = (neighbors[0]).sq_dis;
+		D = (neighbors[0]).sq_dis;
 	}
 }
 
