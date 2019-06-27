@@ -3,7 +3,7 @@ CXXFLAGS := -std=c++17
 
 INCLUDES := -I ./
 
-MAIN_OBJ := main.o
+MAIN_OBJ := ./main/main.o
 OBJ := climate.o config.o environment.o location.o plant.o soil.o terrain.o weather.o
 
 AGENT_PATH := ./agent
@@ -35,7 +35,7 @@ TESTFLAGS := -Igtest/include
 TESTLD := -lgtest -lpthread
 
 ALL_OBJ_WITHOUT_MAIN := $(OBJ) $(AGENT_OBJ) $(PLANT_TYPE_OBJ) $(SIMULATOR_OBJ)
-ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
+ALL_OBJ := $(MAIN_OBJ) $(ALL_OBJ_WITHOUT_MAIN)
 
 %.o: %.cc %.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
@@ -50,7 +50,7 @@ ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
 	$(CXX) $< $(ALL_OBJ_WITHOUT_MAIN) -o $@ $(TESTLD)
 
 all: $(ALL_OBJ)
-	$(CXX) $(ALL_OBJ) -o main
+	$(CXX) $(ALL_OBJ) -o ./main/main
 
 all_test: $(TEST_ALL)
 
@@ -61,5 +61,4 @@ all_test_run: $(TEST_ALL)
 	done
 
 clean:
-	rm -f $(ALL_OBJ) $(TEST_OBJ) $(TEST_ALL)
-	rm -f main
+	rm -f $(ALL_OBJ) $(TEST_OBJ) $(TEST_ALL) 
