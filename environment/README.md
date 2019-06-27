@@ -25,19 +25,19 @@ $ [sudo] cp *.a /usr/lib
 ```shell
 $ add_executable(YOUR_EXECUTABLE_FILE ${DIR_ENVIRONMENT_SRCS})
 $ target_link_libraries(YOUR_EXECUTABLE_FILE plant_types simulators YOUR_LIB_NAME)
-```shell
+```
 **Also, Add the lines of code in the CMakeLists.txt in the subdirectory tests**
 ```shell
 $ add_library(tests_simulators_sun_simulator ./simulators/sun_simulator_test.cc)
-```shell
+```
 ***If the platform is Windows***
 ```shell
 $ target_link_libraries(YOUR_LIB_NAME gtestd gtest_maind)
-```shell
+```
 ***otherwise***
 ```shell
 $ target_link_libraries(YOUR_LIB_NAME ${GTEST_LIBRARY})
-```shell
+```
 # Run tests
 ## Build
 ```shell
