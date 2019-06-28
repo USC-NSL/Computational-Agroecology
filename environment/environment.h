@@ -59,9 +59,9 @@ class Environment {
   friend class simulator::SunSimulator;
 
   // befriend with a list of actions
-  friend class simulator::action::crop::Add;
-  friend class simulator::action::crop::Remove;
-  friend class simulator::action::crop::Harvest;
+  friend struct simulator::action::crop::Add;
+  friend struct simulator::action::crop::Remove;
+  friend struct simulator::action::crop::Harvest;
 
   Config config_;
   const Climate climate_;

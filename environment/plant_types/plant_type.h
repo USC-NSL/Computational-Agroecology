@@ -10,7 +10,7 @@
 namespace environment {
 
 // forward declaration to solve a cycle dependency
-class Plant;
+struct Plant;
 
 namespace plant_type {
 
@@ -42,7 +42,7 @@ struct PlantType {
 // This global map maps from a type name to its corresponding `PlantType` object
 // pointer
 extern std::map<std::string, const PlantType*> plant_type_to_plant;
-
+//void init();
 }  // namespace plant_type
 
 }  // namespace environment
