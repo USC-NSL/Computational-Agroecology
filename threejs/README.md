@@ -38,9 +38,9 @@ For **Windows** User, please download [protoc-gen-grpc-web.exe](<https://github.
 
 For **Windows**, the workflow  is ensured with following version
 
-+ npm  6.4.1
-+ [Protocol Buffers v3.8.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.8.0)
-+ [grpc/grpc-web 1.0.4](https://github.com/grpc/grpc-web/releases/tag/1.0.4)
+- npm  6.4.1
+- [Protocol Buffers v3.8.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.8.0)
+- [grpc/grpc-web 1.0.4](https://github.com/grpc/grpc-web/releases/tag/1.0.4)
 
 For **Linux**,
 
@@ -84,4 +84,28 @@ npm run client
 
 **Assume that the site is deployed on `Ubuntu 18.04`.**
 
+#### Docker
+
+Reference: [How To Install and Use Docker on Ubuntu 18.04](<https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04>)
+
+```bash
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt update
+sudo apt install docker-ce
+
+# check status
+sudo systemctl status docker
+
+# execute Docker without sudo (optional)
+sudo usermod -aG docker ${USER} # $USER for current username
+```
+
+#### Envoy
+
+```bash
+[sudo] docker pull envoyproxy/envoy
+```
 

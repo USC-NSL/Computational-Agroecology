@@ -15,14 +15,14 @@
               domains: ["*"]
               routes:
               - match: { prefix: "/" }
-                route: { cluster: echo_service }
+                route: { cluster: agent_server }
           http_filters:
           - name: envoy.grpc_web
           - name: envoy.router
   clusters:
-  - name: echo_service
+  - name: agent_server
     connect_timeout: 0.25s
     type: logical_dns
     http2_protocol_options: {}
     lb_policy: round_robin
-    hosts: [{ socket_address: { address: node-server, port_value: 50000 }}]
+    hosts: [{ socket_address: { address: 0.0.0.0, port_value: 50000 }}]
