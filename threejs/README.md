@@ -1,47 +1,87 @@
-### Dependencies
+## Development Dependencies
 
 #### Node.js
 
-For Linux user, you might need following dependcies
+For **Linux** user,
 
 ```bash
 sudo apt install npm
 sudo apt install node-typescript
+npm install -g npx
 ```
 
-For Windows user, you only need to install Node.js by yourself.
+For **Windows** user, Please install [Node.js](<https://nodejs.org/en/download/>), and install `npx` by 
 
-#### GRPC
+```powershell
+npm install -g npx
+```
 
-Please follow the instruction in `/agent_server/README.md`.
+#### gRPC
+
+For **Linux** user, please follow the instruction in `../agent_server/README.md`.
+
+For **Windows** user, please download [protoc.exe](https://github.com/protocolbuffers/protobuf/releases), and make sure it is  executable and discoverable in current path. 
+
+#### gRPC-web
+
+For **Linux** User,
+
+```bash
+git clone https://github.com/grpc/grpc-web.git
+cd grpc-web
+sudo make install-plugin
+```
+
+For **Windows** User, please download [protoc-gen-grpc-web.exe](<https://github.com/grpc/grpc-web/releases>) plugin, and make sure it is  executable and discoverable in current path. 
+
+#### Version
+
+For **Windows**, the workflow  is ensured with following version
+
++ npm  6.4.1
++ [Protocol Buffers v3.8.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.8.0)
++ [grpc/grpc-web 1.0.4](https://github.com/grpc/grpc-web/releases/tag/1.0.4)
+
+For **Linux**,
 
 
 
-### Build distributed code
+## Build distributed code
 
-run following commands in bash:
+### Compilation
+
+run following commands in shell:
 
 ```bash
 npm install
 npm run build
-npm run protoc
-npm run bundle
+
+# for windows user instead
+npm run build-windows
 ```
 
 copy the whole `/public` subdirectory to deployment path
 
 ### Node.js based compilation and test 
 
-After compilation, run following commands in bash:
+After compilation, run following commands in shell:
 
-```bash
+```shell
 npm run start
 ```
 
 open browser, enter `localhost:8000`
 
-### GRPC client test
+### gRPC client test
 
 ```bash
 npm run client
 ```
+
+
+
+## Deployment Dependencies
+
+**Assume that the site is deployed on `Ubuntu 18.04`.**
+
+

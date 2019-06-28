@@ -1,11 +1,12 @@
 const {CreateAgentRequest, CreateAgentResponse} = require('./agent_server_pb.js');;
 const {AgentServerClient} = require('./agent_server_grpc_web_pb.js');
 
-var createAgentService = new AgentServerClient('http://localhost:8080');
+var createAgentService = new AgentServerClient('http://localhost:50000');
 
 var request = new CreateAgentRequest();
-request.setMessage('Barath', "Barath");
+request.setAgentName('Barath');
+request.setEnvironmentName('Happy Farm');
 
-createAgentService.echo(request, {}, function(_err: any, _response: any) {
+createAgentService.createAgent(request, {}, function(_err: any, _response: any) {
   // ...
 });
