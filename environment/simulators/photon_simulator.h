@@ -28,14 +28,15 @@ class PhotonSimulator : public Simulator {
   const int kNumberOfPhotonsNeayby;
   const real_t kMaxDistance;
   const real_t kSunHeight;
-  std::vector<Photon> photons, absorb_photons;
+  std::vector<Photon> alive_photons, absorb_photons;
+  std::vector<Model*> models;
   void photon_emit(const Vector3& sun_direction, const Vector3& sun_strength,
     const double latitude_bottom, const double latitude_top, const double latitudeDiff,
     const double longitude_left, const double longitude_right, const double longitudeDiff);
-  void photons_modify(std::vector<Model*> models);
+  void photons_modify();
   int Russian_roulette(const real_t abr, const real_t ref, const real_t tran);
   void construct_kdtree(std::vector<Photon>& p, const unsigned int begin, const unsigned int end);
-  void lookup_kdtree(const Vector3& point, const Vector3& norm, Neighbor* neighbors, const unsigned int begin, const unsigned int end, real_t& distance, int& size);
+  void lookup_kdtree(std::vector<Photon>& p, const Vector3& point, const Vector3& norm, Neighbor* neighbors, const unsigned int begin, const unsigned int end, real_t& distance, int& size);
   Vector3 get_Intersect(const Vector3& p1, const Vector3& p2, const Vector3& p3, const Vector3& line_point, const Vector3& line_dir);
   bool in_Triangle(const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& p);
   Vector3 get_Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3);

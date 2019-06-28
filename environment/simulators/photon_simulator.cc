@@ -1,5 +1,7 @@
 #include "photon_simulator.h"
 
+#include "environment.h"
+
 namespace simulator
 {
 
@@ -8,12 +10,23 @@ namespace photonsimulator
 
 PhotonSimulator::PhotonSimulator(const int number, const real_t distance, const real_t height) : kNumberOfPhotonsNeayby(number), kMaxDistance(distance), kSunHeight(height) {}
 
+void PhotonSimulator::SimulateToTime(
+	environment::Environment* env,
+	const std::chrono::system_clock::time_point& time) override {
+  // we regard north as y asix
+  photon_emit(Vector3(-sin(env->sun_info().SunAzimuth), -cos(env->sun_info().SunAzimuth), -cos(env->sun_info().SolarAltitude)),
+              Vector3(env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance),
+              env->config_.location.latitude_bottom, env->config_.location.latitude_top, (env->config_.location.latitude_top - env->config_.location.latitude_bottom) / 100.0f),
+              env->config_.location.longitude_left, env->config_.location.longitude_right, (env->config_.location.longitude_right - env->config_.location.longitude_left) / 100.0f));
+  photons_modify();
+}
+
 void PhotonSimulator::photon_emit(const Vector3& sun_direction, const Vector3& sun_strength,
   const double latitude_bottom, const double latitude_top, const double latitudeDiff, 
   const double longitude_left, const double longitude_right, const double longitudeDiff ) {
   for (real_t i = (real_t)latitude_bottom; i <= (real_t)latitude_top; i += (real_t)latitudeDiff)
     for (real_t j = (real_t)longitude_left; j <= (real_t)longitude_right; j += (real_t)longitudeDiff)
-		photons.push_back(Photon((sun_direction, Vector3(i, j, kSunHeight), sun_strength));
+		alive_photons.push_back(Photon((sun_direction, Vector3(i, j, kSunHeight), sun_strength));
 }
 
 void PhotonSimulator::construct_kdtree(std::vector<Photon>& p, const unsigned int begin, const unsigned int end) {
@@ -49,38 +62,38 @@ void PhotonSimulator::construct_kdtree(std::vector<Photon>& p, const unsigned in
     photons[median].flag = kXAXIS;
   }
   if (max_var == y_var) {
-    std::sort(photons.p() + begin, p.begin() + end, compare_y);
+    std::sort(p.begin() + begin, p.begin() + end, compare_y);
     photons[median].flag = kYAXIS;
   }
   if (max_var == z_var) {
-    std::sort(photons.p() + begin, p.begin() + end, compare_z);
+    std::sort(p.begin() + begin, p.begin() + end, compare_z);
     photons[median].flag = kZAXIS;
   }
   construct_kdtree(p, begin, median);
   construct_kdtree(p, median + 1, end);
 }
 
-void PhotonSimulator::lookup_kdtree(const Vector3& point, const Vector3& norm, Neighbor* neighbors, const unsigned int begin, const unsigned int end, real_t& distance, int& size) {
+void PhotonSimulator::lookup_kdtree(std::vector<Photon>& p, const Vector3& point, const Vector3& norm, Neighbor* neighbors, const unsigned int begin, const unsigned int end, real_t& distance, int& size) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
-  add_neighbor(photons[begin].pos, photons[begin].dir, point, norm, neighbors, begin, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
+  add_neighbor(p[begin].pos, p[begin].dir, point, norm, neighbors, begin, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
   else {
     unsigned int median = begin + (end - begin) / 2;
-    int flag = (photons[median]).flag;
+    int flag = (p[median]).flag;
     real_t split_value = get_split(median, flag);
     real_t p_value = get_p(point, flag);
     if (p_value <= split_value) {
-      lookup_kdtree(point, norm, neighbors, begin, median, distance, size);
+      lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
       add_neighbor(point, norm, neighbors, median, distance, size);
       if (size < kNumberOfPhotonsNeayby || (p_value - split_value) * (p_value - split_value) < distance)
-        lookup_kdtree(point, norm, neighbors, median + 1, end, distance, size);
+        lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance, size);
     }
     else {
-      lookup_kdtree(point, norm, neighbors, median + 1, end, distance, size);
+      lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance, size);
       add_neighbor(point, norm, neighbors, median, distance, size);
       if (size < kNumberOfPhotonsNeayby || (p_value - split_value) * (p_value - split_value) < distance)
-        lookup_kdtree(point, norm, neighbors, begin, median, distance, size);
+        lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
     }
   }
 }
@@ -217,22 +230,22 @@ Vector3 PhotonSimulator::get_ray_dir(const int x, const int y, const int scene_l
   return t;
 }
 
-int PhotonSimulator::Russian_roulette(const real_t abr, const real_t ref, const real_t tran)
+int PhotonSimulator::Russian_roulette(const real_t abr, const real_t ref, const real_t trans)
 {
   real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
-    return kABR;
+    return kAborb;
   else if (a < abr + ref)
-    return kREF;
+    return kReflect;
   else
-    return kTRAN;
+    return kTrans;
 }
 
-void PhotonSimulator::photons_modify(std::vector<Model*> models)
+void PhotonSimulator::photons_modify()
 {
-  while (!photons.empty())
+  while (!alive_photons.empty())
   {
-    for (int i = 0; i < photons.size(); i++)
+    for (int i = 0; i < alive_photons.size(); i++)
     {
       Vector3 p(-100.0f, -100.0f, -100.0f);
       Face* min = NULL;
@@ -248,15 +261,15 @@ void PhotonSimulator::photons_modify(std::vector<Model*> models)
             Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
             Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
             Vector3 normal = get_Normal(a, b, c);
-            Vector3 intersect = get_Intersect(a, b, c, photons[i].pos, photons[i].dir);
+            Vector3 intersect = get_Intersect(a, b, c, alive_photons[i].pos, alive_photons[i].dir);
             if (in_Triangle(a, b, c, intersect))
             {
-              if (distance(photons[i].pos, intersect) < distance(photons[i].pos, p))
+              if (distance(alive_photons[i].pos, intersect) < distance(alive_photons[i].pos, p))
               {
                 p = intersect;
                 min = &face;
                 min_model = model;
-                if (dotresult(normal, photons[i].dir) > 0.0f) {
+                if (dotresult(normal, alive_photons[i].dir) > 0.0f) {
                   normal *= -1.0;
                 }
                 min_normal = normal;
@@ -272,23 +285,23 @@ void PhotonSimulator::photons_modify(std::vector<Model*> models)
         {
         case kAborb:
         {
-          absorb_photons.push_back(Photon(min_normal, p, photons[i].power));
-          photons.erase(photons.begin() + i--);
+          absorb_photons.push_back(Photon(min_normal, p, alive_photons[i].power));
+          alive_photons.erase(alive_photons.begin() + i--);
           min->photons++;
           break;
         }
         case kReflect:
         {
-          Vector3 ref = get_reflect(photons[i].dir, min_normal);
-		  photons[i].pos = p;
-		  photons[i].dir = ref;
+          Vector3 ref = get_reflect(alive_photons[i].dir, min_normal);
+		  alive_photons[i].pos = p;
+		  alive_photons[i].dir = ref;
           break;
         }
         case kTrans:
         {
-          Vector3 ref = get_refract(photons[i].dir, min_normal, 1.0);
-		  photons[i].pos = p;
-		  photons[i].dir = ref;
+          Vector3 ref = get_refract(alive_photons[i].dir, min_normal, 1.0);
+		  alive_photons[i].pos = p;
+		  alive_photons[i].dir = ref;
           break;
         }
         default:
@@ -297,7 +310,7 @@ void PhotonSimulator::photons_modify(std::vector<Model*> models)
       }
       else
       {
-        photons.erase(photons.begin() + i--);
+        alive_photons.erase(alive_photons.begin() + i--);
       }
     }
   }
