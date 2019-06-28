@@ -12,9 +12,9 @@ namespace simulator
 namespace photonsimulator
 {
 
-const int kABR = 0;
-const int kREF = 1;
-const int kTRAN = 2;
+const int kAborb = 0;
+const int kReflect = 1;
+const int kTrans = 2;
 
 class PhotonSimulator : public Simulator {
  public:

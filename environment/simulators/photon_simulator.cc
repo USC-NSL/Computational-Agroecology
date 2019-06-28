@@ -270,21 +270,21 @@ void PhotonSimulator::photons_modify(std::vector<Model*> models)
         int res = Russian_roulette(min->material.aborption, min->material.reflection, min->material.transmision);
         switch (res)
         {
-        case DEF_ABR:
+        case kAborb:
         {
           absorb_photons.push_back(Photon(min_normal, p, photons[i].power));
           photons.erase(photons.begin() + i--);
           min->photons++;
           break;
         }
-        case DEF_REF:
+        case kReflect:
         {
           Vector3 ref = get_reflect(photons[i].dir, min_normal);
 		  photons[i].pos = p;
 		  photons[i].dir = ref;
           break;
         }
-        case DEF_TRAN:
+        case kTrans:
         {
           Vector3 ref = get_refract(photons[i].dir, min_normal, 1.0);
 		  photons[i].pos = p;
