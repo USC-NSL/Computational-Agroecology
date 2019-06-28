@@ -1,4 +1,7 @@
 #include "crop.h"
+#include "plant_types/corn.h"
+#include "plant_types/squash.h"
+#include "plant_types/bean.h"
 
 namespace simulator {
 
@@ -120,6 +123,12 @@ void Harvest::Execute(environment::Terrain* terrain) const {
     }
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
+}
+
+void init() {
+	auto corn = new environment::plant_type::Corn();
+	auto bean = new environment::plant_type::Bean();
+	auto squash = new environment::plant_type::Squash();
 }
 
 }  // namespace crop

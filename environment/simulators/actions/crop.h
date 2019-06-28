@@ -9,9 +9,6 @@
 #include "action.h"
 #include "plant.h"
 #include "plant_types/plant_type.h"
-#include "plant_types/corn.h"
-#include "plant_types/squash.h"
-#include "plant_types/bean.h"
 
 namespace simulator {
 
