@@ -1,1 +1,2 @@
-add_library(model face.cpp mesh.cpp material.cpp model.cpp)
+aux_source_directory(. DIR_MODEL_SRCS)
+add_library(model DIR_MODEL_SRCS)
