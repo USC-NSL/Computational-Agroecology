@@ -62,3 +62,4 @@ all_test_run: $(TEST_ALL)
 
 clean:
 	rm -f $(ALL_OBJ) $(TEST_OBJ) $(TEST_ALL) 
+	rm -f ./main/main

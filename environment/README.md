@@ -6,10 +6,6 @@ The following instructions are mainly for **Ubuntu 18.04 LTS**.
 $ [sudo] apt update
 $ [sudo] apt install gcc g++ make
 ```
-**If you want to use CMake tools**
-```shell
-$ [sudo] apt-get install cmake
-```
 ## gtest
 **Fetch the source code**
 ```shell
@@ -51,4 +47,4 @@ $ cmake CMakeLists.txt
 ```
 
 All test binary will be built under the ```tests``` directory.
-**If you use CMake tools, it will be right at all subdirectory**
+**If you use CMake tools, it will be right at the directory ./environment/**
