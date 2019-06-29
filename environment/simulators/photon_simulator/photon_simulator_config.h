@@ -1,6 +1,7 @@
 #ifndef __PHOTON_SIMULATOR_CONFIG_H__
 #define __PHOTON_SIMULATOR_CONFIG_H__
 
+#include "photon_simulator_config.h"
 #include "photon/photon.h"
 #include "photon/neighbor.h"
 #include "model/model.h"
