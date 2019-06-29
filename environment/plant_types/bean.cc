@@ -1,22 +1,48 @@
 #include "bean.h"
 
+// TODO: This is just a temperary anonymous namespace. It should be removed some
+// time in the future
+namespace {
+
+const environment::SoilCondition kNullSoilCondition(std::nullopt,  // fertility
+                                                    std::nullopt,  // salinity
+                                                    std::nullopt,  // pH
+                                                    std::nullopt   // drainage
+);
+
+const environment::Light kNullLight(std::nullopt,  // light_intensity
+                                    std::nullopt   // angle
+);
+
+}  // namespace
+
 namespace environment {
 
 namespace plant_type {
 
 const std::string kBeanTypeName = "Bean";
-const environment::Soil beanSoil(environment::Soil::CLAY, 6.0, 1.0, 2.0, 3.0,
-                                 environment::Soil::HIGH,
-                                 environment::Soil::HIGH);
-const environment::Light beanLight(environment::Light::VERY_BRIGHT, 1.1);
 
 Bean::Bean()
-    : PlantType(kBeanTypeName, "o", true, 0.0, MaxMinTemperature(0, 0),
-                MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
-                MaxMinRainfall(0, 0), MaxMinPair<int>(100, 10),
-                MaxMinPair<int>(100, 10), MaxMinPair<int>(100, 10),
-                MaxMinPair<int>(100, 10), beanSoil, beanSoil, beanLight,
-                beanLight, MaxMinPair<int>(100, 10)) {}
+    : PlantType(kBeanTypeName,       // type_name
+                "o",                 // display_symbol
+                true,                // cultivar
+                std::nullopt,        // optimal_soil_depth
+                std::nullopt,        // absolute_soil_depth
+                std::nullopt,        // base_temperature
+                std::nullopt,        // optimal_temperature
+                std::nullopt,        // absolute_temperature
+                std::nullopt,        // optimal_annual_rainfall
+                std::nullopt,        // absolute_annual_rainfall
+                kNullSoilCondition,  // optimal_soil_condition
+                kNullSoilCondition,  // absolute_soil_condition
+                std::nullopt,        // optimal_latitude
+                std::nullopt,        // absolute_latitude
+                kNullLight,          // optimal_light_condition
+                kNullLight,          // absolute_light_condition
+                std::nullopt,        // climate_zone
+                std::nullopt,        // photo_period
+                std::nullopt         // crop_cycle
+      ) {}
 
 environment::Plant Bean::GeneratePlantInstance() const {
   return Plant(kBeanTypeName);

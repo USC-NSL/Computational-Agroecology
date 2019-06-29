@@ -18,9 +18,9 @@ struct Weather {
           const std::chrono::system_clock::time_point& time);
 
   Weather(const double temp_max, const double temp_min, const double rainfall);
-  Weather(const MaxMinTemperature& temperature, const double rainfall);
+  Weather(const MinMaxTemperature& temperature, const double rainfall);
 
-  const MaxMinTemperature temperature;
+  const MinMaxTemperature temperature;
   const double rainfall;
 };
 

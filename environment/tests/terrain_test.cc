@@ -20,7 +20,7 @@ TEST(CoordinateTest, OperatorTest) {
 }
 
 TEST(CellTest, ConstructorTest_1) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0, Soil::HIGH, Soil::HIGH);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
 
   Cell cell(soil);
   EXPECT_EQ(1, cell.size);
@@ -29,7 +29,7 @@ TEST(CellTest, ConstructorTest_1) {
 }
 
 TEST(CellTest, ConstructorTest_2) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0, Soil::HIGH, Soil::HIGH);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
 
   Cell cell(2, soil);
   EXPECT_EQ(2, cell.size);
@@ -38,7 +38,7 @@ TEST(CellTest, ConstructorTest_2) {
 }
 
 TEST(CellTest, OperatorTest) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0, Soil::HIGH, Soil::HIGH);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
 
   Cell lhs(2, soil);
   Cell rhs(2, soil);
@@ -58,7 +58,7 @@ TEST(TilesTest, ConstructorTest_1) {
 }
 
 TEST(TilesTest, ConstructorTest_2) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0, Soil::HIGH, Soil::HIGH);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
   Tiles tiles(5, 7, soil);
 
   EXPECT_EQ(5, tiles.width());
@@ -73,7 +73,7 @@ TEST(TilesTest, ConstructorTest_2) {
 }
 
 TEST(TilesTest, GetTest) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0, Soil::HIGH, Soil::HIGH);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
   Tiles tiles(5, 7, soil);
 
   EXPECT_EQ(tiles[1][1], tiles.get(Coordinate(1, 1)));

@@ -1,8 +1,11 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_SQUASH_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_SQUASH_H_
 
+#include <string>
+
 #include "plant.h"
 #include "plant_type.h"
+#include "utility.h"
 
 namespace environment {
 

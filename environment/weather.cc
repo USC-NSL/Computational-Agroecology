@@ -11,7 +11,7 @@ Weather::Weather(const double temp_max, const double temp_min,
                  const double rainfall)
     : temperature(temp_max, temp_min), rainfall(rainfall) {}
 
-Weather::Weather(const MaxMinTemperature& temperature, const double rainfall)
+Weather::Weather(const MinMaxTemperature& temperature, const double rainfall)
     : temperature(temperature), rainfall(rainfall) {}
 
 bool operator==(const Weather& lhs, const Weather& rhs) {

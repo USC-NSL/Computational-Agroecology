@@ -109,15 +109,36 @@ TEST_F(AgentTest, TakeActionTest) {
   EXPECT_EQ(90, find_money->second);
 }
 
-const environment::Soil fakeSoil(environment::Soil::CLAY, 6.0, 1.0, 2.0, 3.0, environment::Soil::HIGH, environment::Soil::HIGH);
-const environment::Light fakeLight(environment::Light::VERY_BRIGHT, 1.1);
+const environment::SoilCondition kFakeSoilCondition(std::nullopt, std::nullopt,
+                                                    std::nullopt, std::nullopt);
+const environment::Light kFakeLight(
+    MinMaxPair<Light::LightIntensity>(
+        environment::Light::kLightIntensityVeryBright,
+        environment::Light::kLightIntensityVeryBright),
+    1.1);
+
 struct FakePlantType : public PlantType {
   FakePlantType()
-      : PlantType("Fake", "F", true, 0.0, MaxMinTemperature(0, 0),
-                  MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
-                  MaxMinRainfall(0, 0),MaxMinPair<int>({100, 10}), MaxMinPair<int>({100, 10}),
-                  MaxMinPair<int>(100, 10), MaxMinPair<int>(100, 10),
-                  fakeSoil, fakeSoil, fakeLight, fakeLight, MaxMinPair<int>(100, 10)) {}
+      : PlantType("Fake",              // type_name
+                  "F",                 // display_symbol
+                  true,                // cultivar
+                  std::nullopt,        // optimal_soil_depth
+                  std::nullopt,        // absolute_soil_depth
+                  std::nullopt,        // base_temperature
+                  std::nullopt,        // optimal_temperature
+                  std::nullopt,        // absolute_temperature
+                  std::nullopt,        // optimal_annual_rainfall
+                  std::nullopt,        // absolute_annual_rainfall
+                  kFakeSoilCondition,  // optimal_soil_condition
+                  kFakeSoilCondition,  // absolute_soil_condition
+                  std::nullopt,        // optimal_latitude
+                  std::nullopt,        // absolute_latitude
+                  kFakeLight,          // optimal_light_condition
+                  kFakeLight,          // absolute_light_condition
+                  std::nullopt,        // climate_zone
+                  std::nullopt,        // photo_period
+                  std::nullopt         // crop_cycle
+        ) {}
   environment::Plant GeneratePlantInstance() const override {
     return Plant("Fake");
   }

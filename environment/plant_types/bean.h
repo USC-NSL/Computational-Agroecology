@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_TYPES_BEAN_H_
 
 #include <string>
+
 #include "plant.h"
 #include "plant_type.h"
 #include "utility.h"

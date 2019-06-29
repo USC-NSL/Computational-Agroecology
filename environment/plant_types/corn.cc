@@ -1,26 +1,48 @@
 #include "corn.h"
 
-#include <string>
+// TODO: This is just a temperary anonymous namespace. It should be removed some
+// time in the future
+namespace {
 
-#include "utility.h"
+const environment::SoilCondition kNullSoilCondition(std::nullopt,  // fertility
+                                                    std::nullopt,  // salinity
+                                                    std::nullopt,  // pH
+                                                    std::nullopt   // drainage
+);
+
+const environment::Light kNullLight(std::nullopt,  // light_intensity
+                                    std::nullopt   // angle
+);
+
+}  // namespace
 
 namespace environment {
 
 namespace plant_type {
 
 const std::string kCornTypeName = "Corn";
-const environment::Soil cornSoil(environment::Soil::CLAY, 6.0, 1.0, 2.0, 3.0,
-                                 environment::Soil::HIGH,
-                                 environment::Soil::HIGH);
-const environment::Light cornLight(environment::Light::VERY_BRIGHT, 1.1);
 
 Corn::Corn()
-    : PlantType(kCornTypeName, "🌽", true, 0.0, MaxMinTemperature(0, 0),
-                MaxMinTemperature(0, 0), MaxMinRainfall(0, 0),
-                MaxMinRainfall(0, 0), MaxMinPair<int>({100, 10}),
-                MaxMinPair<int>({100, 10}), MaxMinPair<int>(100, 10),
-                MaxMinPair<int>(100, 10), cornSoil, cornSoil, cornLight,
-                cornLight, MaxMinPair<int>(100, 10)) {}
+    : PlantType(kCornTypeName,       // type_name
+                "🌽",                 // display_symbol
+                true,                // cultivar
+                std::nullopt,        // optimal_soil_depth
+                std::nullopt,        // absolute_soil_depth
+                std::nullopt,        // base_temperature
+                std::nullopt,        // optimal_temperature
+                std::nullopt,        // absolute_temperature
+                std::nullopt,        // optimal_annual_rainfall
+                std::nullopt,        // absolute_annual_rainfall
+                kNullSoilCondition,  // optimal_soil_condition
+                kNullSoilCondition,  // absolute_soil_condition
+                std::nullopt,        // optimal_latitude
+                std::nullopt,        // absolute_latitude
+                kNullLight,          // optimal_light_condition
+                kNullLight,          // absolute_light_condition
+                std::nullopt,        // climate_zone
+                std::nullopt,        // photo_period
+                std::nullopt         // crop_cycle
+      ) {}
 
 environment::Plant Corn::GeneratePlantInstance() const {
   return Plant(kCornTypeName);

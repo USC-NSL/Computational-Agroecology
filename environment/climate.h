@@ -29,14 +29,14 @@ struct Climate {
 
   // TODO: include other existing libraries to replace the current types with
   // unit types
-  Climate(const double temp_max, const double temp_min, const double rain_max,
-          const double rain_min, const ZoneType type);
-  Climate(const MaxMinTemperature& yearly_temperature,
-          const MaxMinRainfall& yearly_rainfall, const ZoneType type);
+  Climate(const double temp_min, const double temp_max, const double rain_min,
+          const double rain_max, const ZoneType type);
+  Climate(const MinMaxTemperature& yearly_temperature,
+          const MinMaxRainfall& yearly_rainfall, const ZoneType type);
 
   const ZoneType climate_zone;
-  const MaxMinTemperature yearly_temperature;
-  const MaxMinRainfall yearly_rainfall;
+  const MinMaxTemperature yearly_temperature;
+  const MinMaxRainfall yearly_rainfall;
 };
 
 bool operator==(const Climate& lhs, const Climate& rhs);
