@@ -13,6 +13,7 @@ Light::LightIntensity::LightIntensity(const LightIntensityCategory category,
       indirect_light(indirect_light),
       light_lost(light_lost) {}
 
+// TODO: should include some correct data to replace these zeros
 const Light::LightIntensity Light::kLightIntensityVeryBright(Light::VERY_BRIGHT,
                                                              0.0, 0.0);
 const Light::LightIntensity Light::kLightIntensityClearSkies(Light::CLEAR_SKIES,

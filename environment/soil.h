@@ -35,6 +35,7 @@ bool operator==(const Soil& lhs, const Soil& rhs);
 // TODO: `double` should be replaced with some density units
 using SoilSalinity = MinMaxPair<double>;
 
+// TODO: may need to add soil texture here
 struct SoilCondition {
   enum class SoilFertility { LOW = 0, MODERATE, HIGH };
 
