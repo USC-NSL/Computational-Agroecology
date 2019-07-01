@@ -105,17 +105,20 @@ sudo usermod -aG docker ${USER} # $USER for current username
 
 #### Envoy
 
+Install image
+
 ```bash
 [sudo] docker pull envoyproxy/envoy
 ```
 
+build new image and run
 
-
-
-
-```
- docker build -t envoy:v1 .
- docker run -d -p 8080:8080 --network=host envoy:v1 --name=agent
- docker run -d -p 8080:8080 envoy:v1 --name=agent
+```bash
+ cd envoy
+ docker build -t helloworld/envoy -f ./envoy.Dockerfile .
+ docker run -d -p 8080:8080 --network=host helloworld/envoy
+ 
+ # for windows or mac
+ docker run -d -p 8080:8080 helloworld/envoy
 ```
 
