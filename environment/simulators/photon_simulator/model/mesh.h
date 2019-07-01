@@ -1,11 +1,11 @@
 #ifndef __MESH_H__
 #define __MESH_H__
-#include "stdafx.h"
+#include "../stdafx.h"
 #include <iostream>
 #include <cassert>
 
 #ifndef __VECTORS_H__
-#include "vectors.h"
+#include "../vectors.h"
 #endif
 
 #ifndef __FACE_H__
@@ -13,7 +13,7 @@
 #endif
 
 #ifndef TINY_OBJ_LOADER_H_
-#include "ext/tiny_obj_loader.h"
+#include "../loader/tiny_obj_loader.h"
 #endif
 
 namespace simulator

@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <istream>
 #include "photon_simulator_config.h"
 
 namespace simulator{

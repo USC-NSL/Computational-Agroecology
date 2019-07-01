@@ -1,2 +1,0 @@
-aux_source_directory(. DIR_PHOTONSIMULATOR_SRCS)
-add_library(photonsimulator DIR_PHOTONSIMULATOR_SRCS)

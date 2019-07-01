@@ -1,5 +1,6 @@
 #include "face.h"
-#include "vectors.h"
+#include "../vectors.h"
+#include "../stdafx.h"
 #include <cassert>
 
 namespace simulator

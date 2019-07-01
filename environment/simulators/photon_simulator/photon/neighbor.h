@@ -2,7 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_
 
 #include "../photon_simulator_config.h"
-#include "vectors.h"
+#include "../vectors.h"
 
 namespace simulator
 {

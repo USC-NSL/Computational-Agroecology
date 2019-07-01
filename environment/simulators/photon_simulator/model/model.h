@@ -5,7 +5,8 @@
 
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
-#include "stdafx.h"
+#include "../vectors.h"
+#include "../stdafx.h"
 #include "mesh.h"
 
 namespace simulator

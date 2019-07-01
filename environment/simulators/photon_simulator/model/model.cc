@@ -2,8 +2,10 @@
 #include "mesh.h"
 #ifndef STBI_INCLUDE_STB_IMAGE_H
 #define STB_IMAGE_IMPLEMENTATION
-#include "ext/stb_image.h"
+#include "../loader/stb_image.h"
 #endif
+#include "../vectors.h"
+#include "../stdafx.h"
 #include <cmath>
 
 namespace simulator
@@ -29,6 +31,7 @@ Model::~Model()
   textures.clear();
   meshes.clear();
   materials.clear();
+  deleteBuffer();
   std::cout << "model destroyed." << std::endl;
 };
 
