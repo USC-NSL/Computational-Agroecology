@@ -122,6 +122,8 @@ struct Water : public Action {
   void Execute(environment::Terrain* terrain) const override;
 };
 
+bool operator==(const Water& lhs, const Water& rhs);
+
 }  // namespace crop
 
 }  // namespace action

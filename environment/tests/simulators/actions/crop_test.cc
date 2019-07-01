@@ -451,6 +451,17 @@ TEST_F(AddWaterTest, AddToRange2) {
   }
 }
 
+TEST_F(AddWaterTest, OperatorTest) {
+  crop::Water lhs(applied_range, time, duration, 10.0);
+  EXPECT_TRUE(lhs == lhs);
+
+  crop::Water rhs(applied_range, time, std::chrono::hours(10), 10.0);
+  EXPECT_FALSE(lhs == rhs);
+
+  crop::Water rhs_2(applied_range, time, duration, 5.0);
+  EXPECT_FALSE(lhs == rhs_2);
+}
+
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

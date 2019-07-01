@@ -178,6 +178,12 @@ bool operator==(const Harvest& lhs, const Harvest& rhs) {
   return tmp_lhs == tmp_rhs;
 }
 
+bool operator==(const Water& lhs, const Water& rhs) {
+  const auto& tmp_lhs = reinterpret_cast<const simulator::action::Action&>(lhs);
+  const auto& tmp_rhs = reinterpret_cast<const simulator::action::Action&>(rhs);
+  return (tmp_lhs == tmp_rhs) && (lhs.water_amount == rhs.water_amount);
+}
+
 }  // namespace crop
 
 }  // namespace action
