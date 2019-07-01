@@ -26,5 +26,3 @@ environment/tests/gtest
 *.vcxproj
 *.filters
 *.user
-# binary file
-photon
