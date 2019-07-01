@@ -5,8 +5,10 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <random>
 
 #include "environment.h"
+#include "simulators/actions/crop.h"
 #include "simulators/resource.h"
 
 namespace agent {
@@ -29,7 +31,8 @@ class Agent {
   void AddResource(const simulator::ResourceType& resource, size_t quantity);
   ReturnCodes TakeAction(const simulator::action::Action* action);
 
-  simulator::action::ActionType RandomAction();
+  // generate random action
+  simulator::action::Action* RandomAction();
 
   std::vector<std::string> GetQualifiedPlants();
   std::vector<std::string> GetOptimalPlants();
