@@ -11,21 +11,21 @@ TEST(WeatherTest, ConstructorTest_1) {
   Climate climate(config);
   Weather weather(climate, std::chrono::system_clock::now());
 
-  EXPECT_EQ(MaxMinTemperature({0, 0}), weather.temperature);
+  EXPECT_EQ(MinMaxTemperature({0, 0}), weather.temperature);
   EXPECT_EQ(0.0, weather.rainfall);
 }
 
 TEST(WeatherTest, ConstructorTest_2) {
   Weather weather(0.0, 1.0, 2.0);
 
-  EXPECT_EQ(MaxMinTemperature({0.0, 1.0}), weather.temperature);
+  EXPECT_EQ(MinMaxTemperature({0.0, 1.0}), weather.temperature);
   EXPECT_EQ(2.0, weather.rainfall);
 }
 
 TEST(WeatherTest, ConstructorTest_3) {
-  Weather weather(MaxMinTemperature({0.0, 1.0}), 2.0);
+  Weather weather(MinMaxTemperature({0.0, 1.0}), 2.0);
 
-  EXPECT_EQ(MaxMinTemperature({0.0, 1.0}), weather.temperature);
+  EXPECT_EQ(MinMaxTemperature({0.0, 1.0}), weather.temperature);
   EXPECT_EQ(2.0, weather.rainfall);
 }
 

@@ -2,45 +2,45 @@
 
 #include <utility.h>
 
-TEST(MaxMinPairTest, ConstructorTest_1) {
-  MaxMinPair<int> max_min_pair(100, 10);
+TEST(MinMaxPairTest, ConstructorTest_1) {
+  MinMaxPair<int> min_max_pair(10, 100);
 
-  EXPECT_EQ(100, max_min_pair.max);
-  EXPECT_EQ(10, max_min_pair.min);
+  EXPECT_EQ(10, min_max_pair.min);
+  EXPECT_EQ(100, min_max_pair.max);
 }
 
-TEST(MaxMinPairTest, ConstructorTest_2) {
-  auto a_pair = std::make_pair<int, int>(100, 10);
-  MaxMinPair<int> max_min_pair(a_pair);
+TEST(MinMaxPairTest, ConstructorTest_2) {
+  auto a_pair = std::make_pair<int, int>(10, 100);
+  MinMaxPair<int> min_max_pair(a_pair);
 
-  EXPECT_EQ(100, max_min_pair.max);
-  EXPECT_EQ(10, max_min_pair.min);
+  EXPECT_EQ(10, min_max_pair.min);
+  EXPECT_EQ(100, min_max_pair.max);
 }
 
-TEST(MaxMinPairTest, ConstructorTest_3) {
-  MaxMinPair<int> max_min_pair({100, 10});
+TEST(MinMaxPairTest, ConstructorTest_3) {
+  MinMaxPair<int> min_max_pair({10, 100});
 
-  EXPECT_EQ(100, max_min_pair.max);
-  EXPECT_EQ(10, max_min_pair.min);
+  EXPECT_EQ(10, min_max_pair.min);
+  EXPECT_EQ(100, min_max_pair.max);
 
   // should discard extra elements
-  max_min_pair = MaxMinPair<int>({100, 10, 5, 4, 3, 2, 1});
+  min_max_pair = MinMaxPair<int>({10, 100, 5, 4, 3, 2, 1});
 
-  EXPECT_EQ(100, max_min_pair.max);
-  EXPECT_EQ(10, max_min_pair.min);
+  EXPECT_EQ(10, min_max_pair.min);
+  EXPECT_EQ(100, min_max_pair.max);
 }
 
-TEST(MaxMinPairTest, OperatorTest) {
-  MaxMinPair<int> max_min_pair_1({100, 10});
-  MaxMinPair<int> max_min_pair_2({200, 20});
+TEST(MinMaxPairTest, OperatorTest) {
+  MinMaxPair<int> min_max_pair_1({100, 10});
+  MinMaxPair<int> min_max_pair_2({200, 20});
 
-  EXPECT_TRUE(max_min_pair_1 != max_min_pair_2);
-  EXPECT_FALSE(max_min_pair_1 == max_min_pair_2);
+  EXPECT_TRUE(min_max_pair_1 != min_max_pair_2);
+  EXPECT_FALSE(min_max_pair_1 == min_max_pair_2);
 
-  max_min_pair_1 = max_min_pair_2;
+  min_max_pair_1 = min_max_pair_2;
 
-  EXPECT_TRUE(max_min_pair_1 == max_min_pair_2);
-  EXPECT_FALSE(max_min_pair_1 != max_min_pair_2);
+  EXPECT_TRUE(min_max_pair_1 == min_max_pair_2);
+  EXPECT_FALSE(min_max_pair_1 != min_max_pair_2);
 }
 
 int main(int argc, char** argv) {

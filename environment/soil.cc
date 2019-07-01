@@ -1,5 +1,7 @@
 #include "soil.h"
 
+#include <limits>
+
 namespace environment {
 
 Soil::Soil(const Texture texture, const double pH, const double salinity,
@@ -15,6 +17,22 @@ bool operator==(const Soil& lhs, const Soil& rhs) {
          (lhs.salinity == rhs.salinity) &&
          (lhs.organic_matter == rhs.organic_matter) &&
          (lhs.water_content == rhs.water_content);
+}
+
+SoilCondition::SoilCondition(const std::optional<SoilFertility>& fertility,
+                             const std::optional<SoilSalinity>& salinity,
+                             const std::optional<MinMaxPair<double>>& pH,
+                             const std::optional<SoilDrainage>& drainage)
+    : fertility(fertility), salinity(salinity), pH(pH), drainage(drainage) {}
+
+const SoilSalinity SoilCondition::kSoilSalinityLow(0.0, 4.0);
+const SoilSalinity SoilCondition::kSoilSalinityMedium(4.0, 10.0);
+const SoilSalinity SoilCondition::kSoilSalinityHigh(
+    10.0, std::numeric_limits<double>::infinity());
+
+bool operator==(const SoilCondition& lhs, const SoilCondition& rhs) {
+  return (lhs.fertility == rhs.fertility) && (lhs.salinity == rhs.salinity) &&
+         (lhs.pH == rhs.pH) && (lhs.drainage == rhs.drainage);
 }
 
 }  // namespace environment
