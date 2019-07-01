@@ -109,3 +109,13 @@ sudo usermod -aG docker ${USER} # $USER for current username
 [sudo] docker pull envoyproxy/envoy
 ```
 
+
+
+
+
+```
+ docker build -t envoy:v1 .
+ docker run -d -p 8080:8080 --network=host envoy:v1 --name=agent
+ docker run -d -p 8080:8080 envoy:v1 --name=agent
+```
+
