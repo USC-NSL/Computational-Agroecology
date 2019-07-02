@@ -99,7 +99,7 @@ bool operator==(const Harvest& lhs, const Harvest& rhs);
 
 // Water a crop
 struct Water : public Action {
-  double water_amount;
+  const double water_amount;
 
   Water(const environment::Coordinate& target,
         const std::chrono::system_clock::time_point& start_time,
