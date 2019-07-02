@@ -365,6 +365,7 @@ TEST_F(AddWaterTest, ConstrcutorTest_1) {
             action.applied_range);
   EXPECT_EQ(time, action.start_time);
   EXPECT_EQ(duration, action.duration);
+  EXPECT_EQ(10.0, action.water_amount);
   EXPECT_TRUE(action.cost.empty());
 }
 
@@ -374,6 +375,7 @@ TEST_F(AddWaterTest, ConstrcutorTest_2) {
   EXPECT_EQ(applied_range, action.applied_range);
   EXPECT_EQ(time, action.start_time);
   EXPECT_EQ(duration, action.duration);
+  EXPECT_EQ(10.0, action.water_amount);
   EXPECT_TRUE(action.cost.empty());
 }
 
@@ -384,6 +386,7 @@ TEST_F(AddWaterTest, ConstrcutorTest_3) {
             action.applied_range);
   EXPECT_EQ(time, action.start_time);
   EXPECT_EQ(duration, action.duration);
+  EXPECT_EQ(10.0, action.water_amount);
   EXPECT_EQ(cost, action.cost);
 }
 
@@ -393,6 +396,7 @@ TEST_F(AddWaterTest, ConstrcutorTest_4) {
   EXPECT_EQ(applied_range, action.applied_range);
   EXPECT_EQ(time, action.start_time);
   EXPECT_EQ(duration, action.duration);
+  EXPECT_EQ(10.0, action.water_amount);
   EXPECT_EQ(cost, action.cost);
 }
 
