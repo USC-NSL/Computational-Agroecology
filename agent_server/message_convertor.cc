@@ -218,10 +218,10 @@ data_format::Terrain ToProtobuf(const environment::Terrain& terrain) {
 
 environment::Climate FromProtobuf(
     const data_format::Climate& climate_protobuf) {
-  double temp_max = climate_protobuf.yearly_temperature().max();
   double temp_min = climate_protobuf.yearly_temperature().min();
-  double rain_max = climate_protobuf.yearly_rainfall().max();
+  double temp_max = climate_protobuf.yearly_temperature().max();
   double rain_min = climate_protobuf.yearly_rainfall().min();
+  double rain_max = climate_protobuf.yearly_rainfall().max();
   environment::Climate::ZoneType zone_type;
 
   switch (climate_protobuf.climate_zone()) {
@@ -266,7 +266,7 @@ environment::Climate FromProtobuf(
       break;
   }
 
-  return environment::Climate(temp_max, temp_min, rain_max, rain_min,
+  return environment::Climate(temp_min, temp_max, rain_min, rain_max,
                               zone_type);
 }
 
@@ -326,32 +326,32 @@ data_format::Climate ToProtobuf(const environment::Climate& climate) {
       break;
   }
 
-  climate_protobuf.mutable_yearly_temperature()->set_max(
-      climate.yearly_temperature.max);
   climate_protobuf.mutable_yearly_temperature()->set_min(
       climate.yearly_temperature.min);
-  climate_protobuf.mutable_yearly_rainfall()->set_max(
-      climate.yearly_rainfall.max);
+  climate_protobuf.mutable_yearly_temperature()->set_max(
+      climate.yearly_temperature.max);
   climate_protobuf.mutable_yearly_rainfall()->set_min(
       climate.yearly_rainfall.min);
+  climate_protobuf.mutable_yearly_rainfall()->set_max(
+      climate.yearly_rainfall.max);
 
   return climate_protobuf;
 }
 
 environment::Weather FromProtobuf(
     const data_format::Weather& weather_protobuf) {
-  double temp_max = weather_protobuf.temperature().max();
   double temp_min = weather_protobuf.temperature().min();
+  double temp_max = weather_protobuf.temperature().max();
   double rainfall = weather_protobuf.rainfall();
 
-  return environment::Weather(temp_max, temp_min, rainfall);
+  return environment::Weather(temp_min, temp_max, rainfall);
 }
 
 data_format::Weather ToProtobuf(const environment::Weather& weather) {
   data_format::Weather weather_protobuf;
 
-  weather_protobuf.mutable_temperature()->set_max(weather.temperature.max);
   weather_protobuf.mutable_temperature()->set_min(weather.temperature.min);
+  weather_protobuf.mutable_temperature()->set_max(weather.temperature.max);
   weather_protobuf.set_rainfall(weather.rainfall);
 
   return weather_protobuf;
