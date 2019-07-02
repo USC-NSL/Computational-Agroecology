@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package data_format;
 
-message MaxMinDoublePair {
-  double max = 1;
-  double min = 2;
+message MinMaxDoublePair {
+  double min = 1;
+  double max = 2;
 }
 
 message Location {
@@ -37,8 +37,8 @@ message Climate {
   }
 
   ZoneType climate_zone = 1;
-  MaxMinDoublePair yearly_temperature = 2;
-  MaxMinDoublePair yearly_rainfall = 3;
+  MinMaxDoublePair yearly_temperature = 2;
+  MinMaxDoublePair yearly_rainfall = 3;
 }
 
 message Plant {
@@ -104,7 +104,7 @@ message Terrain {
 }
 
 message Weather {
-  MaxMinDoublePair temperature = 1;
+  MinMaxDoublePair temperature = 1;
   double rainfall = 2;
 }
 
