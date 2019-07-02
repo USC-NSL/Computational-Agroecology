@@ -67,18 +67,12 @@ copy the whole `/public` subdirectory to deployment path
 After compilation, run following commands in shell:
 
 ```shell
+# current testing grpc-web connectivity
+npm run client
 npm run start
 ```
 
 open browser, enter `localhost:8000`
-
-### gRPC client test
-
-```bash
-npm run client
-```
-
-
 
 ## Deployment Dependencies
 

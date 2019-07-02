@@ -4,17 +4,16 @@
   "description": "web visualizer for computational agroecology project",
   "main": "scripts.js",
   "scripts": {
+    "start": "node index.js",
     "build": "npx npm-run-all tsc bundle protoc protoc-web-linux",
     "build-windows": "npx npm-run-all tsc bundle protoc protoc-web-windows",
     "tsc": "tsc",
     "bundle": "browserify ./js/maincontrol.js -p esmify > ./public/bundle.js",
-    "bundle2": "browserify ./js/client.js -p esmify > ./public/bundle.js",
-    "start": "node index.js",
-    "client": "node js/client.js",
-    "server": "node server.js",
     "protoc": "protoc -I=./proto environment.proto agent_server.proto --js_out=import_style=commonjs:./js",
     "protoc-web-linux": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./js",
-    "protoc-web-windows": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./js --plugin=protoc-gen-grpc-web=./protoc-gen-grpc-web.exe"
+    "protoc-web-windows": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./js --plugin=protoc-gen-grpc-web=./protoc-gen-grpc-web.exe",
+    "webpack": "npx webpack",
+    "client": "npx npm-run-all tsc webpack"
   },
   "author": "wym",
   "license": "ISC",
