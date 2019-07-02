@@ -7,9 +7,9 @@ Weather::Weather(const environment::Climate& climate,
                  const std::chrono::system_clock::time_point& time)
     : Weather(0, 0, 0) {}
 
-Weather::Weather(const double temp_max, const double temp_min,
+Weather::Weather(const double temp_min, const double temp_max,
                  const double rainfall)
-    : temperature(temp_max, temp_min), rainfall(rainfall) {}
+    : temperature(temp_min, temp_max), rainfall(rainfall) {}
 
 Weather::Weather(const MinMaxTemperature& temperature, const double rainfall)
     : temperature(temperature), rainfall(rainfall) {}
