@@ -84,6 +84,22 @@ npm run client
 
 **Assume that the site is deployed on `Ubuntu 18.04`.**
 
+#### Nginx
+
+Install
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+Update firewall config
+
+```bash
+sudo ufw allow 'Nginx HTTP'
+sudo ufw status
+```
+
 #### Docker
 
 Reference: [How To Install and Use Docker on Ubuntu 18.04](<https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04>)
@@ -115,10 +131,11 @@ build new image and run
 
 ```bash
  cd envoy
- docker build -t helloworld/envoy -f ./envoy.Dockerfile .
- docker run -d -p 8080:8080 --network=host helloworld/envoy
+ # modify address to static IP of your server in ./envoy.Dockerfile
+ docker build -t agent/envoy -f ./envoy.Dockerfile .
+ docker run -d -p 8080:8080 --network=host agent/envoy
  
  # for windows or mac
- docker run -d -p 8080:8080 helloworld/envoy
+ docker run -d -p 8080:8080 agent/envoy
 ```
 
