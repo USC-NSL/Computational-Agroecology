@@ -10,11 +10,11 @@ namespace photonsimulator
 // floating point precision set by this typedef
 typedef float real_t;
 
-// TODO: @hangjie please comment this
-const int kXAXIS = 0;
-const int kYAXIS = 1;
-const int kZAXIS = 2;
-const int kLEAF = 3;
+// constant for kd-tree
+const int kXAXIS = 0; // use x-axis
+const int kYAXIS = 1; // use y-axis
+const int kZAXIS = 2; // use z-axis
+const int kLEAF = 3;  // just leaf
 
 namespace filepath
 {
