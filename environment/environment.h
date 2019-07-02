@@ -62,6 +62,7 @@ class Environment {
   friend class simulator::action::crop::Add;
   friend class simulator::action::crop::Remove;
   friend class simulator::action::crop::Harvest;
+  friend class simulator::action::crop::Water;
 
   Config config_;
   const Climate climate_;
