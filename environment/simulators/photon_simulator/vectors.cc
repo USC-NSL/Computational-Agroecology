@@ -4,30 +4,25 @@
  *
  * @author Eric Butler (edbutler)
  */
-#include "stdafx.h"
 #include "vectors.h"
+#include "stdafx.h"
 
-namespace simulator
-{
+namespace simulator {
 
-namespace photonsimulator
-{
+namespace photonsimulator {
 
-std::ostream &operator<<(std::ostream &os, const Vector2 &v)
-{
+std::ostream &operator<<(std::ostream &os, const Vector2 &v) {
   return os << '(' << v.x << ',' << v.y << ')';
 }
 
-std::ostream &operator<<(std::ostream &os, const Vector3 &v)
-{
+std::ostream &operator<<(std::ostream &os, const Vector3 &v) {
   return os << '(' << v.x << ',' << v.y << ',' << v.z << ')';
 }
 
-std::ostream &operator<<(std::ostream &os, const Vector4 &v)
-{
+std::ostream &operator<<(std::ostream &os, const Vector4 &v) {
   return os << '(' << v.x << ',' << v.y << ',' << v.z << ',' << v.w << ')';
 }
 
-} // namespace photonsimulator
+}  // namespace photonsimulator
 
-} // namespace simulator
+}  // namespace simulator

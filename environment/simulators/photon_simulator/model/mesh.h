@@ -1,8 +1,8 @@
 #ifndef __MESH_H__
 #define __MESH_H__
-#include "../stdafx.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
+#include "../stdafx.h"
 
 #ifndef __VECTORS_H__
 #include "../vectors.h"
@@ -16,18 +16,15 @@
 #include "../loader/tiny_obj_loader.h"
 #endif
 
-namespace simulator
-{
+namespace simulator {
 
-namespace photonsimulator
-{
+namespace photonsimulator {
 
-class Mesh
-{
-public:
+class Mesh {
+ public:
   // keep everything public for simplicity
-  std::vector<Face> faces; // actually only triangles
-  GLuint vb_id;            // vertex buffer id
+  std::vector<Face> faces;  // actually only triangles
+  GLuint vb_id;             // vertex buffer id
   int numTriangles;
   size_t material_id;
   GLuint texture_id;
@@ -38,7 +35,7 @@ public:
   void render(std::vector<tinyobj::material_t> &materials, Vector3 pos);
   void addFace(Face face) { faces.push_back(face); }
 
-  //OpenGL rendering
+  // OpenGL rendering
   void writeOpenGLBuffer(const std::vector<Vector3> &vertices,
                          const std::vector<Vector3> &normals,
                          const std::vector<Vector2> &texcoords);
@@ -48,11 +45,11 @@ public:
   void addOnePhoton(int index) { faces[index].photons++; }
   int getPhotons();
 
-private:
+ private:
 };
 
-} // namespace photonsimulator
+}  // namespace photonsimulator
 
-} // namespace simulator
+}  // namespace simulator
 
 #endif /* __MESH_H__ */

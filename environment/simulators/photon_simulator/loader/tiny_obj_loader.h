@@ -160,7 +160,7 @@ typedef struct {
 
 typedef struct {
   // Linear flattened indices.
-  std::vector<index_t> indices;       // indices for vertices(poly lines)
+  std::vector<index_t> indices;        // indices for vertices(poly lines)
   std::vector<int> num_line_vertices;  // The number of vertices per line.
 } lines_t;
 
@@ -314,7 +314,8 @@ class ObjReader {
   /// @param[in] filename wavefront .obj filename
   /// @param[in] config Reader configuration
   ///
-  bool ParseFromFile(const std::string &filename, const ObjReaderConfig &config = ObjReaderConfig());
+  bool ParseFromFile(const std::string &filename,
+                     const ObjReaderConfig &config = ObjReaderConfig());
 
   ///
   /// Parse .obj from a text string.
@@ -325,7 +326,8 @@ class ObjReader {
   /// @param[in] mtl_text wavefront .mtl filename
   /// @param[in] config Reader configuration
   ///
-  bool ParseFromString(const std::string &obj_text, const std::string &mtl_text, const ObjReaderConfig &config = ObjReaderConfig());
+  bool ParseFromString(const std::string &obj_text, const std::string &mtl_text,
+                       const ObjReaderConfig &config = ObjReaderConfig());
 
   ///
   /// .obj was loaded or parsed correctly.
@@ -1399,8 +1401,8 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
   if (!prim_group.lineGroup.empty()) {
     // Flatten indices
     for (size_t i = 0; i < prim_group.lineGroup.size(); i++) {
-      for (size_t j = 0; j < prim_group.lineGroup[i].vertex_indices.size(); j++) {
-
+      for (size_t j = 0; j < prim_group.lineGroup[i].vertex_indices.size();
+           j++) {
         const vertex_index_t &vi = prim_group.lineGroup[i].vertex_indices[j];
 
         index_t idx;
@@ -1411,7 +1413,8 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
         shape->lines.indices.push_back(idx);
       }
 
-      shape->lines.num_line_vertices.push_back(int(prim_group.lineGroup[i].vertex_indices.size()));
+      shape->lines.num_line_vertices.push_back(
+          int(prim_group.lineGroup[i].vertex_indices.size()));
     }
   }
 
@@ -1419,8 +1422,8 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
   if (!prim_group.pointsGroup.empty()) {
     // Flatten & convert indices
     for (size_t i = 0; i < prim_group.pointsGroup.size(); i++) {
-      for (size_t j = 0; j < prim_group.pointsGroup[i].vertex_indices.size(); j++) {
-
+      for (size_t j = 0; j < prim_group.pointsGroup[i].vertex_indices.size();
+           j++) {
         const vertex_index_t &vi = prim_group.pointsGroup[i].vertex_indices[j];
 
         index_t idx;
@@ -2025,7 +2028,8 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
                          static_cast<int>(vt.size() / 2), &vi)) {
           if (err) {
             std::stringstream ss;
-            ss << "Failed parse `l' line(e.g. zero value for vertex index. line "
+            ss << "Failed parse `l' line(e.g. zero value for vertex index. "
+                  "line "
                << line_num << ".)\n";
             (*err) += ss.str();
           }
@@ -2056,7 +2060,8 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
                          static_cast<int>(vt.size() / 2), &vi)) {
           if (err) {
             std::stringstream ss;
-            ss << "Failed parse `p' line(e.g. zero value for vertex index. line "
+            ss << "Failed parse `p' line(e.g. zero value for vertex index. "
+                  "line "
                << line_num << ".)\n";
             (*err) += ss.str();
           }
@@ -2692,7 +2697,7 @@ bool LoadObjWithCallback(std::istream &inStream, const callback_t &callback,
 }
 
 bool ObjReader::ParseFromFile(const std::string &filename,
-                     const ObjReaderConfig &config) {
+                              const ObjReaderConfig &config) {
   valid_ = LoadObj(&attrib_, &shapes_, &materials_, &warning_, &error_,
                    filename.c_str(), config.mtl_search_path.c_str(),
                    config.triangulate, config.vertex_color);
@@ -2700,8 +2705,9 @@ bool ObjReader::ParseFromFile(const std::string &filename,
   return valid_;
 }
 
-bool ObjReader::ParseFromString(const std::string &obj_text, const std::string &mtl_text,
-                     const ObjReaderConfig &config) {
+bool ObjReader::ParseFromString(const std::string &obj_text,
+                                const std::string &mtl_text,
+                                const ObjReaderConfig &config) {
   std::stringbuf obj_buf(obj_text);
   std::stringbuf mtl_buf(mtl_text);
 

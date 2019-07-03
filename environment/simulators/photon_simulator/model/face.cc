@@ -1,17 +1,14 @@
 #include "face.h"
-#include "../vectors.h"
-#include "../stdafx.h"
 #include <cassert>
+#include "../stdafx.h"
+#include "../vectors.h"
 
-namespace simulator
-{
+namespace simulator {
 
-namespace photonsimulator
-{
+namespace photonsimulator {
 
 Vector2 Face::getTexcoord(Vector3 pos, const std::vector<Vector3> &vertices,
-                          const std::vector<Vector2> &texcoords)
-{
+                          const std::vector<Vector2> &texcoords) {
   Vector3 vertex12, vertex13, vertex1p;
   real_t k12, k13;
   Vector2 texcoord;
@@ -29,6 +26,6 @@ Vector2 Face::getTexcoord(Vector3 pos, const std::vector<Vector3> &vertices,
   return texcoord;
 }
 
-} // namespace photonsimulator
+}  // namespace photonsimulator
 
-} // namespace simulator
+}  // namespace simulator
