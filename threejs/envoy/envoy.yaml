@@ -1,12 +1,14 @@
 admin:
   access_log_path: /tmp/admin_access.log
   address:
+  ############## change the IP address to your server's static IP
     socket_address: { address: 192.168.136.128, port_value: 9901 }
 
 static_resources:
   listeners:
   - name: listener_0
     address:
+      ############ change the IP address to your server's static IP
       socket_address: { address: 192.168.136.128, port_value: 8080 }
     filter_chains:
     - filters:
@@ -42,4 +44,5 @@ static_resources:
     type: logical_dns
     http2_protocol_options: {}
     lb_policy: round_robin
+    ############ change the IP address to your server's static IP
     hosts: [{ socket_address: { address: 192.168.136.128, port_value: 50000 }}]
