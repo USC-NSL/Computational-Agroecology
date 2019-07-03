@@ -12,7 +12,8 @@ message CreateEnvironmentRequest {
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message CreateEnvironmentResponse {}
+message CreateEnvironmentResponse {
+}
 
 message CreateAgentRequest {
   string agent_name = 1;
@@ -20,7 +21,8 @@ message CreateAgentRequest {
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message CreateAgentResponse {}
+message CreateAgentResponse {
+}
 
 message GetEnvironmentRequest {
   string name = 1;
@@ -36,7 +38,8 @@ message SimulateToTimeRequest {
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message SimulateToTimeResponse {}
+message SimulateToTimeResponse {
+}
 
 message AgentActionConfig {
   message Cost {
@@ -62,7 +65,8 @@ message AgentAddCropRequest {
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message AgentAddCropResponse {}
+message AgentAddCropResponse {
+}
 
 message AgentRemoveCropRequest {
   string agent_name = 1;
@@ -70,13 +74,15 @@ message AgentRemoveCropRequest {
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message AgentRemoveCropResponse {}
+message AgentRemoveCropResponse {
+}
 
 service AgentServer {
-  rpc CreateEnvironment (CreateEnvironmentRequest) returns (CreateEnvironmentResponse);
-  rpc CreateAgent (CreateAgentRequest) returns (CreateAgentResponse);
-  rpc GetEnvironment (GetEnvironmentRequest) returns (GetEnvironmentResponse);
-  rpc SimulateToTime (SimulateToTimeRequest) returns (SimulateToTimeResponse);
-  rpc AgentAddCrop (AgentAddCropRequest) returns (AgentAddCropResponse);
-  rpc AgentRemoveCrop (AgentRemoveCropRequest) returns (AgentRemoveCropResponse);
+  rpc CreateEnvironment(CreateEnvironmentRequest)
+      returns (CreateEnvironmentResponse);
+  rpc CreateAgent(CreateAgentRequest) returns (CreateAgentResponse);
+  rpc GetEnvironment(GetEnvironmentRequest) returns (GetEnvironmentResponse);
+  rpc SimulateToTime(SimulateToTimeRequest) returns (SimulateToTimeResponse);
+  rpc AgentAddCrop(AgentAddCropRequest) returns (AgentAddCropResponse);
+  rpc AgentRemoveCrop(AgentRemoveCropRequest) returns (AgentRemoveCropResponse);
 }
