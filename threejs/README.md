@@ -125,7 +125,7 @@ build new image and run
 
 ```bash
  cd envoy
- # modify address to static IP of your server in ./envoy.Dockerfile
+ # modify address to static IP of your server in ./envoy.yaml
  docker build -t agent/envoy -f ./envoy.Dockerfile .
  docker run -d -p 8080:8080 --network=host agent/envoy
  
