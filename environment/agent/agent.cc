@@ -1,5 +1,4 @@
 #include "agent.h"
-
 #include "plant_types/plant_type.h"
 
 namespace agent {
@@ -25,40 +24,46 @@ void Agent::AddResource(const simulator::ResourceType& resource,
   owned_resource_[resource] += quantity;
 }
 
+void Agent::Qlearning(){
 
-simulator::action::Action* Agent::RandomAction(){
-    std::random_device rd; // obtain a random number from hardware
-    std::mt19937 eng(rd()); // seed the generator
-    std::uniform_int_distribution<> actionDistr(1, 3);
-    std::uniform_int_distribution<> terrainDistr(0, 2);
-    std::uniform_int_distribution<> cropDistr(0, 2);
+}
+simulator::action::Action* Agent::RandomAction(int terrain_width_ ,int terrain_length_ ){
+  // obtain a random number from hardware
+  std::random_device ramdom_number; 
+  // seed the generator
+  std::mt19937 seed(ramdom_number()); 
 
-    const std::string kCornTypeName = "Corn";
-    int random_action_index =  actionDistr(eng);
-    simulator::action::Action* randomAction;
+  std::uniform_int_distribution<> action_Distr(1, 3);
+  std::uniform_int_distribution<> terrain_width_Distr(0, terrain_width_ - 1);
+  std::uniform_int_distribution<> terrain_length_Distr(0, terrain_length_ - 1);
+  std::uniform_int_distribution<> crop_Distr(0, 2);
 
-    switch(random_action_index) {
-    case 1:
-      randomAction = new simulator::action::crop::Add(
-        environment::Coordinate(terrainDistr(eng), terrainDistr(eng)),
-        std::chrono::system_clock::now() + std::chrono::minutes(1),
-        std::chrono::duration<int>(), kCornTypeName);
-      break;
-    case 2:
-      randomAction = new simulator::action::crop::Remove(
-        environment::Coordinate(terrainDistr(eng), terrainDistr(eng)),
-        std::chrono::system_clock::now() + std::chrono::minutes(1),
-        std::chrono::duration<int>());
-      break;
-    case 3:
-      randomAction = new simulator::action::crop::Harvest(
-        environment::Coordinate(terrainDistr(eng), terrainDistr(eng)),
-        std::chrono::system_clock::now() + std::chrono::minutes(1),
-        std::chrono::duration<int>());
-      break;
-    }
+  const std::string kCornTypeName = "Corn";
+  int random_action_index =  action_Distr(seed);
+  simulator::action::Action* randomAction;
 
-    return randomAction;
+  switch(random_action_index) {
+  case kAdd:
+    randomAction = new simulator::action::crop::Add(
+      environment::Coordinate(terrain_width_Distr(seed), terrain_length_Distr(seed)),
+      std::chrono::system_clock::now() + std::chrono::minutes(1),
+      std::chrono::duration<int>(), kCornTypeName);
+    break;
+  case kRemove:
+    randomAction = new simulator::action::crop::Remove(
+      environment::Coordinate(terrain_width_Distr(seed), terrain_length_Distr(seed)),
+      std::chrono::system_clock::now() + std::chrono::minutes(1),
+      std::chrono::duration<int>());
+    break;
+  case kHarvest:
+    randomAction = new simulator::action::crop::Harvest(
+      environment::Coordinate(terrain_width_Distr(seed), terrain_length_Distr(seed)),
+      std::chrono::system_clock::now() + std::chrono::minutes(1),
+      std::chrono::duration<int>());
+    break;
+  }
+
+  return randomAction;
 }
  
 
