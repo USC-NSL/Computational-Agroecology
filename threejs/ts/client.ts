@@ -1,34 +1,36 @@
-// TODO: move client.js to /public
-var PROTO_PATH = __dirname + './../public/proto/agent_server.proto';
+const {CreateAgentRequest, CreateAgentResponse} =
+    require('./agent_server_pb.js');
+;
+const {AgentServerClient} = require('./agent_server_grpc_web_pb.js');
 
-var grpc = require('grpc');
-var protoLoader = require('@grpc/proto-loader');
-var packageDefinition = protoLoader.loadSync(
-    PROTO_PATH,
-    {
-        keepCase: true,
-        longs: String,
-        enums: String,
-        defaults: true,
-        oneofs: true
+// Please change IP address and port, according to ./../envoy/envoy.yaml
+var createAgentService = new AgentServerClient('http://192.168.136.128:8080');
+
+var request = new CreateAgentRequest();
+request.setAgentName('Barath');
+request.setEnvironmentName('Happy Farm');
+
+var call = createAgentService.createAgent(
+    request, {}, function(err:
+                          {
+                            code: any;
+                            message: any;
+                          },
+                          response: { getMessage: () => void; }) {
+      if (err) {
+        console.log(err.code);
+        console.log(err.message);
+      } else {
+        console.log(response.getMessage());
+      }
     });
-var grpc_proto = grpc.loadPackageDefinition(packageDefinition).agent_server.service;
-
-function main() {
-    var client = new grpc_proto.AgentServer('0.0.0.0:50000',
-        grpc.credentials.createInsecure());
-    var agent;
-    if (process.argv.length >= 3) {
-        agent = process.argv[2];
-    } else {
-        agent = 'Barath';
-    }
-    client.CreateAgent({ agent_name: agent, environment_name: agent },
-        function (_err: any, _response: {}) {
-        });
-    client.CreateAgent({ agent_name: agent, environment_name: agent },
-        function (_err: any, _response: {}) {
-        });
-}
-
-main();
+call.on('status', function(status:
+                           {
+                             code: any;
+                             details: any;
+                             metadata: any;
+                           }) {
+  console.log("status.code: " + status.code);
+  console.log("status.details: " + status.details);
+  console.log("status.metadata: " + status.metadata);
+});
