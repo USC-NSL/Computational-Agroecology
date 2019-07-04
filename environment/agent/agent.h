@@ -13,6 +13,10 @@
 
 namespace agent {
 
+const int kAdd = 1;
+const int kRemove = 2;
+const int kHarvest = 3;
+
 using ResourceList = std::vector<std::pair<simulator::ResourceType, size_t>>;
 
 class Agent {
@@ -32,7 +36,8 @@ class Agent {
   ReturnCodes TakeAction(const simulator::action::Action* action);
 
   // generate random action
-  simulator::action::Action* RandomAction();
+  simulator::action::Action* RandomAction(int terrain_width_ ,int terrain_length_ );
+  void Qlearning();
 
   std::vector<std::string> GetQualifiedPlants();
   std::vector<std::string> GetOptimalPlants();
@@ -51,6 +56,7 @@ class Agent {
  private:
   // Name of this agent
   std::string name_;
+
 
   // The corresponding environment that this agent is interacting with
   environment::Environment* env_;
