@@ -348,14 +348,6 @@ Vector3 PhotonSimulator::get_refract(const Vector3& dir, const Vector3& norm,
                  coef * (dir + squared_length(dot(dir, norm)) * norm));
 }
 
-Vector3 PhotonSimulator::get_Normal(const Vector3& p1, const Vector3& p2,
-                                    const Vector3& p3) {
-  real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
-  real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
-  real_t c = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
-  return Vector3(a, b, c);
-}
-
 }  // namespace photonsimulator
 
 }  // namespace simulator
