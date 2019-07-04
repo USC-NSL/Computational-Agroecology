@@ -304,7 +304,7 @@ void PhotonSimulator::photons_modify() {
             Russian_roulette(min->material.aborption, min->material.reflection,
                              min->material.transmision);
         switch (res) {
-          case kAborb: {
+          case kAbsorb: {
             absorb_photons.push_back(
                 Photon(min_normal, p, alive_photons[i].power));
             alive_photons.erase(alive_photons.begin() + i--);

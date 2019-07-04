@@ -10,7 +10,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-const int kAborb = 0;
+const int kAbsorb = 0;
 const int kReflect = 1;
 const int kTrans = 2;
 
