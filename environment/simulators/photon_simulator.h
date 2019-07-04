@@ -54,7 +54,6 @@ class PhotonSimulator : public Simulator {
                         const Vector3& camera_ctr, const Vector3& camera_up);
   Vector3 get_reflect(const Vector3& dir, const Vector3& norm);
   Vector3 get_refract(const Vector3& dir, const Vector3& norm, real_t coef);
-  Vector3 get_Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3);
 };
 
 }  // namespace photonsimulator
