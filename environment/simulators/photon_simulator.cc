@@ -66,15 +66,15 @@ void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
   real_t max_var = std::max(std::max(x_var, y_var), z_var);
   if (max_var == x_var) {
     std::sort(p.begin() + begin, p.begin() + end, compare_x);
-    photons[median].flag = kXAXIS;
+    p[median].flag = kXAXIS;
   }
   if (max_var == y_var) {
     std::sort(p.begin() + begin, p.begin() + end, compare_y);
-    photons[median].flag = kYAXIS;
+    p[median].flag = kYAXIS;
   }
   if (max_var == z_var) {
     std::sort(p.begin() + begin, p.begin() + end, compare_z);
-    photons[median].flag = kZAXIS;
+    p[median].flag = kZAXIS;
   }
   construct_kdtree(p, begin, median);
   construct_kdtree(p, median + 1, end);
@@ -201,8 +201,8 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
     int size = 0;
     float d = 0.0;
     int count = 0;
-    auto neighbors =
-        absorb_photons.lookup_kdtree(p, min_normal, 0.0025f, d, size, 50);
+	Neighbor neighbors[kNumberOfPhotonsNeayby];
+    lookup_kdtree(absorb_photons, p, min_normal, neighbors, kMaxDistance, d, size, kNumberOfPhotonsNeayby);
     for (int i = 0; i < size; i++) {
       real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
       Vector3 color = absorb_photons[neighbors[i].i].power;

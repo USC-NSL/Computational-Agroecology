@@ -1,6 +1,11 @@
 #ifndef __PHOTON_SIMULATOR_CONFIG_H__
 #define __PHOTON_SIMULATOR_CONFIG_H__
 
+#include "photon/photon.h"
+#include "photon/neighbor.h"
+#include "model/model.h"
+#include "vectors.h"
+
 namespace simulator {
 
 namespace photonsimulator {
