@@ -261,7 +261,7 @@ int PhotonSimulator::Russian_roulette(const real_t abr, const real_t ref,
                                       const real_t trans) {
   real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
-    return kAborb;
+    return kAbsorb;
   else if (a < abr + ref)
     return kReflect;
   else
