@@ -1,7 +1,9 @@
 #ifndef __FACE_H__
 #define __FACE_H__
-#include "../stdafx.h"
+
 #include "../vectors.h"
+
+#include <vector>
 
 #ifndef __MATERIAL_H__
 #include "material.h"
