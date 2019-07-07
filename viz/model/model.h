@@ -37,8 +37,6 @@ public:
 
     Model() = delete;
     void LoadObjModel(const char *filename);
-    int size() { return meshes.size(); }
-    Mesh &operator[](int index) { return meshes[index]; }
     Model(const char *filename, Vector3 pos = Vector3(0.0, 0.0, 0.0)) : rel_pos(pos) { LoadObjModel(filename); }
     ~Model();
     int getPhotons();

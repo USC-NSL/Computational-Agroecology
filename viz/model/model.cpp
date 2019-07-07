@@ -124,16 +124,6 @@ void Model::LoadObjModel(const char *filename)
                         glBindTexture(GL_TEXTURE_2D, texture_id);
                         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
                         glBindTexture(GL_TEXTURE_2D, 0);
-                        // for (int i = 500; i < w; i++)
-                        // {
-                        //     for (int j = 0; j < h; j++)
-                        //     {
-                        //         std::cout << (int)texture[(j + i * h) * 3 + 0] << " "
-                        //                   << (int)texture[(j + i * h) * 3 + 1] << " "
-                        //                   << (int)texture[(j + i * h) * 3 + 2] << std::endl;
-                        //     }
-                        // }
-                        std::cout << (int)texture[3 * (316 + 352 * w)] << " " << (int)texture[3 * (316 + 352 * w) + 1] << " " << (int)texture[3 * (316 + 352 * w) + 2] << std::endl;
 
                         texture_infos.push_back(Texture(texture_id, texture, w, h, comp));
                     }
@@ -142,14 +132,16 @@ void Model::LoadObjModel(const char *filename)
         }
     }
 
-    // convert tiny_obj_loader format
+    // Convert tiny_obj_loader format
     for (std::vector<real_t>::iterator it = attrib.vertices.begin(); it != attrib.vertices.end(); it += 3)
         vertices.push_back(Vector3(*it, *std::next(it), *std::next(it, 2)));
     for (std::vector<real_t>::iterator it = attrib.normals.begin(); it != attrib.normals.end(); it += 3)
         normals.push_back(Vector3(*it, *std::next(it), *std::next(it, 2)));
+    // Flip y texture coordinate
     for (std::vector<real_t>::iterator it = attrib.texcoords.begin(); it != attrib.texcoords.end(); it += 2)
         texcoords.push_back(Vector2(*it, *std::next(it)));
 
+    // Load mesh
     for (size_t s = 0; s < shapes.size(); s++)
     {
         Mesh mesh = Mesh();
@@ -299,11 +291,11 @@ void Model::LoadObjModel(const char *filename)
         {
             mesh.material_id = materials.size() - 1; // = ID for default material.
         }
-        
+
         // update texture_id
-        std::string diffuse_texname = materials[mesh.material_id].diffuse_texname;
         if ((mesh.material_id < materials.size()))
         {
+            std::string diffuse_texname = materials[mesh.material_id].diffuse_texname;
             if (textures.find(diffuse_texname) != textures.end())
             {
                 mesh.texture_id = textures[diffuse_texname];
@@ -312,7 +304,7 @@ void Model::LoadObjModel(const char *filename)
         else
         {
             mesh.texture_id = -1;
-            std::cout << "texture " << diffuse_texname << " not found." << std::endl;
+            std::cout << "Texture for " << filename << " not specified." << std::endl;
         }
 
         // update mesh

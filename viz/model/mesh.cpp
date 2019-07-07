@@ -14,11 +14,11 @@ int Mesh::getPhotons()
 void Mesh::render(std::vector<tinyobj::material_t> &materials,
                   Vector3 rel_pos)
 {
+	GLfloat mat_ambient[] = { materials[material_id].ambient[0], materials[material_id].ambient[1], materials[material_id].ambient[2], 1.0f };
+	GLfloat mat_diffuse[] = { materials[material_id].diffuse[0], materials[material_id].diffuse[1], materials[material_id].diffuse[2], 1.0f };
+	GLfloat mat_specular[] = { materials[material_id].specular[0], materials[material_id].specular[1], materials[material_id].specular[2], 1.0f };
+	GLfloat mat_shininess[] = { materials[material_id].shininess };
     glPushMatrix();
-    GLfloat mat_ambient[] = {materials[material_id].ambient[0], materials[material_id].ambient[1], materials[material_id].ambient[2], 1.0f};
-    GLfloat mat_diffuse[] = {materials[material_id].diffuse[0], materials[material_id].diffuse[1], materials[material_id].diffuse[2], 1.0f};
-    GLfloat mat_specular[] = {materials[material_id].specular[0], materials[material_id].specular[1], materials[material_id].specular[2], 1.0f};
-    GLfloat mat_shininess[] = {materials[material_id].shininess};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
@@ -43,7 +43,11 @@ void Mesh::render(std::vector<tinyobj::material_t> &materials,
         if (texture_id != -1)
             glBindTexture(GL_TEXTURE_2D, texture_id);
         else
+        {
             glBindTexture(GL_TEXTURE_2D, 0);
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
         glVertexPointer(3, GL_FLOAT, stride, (const void *)0);
         glNormalPointer(GL_FLOAT, stride, (const void *)(sizeof(float) * 3));
         glTexCoordPointer(2, GL_FLOAT, stride, (const void *)(sizeof(float) * 6));
@@ -72,8 +76,7 @@ void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
         if (face.vertex1.vti != -1)
         {
             buffer.push_back((float)texcoords[face.vertex1.vti].x);
-            // Flip y texture coordinate
-            buffer.push_back(1.0 - (float)texcoords[face.vertex1.vti].y);
+            buffer.push_back((float)texcoords[face.vertex1.vti].y);
         }
         else
         {
@@ -90,8 +93,7 @@ void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
         if (face.vertex2.vti != -1)
         {
             buffer.push_back((float)texcoords[face.vertex2.vti].x);
-            // Flip y texture coordinate
-            buffer.push_back(1.0 - (float)texcoords[face.vertex2.vti].y);
+            buffer.push_back((float)texcoords[face.vertex2.vti].y);
         }
         else
         {
@@ -108,8 +110,7 @@ void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
         if (face.vertex3.vti != -1)
         {
             buffer.push_back((float)texcoords[face.vertex3.vti].x);
-            // Flip y texture coordinate
-            buffer.push_back(1.0 - (float)texcoords[face.vertex3.vti].y);
+            buffer.push_back((float)texcoords[face.vertex3.vti].y);
         }
         else
         {
