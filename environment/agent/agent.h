@@ -37,7 +37,6 @@ class Agent {
 
   // generate random action
   simulator::action::Action* RandomAction(int terrain_width_ ,int terrain_length_ );
-  void Qlearning();
 
   std::vector<std::string> GetQualifiedPlants();
   std::vector<std::string> GetOptimalPlants();

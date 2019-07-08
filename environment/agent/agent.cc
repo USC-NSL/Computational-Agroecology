@@ -24,9 +24,8 @@ void Agent::AddResource(const simulator::ResourceType& resource,
   owned_resource_[resource] += quantity;
 }
 
-void Agent::Qlearning(){
 
-}
+
 simulator::action::Action* Agent::RandomAction(int terrain_width_ ,int terrain_length_ ){
   // obtain a random number from hardware
   std::random_device ramdom_number; 
