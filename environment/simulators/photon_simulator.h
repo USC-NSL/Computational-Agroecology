@@ -1,7 +1,10 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
-#include "photon_simulator/photon_simulator_config.h"
+#include "photons/photon_simulator_config.h"
+#include "photons/photon/photon.h"
+#include "photons/photon/neighbor.h"
+#include "photons/model/model.h"
 #include "simulator.h"
 
 #include <vector>
@@ -59,4 +62,5 @@ class PhotonSimulator : public Simulator {
 }  // namespace photonsimulator
 
 }  // namespace simulator
+
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_

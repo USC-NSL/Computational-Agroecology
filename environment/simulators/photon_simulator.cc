@@ -14,12 +14,12 @@ PhotonSimulator::PhotonSimulator(const int number, const real_t distance,
 
 void PhotonSimulator::SimulateToTime(
     environment::Environment* env,
-    const std::chrono::system_clock::time_point& time) override {
+    const std::chrono::system_clock::time_point& time) {
   // we regard north as y asix
   photon_emit(Vector3(-sin(env->sun_info().SunAzimuth), -cos(env->sun_info().SunAzimuth), -cos(env->sun_info().SolarAltitude)),
               Vector3(env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance),
-              env->config_.location.latitude_bottom, env->config_.location.latitude_top, (env->config_.location.latitude_top - env->config_.location.latitude_bottom) / 100.0f),
-              env->config_.location.longitude_left, env->config_.location.longitude_right, (env->config_.location.longitude_right - env->config_.location.longitude_left) / 100.0f));
+              env->config_.location.latitude_bottom, env->config_.location.latitude_top, (env->config_.location.latitude_top - env->config_.location.latitude_bottom) / 100.0f,
+              env->config_.location.longitude_left, env->config_.location.longitude_right, (env->config_.location.longitude_right - env->config_.location.longitude_left) / 100.0f);
   photons_modify();
 }
 
@@ -32,7 +32,7 @@ void PhotonSimulator::photon_emit(
        i += (real_t)latitudeDiff)
     for (real_t j = (real_t)longitude_left; j <= (real_t)longitude_right;
          j += (real_t)longitudeDiff)
-                alive_photons.push_back(Photon((sun_direction, Vector3(i, j, kSunHeight), sun_strength));
+                alive_photons.push_back(Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
 }
 
 void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
@@ -94,18 +94,18 @@ void PhotonSimulator::lookup_kdtree(std::vector<Photon>& p,
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
-    real_t split_value = get_split(median, flag);
+    real_t split_value = get_split(p, median, flag);
     real_t p_value = get_p(point, flag);
     if (p_value <= split_value) {
       lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
-      add_neighbor(point, norm, neighbors, median, distance, size);
+      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance,
                       size);
     } else {
       lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance, size);
-      add_neighbor(point, norm, neighbors, median, distance, size);
+      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
@@ -165,7 +165,7 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
         Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
         Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
         Vector3 normal = get_Normal(a, b, c);
-        Vector3 intersect = get_Intersact(a, b, c, ray_pos, ray_dir);
+        Vector3 intersect = get_Intersect(a, b, c, ray_pos, ray_dir);
         if (in_Triangle(a, b, c, intersect)) {
           if (distance(ray_pos, intersect) < distance(ray_pos, p)) {
             p = intersect;
@@ -201,8 +201,8 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
     int size = 0;
     float d = 0.0;
     int count = 0;
-	Neighbor neighbors[kNumberOfPhotonsNeayby];
-    lookup_kdtree(absorb_photons, p, min_normal, neighbors, kMaxDistance, d, size, kNumberOfPhotonsNeayby);
+    Neighbor neighbors[kNumberOfPhotonsNeayby];
+    lookup_kdtree(absorb_photons, p, min_normal, neighbors, 0, absorb_photons.size() - 1, d, size);
     for (int i = 0; i < size; i++) {
       real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
       Vector3 color = absorb_photons[neighbors[i].i].power;
@@ -248,7 +248,7 @@ Vector3 PhotonSimulator::get_ray_dir(const int x, const int y,
   Vector3 cR = cross(dir, camera_up);
   Vector3 cU = cross(cR, dir);
   real_t AR = length(cU) / length(cR);
-  real_t dist = tan(PI / 4) * 2 / length(dir);
+  real_t dist = tan(kPI / 4) * 2 / length(dir);
   Vector3 t =
       dir +
       dist * (((real_t)y - (real_t)scene_width / 2) / scene_width * cU +
