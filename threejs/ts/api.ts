@@ -1,13 +1,15 @@
 import {Configs} from "./config";
 import {
   CreateAgentRequest,
-  CreateAgentResponse,
   CreateEnvironmentRequest,
-  CreateEnvironmentResponse,
   GetEnvironmentRequest,
-  GetEnvironmentResponse
+  GetEnvironmentResponse,
+  SimulateToTimeRequest,
+  AgentActionConfig,
+  AgentAddCropRequest,
+  AgentRemoveCropRequest
 } from '../js/agent_server_pb';
-import {Environment} from '../js/environment_pb';
+import {Environment, Terrain} from '../js/environment_pb';
 import {AgentServerClient} from '../js/agent_server_grpc_web_pb';
 import {Error} from "grpc-web";
 
@@ -45,37 +47,32 @@ export class API {
     this.env_name = "Happy Farm";
     this.createEnvironment();
     this.createAgent();
-    this.getEnvironment();
   }
 
   createAgent() {
     let request = new CreateAgentRequest();
     request.setAgentName(this.agent_name);
     request.setEnvironmentName(this.env_name);
-    this.server.createAgent(
-        request, undefined, (err: Error, _response: CreateAgentResponse) => {
-          if (err)
-            console.log("createAgent ERROR " + status[err.code] + ": " +
-                        err.message);
-          else
-            console.log("createAgent: agent " + this.agent_name + " created.");
-        });
+    this.server.createAgent(request, undefined, (err: Error) => {
+      if (err)
+        console.log("createAgent ERROR " + status[err.code] + ": " +
+                    err.message);
+      else
+        console.log("createAgent: " + this.agent_name);
+    });
   }
 
   createEnvironment() {
     let request = new CreateEnvironmentRequest();
     request.setName(this.env_name);
     request.setTimestampEpochCount(Date.now());
-    this.server.createEnvironment(
-        request, undefined,
-        (err: Error, _response: CreateEnvironmentResponse) => {
-          if (err)
-            console.log("createEnvironment ERROR " + status[err.code] + ": " +
-                        err.message);
-          else
-            console.log("createEnvironment: environment " + this.env_name +
-                        " created.");
-        });
+    this.server.createEnvironment(request, undefined, (err: Error) => {
+      if (err)
+        console.log("createEnvironment ERROR " + status[err.code] + ": " +
+                    err.message);
+      else
+        console.log("createEnvironment: " + this.env_name);
+    });
   }
 
   getEnvironment() {
@@ -101,6 +98,61 @@ export class API {
     }
   }
 
+  simulateToTime(timestamp: number) {
+    let request = new SimulateToTimeRequest();
+    request.setEnvironmentName(this.env_name);
+    request.setTimestampEpochCount(timestamp);
+    this.server.simulateToTime(request, undefined, (err: Error) => {
+      if (err)
+        console.log("simulateToTime ERROR " + status[err.code] + ": " +
+                    err.message);
+      else
+        console.log("simulateToTime: " + timestamp);
+    });
+  }
+
+  agentAddCrop(gridX: number, gridY: number, planttype: string) {
+    let request = new AgentAddCropRequest();
+    request.setAgentName(this.agent_name);
+    request.setCropTypeName(planttype);
+    let config = new AgentActionConfig();
+    let coordinate = new Terrain.Coordinate();
+    coordinate.setX(gridX);
+    coordinate.setY(gridY);
+    config.addAppliedRange(coordinate);
+    config.setStartTimeEpochCount(Date.now());
+    config.setEndTimeEpochCount(Date.now());
+    request.setActionConfig(config);
+    this.server.agentAddCrop(request, undefined, (err: Error) => {
+      if (err)
+        console.log("agentAddCrop ERROR " + status[err.code] + ": " +
+                    err.message);
+      else
+        console.log("agentAddCrop: " + planttype + " at (" + gridX + "," +
+                    gridY + ")");
+    });
+  }
+
+  agentRemoveCrop(gridX: number, gridY: number) {
+    let request = new AgentRemoveCropRequest();
+    request.setAgentName(this.agent_name);
+    let config = new AgentActionConfig();
+    let coordinate = new Terrain.Coordinate();
+    coordinate.setX(gridX);
+    coordinate.setY(gridY);
+    config.addAppliedRange(coordinate);
+    config.setStartTimeEpochCount(Date.now());
+    config.setEndTimeEpochCount(Date.now());
+    request.setActionConfig(config);
+    this.server.agentRemoveCrop(request, undefined, (err: Error) => {
+      if (err)
+        console.log("agentRemoveCrop ERROR " + status[err.code] + ": " +
+                    err.message);
+      else
+        console.log("agentRemoveCrop: (" + gridX + "," + gridY + ")");
+    });
+  }
+  
   print() {
     for (var i = 0; i < this.configs.getHeight(); i++)
       for (var j = 0; j < this.configs.getWidth(); j++)
@@ -112,5 +164,4 @@ export class API {
   reset() { console.log("reset"); }
 
   send() { console.log("send"); }
-  recv() { console.log("recieve"); }
 }
