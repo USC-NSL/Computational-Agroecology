@@ -8,7 +8,7 @@
 #include <unistd.h>  //readlink
 #endif
 
-#include "environment/simulators/photon_simulator/model/model.h"
+#include "environment/simulators/photons/model/model.h"
 
 using namespace simulator;
 using namespace photonsimulator;
