@@ -4,7 +4,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   BoxGeometry
-} from "three/src/Three";
+} from "Three";
 import {Render} from "./render";
 import {
   tilemap_color_configs,

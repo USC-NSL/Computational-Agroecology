@@ -9,7 +9,7 @@ import {
   GridHelper,
   Camera,
   LineBasicMaterial
-} from "three/src/Three";
+} from "Three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {TileMap} from './tilemap';
 import {Configs} from './config';
