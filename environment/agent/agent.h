@@ -35,8 +35,11 @@ class Agent {
   void AddResource(const simulator::ResourceType& resource, size_t quantity);
   ReturnCodes TakeAction(const simulator::action::Action* action);
 
-  // generate random action
-  simulator::action::Action* RandomAction(int terrain_width_ ,int terrain_length_ );
+  // generate action
+  simulator::action::Action* CreateAction(int terrain_width_ ,int terrain_length_, int action_num, int crop_num);
+
+  // generate random integer
+  int RandomInt(int min ,int max);
 
   std::vector<std::string> GetQualifiedPlants();
   std::vector<std::string> GetOptimalPlants();
