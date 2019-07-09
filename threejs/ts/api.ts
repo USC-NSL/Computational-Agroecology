@@ -66,6 +66,16 @@ export class API {
     let request = new CreateEnvironmentRequest();
     request.setName(this.env_name);
     request.setTimestampEpochCount(Date.now());
+    let terrain = new Terrain();
+    for (let i = 0; i < this.configs.getHeight(); i++) {
+      let row = new Terrain.Row();
+      for (let j = 0; j < this.configs.getWidth(); j++) {
+        let cell = new Terrain.Cell();
+        row.addCells(cell);
+      }
+      terrain.addTiles(row);
+    }
+    request.setTerrain(terrain);
     this.server.createEnvironment(request, undefined, (err: Error) => {
       if (err)
         console.log("createEnvironment ERROR " + status[err.code] + ": " +
@@ -93,8 +103,10 @@ export class API {
   updateScene(environment: Environment) {
     let terrain = environment.getTerrain();
     if (terrain !== undefined) {
-      terrain.getTilesList();
-      console.log(terrain.toObject());
+      let rows = terrain.getTilesList();
+      let length = rows.length;
+      let width = rows[0].getCellsList().length;
+      console.log("env: length " + length + ", width " + width);
     }
   }
 
@@ -152,7 +164,7 @@ export class API {
         console.log("agentRemoveCrop: (" + gridX + "," + gridY + ")");
     });
   }
-  
+
   print() {
     for (var i = 0; i < this.configs.getHeight(); i++)
       for (var j = 0; j < this.configs.getWidth(); j++)

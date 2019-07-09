@@ -52,13 +52,19 @@ export class MainControl {
       case Mode[Mode.SQUASH]:
         plant =
             this.configs.addPlantModel(planttype, plantstatus, gridX, gridY);
-        if (plant !== undefined) this.render.addtoScene(plant);
+        if (plant !== undefined) {
+          this.render.addtoScene(plant);
+          this.api.agentAddCrop(gridX, gridY, planttype);
+        }
         break;
       case Mode[Mode.WATER]:
         return this.configs.water(gridX, gridY);
       case Mode[Mode.REMOVE]:
         plant = this.configs.removePlantModel(gridX, gridY);
-        if (plant !== undefined) this.render.removefromScene(plant);
+        if (plant !== undefined) {
+          this.render.removefromScene(plant);
+          this.api.agentRemoveCrop(gridX, gridY);
+        }
         break;
       case Mode[Mode.HARVEST]:
         alert("method not implemented yet.");
