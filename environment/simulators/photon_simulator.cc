@@ -16,6 +16,8 @@ void PhotonSimulator::SimulateToTime(
     environment::Environment* env,
     const std::chrono::system_clock::time_point& time) {
   // we regard north as y asix
+  alive_photons.clear();
+  absorb_photons.clear();
   photon_emit(Vector3(-sin(env->sun_info().SunAzimuth), -cos(env->sun_info().SunAzimuth), -cos(env->sun_info().SolarAltitude)),
               Vector3(env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance),
               env->config_.location.latitude_bottom, env->config_.location.latitude_top, (env->config_.location.latitude_top - env->config_.location.latitude_bottom) / 100.0f,
@@ -31,8 +33,9 @@ void PhotonSimulator::photon_emit(
   for (real_t i = (real_t)latitude_bottom; i <= (real_t)latitude_top;
        i += (real_t)latitudeDiff)
     for (real_t j = (real_t)longitude_left; j <= (real_t)longitude_right;
-         j += (real_t)longitudeDiff)
+         j += (real_t)longitudeDiff) {
                 alive_photons.push_back(Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
+    }
 }
 
 void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
