@@ -1,4 +1,4 @@
-import {Raycaster, Vector2, Mesh, MeshBasicMaterial, BoxGeometry} from "Three";
+import {Raycaster, Vector2, Mesh, MeshBasicMaterial, BoxGeometry} from "three/src/Three";
 import {Render} from "./render";
 import {
   tilemap_color_configs,

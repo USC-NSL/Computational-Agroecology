@@ -8,7 +8,7 @@ import {
   clamp,
   hydration_max
 } from "./common";
-import {Group, Mesh, Object3D} from "Three";
+import {Group, Mesh, Object3D} from "three/src/Three";
 
 import {MTLLoader, MaterialCreator} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';

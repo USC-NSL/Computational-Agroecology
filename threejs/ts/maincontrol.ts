@@ -1,4 +1,4 @@
-import {Object3D} from "Three";
+import {Object3D} from "three/src/Three";
 import {Mode} from "./common";
 import {Configs} from "./config";
 import {Render} from "./render";
