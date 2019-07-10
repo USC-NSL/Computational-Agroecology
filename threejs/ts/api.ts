@@ -40,9 +40,9 @@ export class API {
   env_name: string;
   constructor(configs: Configs) {
     this.configs = configs;
-    // Please change IP address and port, according to ./../envoy/envoy.yaml
+    /////////////  change the IP address to your server's IP
     this.server =
-        new AgentServerClient('http://192.168.136.128:8080', null, null);
+        new AgentServerClient('http://204.57.3.150:8080', null, null);
     this.agent_name = 'Barath';
     this.env_name = "Happy Farm";
     this.createEnvironment();
