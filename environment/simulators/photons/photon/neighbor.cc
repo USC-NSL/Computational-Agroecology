@@ -90,7 +90,7 @@ void add_neighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& poi
   }
 }
 
-real_t get_split(std::vector<Photon>&p, unsigned int i, int axis) {
+real_t get_split(const std::vector<Photon>&p, unsigned int i, int axis) {
   if (axis == kXAXIS)
     return (p[i]).pos.x;
   if (axis == kYAXIS)
@@ -100,7 +100,7 @@ real_t get_split(std::vector<Photon>&p, unsigned int i, int axis) {
   return 0.0;
 }
 
-real_t get_p(Vector3 p, int axis) {
+real_t get_p(const Vector3& p, int axis) {
   if (axis == kXAXIS)
     return p.x;
   if (axis == kYAXIS)

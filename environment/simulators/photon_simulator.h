@@ -39,7 +39,7 @@ class PhotonSimulator : public Simulator {
   int Russian_roulette(const real_t abr, const real_t ref, const real_t tran);
   void construct_kdtree(std::vector<Photon>& p, const unsigned int begin,
                         const unsigned int end);
-  void lookup_kdtree(std::vector<Photon>& p, const Vector3& point,
+  void lookup_kdtree(const std::vector<Photon>& p, const Vector3& point,
                      const Vector3& norm, Neighbor* neighbors,
                      const unsigned int begin, const unsigned int end,
                      real_t& distance, int& size);

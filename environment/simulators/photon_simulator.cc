@@ -83,7 +83,7 @@ void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
   construct_kdtree(p, median + 1, end);
 }
 
-void PhotonSimulator::lookup_kdtree(std::vector<Photon>& p,
+void PhotonSimulator::lookup_kdtree(const std::vector<Photon>& p,
                                     const Vector3& point, const Vector3& norm,
                                     Neighbor* neighbors,
                                     const unsigned int begin,
