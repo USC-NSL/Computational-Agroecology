@@ -5,10 +5,11 @@
   "main": "scripts.js",
   "scripts": {
     "start": "node index.js",
-    "build": "npx npm-run-all tsc protoc protoc-web-linux tsc webpack",
+    "build": "npx npm-run-all mkdir protoc protoc-web-linux tsc webpack",
     "build-windows": "npx npm-run-all tsc protoc protoc-web-linux tsc webpack",
+    "mkdir": "mkdir -p js",
+    "mkdir-windows": "New-Item -ItemType Directory -Force -Path js",
     "tsc": "tsc",
-    "bundle": "browserify ./js/maincontrol.js -p esmify > ./public/bundle.js",
     "protoc": "protoc -I=./proto environment.proto agent_server.proto --js_out=import_style=commonjs:./js",
     "protoc-web-linux": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./js",
     "protoc-web-windows": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./js --plugin=protoc-gen-grpc-web=./protoc-gen-grpc-web.exe",
