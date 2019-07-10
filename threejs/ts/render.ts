@@ -14,13 +14,6 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {TileMap} from './tilemap';
 import {Configs} from './config';
 
-// if (WEBGL.isWebGLAvailable() === false) {
-
-//     document.body.appendChild(WEBGL.getWebGLErrorMessage());
-
-// }
-
-
 export class Render {
   private camera: PerspectiveCamera;  // public for convenience
   private scene: Scene;
@@ -74,11 +67,13 @@ export class Render {
     // GRID
     var grid = new GridHelper(100, 10, 0xFFFFFF, 0xFFFFFF);
     grid.geometry.rotateX(Math.PI / 2);
-    if (grid.material instanceof LineBasicMaterial)
+    if (grid.material instanceof LineBasicMaterial) {
       grid.material.linewidth = 10;
-    else
-      for (let material of<LineBasicMaterial[]>grid.material)
+    } else {
+      for (let material of<LineBasicMaterial[]>grid.material) {
         material.linewidth = 10;
+      }
+    }
     this.scene.add(grid);
   };
 
@@ -86,11 +81,14 @@ export class Render {
 
   reset() {
     let plant: Object3D | undefined;
-    for (var i = 0; i < this.configs.getHeight(); i++)
+    for (var i = 0; i < this.configs.getHeight(); i++) {
       for (var j = 0; j < this.configs.getWidth(); j++) {
         plant = this.configs.removePlantModel(i, j);
-        if (plant != undefined) this.scene.remove(plant);
+        if (plant != undefined) {
+          this.scene.remove(plant);
+        }
       }
+    }
   }
 
 
@@ -105,8 +103,8 @@ export class Render {
   }
 
   onWindowResize() {
-    var canvasWidth = window.innerWidth;
-    var canvasHeight = window.innerHeight;
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
     this.renderer.setSize(canvasWidth, canvasHeight);
 
     this.camera.aspect = canvasWidth / canvasHeight;
@@ -118,10 +116,14 @@ export class Render {
   render() { this.renderer.render(this.scene, this.camera); }
 
   addtoScene(model: Object3D | undefined) {
-    if (model !== undefined) this.scene.add(model);
+    if (model !== undefined) {
+      this.scene.add(model);
+    }
   }
 
   removefromScene(model: Object3D | undefined) {
-    if (model !== undefined) this.scene.remove(model);
+    if (model !== undefined) {
+      this.scene.remove(model);
+    }
   }
 }

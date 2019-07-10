@@ -22,13 +22,14 @@ export class Configs {
     this.env = {width: width, height: height, grids: []};
     for (var i = 0; i < this.env.height; i++) {
       this.env.grids[i] = [];
-      for (var j = 0; j < this.env.width; j++)
+      for (var j = 0; j < this.env.width; j++) {
         this.env.grids[i][j] = {
           planttype: undefined,
           plantstatus: 0,
           waterlevel: 0,
           plantmodel: undefined,
         };
+      }
     }
   }
 
@@ -43,8 +44,9 @@ export class Configs {
         mtlLoader.setPath(object.base_url);
         mtlLoader.load(object.mtl_url, (materials: MaterialCreator) => {
           materials.preload();
-          for (let key in materials.materials)
+          for (let key in materials.materials) {
             materials.materials[key].alphaTest = 0.5;
+          }
           new OBJLoader()
               .setMaterials(materials)
               .setPath(object.base_url)
@@ -70,13 +72,14 @@ export class Configs {
 
   // reset renderer first
   reset() {
-    for (var i = 0; i < this.env.height; i++)
+    for (var i = 0; i < this.env.height; i++) {
       for (var j = 0; j < this.env.width; j++) {
         this.env.grids[i][j].planttype = undefined;
         this.env.grids[i][j].plantstatus = 0;
         this.env.grids[i][j].waterlevel = 0;
         this.env.grids[i][j].plantmodel = undefined;
       }
+    }
   }
 
   getHeight(): number { return this.env.height; }
@@ -143,7 +146,9 @@ export class Configs {
   removePlantModel(gridX: number, gridY: number): Object3D | undefined {
     let plantmodel = this.env.grids[gridX][gridY].plantmodel;
     if (plantmodel !== undefined) {
-      for (let mesh of<Mesh[]>plantmodel.children) mesh.geometry.dispose();
+      for (let mesh of<Mesh[]>plantmodel.children) {
+        mesh.geometry.dispose();
+      }
       this.env.grids[gridX][gridY].planttype = undefined;
       this.env.grids[gridX][gridY].plantstatus = 0;
       this.env.grids[gridX][gridY].plantmodel = undefined;

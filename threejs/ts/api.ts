@@ -54,11 +54,12 @@ export class API {
     request.setAgentName(this.agent_name);
     request.setEnvironmentName(this.env_name);
     this.server.createAgent(request, undefined, (err: Error) => {
-      if (err)
+      if (err) {
         console.log("createAgent ERROR " + status[err.code] + ": " +
                     err.message);
-      else
+      } else {
         console.log("createAgent: " + this.agent_name);
+      }
     });
   }
 
@@ -77,11 +78,12 @@ export class API {
     }
     request.setTerrain(terrain);
     this.server.createEnvironment(request, undefined, (err: Error) => {
-      if (err)
+      if (err) {
         console.log("createEnvironment ERROR " + status[err.code] + ": " +
                     err.message);
-      else
+      } else {
         console.log("createEnvironment: " + this.env_name);
+      }
     });
   }
 
@@ -90,12 +92,14 @@ export class API {
     request.setName(this.env_name);
     this.server.getEnvironment(
         request, undefined, (err: Error, response: GetEnvironmentResponse) => {
-          if (err)
+          if (err) {
             console.log("getEnvironment ERROR " + status[err.code] + ": " +
                         err.message);
-          else {
+          } else {
             let environment = response.getEnvironment();
-            if (environment !== undefined) this.updateScene(environment);
+            if (environment !== undefined) {
+              this.updateScene(environment);
+            }
           }
         });
   }
@@ -115,11 +119,12 @@ export class API {
     request.setEnvironmentName(this.env_name);
     request.setTimestampEpochCount(timestamp);
     this.server.simulateToTime(request, undefined, (err: Error) => {
-      if (err)
+      if (err) {
         console.log("simulateToTime ERROR " + status[err.code] + ": " +
                     err.message);
-      else
+      } else {
         console.log("simulateToTime: " + timestamp);
+      }
     });
   }
 
@@ -136,12 +141,13 @@ export class API {
     config.setEndTimeEpochCount(Date.now());
     request.setActionConfig(config);
     this.server.agentAddCrop(request, undefined, (err: Error) => {
-      if (err)
+      if (err) {
         console.log("agentAddCrop ERROR " + status[err.code] + ": " +
                     err.message);
-      else
+      } else {
         console.log("agentAddCrop: " + planttype + " at (" + gridX + "," +
                     gridY + ")");
+      }
     });
   }
 
@@ -157,19 +163,23 @@ export class API {
     config.setEndTimeEpochCount(Date.now());
     request.setActionConfig(config);
     this.server.agentRemoveCrop(request, undefined, (err: Error) => {
-      if (err)
+      if (err) {
         console.log("agentRemoveCrop ERROR " + status[err.code] + ": " +
                     err.message);
-      else
+      } else {
         console.log("agentRemoveCrop: (" + gridX + "," + gridY + ")");
+      }
     });
   }
 
   print() {
-    for (var i = 0; i < this.configs.getHeight(); i++)
-      for (var j = 0; j < this.configs.getWidth(); j++)
-        if (this.configs.getPlantType(i, j) != undefined)
+    for (var i = 0; i < this.configs.getHeight(); i++) {
+      for (var j = 0; j < this.configs.getWidth(); j++) {
+        if (this.configs.getPlantType(i, j) != undefined) {
           console.log(i, j, this.configs.getPlantType(i, j));
+        }
+      }
+    }
   }
 
   // send message to reset

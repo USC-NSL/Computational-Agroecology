@@ -8,6 +8,10 @@ For **Linux** user,
 sudo apt install npm
 sudo apt install node-typescript
 npm install -g npx
+
+# node js 8.x
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
 For **Windows** user, Please install [Node.js](<https://nodejs.org/en/download/>), and install `npx` by 
@@ -39,6 +43,7 @@ For **Windows** User, please download [protoc-gen-grpc-web.exe](<https://github.
 For **Windows**, the workflow  is ensured with following version
 
 - npm  6.4.1
+- Node 8
 - [Protocol Buffers v3.8.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.8.0)
 - [grpc/grpc-web 1.0.4](https://github.com/grpc/grpc-web/releases/tag/1.0.4)
 

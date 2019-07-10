@@ -11,19 +11,3 @@ let progressbar = new class {
 ();
 
 progressbar.hide();
-
-
-// var LoadingWrapper = function (fn) {
-//     return async function () {
-//         progressbar.show();
-//         console.log("load finished");
-//         var result = await new Promise(resolve => {
-//             result = fn.apply(this, arguments);
-//             console.log(result);
-//             resolve(result);
-//         });
-//         console.log(result);
-//         progressbar.hide();
-//         return result;
-//     }
-// };
