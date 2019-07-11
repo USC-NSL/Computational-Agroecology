@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: './js/client.js',
+  entry: './js/maincontrol.js',
   output: {
-    filename: 'main.js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   }
 };

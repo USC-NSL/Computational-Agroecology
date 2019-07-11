@@ -25,7 +25,7 @@ export class GUI {
 
     gui.add(this, 'mode', Object.keys(Mode).filter(
                               (key: any) => { return isNaN(Number(key)); }));
-    gui.add(this, 'send');
+    gui.add(this, 'update');
     gui.add(this, 'print');
     gui.add(this, 'restart');
 
@@ -47,6 +47,10 @@ export class GUI {
     this.cameraZ = this.render.getCamera().position.z;
   };
 
-  send() { this.api.send(); };
+  update() {
+    console.log("Updating environment.");
+    this.api.getEnvironment();
+  };
+
   print(){this.api.print()};
 }

@@ -1,19 +1,19 @@
 {
   "name": "threejs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "web visualizer for computational agroecology project",
   "main": "scripts.js",
   "scripts": {
     "start": "node index.js",
-    "build": "npx npm-run-all tsc bundle protoc protoc-web-linux",
-    "build-windows": "npx npm-run-all tsc bundle protoc protoc-web-windows",
+    "build": "npx npm-run-all mkdir protoc protoc-web-linux tsc webpack",
+    "build-windows": "npx npm-run-all tsc protoc protoc-web-linux tsc webpack",
+    "mkdir": "mkdir -p js",
+    "mkdir-windows": "New-Item -ItemType Directory -Force -Path js",
     "tsc": "tsc",
-    "bundle": "browserify ./js/maincontrol.js -p esmify > ./public/bundle.js",
     "protoc": "protoc -I=./proto environment.proto agent_server.proto --js_out=import_style=commonjs:./js",
-    "protoc-web-linux": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./js",
-    "protoc-web-windows": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./js --plugin=protoc-gen-grpc-web=./protoc-gen-grpc-web.exe",
-    "webpack": "npx webpack",
-    "client": "npx npm-run-all tsc webpack"
+    "protoc-web-linux": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./js",
+    "protoc-web-windows": "protoc -I=./proto environment.proto agent_server.proto --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./js --plugin=protoc-gen-grpc-web=./protoc-gen-grpc-web.exe",
+    "webpack": "npx webpack"
   },
   "author": "wym",
   "license": "ISC",
@@ -21,16 +21,18 @@
     "@grpc/proto-loader": "^0.5.1",
     "express": "^4.17.1",
     "google-protobuf": "^3.9.0-rc.1",
-    "grpc": "^1.21.1",
-    "grpc-web": "^1.0.4"
+    "grpc": "^1.21.1"
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.2",
+    "@types/google-protobuf": "^3.7.1",
+    "@types/node": "^12.6.0",
     "babel-preset-es2015": "^6.24.1",
     "browser-resolve": "^1.11.3",
     "browserify": "^16.2.3",
     "dat.gui": "^0.7.6",
     "esmify": "^2.1.1",
+    "grpc-web": "^1.0.4",
     "three": "^0.105.2",
     "typescript": "^3.5.1",
     "webpack": "^4.35.0",
