@@ -24,11 +24,11 @@ export class Render {
   tilemap: TileMap | undefined;
 
   constructor(configs: Configs) {
-    var container = document.createElement('div');
+    let container = document.createElement('div');
     document.body.appendChild(container);
 
-    var canvasWidth = window.innerWidth;
-    var canvasHeight = window.innerHeight;
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
 
     // CONFIGS
     this.configs = configs;
@@ -54,9 +54,9 @@ export class Render {
     // SCENE
     this.scene = new Scene();
     this.scene.background = new Color(0xAAAAAA);
-    var ambientLight = new AmbientLight(0xcccccc, 0.4);
+    let ambientLight = new AmbientLight(0xcccccc, 0.4);
     this.scene.add(ambientLight);
-    var pointLight = new PointLight(0xffffff, 0.8);
+    let pointLight = new PointLight(0xffffff, 0.8);
     this.camera.add(pointLight);
     this.scene.add(this.camera);
 
@@ -65,7 +65,7 @@ export class Render {
 
 
     // GRID
-    var grid = new GridHelper(100, 10, 0xFFFFFF, 0xFFFFFF);
+    let grid = new GridHelper(100, 10, 0xFFFFFF, 0xFFFFFF);
     grid.geometry.rotateX(Math.PI / 2);
     if (grid.material instanceof LineBasicMaterial) {
       grid.material.linewidth = 10;
@@ -75,22 +75,21 @@ export class Render {
       }
     }
     this.scene.add(grid);
-  };
+  }
 
   getCamera(): Camera { return this.camera; }
 
   reset() {
     let plant: Object3D | undefined;
-    for (var i = 0; i < this.configs.getHeight(); i++) {
-      for (var j = 0; j < this.configs.getWidth(); j++) {
+    for (let i = 0; i < this.configs.getHeight(); i++) {
+      for (let j = 0; j < this.configs.getWidth(); j++) {
         plant = this.configs.removePlantModel(i, j);
-        if (plant != undefined) {
+        if (plant !== undefined) {
           this.scene.remove(plant);
         }
       }
     }
   }
-
 
   bindTileMapEvent(tilemap: TileMap) {
     this.tilemap = tilemap;
@@ -99,6 +98,9 @@ export class Render {
         false);
     document.addEventListener(
         'mousedown', this.tilemap.onDocumentMouseDown.bind(this.tilemap),
+        false);
+    document.addEventListener(
+        'touchstart', this.tilemap.onDocumentTouchStart.bind(this.tilemap),
         false);
   }
 
