@@ -31,11 +31,12 @@ void PhotonSimulator::photon_emit(
     const double latitudeDiff, const double longitude_left,
     const double longitude_right, const double longitudeDiff) {
   for (real_t i = (real_t)latitude_bottom; i <= (real_t)latitude_top;
-       i += (real_t)latitudeDiff)
+    i += (real_t)latitudeDiff) {
     for (real_t j = (real_t)longitude_left; j <= (real_t)longitude_right;
-         j += (real_t)longitudeDiff) {
-                alive_photons.push_back(Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
+      j += (real_t)longitudeDiff) {
+      alive_photons.push_back(Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
     }
+  }
 }
 
 void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
