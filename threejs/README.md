@@ -119,7 +119,7 @@ $ sudo bash -c "echo '<VirtualHost *:80>
 </VirtualHost>
 ' > /etc/apache2/sites-available/CompAgGame.conf"
 $ cat /etc/apache2/sites-available/CompAgGame.conf
-$ sudo cp -r public /var/www/public
+$ sudo cp -rf public /var/www/public
 $ sudo mkdir -p /var/www/public/log
 $ sudo a2ensite CompAgGame.conf
 $ sudo systemctl reload apache2

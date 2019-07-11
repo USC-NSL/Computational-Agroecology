@@ -33,7 +33,7 @@ export class MainControl {
     await this.updateTile(1, 0, "SQUASH", 0);
     await this.updateTile(1, 1, "SQUASH", 3);
     await this.updateTile(1, 2, "SQUASH", 6);
-    this.render.render();
+    this.render.animate();
   }
 
   reset() {

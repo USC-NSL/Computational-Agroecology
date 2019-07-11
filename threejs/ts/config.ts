@@ -135,6 +135,8 @@ export class Configs {
       var model = this.models[configs.model].clone();
       model.scale.set(configs.scaleX, configs.scaleY, configs.scaleZ);
       model.position.set(grid2pos(gridX), grid2pos(gridY), 0);
+      model.castShadow = true;
+      model.receiveShadow = true;
 
       this.env.grids[gridX][gridY].planttype = planttype;
       this.env.grids[gridX][gridY].plantstatus = plantstatus;

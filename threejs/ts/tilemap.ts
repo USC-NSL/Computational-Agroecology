@@ -60,6 +60,7 @@ export class TileMap {
         });
         let tile: Mesh = new Mesh(geometry, material);
         tile.position.set(grid2pos(i), grid2pos(j), -0.5);
+        tile.receiveShadow = true;
         this.tilemap.push(tile);
         this.render.addtoScene(tile);
       }
@@ -102,7 +103,6 @@ export class TileMap {
         }
       }
     }
-    this.render.render();
   }
 
   clickEvent(x: number, y: number) {
@@ -151,7 +151,6 @@ export class TileMap {
         }
       }
     }
-    this.render.render();
   }
 
   onDocumentMouseDown(event: MouseEvent) {
