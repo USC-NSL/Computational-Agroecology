@@ -3,7 +3,6 @@
 
 #include <vector>
 
-
 #include "photon.h"
 #include "../photon_simulator_config.h"
 
