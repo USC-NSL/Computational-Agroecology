@@ -102,6 +102,11 @@ export class Render {
     document.addEventListener(
         'touchstart', this.tilemap.onDocumentTouchStart.bind(this.tilemap),
         false);
+    document.addEventListener(
+        'touchmove', this.tilemap.onDocumentTouchMove.bind(this.tilemap),
+        false);
+    document.addEventListener(
+        'touchend', this.tilemap.onDocumentTouchEnd.bind(this.tilemap), false);
   }
 
   onWindowResize() {

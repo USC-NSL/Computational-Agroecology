@@ -23,6 +23,11 @@ export class TileMap {
   configs: Configs;
   render: Render;
 
+  // touch event
+  dragging: Boolean;
+  clientX: number;
+  clientY: number;
+
   constructor(configs: Configs, render: Render,
               updateTile: (gridX: number, gridY: number) => void) {
     this.tilemap = [];
@@ -31,6 +36,9 @@ export class TileMap {
     this.configs = configs;
     this.render = render;
     this.updateTile = updateTile;
+    this.dragging = false;
+    this.clientX = 0;
+    this.clientY = 0;
     this.reset();
   }
 
@@ -151,6 +159,16 @@ export class TileMap {
   };
 
   onDocumentTouchStart(event: TouchEvent) {
-    this.clickEvent(event.touches[0].clientX, event.touches[0].clientY);
+    this.dragging = false;
+    this.clientX = event.touches[0].clientX;
+    this.clientY = event.touches[0].clientY;
+  }
+
+  onDocumentTouchMove() { this.dragging = true; }
+
+  onDocumentTouchEnd() {
+    if (!this.dragging) {
+      this.clickEvent(this.clientX, this.clientY);
+    }
   }
 }
