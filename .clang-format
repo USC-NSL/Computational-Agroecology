@@ -1,0 +1,11 @@
+﻿---
+BasedOnStyle: Google
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: 'false'
+AllowShortLoopsOnASingleLine: 'false'
+CompactNamespaces: 'false'
+DerivePointerAlignment: 'false'
+NamespaceIndentation: None
+PointerAlignment: Right
+
+...

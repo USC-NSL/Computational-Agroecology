@@ -1,6 +1,6 @@
 #include "agent.h"
 
-#include "plant_types/plant_type.h"
+#include "plant.h"
 
 namespace agent {
 
@@ -77,27 +77,29 @@ Agent::ReturnCodes Agent::TakeAction(const simulator::action::Action *action) {
 std::vector<std::string> Agent::GetQualifiedPlants() {
   std::vector<std::string> qualified_plants;
 
-  for (const auto &plant_type : environment::plant_type::plant_type_to_plant) {
-    bool qualified = true;
+  // TODO: This needs to be refactored.
+  // for (const auto& plant_type : environment::plant_type::plant_type_to_plant)
+  // {
+  //   bool qualified = true;
 
-    if (plant_type.second->absolute_temperature.has_value()) {
-      qualified &= (plant_type.second->absolute_temperature->max >=
-                    env_->climate().yearly_temperature.max);
-      qualified &= (plant_type.second->absolute_temperature->min <=
-                    env_->climate().yearly_temperature.min);
-    }
+  //   if (plant_type.second->absolute_temperature.has_value()) {
+  //     qualified &= (plant_type.second->absolute_temperature->max >=
+  //                   env_->climate().yearly_temperature.max);
+  //     qualified &= (plant_type.second->absolute_temperature->min <=
+  //                   env_->climate().yearly_temperature.min);
+  //   }
 
-    if (plant_type.second->absolute_annual_rainfall.has_value()) {
-      qualified &= (plant_type.second->absolute_annual_rainfall->max >=
-                    env_->climate().yearly_rainfall.max);
-      qualified &= (plant_type.second->absolute_annual_rainfall->min <=
-                    env_->climate().yearly_rainfall.min);
-    }
+  //   if (plant_type.second->absolute_annual_rainfall.has_value()) {
+  //     qualified &= (plant_type.second->absolute_annual_rainfall->max >=
+  //                   env_->climate().yearly_rainfall.max);
+  //     qualified &= (plant_type.second->absolute_annual_rainfall->min <=
+  //                   env_->climate().yearly_rainfall.min);
+  //   }
 
-    if (qualified) {
-      qualified_plants.push_back(plant_type.first);
-    }
-  }
+  //   if (qualified) {
+  //     qualified_plants.push_back(plant_type.first);
+  //   }
+  // }
 
   return qualified_plants;
 }
@@ -105,27 +107,29 @@ std::vector<std::string> Agent::GetQualifiedPlants() {
 std::vector<std::string> Agent::GetOptimalPlants() {
   std::vector<std::string> optimal_plants;
 
-  for (const auto &plant_type : environment::plant_type::plant_type_to_plant) {
-    bool optimal = true;
+  // TODO: This needs to be refactored.
+  // for (const auto& plant_type : environment::plant_type::plant_type_to_plant)
+  // {
+  //   bool optimal = true;
 
-    if (plant_type.second->optimal_temperature.has_value()) {
-      optimal &= (plant_type.second->optimal_temperature->max >=
-                  env_->climate().yearly_temperature.max);
-      optimal &= (plant_type.second->optimal_temperature->min <=
-                  env_->climate().yearly_temperature.min);
-    }
+  //   if (plant_type.second->optimal_temperature.has_value()) {
+  //     optimal &= (plant_type.second->optimal_temperature->max >=
+  //                 env_->climate().yearly_temperature.max);
+  //     optimal &= (plant_type.second->optimal_temperature->min <=
+  //                 env_->climate().yearly_temperature.min);
+  //   }
 
-    if (plant_type.second->optimal_annual_rainfall.has_value()) {
-      optimal &= (plant_type.second->optimal_annual_rainfall->max >=
-                  env_->climate().yearly_rainfall.max);
-      optimal &= (plant_type.second->optimal_annual_rainfall->min <=
-                  env_->climate().yearly_rainfall.min);
-    }
+  //   if (plant_type.second->optimal_annual_rainfall.has_value()) {
+  //     optimal &= (plant_type.second->optimal_annual_rainfall->max >=
+  //                 env_->climate().yearly_rainfall.max);
+  //     optimal &= (plant_type.second->optimal_annual_rainfall->min <=
+  //                 env_->climate().yearly_rainfall.min);
+  //   }
 
-    if (optimal) {
-      optimal_plants.push_back(plant_type.first);
-    }
-  }
+  //   if (optimal) {
+  //     optimal_plants.push_back(plant_type.first);
+  //   }
+  // }
 
   return optimal_plants;
 }

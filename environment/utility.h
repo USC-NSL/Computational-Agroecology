@@ -2,7 +2,17 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_UTILITY_H_
 
 #include <initializer_list>
+#include <unordered_map>
 #include <utility>
+
+// TODO: Complete this resource type enum.
+enum class ResourceType {
+  NITROGEN = 0,  // TODO.
+};
+
+// TODO: Document this Resources map based upon the right units for the value
+// type.
+using Resources = std::unordered_map<ResourceType, int64_t>;
 
 template <typename T>
 struct MinMaxPair {

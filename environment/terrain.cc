@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "plant_types/plant_type.h"
+#include "plant.h"
 
 namespace environment {
 
@@ -16,8 +16,8 @@ bool operator==(const Coordinate& lhs, const Coordinate& rhs) {
 // `struct Cell`
 Cell::Cell(const Soil& soil) : Cell(1, soil) {}
 
-Cell::Cell(const size_t size, const Soil& soil)
-    : size(size), plant(std::nullopt), soil(soil) {}
+Cell::Cell(const size_t size, const Soil &soil)
+    : size(size), plant(), soil(soil) {}
 
 bool operator==(const Cell& lhs, const Cell& rhs) {
   return (lhs.size == rhs.size) && (lhs.plant == rhs.plant) &&
@@ -39,10 +39,8 @@ Terrain::Terrain(const size_t size) : tiles_(), yield_(0) {
 std::ostream& operator<<(std::ostream& os, const Terrain& terrain) {
   for (const auto& row : terrain.tiles_) {
     for (const auto& cell : row) {
-      if (cell.plant != std::nullopt) {
-        auto& plant_type =
-            plant_type::plant_type_to_plant[cell.plant->type_name];
-        os << plant_type->display_symbol;
+      if (cell.plant != nullptr) {
+        os << cell.plant->name();
       } else {
         os << " ";
       }

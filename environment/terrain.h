@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_TERRAIN_H_
 
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <vector>
 
@@ -25,7 +26,7 @@ struct Cell {
   Cell(const size_t size, const Soil& soil);
 
   size_t size;
-  std::optional<Plant> plant;
+  std::shared_ptr<Plant> plant;
   Soil soil;
 };
 

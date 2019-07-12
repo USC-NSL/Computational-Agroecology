@@ -6,13 +6,11 @@
 #include "agent/agent.h"
 #include "agent/q_learning.h"
 #include "environment.h"
-#include "plant_types/plant_type.h"
 #include "simulators/actions/crop.h"
 #include "simulators/resource.h"
 
 using namespace agent;
 using namespace environment;
-using namespace environment::plant_type;
 using namespace simulator;
 using namespace simulator::action;
 

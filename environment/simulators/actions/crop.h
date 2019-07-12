@@ -8,7 +8,6 @@
 
 #include "action.h"
 #include "plant.h"
-#include "plant_types/plant_type.h"
 
 namespace simulator {
 

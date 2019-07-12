@@ -7,6 +7,9 @@
 
 namespace environment {
 
+// TODO: Refactor these nutrients into a map from ResourceType to amount, as in
+// utility.h, and add to utility.h as needed.
+// TODO: Merge Soil and SoilCondition.
 struct Soil {
   enum Texture { CLAY = 0, SILT, SAND };
 

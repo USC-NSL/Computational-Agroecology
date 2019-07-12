@@ -5,14 +5,14 @@ OPENGLLIBS := -lGL -lglut -lGLEW
 INCLUDES := -I ./
 
 MAIN_OBJ := main.o
-OBJ := climate.o config.o environment.o location.o plant.o soil.o terrain.o weather.o light.o
+OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o terrain.o weather.o light.o
 
 AGENT_PATH := ./agent
 AGENT_OBJ := $(AGENT_PATH)/agent.o
 QLEARNING_OBJ := $(AGENT_PATH)/q_learning.o
 
-PLANT_TYPE_PATH := ./plant_types
-PLANT_TYPE_OBJ := $(PLANT_TYPE_PATH)/plant_type.o $(PLANT_TYPE_PATH)/bean.o $(PLANT_TYPE_PATH)/corn.o $(PLANT_TYPE_PATH)/squash.o
+PLANTS_PATH := ./plants
+PLANTS_OBJ := $(PLANT_TYPE_PATH)/bean.o
 
 SIMULATOR_PATH := ./simulators
 PHOTON_SIMULATOR_PATH := $(SIMULATOR_PATH)/photon_simulator
@@ -38,9 +38,9 @@ TEST_AGENT_OBJ := $(TEST_AGENT_PATH)/agent_test.o
 TEST_AGENT := $(TEST_AGENT_PATH)/agent_test
 TEST_QLEARNING_OBJ := $(TEST_AGENT_PATH)/qlearning_test.o
 TEST_QLEARNING := $(TEST_AGENT_PATH)/qlearning_test
-TEST_PLANT_TYPES_PATH := $(TEST_PATH)/plant_types
-TEST_PLANT_TYPES_OBJ := $(TEST_PLANT_TYPES_PATH)/bean_test.o $(TEST_PLANT_TYPES_PATH)/corn_test.o $(TEST_PLANT_TYPES_PATH)/squash_test.o $(TEST_PLANT_TYPES_PATH)/plant_type_test.o
-TEST_PLANT_TYPES := $(TEST_PLANT_TYPES_PATH)/bean_test $(TEST_PLANT_TYPES_PATH)/corn_test $(TEST_PLANT_TYPES_PATH)/squash_test $(TEST_PLANT_TYPES_PATH)/plant_type_test
+TEST_PLANTS_PATH := $(TEST_PATH)/plants
+TEST_PLANTS_OBJ := $(TEST_PLANTS_PATH)/bean_test.o $(TEST_PLANT_TYPES_PATH)/corn_test.o $(TEST_PLANT_TYPES_PATH)/squash_test.o $(TEST_PLANT_TYPES_PATH)/plants_test.o
+TEST_PLANTS := $(TEST_PLANTS_PATH)/bean_test $(TEST_PLANTS_PATH)/corn_test $(TEST_PLANTS_PATH)/squash_test $(TEST_PLANTS_PATH)/plants_test
 TEST_SIMULATORS_PATH := $(TEST_PATH)/simulators
 TEST_SIMULATORS_OBJ := $(TEST_SIMULATORS_PATH)/main_simulator_test.o $(TEST_SIMULATORS_PATH)/sun_simulator_test.o
 TEST_SIMULATORS := $(TEST_SIMULATORS_PATH)/main_simulator_test $(TEST_SIMULATORS_PATH)/sun_simulator_test
