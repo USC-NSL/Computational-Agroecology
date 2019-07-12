@@ -41,7 +41,7 @@ export class TileMap {
   reset() {
     let pop = this.tilemap.pop();
     while (pop != undefined) {
-      this.render.removefromScene(pop);
+      this.render.removeModelfromScene(pop);
       pop.geometry.dispose();
       pop.geometry.dispose();
       pop = undefined;
@@ -58,7 +58,7 @@ export class TileMap {
         tile.position.set(grid2pos(i), grid2pos(j), -0.5);
         tile.receiveShadow = true;
         this.tilemap.push(tile);
-        this.render.addtoScene(tile);
+        this.render.addModeltoScene(tile);
       }
     }
   }
@@ -78,9 +78,13 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      for (let material of<Material[]>this.mask.material) {
-        if (material instanceof MeshBasicMaterial) {
-          material.color.set(hydration_configs[waterlevel]);
+      if (this.mask.material instanceof MeshBasicMaterial) {
+        this.mask.material.color.set(hydration_configs[waterlevel]);
+      } else {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshBasicMaterial) {
+            material.color.set(hydration_configs[waterlevel]);
+          }
         }
       }
       this.mask = undefined;
@@ -89,9 +93,13 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      for (let material of<Material[]>this.mask.material) {
-        if (material instanceof MeshBasicMaterial) {
-          material.color.set(color_configs.TILE_ONSELECT);
+      if (this.mask.material instanceof MeshBasicMaterial) {
+        this.mask.material.color.set(color_configs.TILE_ONSELECT);
+      } else {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshBasicMaterial) {
+            material.color.set(color_configs.TILE_ONSELECT);
+          }
         }
       }
     }
@@ -109,9 +117,13 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      for (let material of<Material[]>this.mask.material) {
-        if (material instanceof MeshBasicMaterial) {
-          material.color.set(hydration_configs[waterlevel]);
+      if (this.mask.material instanceof MeshBasicMaterial) {
+        this.mask.material.color.set(hydration_configs[waterlevel]);
+      } else {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshBasicMaterial) {
+            material.color.set(hydration_configs[waterlevel]);
+          }
         }
       }
       this.mask = undefined;
@@ -120,9 +132,13 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      for (let material of<Material[]>this.mask.material) {
-        if (material instanceof MeshBasicMaterial) {
-          material.color.set(color_configs.TILE_ONCLICK);
+      if (this.mask.material instanceof MeshBasicMaterial) {
+        this.mask.material.color.set(color_configs.TILE_ONCLICK);
+      } else {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshBasicMaterial) {
+            material.color.set(color_configs.TILE_ONCLICK);
+          }
         }
       }
       let gridX = pos2grid(tile.position.x);
@@ -130,9 +146,13 @@ export class TileMap {
       this.updateTile(gridX, gridY);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
       if (waterlevel !== undefined) {
-        for (let material of<Material[]>this.mask.material) {
-          if (material instanceof MeshBasicMaterial) {
-            material.color.set(hydration_configs[waterlevel]);
+        if (this.mask.material instanceof MeshBasicMaterial) {
+          this.mask.material.color.set(hydration_configs[waterlevel]);
+        } else {
+          for (let material of<Material[]>this.mask.material) {
+            if (material instanceof MeshBasicMaterial) {
+              material.color.set(hydration_configs[waterlevel]);
+            }
           }
         }
       }

@@ -1,5 +1,5 @@
 import {Object3D} from "three/src/Three";
-import {Mode} from "./common";
+import {FunctionMode} from "./common";
 import {Configs} from "./config";
 import {Render} from "./render";
 import {API} from "./api";
@@ -44,33 +44,34 @@ export class MainControl {
   }
 
   updateTile(gridX: number, gridY: number,
-             planttype: string = this.gui.getMode(), plantstatus: number = 0) {
+             planttype: string = this.gui.getFunctionMode(),
+             plantstatus: number = 0) {
     let plant: Object3D | undefined;
     switch (planttype) {
-      case Mode[Mode.CORN]:
-      case Mode[Mode.BEAN]:
-      case Mode[Mode.SQUASH]:
+      case FunctionMode[FunctionMode.CORN]:
+      case FunctionMode[FunctionMode.BEAN]:
+      case FunctionMode[FunctionMode.SQUASH]:
         plant =
             this.configs.addPlantModel(planttype, plantstatus, gridX, gridY);
         if (plant !== undefined) {
-          this.render.addtoScene(plant);
+          this.render.addModeltoScene(plant);
           this.api.agentAddCrop(gridX, gridY, planttype);
         }
         break;
-      case Mode[Mode.WATER]:
+      case FunctionMode[FunctionMode.WATER]:
         return this.configs.water(gridX, gridY);
-      case Mode[Mode.REMOVE]:
+      case FunctionMode[FunctionMode.REMOVE]:
         plant = this.configs.removePlantModel(gridX, gridY);
         if (plant !== undefined) {
-          this.render.removefromScene(plant);
+          this.render.removeModelfromScene(plant);
           this.api.agentRemoveCrop(gridX, gridY);
         }
         break;
-      case Mode[Mode.HARVEST]:
+      case FunctionMode[FunctionMode.HARVEST]:
         alert("method not implemented yet.");
         break;
       default:
-        console.log("invalid mode: " + this.gui.getMode());
+        console.log("invalid mode: " + this.gui.getFunctionMode());
     }
     return undefined;
   }

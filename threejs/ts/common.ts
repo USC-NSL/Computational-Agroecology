@@ -26,13 +26,19 @@ export interface Env {
   grids: Grid[][];
 };
 
-export enum Mode {
+export enum FunctionMode {
   CORN,
   BEAN,
   SQUASH,
   WATER,
   REMOVE,
   HARVEST,
+}
+
+export enum WeatherMode {
+  SUNNY,
+  CLOUDY,
+  RAINY,
 }
 
 export const file_urls: {

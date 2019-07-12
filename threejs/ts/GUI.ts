@@ -1,10 +1,11 @@
-import {Mode} from "./common";
+import {FunctionMode, WeatherMode} from "./common";
 import {Render} from "./render";
 import {API} from "./api";
 import * as dat from 'dat.gui';
 
 export class GUI {
-  mode: string;
+  functionMode: string;
+  weatherMode: string;
   render: Render;
   api: API;
   cameraX: number;
@@ -13,7 +14,8 @@ export class GUI {
   restart: () => void;
 
   constructor(render: Render, api: API, restart: () => void) {
-    this.mode = Mode[Mode.SQUASH];
+    this.functionMode = FunctionMode[FunctionMode.SQUASH];
+    this.weatherMode = WeatherMode[WeatherMode.CLOUDY];
     this.render = render;
     this.api = api;
     this.cameraX = 0;
@@ -21,10 +23,15 @@ export class GUI {
     this.cameraZ = 0;
     this.restart = restart;
 
-    var gui = new dat.GUI();
+    let gui = new dat.GUI();
 
-    gui.add(this, 'mode', Object.keys(Mode).filter(
-                              (key: any) => { return isNaN(Number(key)); }));
+    gui.add(this, 'functionMode',
+            Object.keys(FunctionMode)
+                .filter((key: any) => { return isNaN(Number(key)); }));
+    gui.add(this, 'weatherMode',
+            Object.keys(WeatherMode)
+                .filter((key: any) => { return isNaN(Number(key)); }))
+        .onChange(this.updateWeather.bind(this));
     gui.add(this, 'update');
     gui.add(this, 'print');
     gui.add(this, 'restart');
@@ -37,8 +44,10 @@ export class GUI {
     this.updateCamera();
   }
 
-  getMode(): string { return this.mode; }
-  setMode(mode: Mode) { this.mode = Mode[mode]; }
+  getFunctionMode(): string { return this.functionMode; }
+  setFunctionMode(functionMode: FunctionMode) {
+    this.functionMode = FunctionMode[functionMode];
+  }
 
   updateCamera() {
     requestAnimationFrame(this.updateCamera.bind(this));
@@ -46,6 +55,24 @@ export class GUI {
     this.cameraY = this.render.getCamera().position.y;
     this.cameraZ = this.render.getCamera().position.z;
   };
+
+  updateWeather() {
+    console.log(this.weatherMode);
+    switch (this.weatherMode) {
+      case WeatherMode[WeatherMode.SUNNY]:
+        this.render.addSuntoScene();
+        this.render.removeCloudfromScene();
+        break;
+      case WeatherMode[WeatherMode.CLOUDY]:
+        this.render.addCloudtoScene();
+        this.render.removeSunfromScene();
+      case WeatherMode[WeatherMode.RAINY]:
+        this.render.removeSunfromScene();
+        this.render.removeCloudfromScene();
+      default:
+        break;
+    }
+  }
 
   update() {
     console.log("Updating environment.");

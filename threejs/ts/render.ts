@@ -30,11 +30,14 @@ export class Render {
   private scene: Scene;
   private renderer: WebGLRenderer;
   private cameraControls: OrbitControls;
+
+  private isSunny: boolean;
   private sun: DirectionalLight;
+  private isCloudy: boolean;
+  clouds: Mesh[];
 
   configs: Configs;
   tilemap: TileMap | undefined;
-  clouds: Mesh[];
 
   constructor(configs: Configs) {
     let container = document.createElement('div');
@@ -76,6 +79,7 @@ export class Render {
     this.scene.add(ambientlight);
 
     // SUN
+    this.isSunny = false;
     this.sun = new DirectionalLight(color_configs.SUN_LIGHT, 1.9);
     this.sun.castShadow = true;
     this.sun.position.set(0, 0, 0);
@@ -89,36 +93,9 @@ export class Render {
         new Mesh(new SphereBufferGeometry(5, 50, 50),
                  new MeshBasicMaterial({color: color_configs.SUN_LIGHT}));
     this.sun.add(emitter);
-    this.scene.add(this.sun);
 
-    // CLOUD
-    // let texture = new TextureLoader().load(file_urls.cloud);
-    // texture.magFilter = texture.minFilter = LinearMipMapLinearFilter;
-    // let cloudMaterial = new MeshLambertMaterial(
-    //     {map: texture, transparent: true, alphaTest: 0.1});
-    // let cloudGeometry = new Geometry();
-    // let plane = new Mesh(new PlaneGeometry(10, 10));
-    // for (let i = 0; i < 4000; i++) {
-    //   plane.position.set(Math.random() * 200 - 100, Math.random() * 200 -
-    //   100,
-    //                      Math.random() * 20 + 70);
-    //   plane.lookAt(this.camera.position.x, this.camera.position.y,
-    //                this.camera.position.z);
-    //   plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 +
-    //   0.5;
-    //   cloudGeometry.mergeMesh(plane);
-    // }
-    // let cloud = new Mesh(cloudGeometry, cloudMaterial);
-    // if (cloud.material instanceof MeshLambertMaterial) {
-    //   cloud.material.opacity = 0.3;
-    // } else {
-    //   for (let material of<MeshLambertMaterial[]>cloud.material) {
-    //     material.opacity = 0.3;
-    //   }
-    // }
-    // cloud.castShadow = true;
-    // this.scene.add(cloud);
-
+    // CLOUDS
+    this.isCloudy = false;
     this.clouds = [];
     let texture = new TextureLoader().load(file_urls.cloud);
     texture.magFilter = texture.minFilter = LinearMipMapLinearFilter;
@@ -194,22 +171,60 @@ export class Render {
 
   animate() {
     requestAnimationFrame(this.animate.bind(this));
-    let delta = Date.now();
-    this.sun.position.x = Math.sin(delta / 1000) * 100;
-    this.sun.position.z = Math.cos(delta / 1000) * 100;
-    this.clouds.forEach(cloud => { cloud.lookAt(this.camera.position); });
+    if (this.isSunny) {
+      let delta = Date.now();
+      this.sun.position.x = Math.sin(delta / 1000) * 100;
+      this.sun.position.z = Math.cos(delta / 1000) * 100;
+    }
+    if (this.isCloudy) {
+      this.clouds.forEach(cloud => { cloud.lookAt(this.camera.position); });
+    }
     this.renderer.render(this.scene, this.camera);
   }
 
-  addtoScene(model: Object3D | undefined) {
+  addModeltoScene(model: Object3D | undefined) {
     if (model !== undefined) {
       this.scene.add(model);
     }
   }
 
-  removefromScene(model: Object3D | undefined) {
+  removeModelfromScene(model: Object3D | undefined) {
     if (model !== undefined) {
       this.scene.remove(model);
     }
+  }
+
+  addSuntoScene() {
+    this.isSunny = true;
+    if (this.sun.parent !== this.scene) {
+      this.scene.add(this.sun);
+    }
+  }
+
+  removeSunfromScene() {
+    this.isSunny = false;
+    if (this.sun.parent === this.scene) {
+      this.scene.remove(this.sun);
+    }
+  }
+
+  addCloudtoScene() {
+    this.isCloudy = true;
+    this.clouds.forEach(cloud => {
+      if (cloud.parent !== this.scene) {
+        console.log(cloud.parent);
+        this.scene.add(cloud);
+      }
+    });
+  }
+
+  removeCloudfromScene() {
+    this.isCloudy = false;
+    this.clouds.forEach(cloud => {
+      if (cloud.parent === this.scene) {
+        console.log(cloud.parent);
+        this.scene.remove(cloud);
+      }
+    });
   }
 }
