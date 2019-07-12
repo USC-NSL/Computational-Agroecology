@@ -13,9 +13,17 @@ class AgentServerGrpcService final : public AgentServer::Service {
   ::grpc::Status CreateEnvironment(
       ::grpc::ServerContext* context, const CreateEnvironmentRequest* request,
       CreateEnvironmentResponse* response) override;
+  ::grpc::Status DeleteEnvironment(
+      ::grpc::ServerContext* context, const DeleteEnvironmentRequest* request,
+      DeleteEnvironmentResponse* response) override;
+
   ::grpc::Status CreateAgent(::grpc::ServerContext* context,
                              const CreateAgentRequest* request,
                              CreateAgentResponse* response) override;
+  ::grpc::Status DeleteAgent(::grpc::ServerContext* context,
+                             const DeleteAgentRequest* request,
+                             DeleteAgentResponse* response) override;
+
   ::grpc::Status GetEnvironment(::grpc::ServerContext* context,
                                 const GetEnvironmentRequest* request,
                                 GetEnvironmentResponse* response) override;

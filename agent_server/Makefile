@@ -33,7 +33,7 @@ ENV_OBJS := $(ENV_PATH)/environment.o $(ENV_PATH)/agent/agent.o $(ENV_PATH)/simu
 agent_server_service: $(PROTO_PATH)/environment.pb.o $(PROTO_PATH)/agent_server.pb.o $(PROTO_PATH)/agent_server.grpc.pb.o agent_server.o agent_server_grpc_service.o message_convertor.o
 
 all: agent_server_service
-# tempprarily hard code them
+# temporarily hard code them
 	$(CXX) $(ENV_OBJS) agent_server.o agent_server_grpc_service.o message_convertor.o proto/agent_server.grpc.pb.o proto/agent_server.pb.o proto/environment.pb.o $(LDFLAGS) -o agent_server
 
 all_test: tests/agent_server_test tests/message_convertor_test
