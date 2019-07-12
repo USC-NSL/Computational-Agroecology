@@ -11,20 +11,20 @@ export function grid2pos(grid: number) {
   return -45 + 10 * grid;
 };
 
-export interface model { [name: string]: Group; }
+export interface model { [name: string]: Group; };
 
 export interface Grid {
   planttype: string | undefined;
   plantstatus: number;
   waterlevel: number;
   plantmodel: Object3D | undefined;
-}
+};
 
 export interface Env {
   width: number;
   height: number;
   grids: Grid[][];
-}
+};
 
 export enum Mode {
   CORN,
@@ -34,17 +34,22 @@ export enum Mode {
   REMOVE,
   HARVEST,
 }
-;
+
+export const file_urls: {
+  [name: string]: string;
+}
+= {cloud: "assets/effect/cloud.png"};
 
 export interface model_url {
   base_url: string;
   obj_url: string;
   mtl_url: string;
+};
+
+export const model_urls: {
+  [name: string]: model_url;
 }
-
-export interface model_urls { [name: string]: model_url; }
-
-export const loader_configs: model_urls = {
+= {
   // TODO: don't know why magic is required to load first model in the list
   magic: {
     base_url: "assets/model/",
@@ -83,26 +88,32 @@ export const loader_configs: model_urls = {
   },
 };
 
-export interface tilemap_color { [name: string]: number; }
-
-export const tilemap_color_configs: tilemap_color = {
-  NORMAL: 0xaf7c52,
-  WATERED1: 0x84532f,
-  WATERED2: 0x843e0a,
-  WATERED3: 0x492205,
-  ONSELECT: 0xffffff,
-  CONFIRMED: 0xff0000,
+export const color_configs: {
+  [name: string]: number;
+}
+= {
+  BACKGROUND: 0xaaaaaa,
+  AMBIENT_LIGHT: 0xffffff,
+  SUN_LIGHT: 0xffd69c,
+  GRID: 0xffffff,
+  TILE_NORMAL: 0xaf7c52,
+  TILE_WATERED1: 0x84532f,
+  TILE_WATERED2: 0x843e0a,
+  TILE_WATERED3: 0x492205,
+  TILE_ONSELECT: 0xffffff,
+  TILE_ONCLICK: 0xff0000,
 };
 
 export const hydration_max = 3;
 
-export interface hydration { [index: number]: number; }
-
-export const hydration_configs: hydration = {
-  0: tilemap_color_configs.NORMAL,
-  1: tilemap_color_configs.WATERED1,
-  2: tilemap_color_configs.WATERED2,
-  3: tilemap_color_configs.WATERED3,
+export const hydration_configs: {
+  [index: number]: number;
+}
+= {
+  0: color_configs.TILE_NORMAL,
+  1: color_configs.TILE_WATERED1,
+  2: color_configs.TILE_WATERED2,
+  3: color_configs.TILE_WATERED3,
 };
 
 export interface plant_status {
@@ -110,11 +121,12 @@ export interface plant_status {
   scaleX: number;
   scaleY: number;
   scaleZ: number;
+};
+
+export const plant_configs: {
+  [name: string]: plant_status[];
 }
-
-export interface plants { [name: string]: plant_status[]; }
-
-export const plant_configs: plants = {
+= {
   "CORN": [
     {
       // status 0

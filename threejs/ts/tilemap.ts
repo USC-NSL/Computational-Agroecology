@@ -3,15 +3,11 @@ import {
   Vector2,
   Mesh,
   MeshBasicMaterial,
-  BoxGeometry
+  BoxGeometry,
+  Material
 } from "three/src/Three";
 import {Render} from "./render";
-import {
-  tilemap_color_configs,
-  grid2pos,
-  pos2grid,
-  hydration_configs
-} from "./common";
+import {color_configs, grid2pos, pos2grid, hydration_configs} from "./common";
 import {Configs} from "./config";
 
 
@@ -56,9 +52,9 @@ export class TileMap {
       for (let j = 0; j < this.configs.getWidth(); j++) {
         let geometry = new BoxGeometry(10, 10, 1);
         let material = new MeshBasicMaterial({
-          color: tilemap_color_configs.NORMAL,
+          color: color_configs.TILE_NORMAL,
         });
-        let tile: Mesh = new Mesh(geometry, material);
+        let tile = new Mesh(geometry, material);
         tile.position.set(grid2pos(i), grid2pos(j), -0.5);
         tile.receiveShadow = true;
         this.tilemap.push(tile);
@@ -82,10 +78,8 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      if (this.mask.material instanceof MeshBasicMaterial) {
-        this.mask.material.color.set(hydration_configs[waterlevel]);
-      } else {
-        for (let material of<MeshBasicMaterial[]>this.mask.material) {
+      for (let material of<Material[]>this.mask.material) {
+        if (material instanceof MeshBasicMaterial) {
           material.color.set(hydration_configs[waterlevel]);
         }
       }
@@ -95,11 +89,9 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      if (this.mask.material instanceof MeshBasicMaterial) {
-        this.mask.material.color.set(tilemap_color_configs.ONSELECT);
-      } else {
-        for (let material of<MeshBasicMaterial[]>this.mask.material) {
-          material.color.set(tilemap_color_configs.ONSELECT);
+      for (let material of<Material[]>this.mask.material) {
+        if (material instanceof MeshBasicMaterial) {
+          material.color.set(color_configs.TILE_ONSELECT);
         }
       }
     }
@@ -117,10 +109,8 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      if (this.mask.material instanceof MeshBasicMaterial) {
-        this.mask.material.color.set(hydration_configs[waterlevel]);
-      } else {
-        for (let material of<MeshBasicMaterial[]>this.mask.material) {
+      for (let material of<Material[]>this.mask.material) {
+        if (material instanceof MeshBasicMaterial) {
           material.color.set(hydration_configs[waterlevel]);
         }
       }
@@ -130,11 +120,9 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      if (this.mask.material instanceof MeshBasicMaterial) {
-        this.mask.material.color.set(tilemap_color_configs.CONFIRMED);
-      } else {
-        for (let material of<MeshBasicMaterial[]>this.mask.material) {
-          material.color.set(tilemap_color_configs.CONFIRMED);
+      for (let material of<Material[]>this.mask.material) {
+        if (material instanceof MeshBasicMaterial) {
+          material.color.set(color_configs.TILE_ONCLICK);
         }
       }
       let gridX = pos2grid(tile.position.x);
@@ -142,10 +130,8 @@ export class TileMap {
       this.updateTile(gridX, gridY);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
       if (waterlevel !== undefined) {
-        if (this.mask.material instanceof MeshBasicMaterial) {
-          this.mask.material.color.set(hydration_configs[waterlevel]);
-        } else {
-          for (let material of<MeshBasicMaterial[]>this.mask.material) {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshBasicMaterial) {
             material.color.set(hydration_configs[waterlevel]);
           }
         }

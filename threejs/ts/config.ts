@@ -1,7 +1,7 @@
 import {
   Env,
   model_url,
-  loader_configs,
+  model_urls,
   model,
   plant_configs,
   grid2pos,
@@ -60,8 +60,8 @@ export class Configs {
 
     var promises: Promise<any>[] = [];
 
-    for (var name in loader_configs) {
-      promises.push(loadModel(name, loader_configs[name]));
+    for (var name in model_urls) {
+      promises.push(loadModel(name, model_urls[name]));
     }
 
     return new Promise(resolve => {
