@@ -19,6 +19,17 @@ AgentServer::ReturnCodes AgentServer::CreateEnvironment(
   return OK;
 }
 
+AgentServer::ReturnCodes AgentServer::DeleteEnvironment(
+    const std::string& name) {
+  auto result = name_to_env_.find(name);
+  if (result == name_to_env_.end()) {
+    return ENV_NOT_FOUND;
+  }
+
+  name_to_env_.erase(result);
+  return OK;
+}
+
 AgentServer::ReturnCodes AgentServer::CreateAgent(const std::string& agent_name,
                                                   const std::string& env_name) {
   auto agent_result = name_to_agent_.find(agent_name);
@@ -34,6 +45,16 @@ AgentServer::ReturnCodes AgentServer::CreateAgent(const std::string& agent_name,
   name_to_agent_.emplace(std::make_pair(
       agent_name, agent::Agent(agent_name, &(env_result->second))));
 
+  return OK;
+}
+
+AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string& name) {
+  auto result = name_to_agent_.find(name);
+  if (result == name_to_agent_.end()) {
+    return AGENT_NOT_FOUND;
+  }
+
+  name_to_agent_.erase(result);
   return OK;
 }
 

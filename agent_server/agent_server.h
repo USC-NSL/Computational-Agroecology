@@ -29,8 +29,12 @@ class AgentServer {
       const std::string& name, const environment::Config& config,
       const std::chrono::system_clock::time_point& time,
       const environment::Terrain& terrain);
+  ReturnCodes DeleteEnvironment(const std::string& name);
+
   ReturnCodes CreateAgent(const std::string& agent_name,
                           const std::string& env_name);
+  ReturnCodes DeleteAgent(const std::string& name);
+
   std::pair<ReturnCodes, std::optional<environment::Environment>>
   GetEnvironment(const std::string& name);
   ReturnCodes SimulateToTime(const std::string& env_name,

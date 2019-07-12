@@ -50,6 +50,25 @@ namespace service {
   return ::grpc::Status::OK;
 }
 
+::grpc::Status AgentServerGrpcService::DeleteEnvironment(
+    ::grpc::ServerContext* context, const DeleteEnvironmentRequest* request,
+    DeleteEnvironmentResponse* response) {
+  if (context == nullptr || request == nullptr) {
+    return ::grpc::Status(
+        ::grpc::FAILED_PRECONDITION,
+        "`ServerContext` or `DeleteEnvironmentRequest` is nullptr.");
+  }
+
+  auto ret = agent_server_.DeleteEnvironment(request->name());
+
+  if (ret == ::agent_server::AgentServer::ENV_NOT_FOUND) {
+    return ::grpc::Status(::grpc::NOT_FOUND,
+                          request->name() + " is not found.");
+  }
+
+  return ::grpc::Status::OK;
+}
+
 ::grpc::Status AgentServerGrpcService::CreateAgent(
     ::grpc::ServerContext* context, const CreateAgentRequest* request,
     CreateAgentResponse* response) {
@@ -68,6 +87,25 @@ namespace service {
   } else if (ret == ::agent_server::AgentServer::ALREADY_EXISTS) {
     return ::grpc::Status(::grpc::ALREADY_EXISTS,
                           request->environment_name() + " has been used.");
+  }
+
+  return ::grpc::Status::OK;
+}
+
+::grpc::Status AgentServerGrpcService::DeleteAgent(
+    ::grpc::ServerContext* context, const DeleteAgentRequest* request,
+    DeleteAgentResponse* response) {
+  if (context == nullptr || request == nullptr) {
+    return ::grpc::Status(
+        ::grpc::FAILED_PRECONDITION,
+        "`ServerContext` or `DeleteAgentRequest` is nullptr.");
+  }
+
+  auto ret = agent_server_.DeleteAgent(request->name());
+
+  if (ret == ::agent_server::AgentServer::AGENT_NOT_FOUND) {
+    return ::grpc::Status(::grpc::NOT_FOUND,
+                          request->name() + " is not found.");
   }
 
   return ::grpc::Status::OK;

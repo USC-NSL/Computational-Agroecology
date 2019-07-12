@@ -59,6 +59,14 @@ TEST_F(AgentServerTest, CreateAndGetEnvironmentTest) {
   EXPECT_EQ(AgentServer::ENV_NOT_FOUND, get_ret_3.first);
 }
 
+TEST_F(AgentServerTest, DeleteEnvironmentTest) {
+  auto ret = agent_server.DeleteEnvironment(kDummyEnvName);
+  EXPECT_EQ(AgentServer::OK, ret);
+
+  ret = agent_server.DeleteEnvironment(kDummyEnvName);
+  EXPECT_EQ(AgentServer::ENV_NOT_FOUND, ret);
+}
+
 TEST_F(AgentServerTest, CreateAgentTest) {
   std::string agent_name_1 = "agent_name_1";
   auto agent_env = agent_server.CreateAgent(agent_name_1, kDummyEnvName);
@@ -71,6 +79,14 @@ TEST_F(AgentServerTest, CreateAgentTest) {
   std::string agent_name_2 = "agent_name_2";
   agent_env = agent_server.CreateAgent(agent_name_2, env_not_exist);
   EXPECT_EQ(AgentServer::ENV_NOT_FOUND, agent_env);
+}
+
+TEST_F(AgentServerTest, DeleteAgentTest) {
+  auto ret = agent_server.DeleteAgent(kDummyAgentName);
+  EXPECT_EQ(AgentServer::OK, ret);
+
+  ret = agent_server.DeleteAgent(kDummyAgentName);
+  EXPECT_EQ(AgentServer::AGENT_NOT_FOUND, ret);
 }
 
 TEST_F(AgentServerTest, SimulateToTimeTest) {

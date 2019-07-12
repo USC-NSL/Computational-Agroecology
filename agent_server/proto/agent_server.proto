@@ -14,6 +14,13 @@ message CreateEnvironmentRequest {
 // Empty since sucess/failure is signaled via gRPC status.
 message CreateEnvironmentResponse {}
 
+message DeleteEnvironmentRequest {
+  string name = 1;
+}
+
+// Empty since sucess/failure is signaled via gRPC status.
+message DeleteEnvironmentResponse {}
+
 message CreateAgentRequest {
   string agent_name = 1;
   string environment_name = 2;
@@ -21,6 +28,13 @@ message CreateAgentRequest {
 
 // Empty since sucess/failure is signaled via gRPC status.
 message CreateAgentResponse {}
+
+message DeleteAgentRequest {
+  string name = 1;
+}
+
+// Empty since sucess/failure is signaled via gRPC status.
+message DeleteAgentResponse {}
 
 message GetEnvironmentRequest {
   string name = 1;
@@ -74,7 +88,9 @@ message AgentRemoveCropResponse {}
 
 service AgentServer {
   rpc CreateEnvironment (CreateEnvironmentRequest) returns (CreateEnvironmentResponse);
+  rpc DeleteEnvironment (DeleteEnvironmentRequest) returns (DeleteEnvironmentResponse);
   rpc CreateAgent (CreateAgentRequest) returns (CreateAgentResponse);
+  rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentResponse);
   rpc GetEnvironment (GetEnvironmentRequest) returns (GetEnvironmentResponse);
   rpc SimulateToTime (SimulateToTimeRequest) returns (SimulateToTimeResponse);
   rpc AgentAddCrop (AgentAddCropRequest) returns (AgentAddCropResponse);
