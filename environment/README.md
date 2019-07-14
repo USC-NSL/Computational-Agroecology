@@ -34,6 +34,22 @@ $ [sudo] cp *.a /usr/lib
 $ [sudo] apt-get install freeglut3 freeglut3-dev cmake libglew-dev mesa-common-dev build-essential libglew-dev libglm-dev
 ```
 
+## PostgreSQL
+
+**Dependency**
+```shell
+$ [sudo] apt install libpq-dev
+```
+
+**Build from the source code**
+```shell
+$ git clone https://github.com/jtv/libpqxx.git
+$ cd libpqxx
+$ ./configure --disable-documentation
+$ make
+$ [sudo] make install
+```
+
 # Run tests
 
 ## Build

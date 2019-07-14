@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "plant_connector.h"
+#include "plant_data_connector.h"
 
-using namespace environment;
+using namespace database;
 
 TEST(ConfigTest, search) {
-EXPECT_EQ(PlantConnector::QueryRecordByName("Abelmoschus esculentus"), true);
+  PlantDataConnector c;
+  EXPECT_EQ(c.QueryRecordByName("Abelmoschus esculentus"), true);
 }
 
 int main(int argc, char **argv) {
