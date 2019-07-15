@@ -15,7 +15,7 @@ export class GUI {
 
   constructor(render: Render, api: API, restart: () => void) {
     this.functionMode = FunctionMode[FunctionMode.SQUASH];
-    this.weatherMode = WeatherMode[WeatherMode.CLOUDY];
+    this.weatherMode = WeatherMode[WeatherMode.SUNNY];
     this.render = render;
     this.api = api;
     this.cameraX = 0;
@@ -32,6 +32,8 @@ export class GUI {
             Object.keys(WeatherMode)
                 .filter((key: any) => { return isNaN(Number(key)); }))
         .onChange(this.updateWeather.bind(this));
+    // reactivate updateWeather
+    this.weatherMode = WeatherMode[WeatherMode.SUNNY];
     gui.add(this, 'update');
     gui.add(this, 'print');
     gui.add(this, 'restart');
@@ -62,13 +64,18 @@ export class GUI {
       case WeatherMode[WeatherMode.SUNNY]:
         this.render.addSuntoScene();
         this.render.removeCloudfromScene();
+        this.render.removeRainfromScene();
         break;
       case WeatherMode[WeatherMode.CLOUDY]:
         this.render.addCloudtoScene();
+        this.render.removeRainfromScene();
         this.render.removeSunfromScene();
+        break;
       case WeatherMode[WeatherMode.RAINY]:
+        this.render.addRaintoScene();
+        this.render.addCloudtoScene();
         this.render.removeSunfromScene();
-        this.render.removeCloudfromScene();
+        break;
       default:
         break;
     }

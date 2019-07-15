@@ -44,7 +44,7 @@ export enum WeatherMode {
 export const file_urls: {
   [name: string]: string;
 }
-= {cloud: "assets/effect/cloud.png"};
+= {CLOUD: "assets/effect/cloud.png", RAINDROP: "assets/effect/raindrop.png"};
 
 export interface model_url {
   base_url: string;
@@ -101,6 +101,7 @@ export const color_configs: {
   BACKGROUND: 0xaaaaaa,
   AMBIENT_LIGHT: 0xffffff,
   SUN_LIGHT: 0xffd69c,
+  RAINDROP: 0x333333,
   GRID: 0xffffff,
   TILE_NORMAL: 0xaf7c52,
   TILE_WATERED1: 0x84532f,
