@@ -1,5 +1,5 @@
 import {Object3D} from "three/src/Three";
-import {FunctionMode} from "./common";
+import {FunctionMode, WeatherMode} from "./common";
 import {Configs} from "./config";
 import {Render} from "./render";
 import {API} from "./api";
@@ -18,7 +18,8 @@ export class MainControl {
     this.configs = new Configs(width, height);
     this.render = new Render(this.configs);
     this.api = new API(this.configs);
-    this.gui = new GUI(this.render, this.api, this.reset.bind(this));
+    this.gui = new GUI(this.render, this.api, this.reset.bind(this),
+                       this.updateWeather.bind(this));
     this.tilemap =
         new TileMap(this.configs, this.render, this.updateTile.bind(this));
     // resolve cyclic dependency
@@ -74,6 +75,28 @@ export class MainControl {
         console.log("invalid mode: " + this.gui.getFunctionMode());
     }
     return undefined;
+  }
+
+  updateWeather(weatherMode: string) {
+    switch (weatherMode) {
+      case WeatherMode[WeatherMode.SUNNY]:
+        this.render.addSuntoScene();
+        this.render.removeCloudfromScene();
+        this.render.removeRainfromScene();
+        break;
+      case WeatherMode[WeatherMode.CLOUDY]:
+        this.render.addCloudtoScene();
+        this.render.removeRainfromScene();
+        this.render.removeSunfromScene();
+        break;
+      case WeatherMode[WeatherMode.RAINY]:
+        this.render.addRaintoScene();
+        this.render.addCloudtoScene();
+        this.render.removeSunfromScene();
+        break;
+      default:
+        break;
+    }
   }
 }
 
