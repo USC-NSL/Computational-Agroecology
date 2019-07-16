@@ -78,14 +78,14 @@ void heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
   }
 }
 
-void add_neighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& point, const Vector3& norm, Neighbor* neighbors, unsigned int e, real_t& D, const real_t EPSILON, int& size, const int NUM_PHOTON_RADIANCE) {
+void add_neighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& point, const Vector3& norm, Neighbor* neighbors, unsigned int index, real_t& distance, const real_t kMaxDistance, int& size, const int kNumberOfPhotonsNeayby) {
   if (dotresult(norm, p_dir) < 0.0f)
 	return;
   real_t e_dis = squared_distance(point, p_pos);
-  if (e_dis <= EPSILON && (size < NUM_PHOTON_RADIANCE || e_dis < D)) {
-	if (size == NUM_PHOTON_RADIANCE)
+  if (e_dis <= kMaxDistance && (size < kNumberOfPhotonsNeayby || e_dis < distance)) {
+	if (size == kNumberOfPhotonsNeayby)
 	  heap_remove(neighbors, size);
-    heap_add(neighbors, size, e, e_dis);
+    heap_add(neighbors, size, index, e_dis);
 	D = (neighbors[0]).sq_dis;
   }
 }

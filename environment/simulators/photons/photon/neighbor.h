@@ -23,9 +23,9 @@ void heap_remove(Neighbor* neighbors, int& size);
 void heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis);
 void add_neighbor(const Vector3& p_pos, const Vector3& p_dir,
                   const Vector3& point, const Vector3& norm,
-                  Neighbor* neighbors, unsigned int e, real_t& D,
-                  const real_t EPSILON, int& size,
-                  const int NUM_PHOTON_RADIANCE);
+                  Neighbor* neighbors, unsigned int index, real_t& distance,
+                  const real_t kMaxDistance, int& size,
+                  const int kNumberOfPhotonsNeayby);
 real_t get_split(const std::vector<Photon>&p, const unsigned int i, const int axis);
 real_t get_p(const Vector3& p, const int axis);
 
