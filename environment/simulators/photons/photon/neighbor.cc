@@ -86,7 +86,7 @@ void add_neighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& poi
 	if (size == kNumberOfPhotonsNeayby)
 	  heap_remove(neighbors, size);
     heap_add(neighbors, size, index, e_dis);
-	D = (neighbors[0]).sq_dis;
+	distance = (neighbors[0]).sq_dis;
   }
 }
 
