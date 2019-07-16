@@ -1,6 +1,6 @@
 import {FunctionMode, WeatherMode} from "./common";
 import {Render} from "./render";
-import {API} from "./api";
+import {API} from "./API";
 import * as dat from 'dat.gui';
 
 export class GUI {

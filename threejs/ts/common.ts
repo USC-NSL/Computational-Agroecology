@@ -4,6 +4,8 @@ export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 };
 
+
+// TODO: update for arbitrary grid size
 export function pos2grid(pos: number) {
   return (pos + 45) / 10;
 };
@@ -44,7 +46,11 @@ export enum WeatherMode {
 export const file_urls: {
   [name: string]: string;
 }
-= {CLOUD: "assets/effect/cloud.png", RAINDROP: "assets/effect/raindrop.png"};
+= {
+  CLOUD: "assets/texture/cloud.png",
+  RAINDROP: "assets/texture/raindrop.png",
+  TILEMAP: "assets/texture/tilemap.png"
+};
 
 export interface model_url {
   base_url: string;

@@ -4,9 +4,7 @@ import {
   WebGLRenderer,
   Object3D,
   Color,
-  GridHelper,
   Camera,
-  LineBasicMaterial,
   DirectionalLight,
   PCFSoftShadowMap,
   DirectionalLightShadow,
@@ -83,8 +81,7 @@ export class Render {
     this.camera.up.set(0, 0, 1);
 
     // CAMERA CONTROLS
-    this.mapControl =
-        new MapControls(this.camera, this.renderer.domElement);
+    this.mapControl = new MapControls(this.camera, this.renderer.domElement);
     this.mapControl.enableDamping = true;
     this.mapControl.dampingFactor = 0.25;
     this.mapControl.enableRotate = false;
@@ -92,12 +89,12 @@ export class Render {
     this.mapControl.maxDistance = 200;
 
     // AMBIENT LIGHT
-    let ambientlight = new AmbientLight(color_configs.AMBIENT_LIGHT, 0.1);
+    let ambientlight = new AmbientLight(color_configs.AMBIENT_LIGHT, 0.5);
     this.scene.add(ambientlight);
 
     // SUN
     this.isSunny = false;
-    this.sun = new DirectionalLight(color_configs.SUN_LIGHT, 1.9);
+    this.sun = new DirectionalLight(color_configs.SUN_LIGHT, 1.5);
     this.sun.name = "sun";
     this.sun.castShadow = true;
     this.sun.position.set(0, 0, 0);
@@ -164,18 +161,6 @@ export class Render {
 
     // EVENTS
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
-
-    // GRID
-    let grid = new GridHelper(100, 10, color_configs.GRID, color_configs.GRID);
-    grid.geometry.rotateX(Math.PI / 2);
-    if (grid.material instanceof LineBasicMaterial) {
-      grid.material.linewidth = 10;
-    } else {
-      for (let material of<LineBasicMaterial[]>grid.material) {
-        material.linewidth = 10;
-      }
-    }
-    this.scene.add(grid);
 
     this.animate();
   }

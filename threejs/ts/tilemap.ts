@@ -2,12 +2,20 @@ import {
   Raycaster,
   Vector2,
   Mesh,
-  MeshBasicMaterial,
   BoxGeometry,
-  Material
+  Material,
+  MeshLambertMaterial,
+  TextureLoader,
+  MultiplyBlending
 } from "three/src/Three";
 import {Render} from "./render";
-import {color_configs, grid2pos, pos2grid, hydration_configs} from "./common";
+import {
+  color_configs,
+  grid2pos,
+  pos2grid,
+  hydration_configs,
+  file_urls
+} from "./common";
 import {Configs} from "./config";
 
 
@@ -51,8 +59,10 @@ export class TileMap {
     for (let i = 0; i < this.configs.getHeight(); i++) {
       for (let j = 0; j < this.configs.getWidth(); j++) {
         let geometry = new BoxGeometry(10, 10, 1);
-        let material = new MeshBasicMaterial({
+        let material = new MeshLambertMaterial({
           color: color_configs.TILE_NORMAL,
+          map: new TextureLoader().load(file_urls.TILEMAP),
+          blending: MultiplyBlending,
         });
         let tile = new Mesh(geometry, material);
         tile.position.set(grid2pos(i), grid2pos(j), -0.5);
@@ -78,11 +88,11 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      if (this.mask.material instanceof MeshBasicMaterial) {
+      if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
       } else {
         for (let material of<Material[]>this.mask.material) {
-          if (material instanceof MeshBasicMaterial) {
+          if (material instanceof MeshLambertMaterial) {
             material.color.set(hydration_configs[waterlevel]);
           }
         }
@@ -93,11 +103,11 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      if (this.mask.material instanceof MeshBasicMaterial) {
+      if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(color_configs.TILE_ONSELECT);
       } else {
         for (let material of<Material[]>this.mask.material) {
-          if (material instanceof MeshBasicMaterial) {
+          if (material instanceof MeshLambertMaterial) {
             material.color.set(color_configs.TILE_ONSELECT);
           }
         }
@@ -117,11 +127,11 @@ export class TileMap {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
-      if (this.mask.material instanceof MeshBasicMaterial) {
+      if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
       } else {
         for (let material of<Material[]>this.mask.material) {
-          if (material instanceof MeshBasicMaterial) {
+          if (material instanceof MeshLambertMaterial) {
             material.color.set(hydration_configs[waterlevel]);
           }
         }
@@ -132,11 +142,11 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      if (this.mask.material instanceof MeshBasicMaterial) {
+      if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(color_configs.TILE_ONCLICK);
       } else {
         for (let material of<Material[]>this.mask.material) {
-          if (material instanceof MeshBasicMaterial) {
+          if (material instanceof MeshLambertMaterial) {
             material.color.set(color_configs.TILE_ONCLICK);
           }
         }
@@ -146,11 +156,11 @@ export class TileMap {
       this.updateTile(gridX, gridY);
       let waterlevel = this.configs.getWaterLevel(gridX, gridY);
       if (waterlevel !== undefined) {
-        if (this.mask.material instanceof MeshBasicMaterial) {
+        if (this.mask.material instanceof MeshLambertMaterial) {
           this.mask.material.color.set(hydration_configs[waterlevel]);
         } else {
           for (let material of<Material[]>this.mask.material) {
-            if (material instanceof MeshBasicMaterial) {
+            if (material instanceof MeshLambertMaterial) {
               material.color.set(hydration_configs[waterlevel]);
             }
           }

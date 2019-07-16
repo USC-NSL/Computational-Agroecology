@@ -2,7 +2,7 @@ import {Object3D} from "three/src/Three";
 import {FunctionMode, WeatherMode} from "./common";
 import {Configs} from "./config";
 import {Render} from "./render";
-import {API} from "./api";
+import {API} from "./API";
 import {GUI} from "./GUI";
 import {TileMap} from "./tilemap";
 
