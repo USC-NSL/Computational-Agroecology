@@ -26,8 +26,8 @@ void add_neighbor(const Vector3& p_pos, const Vector3& p_dir,
                   Neighbor* neighbors, unsigned int e, real_t& D,
                   const real_t EPSILON, int& size,
                   const int NUM_PHOTON_RADIANCE);
-real_t get_split(const std::vector<Photon>&p, unsigned int i, int axis);
-real_t get_p(const Vector3& p, int axis);
+real_t get_split(const std::vector<Photon>&p, const unsigned int i, const int axis);
+real_t get_p(const Vector3& p, const int axis);
 
 }  // namespace photonsimulator
 
