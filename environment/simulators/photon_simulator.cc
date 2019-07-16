@@ -18,10 +18,22 @@ void PhotonSimulator::SimulateToTime(
   // we regard north as y asix
   alive_photons.clear();
   absorb_photons.clear();
-  photon_emit(Vector3(-sin(env->sun_info().SunAzimuth), -cos(env->sun_info().SunAzimuth), -cos(env->sun_info().SolarAltitude)),
-              Vector3(env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance, env->sun_info().HourlyIrradiance),
-              env->config_.location.latitude_bottom, env->config_.location.latitude_top, (env->config_.location.latitude_top - env->config_.location.latitude_bottom) / 100.0f,
-              env->config_.location.longitude_left, env->config_.location.longitude_right, (env->config_.location.longitude_right - env->config_.location.longitude_left) / 100.0f);
+  photon_emit(Vector3(-sin(env->sun_info().SunAzimuth),
+                      -cos(env->sun_info().SunAzimuth),
+                      -cos(env->sun_info().SolarAltitude)),
+              Vector3(env->sun_info().HourlyIrradiance,
+                      env->sun_info().HourlyIrradiance,
+                      env->sun_info().HourlyIrradiance),
+              env->config_.location.latitude_bottom,
+              env->config_.location.latitude_top,
+              (env->config_.location.latitude_top -
+               env->config_.location.latitude_bottom) /
+                  100.0f,
+              env->config_.location.longitude_left,
+              env->config_.location.longitude_right,
+              (env->config_.location.longitude_right -
+               env->config_.location.longitude_left) /
+                  100.0f);
   photons_modify();
 }
 
@@ -31,10 +43,11 @@ void PhotonSimulator::photon_emit(
     const double latitudeDiff, const double longitude_left,
     const double longitude_right, const double longitudeDiff) {
   for (real_t i = (real_t)latitude_bottom; i <= (real_t)latitude_top;
-    i += (real_t)latitudeDiff) {
+       i += (real_t)latitudeDiff) {
     for (real_t j = (real_t)longitude_left; j <= (real_t)longitude_right;
-      j += (real_t)longitudeDiff) {
-      alive_photons.push_back(Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
+         j += (real_t)longitudeDiff) {
+      alive_photons.push_back(
+          Photon(sun_direction, Vector3(i, j, kSunHeight), sun_strength));
     }
   }
 }
@@ -102,14 +115,16 @@ void PhotonSimulator::lookup_kdtree(const std::vector<Photon>& p,
     real_t p_value = get_p(point, flag);
     if (p_value <= split_value) {
       lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
-      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
+      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
+                   distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance,
                       size);
     } else {
       lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance, size);
-      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median, distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
+      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
+                   distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
@@ -206,7 +221,8 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
     float d = 0.0;
     int count = 0;
     Neighbor neighbors[kNumberOfPhotonsNeayby];
-    lookup_kdtree(absorb_photons, p, min_normal, neighbors, 0, absorb_photons.size() - 1, d, size);
+    lookup_kdtree(absorb_photons, p, min_normal, neighbors, 0,
+                  absorb_photons.size() - 1, d, size);
     for (int i = 0; i < size; i++) {
       real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
       Vector3 color = absorb_photons[neighbors[i].i].power;

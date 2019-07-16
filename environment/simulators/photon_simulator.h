@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "photons/photon_simulator_config.h"
-#include "photons/photon/photon.h"
-#include "photons/photon/neighbor.h"
 #include "photons/model/model.h"
+#include "photons/photon/neighbor.h"
+#include "photons/photon/photon.h"
+#include "photons/photon_simulator_config.h"
 #include "simulator.h"
 
 namespace simulator {
