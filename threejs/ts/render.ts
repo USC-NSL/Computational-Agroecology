@@ -24,7 +24,8 @@ import {
   Points,
   AdditiveBlending,
 } from "three/src/Three";
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {MapControls} from 'three/examples/jsm/controls/MapControls';
+
 import {TileMap} from './tilemap';
 import {Configs} from './config';
 import {file_urls, color_configs} from "./common";
@@ -35,7 +36,7 @@ export class Render {
   private camera: PerspectiveCamera;  // public for convenience
   private scene: Scene;
   private renderer: WebGLRenderer;
-  private cameraControls: OrbitControls;
+  private mapControl: MapControls;
 
   private isSunny: boolean;
   private sun: DirectionalLight;
@@ -77,13 +78,18 @@ export class Render {
 
     // CAMERA
     this.camera = new PerspectiveCamera(
-        45, window.innerWidth / window.innerHeight, 30, 1000);
+        45, window.innerWidth / window.innerHeight, 1, 1000);
     this.camera.position.set(0, -100, 75);
+    this.camera.up.set(0, 0, 1);
 
     // CAMERA CONTROLS
-    this.cameraControls =
-        new OrbitControls(this.camera, this.renderer.domElement);
-    this.cameraControls.update();
+    this.mapControl =
+        new MapControls(this.camera, this.renderer.domElement);
+    this.mapControl.enableDamping = true;
+    this.mapControl.dampingFactor = 0.25;
+    this.mapControl.enableRotate = false;
+    this.mapControl.minDistance = 60;
+    this.mapControl.maxDistance = 200;
 
     // AMBIENT LIGHT
     let ambientlight = new AmbientLight(color_configs.AMBIENT_LIGHT, 0.1);
@@ -236,6 +242,7 @@ export class Render {
       });
       this.rainGeometry.verticesNeedUpdate = true;
     }
+    this.mapControl.update();
     this.renderer.render(this.scene, this.camera);
   }
 
