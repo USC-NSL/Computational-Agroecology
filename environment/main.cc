@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "agent/agent.h"
+#include "agent/q_learning.h"
 #include "environment.h"
 #include "simulators/actions/crop.h"
 
@@ -10,12 +12,23 @@
 int main() {
   environment::Location location(100, 100, 200, 200);
   environment::Config config("place name", location);
-  environment::Terrain terrain(5);
+  environment::Terrain terrain(3);
 
   environment::Environment env(config, std::chrono::system_clock::now(),
                                terrain);
 
   const std::string kCornTypeName = "Corn";
+
+  // Declare agent
+  std::string agent_name = "q_learning";
+  environment::Environment *env_pointer = &env;
+  agent::Agent agent_test(agent_name, env_pointer);
+  // Create Action
+  agent::ActionID action = {terrain.width(), terrain.length(), 3, 2};
+  auto action_obj = agent_test.CreateAction(action);
+  // Declare Qlearning
+  agent::Qlearning q_learning(agent_name, env_pointer, 10, 54);
+
   simulator::action::crop::Add add_crop(
       environment::Coordinate(0, 0),
       std::chrono::system_clock::now() + std::chrono::minutes(10),
@@ -38,6 +51,6 @@ int main() {
   env.JumpDuration(std::chrono::hours(24));
 
   std::cout << env << std::endl;
-
+  
   return 0;
 }
