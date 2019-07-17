@@ -100,6 +100,9 @@ class Plant {
   // Is the plant currently flowering?
   bool flowering_;
 
+  // The height of this plant
+  double height_;
+
   // Accumulated Growing Degree Days.
   // This accumulated value can be reset by the plant model as needed
   int accumulated_gdd_;
