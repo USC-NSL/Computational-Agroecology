@@ -20,7 +20,7 @@ Action::Action(const simulator::action::ActionType type,
       applied_range_(std::vector<environment::Coordinate>(1, target)),
       start_time_(start_time),
       duration_(duration),
-      cost_(std::unordered_map<ResourceType, size_t>()) {}
+      cost_(agent::Resources()) {}
 
 Action::Action(const simulator::action::ActionType type,
                const std::vector<environment::Coordinate> &applied_range,
@@ -30,13 +30,13 @@ Action::Action(const simulator::action::ActionType type,
       applied_range_(applied_range),
       start_time_(start_time),
       duration_(duration),
-      cost_(std::unordered_map<ResourceType, size_t>()) {}
+      cost_(agent::Resources()) {}
 
 Action::Action(const simulator::action::ActionType type,
                const environment::Coordinate &target,
                const std::chrono::system_clock::time_point &start_time,
                const std::chrono::duration<int> &duration,
-               const std::unordered_map<ResourceType, size_t> &cost)
+               const agent::Resources &cost)
     : type_(type),
       applied_range_(std::vector<environment::Coordinate>(1, target)),
       start_time_(start_time),
@@ -47,7 +47,7 @@ Action::Action(const simulator::action::ActionType type,
                const std::vector<environment::Coordinate> &applied_range,
                const std::chrono::system_clock::time_point &start_time,
                const std::chrono::duration<int> &duration,
-               const std::unordered_map<ResourceType, size_t> &cost)
+               const agent::Resources &cost)
     : type_(type),
       applied_range_(applied_range),
       start_time_(start_time),

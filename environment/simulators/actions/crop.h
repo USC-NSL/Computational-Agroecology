@@ -31,13 +31,13 @@ class Add : public Action {
   Add(const environment::Coordinate &target,
       const std::chrono::system_clock::time_point &start_time,
       const std::chrono::duration<int> &duration,
-      const std::unordered_map<ResourceType, size_t> &cost,
+      const agent::Resources &cost,
       const std::string &crop_type_name);
 
   Add(const std::vector<environment::Coordinate> &applied_range,
       const std::chrono::system_clock::time_point &start_time,
       const std::chrono::duration<int> &duration,
-      const std::unordered_map<ResourceType, size_t> &cost,
+      const agent::Resources &cost,
       const std::string &crop_type_name);
 
   void Execute(environment::Terrain *terrain) const override;
@@ -62,12 +62,12 @@ class Remove : public Action {
   Remove(const environment::Coordinate &target,
          const std::chrono::system_clock::time_point &start_time,
          const std::chrono::duration<int> &duration,
-         const std::unordered_map<ResourceType, size_t> &cost);
+         const agent::Resources &cost);
 
   Remove(const std::vector<environment::Coordinate> &applied_range,
          const std::chrono::system_clock::time_point &start_time,
          const std::chrono::duration<int> &duration,
-         const std::unordered_map<ResourceType, size_t> &cost);
+         const agent::Resources &cost);
 
   void Execute(environment::Terrain *terrain) const override;
 };
@@ -86,12 +86,12 @@ class Harvest : public Action {
   Harvest(const environment::Coordinate &target,
           const std::chrono::system_clock::time_point &start_time,
           const std::chrono::duration<int> &duration,
-          const std::unordered_map<ResourceType, size_t> &cost);
+          const agent::Resources &cost);
 
   Harvest(const std::vector<environment::Coordinate> &applied_range,
           const std::chrono::system_clock::time_point &start_time,
           const std::chrono::duration<int> &duration,
-          const std::unordered_map<ResourceType, size_t> &cost);
+          const agent::Resources &cost);
 
   void Execute(environment::Terrain *terrain) const override;
 };
@@ -110,13 +110,13 @@ class Water : public Action {
   Water(const environment::Coordinate &target,
         const std::chrono::system_clock::time_point &start_time,
         const std::chrono::duration<int> &duration,
-        const std::unordered_map<ResourceType, size_t> &cost,
+        const agent::Resources &cost,
         const double &water_amount);
 
   Water(const std::vector<environment::Coordinate> &applied_range,
         const std::chrono::system_clock::time_point &start_time,
         const std::chrono::duration<int> &duration,
-        const std::unordered_map<ResourceType, size_t> &cost,
+        const agent::Resources &cost,
         const double &water_amount);
 
   void Execute(environment::Terrain *terrain) const override;

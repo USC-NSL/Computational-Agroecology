@@ -7,7 +7,6 @@
 #include "agent/q_learning.h"
 #include "environment.h"
 #include "simulators/actions/crop.h"
-#include "simulators/resource.h"
 
 using namespace agent;
 using namespace environment;

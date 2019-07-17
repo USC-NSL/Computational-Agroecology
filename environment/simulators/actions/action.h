@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "simulators/resource.h"
+#include "agent/resource.h"
 #include "terrain.h"
 
 namespace simulator {
@@ -32,7 +32,7 @@ class Action {
     return start_time_;
   }
   const std::chrono::duration<int> duration() const { return duration_; }
-  const std::unordered_map<ResourceType, size_t> cost() const { return cost_; }
+  const agent::Resources &cost() const { return cost_; }
 
   // operator
   bool operator==(const Action &rhs) const;
@@ -51,13 +51,13 @@ class Action {
   Action(const ActionType type, const environment::Coordinate &target,
          const std::chrono::system_clock::time_point &start_time,
          const std::chrono::duration<int> &duration,
-         const std::unordered_map<ResourceType, size_t> &cost);
+         const agent::Resources &cost);
 
   Action(const ActionType type,
          const std::vector<environment::Coordinate> &applied_range,
          const std::chrono::system_clock::time_point &start_time,
          const std::chrono::duration<int> &duration,
-         const std::unordered_map<ResourceType, size_t> &cost);
+         const agent::Resources &cost);
 
   // private accessor
   const ActionType &type() const { return type_; }
@@ -65,7 +65,7 @@ class Action {
   const std::vector<environment::Coordinate> applied_range_;
   const std::chrono::system_clock::time_point start_time_;
   const std::chrono::duration<int> duration_;
-  const std::unordered_map<ResourceType, size_t> cost_;
+  const agent::Resources cost_;
 
  private:
   const ActionType type_;

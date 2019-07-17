@@ -16,8 +16,6 @@ namespace agent {
 
 const std::string kCornTypeName = "Corn";
 
-using ResourceList = std::vector<std::pair<simulator::ResourceType, size_t>>;
-
 struct ActionID {
   size_t row;
   size_t col;
