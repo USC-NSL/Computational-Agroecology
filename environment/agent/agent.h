@@ -7,10 +7,8 @@
 #include <utility>
 #include <vector>
 
+#include "agent/resource.h"
 #include "environment.h"
-#include "simulators/actions/action.h"
-#include "simulators/actions/crop.h"
-#include "simulators/resource.h"
 
 namespace agent {
 
@@ -28,7 +26,7 @@ class Agent {
   enum ReturnCodes { SUCCESS = 0, INVALID_ARGUMENT, NOT_ENOUGH_RESOURCES };
 
   // modifiers
-  void AddResource(const simulator::ResourceType &resource, size_t quantity);
+  void AddResource(const agent::ResourceType &resource, size_t quantity);
   ReturnCodes TakeAction(const simulator::action::Action *action);
 
   // generate action
@@ -38,28 +36,21 @@ class Agent {
   int RandomInt(int min, int max);
 
   std::vector<std::string> GetQualifiedPlants();
-  std::vector<std::string> GetOptimalPlants();
 
   // accessors
   inline const std::string &name() const { return name_; }
 
-  inline environment::Environment *environment() { return env_; }
+  inline environment::Environment *mutable_environment() { return env_; }
   inline const environment::Environment *environment() const { return env_; }
 
-  inline const std::unordered_map<simulator::ResourceType, size_t>
-  owned_resource() const {
-    return owned_resource_;
-  }
+  inline const Resources owned_resource() const { return owned_resources_; }
 
  protected:
   // constructors which can only be used in heritance
   // only children can call these
   Agent(const std::string &name, environment::Environment *env);
   Agent(const std::string &name, environment::Environment *env,
-        const std::unordered_map<simulator::ResourceType, size_t>
-            &owned_resource);
-  Agent(const std::string &name, environment::Environment *env,
-        const ResourceList &resources_list);
+        const Resources &owned_resources);
 
   // Name of this agent
   std::string name_;
@@ -67,11 +58,17 @@ class Agent {
   // The corresponding environment that this agent is interacting with
   environment::Environment *env_;
 
-  std::unordered_map<simulator::ResourceType, size_t> owned_resource_;
+  // The resources this agent has
+  Resources owned_resources_;
 
-  bool CheckEnoughResources(const ResourceList &resources) const;
+  // Check whether this agent's resources is more than the specified resources
+  bool CheckEnoughResources(const Resources &resources) const;
 
-  void DeductResources(const ResourceList &cost);
+  // Decrease this agent's recources by the specified `cost`. This function
+  // assumes this agent's resources are enough to be decreased, which means
+  // `CheckEnoughResources()` should always be called before calling this
+  // function.
+  void DeductResources(const Resources &cost);
 };
 
 }  // namespace agent
