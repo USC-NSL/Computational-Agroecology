@@ -43,7 +43,6 @@ TEST_F(QlearningTest, ConstructorTest_1) {
 
   EXPECT_EQ(name, agent.name());
   EXPECT_EQ(env, agent.environment());
-  EXPECT_EQ(10, agent.environment());
 }
 
 
