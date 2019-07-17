@@ -31,4 +31,7 @@ Plant *PlantBuilder::NewPlant(const std::string &model_name,
   return nullptr;
 }
 
+// Definition
+std::unordered_map<std::string, PlantGenerator> PlantBuilder::models_;
+
 }  // namespace environment

@@ -43,7 +43,9 @@ class PlantBuilder {
    public:                                                                \
     _PLANT##_generator_class() {                                          \
       PlantBuilder::RegisterPlant(                                        \
-          _NAME, PlantGenerator([]() { return new _PLANT(_NAME); }));     \
+          _NAME, PlantGenerator([]() {                                    \
+            return new environment::plants::_PLANT(_NAME);                \
+          }));                                                            \
     }                                                                     \
     ~_PLANT##_generator_class() { PlantBuilder::UnregisterPlant(_NAME); } \
   };
