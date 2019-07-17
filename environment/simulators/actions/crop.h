@@ -16,112 +16,116 @@ namespace action {
 namespace crop {
 
 // Plant a crop
-struct Add : public Action {
-  const std::string crop_type_name;
+class Add : public Action {
+ public:
+  Add(const environment::Coordinate &target,
+      const std::chrono::system_clock::time_point &start_time,
+      const std::chrono::duration<int> &duration,
+      const std::string &crop_type_name);
 
-  Add(const environment::Coordinate& target,
-      const std::chrono::system_clock::time_point& start_time,
-      const std::chrono::duration<int>& duration,
-      const std::string& crop_type_name);
+  Add(const std::vector<environment::Coordinate> &applied_range,
+      const std::chrono::system_clock::time_point &start_time,
+      const std::chrono::duration<int> &duration,
+      const std::string &crop_type_name);
 
-  Add(const std::vector<environment::Coordinate>& applied_range,
-      const std::chrono::system_clock::time_point& start_time,
-      const std::chrono::duration<int>& duration,
-      const std::string& crop_type_name);
+  Add(const environment::Coordinate &target,
+      const std::chrono::system_clock::time_point &start_time,
+      const std::chrono::duration<int> &duration,
+      const std::unordered_map<ResourceType, size_t> &cost,
+      const std::string &crop_type_name);
 
-  Add(const environment::Coordinate& target,
-      const std::chrono::system_clock::time_point& start_time,
-      const std::chrono::duration<int>& duration,
-      const std::string& crop_type_name,
-      const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Add(const std::vector<environment::Coordinate> &applied_range,
+      const std::chrono::system_clock::time_point &start_time,
+      const std::chrono::duration<int> &duration,
+      const std::unordered_map<ResourceType, size_t> &cost,
+      const std::string &crop_type_name);
 
-  Add(const std::vector<environment::Coordinate>& applied_range,
-      const std::chrono::system_clock::time_point& start_time,
-      const std::chrono::duration<int>& duration,
-      const std::string& crop_type_name,
-      const std::vector<std::pair<ResourceType, size_t>>& cost);
+  void Execute(environment::Terrain *terrain) const override;
 
-  void Execute(environment::Terrain* terrain) const override;
+  bool operator==(const Add &rhs) const;
+
+ private:
+  const std::string crop_type_name_;
 };
-
-bool operator==(const Add& lhs, const Add& rhs);
 
 // Remove a crop
-struct Remove : public Action {
-  Remove(const environment::Coordinate& target,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration);
+class Remove : public Action {
+ public:
+  Remove(const environment::Coordinate &target,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration);
 
-  Remove(const std::vector<environment::Coordinate>& applied_range,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration);
+  Remove(const std::vector<environment::Coordinate> &applied_range,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration);
 
-  Remove(const environment::Coordinate& target,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Remove(const environment::Coordinate &target,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration,
+         const std::unordered_map<ResourceType, size_t> &cost);
 
-  Remove(const std::vector<environment::Coordinate>& applied_range,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Remove(const std::vector<environment::Coordinate> &applied_range,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration,
+         const std::unordered_map<ResourceType, size_t> &cost);
 
-  void Execute(environment::Terrain* terrain) const override;
+  void Execute(environment::Terrain *terrain) const override;
 };
-
-bool operator==(const Remove& lhs, const Remove& rhs);
 
 // Harvest a crop
-struct Harvest : public Action {
-  Harvest(const environment::Coordinate& target,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration);
+class Harvest : public Action {
+ public:
+  Harvest(const environment::Coordinate &target,
+          const std::chrono::system_clock::time_point &start_time,
+          const std::chrono::duration<int> &duration);
 
-  Harvest(const std::vector<environment::Coordinate>& applied_range,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration);
+  Harvest(const std::vector<environment::Coordinate> &applied_range,
+          const std::chrono::system_clock::time_point &start_time,
+          const std::chrono::duration<int> &duration);
 
-  Harvest(const environment::Coordinate& target,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration,
-          const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Harvest(const environment::Coordinate &target,
+          const std::chrono::system_clock::time_point &start_time,
+          const std::chrono::duration<int> &duration,
+          const std::unordered_map<ResourceType, size_t> &cost);
 
-  Harvest(const std::vector<environment::Coordinate>& applied_range,
-          const std::chrono::system_clock::time_point& start_time,
-          const std::chrono::duration<int>& duration,
-          const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Harvest(const std::vector<environment::Coordinate> &applied_range,
+          const std::chrono::system_clock::time_point &start_time,
+          const std::chrono::duration<int> &duration,
+          const std::unordered_map<ResourceType, size_t> &cost);
 
-  void Execute(environment::Terrain* terrain) const override;
+  void Execute(environment::Terrain *terrain) const override;
 };
-
-bool operator==(const Harvest& lhs, const Harvest& rhs);
 
 // Water a crop
-struct Water : public Action {
-  const double water_amount;
+class Water : public Action {
+ public:
+  Water(const environment::Coordinate &target,
+        const std::chrono::system_clock::time_point &start_time,
+        const std::chrono::duration<int> &duration, const double &water_amount);
 
-  Water(const environment::Coordinate& target,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration, const double& water_amount);
+  Water(const std::vector<environment::Coordinate> &applied_range,
+        const std::chrono::system_clock::time_point &start_time,
+        const std::chrono::duration<int> &duration, const double &water_amount);
 
-  Water(const std::vector<environment::Coordinate>& applied_range,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration, const double& water_amount);
+  Water(const environment::Coordinate &target,
+        const std::chrono::system_clock::time_point &start_time,
+        const std::chrono::duration<int> &duration,
+        const std::unordered_map<ResourceType, size_t> &cost,
+        const double &water_amount);
 
-  Water(const environment::Coordinate& target,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration, const double& water_amount,
-        const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Water(const std::vector<environment::Coordinate> &applied_range,
+        const std::chrono::system_clock::time_point &start_time,
+        const std::chrono::duration<int> &duration,
+        const std::unordered_map<ResourceType, size_t> &cost,
+        const double &water_amount);
 
-  Water(const std::vector<environment::Coordinate>& applied_range,
-        const std::chrono::system_clock::time_point& start_time,
-        const std::chrono::duration<int>& duration, const double& water_amount,
-        const std::vector<std::pair<ResourceType, size_t>>& cost);
+  void Execute(environment::Terrain *terrain) const override;
 
-  void Execute(environment::Terrain* terrain) const override;
+  bool operator==(const Water &rhs) const;
+
+ private:
+  const double water_amount_;
 };
-
-bool operator==(const Water& lhs, const Water& rhs);
 
 }  // namespace crop
 

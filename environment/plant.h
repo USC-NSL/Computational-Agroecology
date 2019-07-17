@@ -62,6 +62,9 @@ class Plant {
 
   const std::string &name() { return name_; }
 
+  // Harvest this plant. This should return the value of yeild.
+  int Harvest();
+
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
   // (e.g., light) resources, attempts to perform one growing time step.

@@ -26,6 +26,7 @@ class PlantBuilder {
   // under `model_name` and passes `overrides` to the generator.  If no model is
   // found or an error occurs, returns nullptr.  Does not retain ownership of
   // the returned pointer.
+  static Plant *NewPlant(const std::string &model_name);
   static Plant *NewPlant(const std::string &model_name,
                          const PlantParams &overrides);
 

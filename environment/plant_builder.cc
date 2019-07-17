@@ -17,6 +17,10 @@ void PlantBuilder::UnregisterPlant(const std::string &model_name) {
   models_.erase(model_name);
 }
 
+Plant *PlantBuilder::NewPlant(const std::string &model_name) {
+  return NewPlant(model_name, PlantParams());
+}
+
 Plant *PlantBuilder::NewPlant(const std::string &model_name,
                               const PlantParams &overrides) {
   if (models_.count(model_name)) {

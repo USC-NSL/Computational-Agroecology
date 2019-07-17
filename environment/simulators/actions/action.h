@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_ACTION_H_
 
 #include <chrono>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -18,53 +19,69 @@ enum ActionType { CROP_ADD = 0, CROP_REMOVE, CROP_HARVEST, WATER_CROP, NUM_ACTIO
 // An agent or a human can set up this `Action` object and pass it to the
 // environment to schedule the action.
 // The simulator will then execute this action on the scheduled time.
-struct Action {
-  Action(const ActionType type, const environment::Coordinate& target,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration);
+class Action {
+ public:
+  // execute an action on a specified terrain
+  virtual void Execute(environment::Terrain *terrain) const = 0;
+
+  // accessors
+  const std::vector<environment::Coordinate> &applied_range() const {
+    return applied_range_;
+  }
+  const std::chrono::system_clock::time_point start_time() const {
+    return start_time_;
+  }
+  const std::chrono::duration<int> duration() const { return duration_; }
+  const std::unordered_map<ResourceType, size_t> cost() const { return cost_; }
+
+  // operator
+  bool operator==(const Action &rhs) const;
+
+ protected:
+  // only children can call constructors
+  Action(const ActionType type, const environment::Coordinate &target,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration);
 
   Action(const ActionType type,
-         const std::vector<environment::Coordinate>& applied_range,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration);
+         const std::vector<environment::Coordinate> &applied_range,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration);
 
-  Action(const ActionType type, const environment::Coordinate& target,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<ResourceType, size_t>>& cost);
+  Action(const ActionType type, const environment::Coordinate &target,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration,
+         const std::unordered_map<ResourceType, size_t> &cost);
 
   Action(const ActionType type,
-         const std::vector<environment::Coordinate>& applied_range,
-         const std::chrono::system_clock::time_point& start_time,
-         const std::chrono::duration<int>& duration,
-         const std::vector<std::pair<ResourceType, size_t>>& cost);
+         const std::vector<environment::Coordinate> &applied_range,
+         const std::chrono::system_clock::time_point &start_time,
+         const std::chrono::duration<int> &duration,
+         const std::unordered_map<ResourceType, size_t> &cost);
 
-  // This should directly call its corresponding function in `struct
-  // ActionExecutorList`. We should not write anything functional here since
-  // this is not a friend of the `environment::Environment`.
-  virtual void Execute(environment::Terrain* terrain) const = 0;
+  // private accessor
+  const ActionType &type() const { return type_; }
 
-  const ActionType type;
+  const std::vector<environment::Coordinate> applied_range_;
+  const std::chrono::system_clock::time_point start_time_;
+  const std::chrono::duration<int> duration_;
+  const std::unordered_map<ResourceType, size_t> cost_;
 
-  const std::vector<environment::Coordinate> applied_range;
-  const std::chrono::system_clock::time_point start_time;
-  const std::chrono::duration<int> duration;
-  const std::vector<std::pair<ResourceType, size_t>> cost;
+ private:
+  const ActionType type_;
 };
 
-bool operator==(const Action& lhs, const Action& rhs);
-
-using ActionList = std::vector<const Action*>;
+using ActionList = std::vector<const Action *>;
 
 // Custom comparator for `struct Action`
 // These two custom comparators are used for the priority queues in the
 // `MainSimulator`
 struct ActionStartTimeComparator {
-  bool operator()(const Action* const lhs, const Action* const rhs) const;
+  bool operator()(const Action *const lhs, const Action *const rhs) const;
 };
 
 struct ActionEndTimeComparator {
-  bool operator()(const Action* const lhs, const Action* const rhs) const;
+  bool operator()(const Action *const lhs, const Action *const rhs) const;
 };
 
 // forward declaration all actions
