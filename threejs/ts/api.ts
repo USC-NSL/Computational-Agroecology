@@ -7,7 +7,9 @@ import {
   SimulateToTimeRequest,
   AgentActionConfig,
   AgentAddCropRequest,
-  AgentRemoveCropRequest
+  AgentRemoveCropRequest,
+  DeleteEnvironmentRequest,
+  DeleteAgentRequest
 } from '../js/agent_server_pb';
 import {Environment, Terrain} from '../js/environment_pb';
 import {AgentServerClient} from '../js/agent_server_grpc_web_pb';
@@ -41,12 +43,17 @@ export class API {
   constructor(configs: Configs) {
     this.configs = configs;
     /////////////  change the IP address to your server's IP
-    this.server =
-        new AgentServerClient('http://204.57.3.150:8080', null, null);
+    this.server = new AgentServerClient('http://204.57.3.150:8080', null, null);
     this.agent_name = 'Barath';
     this.env_name = "Happy Farm";
-    this.createEnvironment();
-    this.createAgent();
+    this.init();
+  }
+
+  async init() {
+    await this.deleteEnvironment();
+    await this.deleteAgent();
+    await this.createEnvironment();
+    await this.createAgent();
   }
 
   createAgent() {
@@ -59,6 +66,19 @@ export class API {
                     err.message);
       } else {
         console.log("createAgent: " + this.agent_name);
+      }
+    });
+  }
+
+  deleteAgent() {
+    let request = new DeleteAgentRequest();
+    request.setName(this.agent_name);
+    this.server.deleteAgent(request, undefined, (err: Error) => {
+      if (err) {
+        console.log("deleteAgent ERROR " + status[err.code] + ": " +
+                    err.message);
+      } else {
+        console.log("deleteAgent: " + this.agent_name);
       }
     });
   }
@@ -102,6 +122,19 @@ export class API {
             }
           }
         });
+  }
+
+  deleteEnvironment() {
+    let request = new DeleteEnvironmentRequest();
+    request.setName(this.env_name);
+    this.server.deleteEnvironment(request, undefined, (err: Error) => {
+      if (err) {
+        console.log("deleteEnvironment ERROR " + status[err.code] + ": " +
+                    err.message);
+      } else {
+        console.log("deleteEnvironment: " + this.env_name);
+      }
+    });
   }
 
   updateScene(environment: Environment) {

@@ -1,30 +1,40 @@
-import {Mode} from "./common";
+import {FunctionMode, WeatherMode} from "./common";
 import {Render} from "./render";
-import {API} from "./api";
+import {API} from "./API";
 import * as dat from 'dat.gui';
 
 export class GUI {
-  mode: string;
+  functionMode: string;
+  weatherMode: string;
   render: Render;
   api: API;
   cameraX: number;
   cameraY: number;
   cameraZ: number;
-  restart: () => void;
+  restartCall: () => void;
+  updateWeatherCall: (weatherMode: string) => void;
 
-  constructor(render: Render, api: API, restart: () => void) {
-    this.mode = Mode[Mode.SQUASH];
+  constructor(render: Render, api: API, restartCall: () => void,
+              updateWeatherCall: (weatherMode: string) => void) {
+    this.functionMode = FunctionMode[FunctionMode.SQUASH];
+    this.weatherMode = WeatherMode[WeatherMode.SUNNY];
     this.render = render;
     this.api = api;
     this.cameraX = 0;
     this.cameraY = 0;
     this.cameraZ = 0;
-    this.restart = restart;
+    this.restartCall = restartCall;
+    this.updateWeatherCall = updateWeatherCall;
 
-    var gui = new dat.GUI();
+    let gui = new dat.GUI();
 
-    gui.add(this, 'mode', Object.keys(Mode).filter(
-                              (key: any) => { return isNaN(Number(key)); }));
+    gui.add(this, 'functionMode',
+            Object.keys(FunctionMode)
+                .filter((key: any) => { return isNaN(Number(key)); }));
+    gui.add(this, 'weatherMode',
+            Object.keys(WeatherMode)
+                .filter((key: any) => { return isNaN(Number(key)); }))
+        .onChange(this.updateWeather.bind(this));
     gui.add(this, 'update');
     gui.add(this, 'print');
     gui.add(this, 'restart');
@@ -35,11 +45,15 @@ export class GUI {
     table.add(this, "cameraZ", -1000.0, 1000.0, 1.0).name("cameraZ").listen();
 
     this.updateCamera();
+    this.updateWeather();
   }
 
-  getMode(): string { return this.mode; }
-  setMode(mode: Mode) { this.mode = Mode[mode]; }
+  getFunctionMode(): string { return this.functionMode; }
+  setFunctionMode(functionMode: FunctionMode) {
+    this.functionMode = FunctionMode[functionMode];
+  }
 
+  // TODO: deprecate it later
   updateCamera() {
     requestAnimationFrame(this.updateCamera.bind(this));
     this.cameraX = this.render.getCamera().position.x;
@@ -53,4 +67,8 @@ export class GUI {
   };
 
   print(){this.api.print()};
+
+  restart(){this.restartCall()};
+
+  updateWeather() { this.updateWeatherCall(this.weatherMode); }
 }

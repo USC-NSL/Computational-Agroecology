@@ -1,8 +1,8 @@
 import {Object3D} from "three/src/Three";
-import {Mode} from "./common";
+import {FunctionMode, WeatherMode} from "./common";
 import {Configs} from "./config";
 import {Render} from "./render";
-import {API} from "./api";
+import {API} from "./API";
 import {GUI} from "./GUI";
 import {TileMap} from "./tilemap";
 
@@ -18,7 +18,8 @@ export class MainControl {
     this.configs = new Configs(width, height);
     this.render = new Render(this.configs);
     this.api = new API(this.configs);
-    this.gui = new GUI(this.render, this.api, this.reset.bind(this));
+    this.gui = new GUI(this.render, this.api, this.reset.bind(this),
+                       this.updateWeather.bind(this));
     this.tilemap =
         new TileMap(this.configs, this.render, this.updateTile.bind(this));
     // resolve cyclic dependency
@@ -44,35 +45,58 @@ export class MainControl {
   }
 
   updateTile(gridX: number, gridY: number,
-             planttype: string = this.gui.getMode(), plantstatus: number = 0) {
+             planttype: string = this.gui.getFunctionMode(),
+             plantstatus: number = 0) {
     let plant: Object3D | undefined;
     switch (planttype) {
-      case Mode[Mode.CORN]:
-      case Mode[Mode.BEAN]:
-      case Mode[Mode.SQUASH]:
+      case FunctionMode[FunctionMode.CORN]:
+      case FunctionMode[FunctionMode.BEAN]:
+      case FunctionMode[FunctionMode.SQUASH]:
         plant =
             this.configs.addPlantModel(planttype, plantstatus, gridX, gridY);
         if (plant !== undefined) {
-          this.render.addtoScene(plant);
+          this.render.addModeltoScene(plant);
           this.api.agentAddCrop(gridX, gridY, planttype);
         }
         break;
-      case Mode[Mode.WATER]:
+      case FunctionMode[FunctionMode.WATER]:
         return this.configs.water(gridX, gridY);
-      case Mode[Mode.REMOVE]:
+      case FunctionMode[FunctionMode.REMOVE]:
         plant = this.configs.removePlantModel(gridX, gridY);
         if (plant !== undefined) {
-          this.render.removefromScene(plant);
+          this.render.removeModelfromScene(plant);
           this.api.agentRemoveCrop(gridX, gridY);
         }
         break;
-      case Mode[Mode.HARVEST]:
+      case FunctionMode[FunctionMode.HARVEST]:
         alert("method not implemented yet.");
         break;
       default:
-        console.log("invalid mode: " + this.gui.getMode());
+        console.log("invalid mode: " + this.gui.getFunctionMode());
     }
     return undefined;
+  }
+
+  updateWeather(weatherMode: string) {
+    switch (weatherMode) {
+      case WeatherMode[WeatherMode.SUNNY]:
+        this.render.addSuntoScene();
+        this.render.removeCloudfromScene();
+        this.render.removeRainfromScene();
+        break;
+      case WeatherMode[WeatherMode.CLOUDY]:
+        this.render.addCloudtoScene();
+        this.render.removeRainfromScene();
+        this.render.removeSunfromScene();
+        break;
+      case WeatherMode[WeatherMode.RAINY]:
+        this.render.addRaintoScene();
+        this.render.addCloudtoScene();
+        this.render.removeSunfromScene();
+        break;
+      default:
+        break;
+    }
   }
 }
 
