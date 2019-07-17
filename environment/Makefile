@@ -5,14 +5,14 @@ OPENGLLIBS := -lGL -lglut -lGLEW
 INCLUDES := -I ./
 
 MAIN_OBJ := main.o
-OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o terrain.o weather.o light.o
+OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o plant.o terrain.o weather.o light.o
 
 AGENT_PATH := ./agent
 AGENT_OBJ := $(AGENT_PATH)/agent.o
 QLEARNING_OBJ := $(AGENT_PATH)/q_learning.o
 
 PLANTS_PATH := ./plants
-PLANTS_OBJ := $(PLANT_TYPE_PATH)/bean.o
+PLANTS_OBJ := $(PLANTS_PATH)/bean.o
 
 SIMULATOR_PATH := ./simulators
 PHOTON_SIMULATOR_PATH := $(SIMULATOR_PATH)/photon_simulator
@@ -55,7 +55,7 @@ TEST_ALL := $(TEST_PATH)/climate_test $(TEST_PATH)/config_test $(TEST_PATH)/envi
 TESTFLAGS := -Igtest/include
 TESTLD := -lgtest -lpthread
 
-ALL_OBJ_WITHOUT_MAIN := $(OBJ) $(AGENT_OBJ) $(PLANT_TYPE_OBJ) $(SIMULATOR_OBJ) $(QLEARNING_OBJ)
+ALL_OBJ_WITHOUT_MAIN := $(OBJ) $(AGENT_OBJ) $(PLANTS_OBJ) $(SIMULATOR_OBJ) $(QLEARNING_OBJ)
 ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
 
 %.o: %.cc %.h
