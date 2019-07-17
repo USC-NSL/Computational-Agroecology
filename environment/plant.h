@@ -55,12 +55,12 @@ class Plant {
   enum Maturity { SEED = 0, SEEDLING, JUVENILE, MATURE, OLD };
 
   // The minimum and maximum (unit-less) health values.
-  const int kMinHealth = 0;   // Corresponds to a dead plant.
-  const int kMaxHealth = 10;  // Corresponds to maximial growth.
+  static const int kMinHealth = 0;   // Corresponds to a dead plant.
+  static const int kMaxHealth = 10;  // Corresponds to maximial growth.
 
   virtual ~Plant() {}
 
-  const std::string &name() { return name_; }
+  const std::string &name() const { return name_; }
 
   // Harvest this plant. This should return the value of yeild.
   int Harvest();

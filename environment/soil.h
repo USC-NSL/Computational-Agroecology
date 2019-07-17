@@ -33,13 +33,13 @@ struct Soil {
   double water_content;
 };
 
-bool operator==(const Soil& lhs, const Soil& rhs);
+bool operator==(const Soil &lhs, const Soil &rhs);
 
 // TODO: `double` should be replaced with some density units
 using SoilSalinity = MinMaxPair<double>;
 
 // TODO: may need to add soil texture here
-struct SoilCondition {
+struct SoilRequirement {
   enum class SoilFertility { LOW = 0, MODERATE, HIGH };
 
   // Poorly: (saturated >50% of year)
@@ -47,10 +47,10 @@ struct SoilCondition {
   // Excessive: (dry/moderately dry)
   enum class SoilDrainage { POORLY = 0, WELL, EXCESSIVE };
 
-  SoilCondition(const std::optional<SoilFertility>& fertility,
-                const std::optional<SoilSalinity>& salinity,
-                const std::optional<MinMaxPair<double>>& pH,
-                const std::optional<SoilDrainage>& drainage);
+  SoilRequirement(const std::optional<SoilFertility> &fertility,
+                  const std::optional<SoilSalinity> &salinity,
+                  const std::optional<MinMaxPair<double>> &pH,
+                  const std::optional<SoilDrainage> &drainage);
 
   const std::optional<SoilFertility> fertility;
 
@@ -69,7 +69,7 @@ struct SoilCondition {
   const std::optional<SoilDrainage> drainage;
 };
 
-bool operator==(const SoilCondition& lhs, const SoilCondition& rhs);
+bool operator==(const SoilRequirement &lhs, const SoilRequirement &rhs);
 
 }  // namespace environment
 
