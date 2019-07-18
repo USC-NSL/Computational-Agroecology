@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include "agent/resource.h"
 #include "simulators/actions/crop.h"
 #include "terrain.h"
 
@@ -21,19 +22,14 @@ class AddTest : public ::testing::Test {
       applied_range.push_back(Coordinate(i, i));
     }
 
-    time = std::chrono::system_clock::now();
-    duration = std::chrono::minutes(10);
-
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::LABOR, 40));
+    cost[agent::ResourceType::MONEY] = 20;
+    cost[agent::ResourceType::LABOR] = 40;
   }
 
   std::vector<Coordinate> applied_range;
-  std::chrono::system_clock::time_point time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<ResourceType, size_t>> cost;
+  int64_t time_step = 0;
+  int64_t duration = 1;
+  agent::Resources cost;
 };
 
 class RemoveTest : public ::testing::Test {
@@ -43,19 +39,14 @@ class RemoveTest : public ::testing::Test {
       applied_range.push_back(Coordinate(i, i));
     }
 
-    time = std::chrono::system_clock::now();
-    duration = std::chrono::minutes(10);
-
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::LABOR, 40));
+    cost[agent::ResourceType::MONEY] = 20;
+    cost[agent::ResourceType::LABOR] = 40;
   }
 
   std::vector<Coordinate> applied_range;
-  std::chrono::system_clock::time_point time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<ResourceType, size_t>> cost;
+  int64_t time_step = 0;
+  int64_t duration = 1;
+  agent::Resources cost;
 };
 
 class HarvestTest : public ::testing::Test {
@@ -65,19 +56,14 @@ class HarvestTest : public ::testing::Test {
       applied_range.push_back(Coordinate(i, i));
     }
 
-    time = std::chrono::system_clock::now();
-    duration = std::chrono::minutes(10);
-
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::LABOR, 40));
+    cost[agent::ResourceType::MONEY] = 20;
+    cost[agent::ResourceType::LABOR] = 40;
   }
 
   std::vector<Coordinate> applied_range;
-  std::chrono::system_clock::time_point time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<ResourceType, size_t>> cost;
+  int64_t time_step = 0;
+  int64_t duration = 1;
+  agent::Resources cost;
 };
 
 class AddWaterTest : public ::testing::Test {
@@ -87,63 +73,59 @@ class AddWaterTest : public ::testing::Test {
       applied_range.push_back(Coordinate(i, i));
     }
 
-    time = std::chrono::system_clock::now();
-    duration = std::chrono::minutes(10);
-
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::MONEY, 20));
-    cost.push_back(
-        std::make_pair<ResourceType, size_t>(ResourceType::LABOR, 40));
+    cost[agent::ResourceType::MONEY] = 20;
+    cost[agent::ResourceType::LABOR] = 40;
   }
 
   std::vector<Coordinate> applied_range;
-  std::chrono::system_clock::time_point time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<ResourceType, size_t>> cost;
+  int64_t time_step = 0;
+  int64_t duration = 1;
+  agent::Resources cost;
 };
 
-const std::string kCornTypeName = "Corn";
+const std::string kBeanTypeName = "bean";
 
 TEST_F(AddTest, ConstrcutorTest_1) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName);
+  crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(AddTest, ConstrcutorTest_2) {
-  crop::Add action(applied_range, time, duration, kCornTypeName);
+  crop::Add action(applied_range, time_step, duration, kBeanTypeName);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(AddTest, ConstrcutorTest_3) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName, cost);
+  crop::Add action(applied_range.front(), time_step, duration, cost,
+                   kBeanTypeName);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(AddTest, ConstrcutorTest_4) {
-  crop::Add action(applied_range, time, duration, kCornTypeName, cost);
+  crop::Add action(applied_range, time_step, duration, cost, kBeanTypeName);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(AddTest, ExecuteTest_1) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName);
+  crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
 
   action.Execute(&terrain);
@@ -151,17 +133,17 @@ TEST_F(AddTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 }
 
 TEST_F(AddTest, ExecuteTest_2) {
-  crop::Add action(applied_range, time, duration, kCornTypeName);
+  crop::Add action(applied_range, time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
 
   action.Execute(&terrain);
@@ -172,63 +154,63 @@ TEST_F(AddTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 }
 
 TEST_F(AddTest, OperatorTest) {
-  crop::Add lhs(applied_range, time, duration, kCornTypeName);
+  crop::Add lhs(applied_range, time_step, duration, kBeanTypeName);
   EXPECT_TRUE(lhs == lhs);
 
-  crop::Add rhs(applied_range, time, duration, "Bean");
+  crop::Add rhs(applied_range, time_step, duration, "corn");
   EXPECT_FALSE(lhs == rhs);
 }
 
 TEST_F(RemoveTest, ConstrcutorTest_1) {
-  crop::Remove action(applied_range.front(), time, duration);
+  crop::Remove action(applied_range.front(), time_step, duration);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(RemoveTest, ConstrcutorTest_2) {
-  crop::Remove action(applied_range, time, duration);
+  crop::Remove action(applied_range, time_step, duration);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(RemoveTest, ConstrcutorTest_3) {
-  crop::Remove action(applied_range.front(), time, duration, cost);
+  crop::Remove action(applied_range.front(), time_step, duration, cost);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(RemoveTest, ConstrcutorTest_4) {
-  crop::Remove action(applied_range, time, duration, cost);
+  crop::Remove action(applied_range, time_step, duration, cost);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(RemoveTest, ExecuteTest_1) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName);
+  crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
 
   action.Execute(&terrain);
@@ -236,28 +218,28 @@ TEST_F(RemoveTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 
-  crop::Remove remove_action(applied_range.front(), time, duration);
+  crop::Remove remove_action(applied_range.front(), time_step, duration);
 
   remove_action.Execute(&terrain);
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 }
 
 TEST_F(RemoveTest, ExecuteTest_2) {
-  crop::Add action(applied_range, time, duration, kCornTypeName);
+  crop::Add action(applied_range, time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
 
   action.Execute(&terrain);
@@ -268,15 +250,15 @@ TEST_F(RemoveTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
-        EXPECT_EQ(kCornTypeName, terrain.tiles()[i][j].plant->type_name);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 
-  crop::Remove remove_action(applied_range, time, duration);
+  crop::Remove remove_action(applied_range, time_step, duration);
 
   remove_action.Execute(&terrain);
   for (size_t i = 0; i < terrain.width(); ++i) {
@@ -285,137 +267,125 @@ TEST_F(RemoveTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 }
 
 TEST_F(RemoveTest, OperatorTest) {
-  crop::Remove lhs(applied_range, time, duration);
+  crop::Remove lhs(applied_range, time_step, duration);
   EXPECT_TRUE(lhs == lhs);
 
-  crop::Remove rhs(applied_range, time, std::chrono::hours(10));
+  crop::Remove rhs(applied_range, time_step, 10);
   EXPECT_FALSE(lhs == rhs);
 }
 
 TEST_F(HarvestTest, ConstrcutorTest_1) {
-  crop::Harvest action(applied_range.front(), time, duration);
+  crop::Harvest action(applied_range.front(), time_step, duration);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(HarvestTest, ConstrcutorTest_2) {
-  crop::Harvest action(applied_range, time, duration);
+  crop::Harvest action(applied_range, time_step, duration);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_TRUE(action.cost.empty());
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(HarvestTest, ConstrcutorTest_3) {
-  crop::Harvest action(applied_range.front(), time, duration, cost);
+  crop::Harvest action(applied_range.front(), time_step, duration, cost);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(HarvestTest, ConstrcutorTest_4) {
-  crop::Harvest action(applied_range, time, duration, cost);
+  crop::Harvest action(applied_range, time_step, duration, cost);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(cost, action.cost);
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(HarvestTest, ExecuteTest_1) {
-  crop::Add action(applied_range, time, duration, kCornTypeName);
-  Terrain* terrain = new Terrain(kNumberOfRange);
-  action.Execute(terrain);
-  ASSERT_TRUE(terrain->tiles().get(applied_range[0]).plant.has_value());
-  environment::Plant& plant = *(terrain->tiles().get(applied_range[0]).plant);
-  plant.produce = 5;
-
-  crop::Harvest harvest_action(applied_range.front(), time, duration);
-  harvest_action.Execute(terrain);
-  EXPECT_EQ(5, terrain->yield());
+  // This could not be tested now since there is no function to make a plant
+  // grow and even produce.
 }
 
 TEST_F(HarvestTest, OperatorTest) {
-  crop::Harvest lhs(applied_range, time, duration);
+  crop::Harvest lhs(applied_range, time_step, duration);
   EXPECT_TRUE(lhs == lhs);
 
-  crop::Harvest rhs(applied_range, time, std::chrono::hours(10));
+  crop::Harvest rhs(applied_range, time_step, 10);
   EXPECT_FALSE(lhs == rhs);
 }
 
 TEST_F(AddWaterTest, ConstrcutorTest_1) {
-  crop::Water action(applied_range.front(), time, duration, 10.0);
+  crop::Water action(applied_range.front(), time_step, duration, 10.0);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(10.0, action.water_amount);
-  EXPECT_TRUE(action.cost.empty());
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(AddWaterTest, ConstrcutorTest_2) {
-  crop::Water action(applied_range, time, duration, 10.0);
+  crop::Water action(applied_range, time_step, duration, 10.0);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(10.0, action.water_amount);
-  EXPECT_TRUE(action.cost.empty());
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_TRUE(action.cost().empty());
 }
 
 TEST_F(AddWaterTest, ConstrcutorTest_3) {
-  crop::Water action(applied_range.front(), time, duration, 10.0, cost);
+  crop::Water action(applied_range.front(), time_step, duration, cost, 10.0);
 
   EXPECT_EQ(std::vector<Coordinate>(1, applied_range.front()),
-            action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(10.0, action.water_amount);
-  EXPECT_EQ(cost, action.cost);
+            action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 TEST_F(AddWaterTest, ConstrcutorTest_4) {
-  crop::Water action(applied_range, time, duration, 10.0, cost);
+  crop::Water action(applied_range, time_step, duration, cost, 10.0);
 
-  EXPECT_EQ(applied_range, action.applied_range);
-  EXPECT_EQ(time, action.start_time);
-  EXPECT_EQ(duration, action.duration);
-  EXPECT_EQ(10.0, action.water_amount);
-  EXPECT_EQ(cost, action.cost);
+  EXPECT_EQ(applied_range, action.applied_range());
+  EXPECT_EQ(time_step, action.start_time_step());
+  EXPECT_EQ(duration, action.duration());
+  EXPECT_EQ(cost, action.cost());
 }
 
 // Adds water to a range of plants
 TEST_F(AddWaterTest, AddToRange1) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName);
+  crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
   action.Execute(&terrain);
   // add water to terrain
-  crop::Water water_action(applied_range.front(), time, duration, 15.0);
+  crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
   water_action.Execute(&terrain);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(15.0, terrain.tiles()[i][j].soil.water_content);
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -423,20 +393,20 @@ TEST_F(AddWaterTest, AddToRange1) {
 
 // Adds water to a range of plants twice
 TEST_F(AddWaterTest, AddToRange2) {
-  crop::Add action(applied_range.front(), time, duration, kCornTypeName);
+  crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
   Terrain terrain(kNumberOfRange);
   action.Execute(&terrain);
   // add water to terrain
-  crop::Water water_action(applied_range.front(), time, duration, 15.0);
+  crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
   water_action.Execute(&terrain);
 
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(15.0, terrain.tiles()[i][j].soil.water_content);
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
@@ -446,27 +416,27 @@ TEST_F(AddWaterTest, AddToRange2) {
   for (size_t i = 0; i < terrain.width(); ++i) {
     for (size_t j = 0; j < terrain.length(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        ASSERT_NE(std::nullopt, terrain.tiles()[i][j].plant);
+        ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(30.0, terrain.tiles()[i][j].soil.water_content);
       } else {
-        EXPECT_EQ(std::nullopt, terrain.tiles()[i][j].plant);
+        EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
     }
   }
 }
 
 TEST_F(AddWaterTest, OperatorTest) {
-  crop::Water lhs(applied_range, time, duration, 10.0);
+  crop::Water lhs(applied_range, time_step, duration, 10.0);
   EXPECT_TRUE(lhs == lhs);
 
-  crop::Water rhs(applied_range, time, std::chrono::hours(10), 10.0);
+  crop::Water rhs(applied_range, time_step, 10, 10.0);
   EXPECT_FALSE(lhs == rhs);
 
-  crop::Water rhs_2(applied_range, time, duration, 5.0);
+  crop::Water rhs_2(applied_range, time_step, duration, 5.0);
   EXPECT_FALSE(lhs == rhs_2);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

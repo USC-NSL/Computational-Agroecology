@@ -26,7 +26,8 @@ class QlearningTest : public ::testing::Test {
     Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
     Terrain terrain(5);
 
-    env = new Environment(config, std::chrono::system_clock::now(), terrain);
+    env = new Environment(config, std::chrono::system_clock::now(),
+                          std::chrono::hours(1), terrain);
     qlearning = new Qlearning("agent name", env, 10, 54);
   }
 

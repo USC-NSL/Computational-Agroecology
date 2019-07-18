@@ -15,38 +15,38 @@ class EnvironmentTest : public ::testing::Test {
   ~EnvironmentTest() { delete env; }
 
  protected:
-  Environment* ConstructDummyEnvironment() {
+  Environment *ConstructDummyEnvironment() {
     Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
     Terrain terrain(kTerrainSize);
 
-    return new Environment(config, std::chrono::system_clock::now(), terrain);
+    return new Environment(config, std::chrono::system_clock::now(),
+                           std::chrono::hours(1), terrain);
   }
 
   void SetUp() override { env = ConstructDummyEnvironment(); }
 
-  Environment* env;
+  Environment *env;
 };
 
 TEST_F(EnvironmentTest, ConstructorTest) {
-  Environment* tmp = ConstructDummyEnvironment();
+  Environment *tmp = ConstructDummyEnvironment();
   // Nothing happens means it should have been constructed successfully.
   delete tmp;
 }
 
-TEST_F(EnvironmentTest, JumpToTimeTest) {
-  auto time = std::chrono::system_clock::now() + std::chrono::hours(1);
-  env->JumpToTime(time);
+TEST_F(EnvironmentTest, JumpToTimeStepTest) {
+  env->JumpToTimeStep(1);
 
-  EXPECT_EQ(time, env->timestamp());
+  EXPECT_EQ(1, env->time_step());
 }
 
-TEST_F(EnvironmentTest, JumpDurationTest) {
-  auto current_time = env->timestamp();
-  env->JumpDuration(std::chrono::hours(1));
-  EXPECT_EQ(current_time + std::chrono::hours(1), env->timestamp());
+TEST_F(EnvironmentTest, JumpForwardTimeTest) {
+  auto current_time_step = env->time_step();
+  env->JumpForwardTimeStep(1);
+  EXPECT_EQ(current_time_step + 1, env->time_step());
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
