@@ -26,7 +26,8 @@ export class GUI {
     this.restartCall = restartCall;
     this.updateWeatherCall = updateWeatherCall;
 
-    let gui = new dat.GUI();
+    let gui = new dat.GUI({autoPlace: false});
+    gui.domElement.id = 'gui';
 
     gui.add(this, 'functionMode',
             Object.keys(FunctionMode)

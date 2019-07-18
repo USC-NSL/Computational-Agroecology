@@ -25,7 +25,7 @@ import {
 import {MapControls} from 'three/examples/jsm/controls/MapControls';
 
 import {TileMap} from './tilemap';
-import {Configs} from './config';
+import {PlantConfigs} from './plant';
 import {file_urls, color_configs} from "./common";
 
 export interface RainDrop { position: Vector3, velocity: number };
@@ -45,15 +45,16 @@ export class Render {
   private rainDrops: RainDrop[];
   private rain: Points;
 
-  configs: Configs;
+  plantConfigs: PlantConfigs;
   tilemap: TileMap | undefined;
 
-  constructor(configs: Configs) {
+  constructor(configs: PlantConfigs) {
     let container = document.createElement('div');
+    container.setAttribute("id", "threejs");
     document.body.appendChild(container);
 
     // CONFIGS
-    this.configs = configs;
+    this.plantConfigs = configs;
 
     // SCENE
     this.scene = new Scene();
@@ -77,7 +78,7 @@ export class Render {
     // CAMERA
     this.camera = new PerspectiveCamera(
         45, window.innerWidth / window.innerHeight, 1, 1000);
-    this.camera.position.set(0, -100, 75);
+    this.camera.position.set(0, -160, 120);
     this.camera.up.set(0, 0, 1);
 
     // CAMERA CONTROLS
@@ -118,8 +119,8 @@ export class Render {
       alphaTest: 0.1,
       opacity: 0.3
     });
-    let width = this.configs.getWidth();
-    let height = this.configs.getWidth();
+    let width = this.plantConfigs.getWidth();
+    let height = this.plantConfigs.getWidth();
     for (let i = 0; i < width * height * 3; i++) {
       let cloud = new Mesh(new PlaneGeometry(30, 30), cloudMaterial);
       cloud.name = "cloud";
@@ -169,9 +170,9 @@ export class Render {
 
   reset() {
     let plant: Object3D | undefined;
-    for (let i = 0; i < this.configs.getHeight(); i++) {
-      for (let j = 0; j < this.configs.getWidth(); j++) {
-        plant = this.configs.removePlantModel(i, j);
+    for (let i = 0; i < this.plantConfigs.getHeight(); i++) {
+      for (let j = 0; j < this.plantConfigs.getWidth(); j++) {
+        plant = this.plantConfigs.removePlantModel(i, j);
         if (plant !== undefined) {
           this.scene.remove(plant);
         }

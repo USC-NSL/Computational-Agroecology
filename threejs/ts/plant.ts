@@ -13,7 +13,7 @@ import {Group, Mesh, Object3D} from "three/src/Three";
 import {MTLLoader, MaterialCreator} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 
-export class Configs {
+export class PlantConfigs {
   // data
   private env: Env;
   private models: model | undefined;

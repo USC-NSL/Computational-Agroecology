@@ -1,6 +1,6 @@
 import {Object3D} from "three/src/Three";
 import {FunctionMode, WeatherMode} from "./common";
-import {Configs} from "./config";
+import {PlantConfigs} from "./plant";
 import {Render} from "./render";
 import {API} from "./API";
 import {GUI} from "./GUI";
@@ -8,26 +8,26 @@ import {TileMap} from "./tilemap";
 
 export class MainControl {
   // modules
-  configs: Configs;
+  plantConfigs: PlantConfigs;
   api: API;
   gui: GUI;
   tilemap: TileMap;
   render: Render;
 
   constructor(width: number, height: number) {
-    this.configs = new Configs(width, height);
-    this.render = new Render(this.configs);
-    this.api = new API(this.configs);
+    this.plantConfigs = new PlantConfigs(width, height);
+    this.render = new Render(this.plantConfigs);
+    this.api = new API(this.plantConfigs);
     this.gui = new GUI(this.render, this.api, this.reset.bind(this),
                        this.updateWeather.bind(this));
     this.tilemap =
-        new TileMap(this.configs, this.render, this.updateTile.bind(this));
+        new TileMap(this.plantConfigs, this.render, this.updateTile.bind(this));
     // resolve cyclic dependency
     this.render.bindTileMapEvent(this.tilemap);
   }
 
   async load() {
-    await this.configs.loadModels();
+    await this.plantConfigs.loadModels();
     await this.updateTile(0, 0, "CORN", 0);
     await this.updateTile(0, 1, "CORN", 3);
     await this.updateTile(0, 2, "CORN", 6);
@@ -40,7 +40,7 @@ export class MainControl {
   reset() {
     this.tilemap.reset();
     this.render.reset();
-    this.configs.reset();  // reset after renderer
+    this.plantConfigs.reset();  // reset after renderer
     this.api.reset();
   }
 
@@ -52,17 +52,17 @@ export class MainControl {
       case FunctionMode[FunctionMode.CORN]:
       case FunctionMode[FunctionMode.BEAN]:
       case FunctionMode[FunctionMode.SQUASH]:
-        plant =
-            this.configs.addPlantModel(planttype, plantstatus, gridX, gridY);
+        plant = this.plantConfigs.addPlantModel(planttype, plantstatus, gridX,
+                                                gridY);
         if (plant !== undefined) {
           this.render.addModeltoScene(plant);
           this.api.agentAddCrop(gridX, gridY, planttype);
         }
         break;
       case FunctionMode[FunctionMode.WATER]:
-        return this.configs.water(gridX, gridY);
+        return this.plantConfigs.water(gridX, gridY);
       case FunctionMode[FunctionMode.REMOVE]:
-        plant = this.configs.removePlantModel(gridX, gridY);
+        plant = this.plantConfigs.removePlantModel(gridX, gridY);
         if (plant !== undefined) {
           this.render.removeModelfromScene(plant);
           this.api.agentRemoveCrop(gridX, gridY);

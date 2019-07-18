@@ -16,7 +16,7 @@ import {
   hydration_configs,
   file_urls
 } from "./common";
-import {Configs} from "./config";
+import {PlantConfigs} from "./plant";
 
 
 export class TileMap {
@@ -24,7 +24,7 @@ export class TileMap {
   mask: Mesh | undefined;
   updateTile: (gridX: number, gridY: number) => void;
 
-  configs: Configs;
+  plantConfigs: PlantConfigs;
   render: Render;
 
   // touch event
@@ -32,12 +32,12 @@ export class TileMap {
   clientX: number;
   clientY: number;
 
-  constructor(configs: Configs, render: Render,
+  constructor(configs: PlantConfigs, render: Render,
               updateTile: (gridX: number, gridY: number) => void) {
     this.tilemap = [];
     this.mask = undefined;
 
-    this.configs = configs;
+    this.plantConfigs = configs;
     this.render = render;
     this.updateTile = updateTile;
     this.dragging = false;
@@ -56,8 +56,8 @@ export class TileMap {
       pop = this.tilemap.pop();
     }
 
-    for (let i = 0; i < this.configs.getHeight(); i++) {
-      for (let j = 0; j < this.configs.getWidth(); j++) {
+    for (let i = 0; i < this.plantConfigs.getHeight(); i++) {
+      for (let j = 0; j < this.plantConfigs.getWidth(); j++) {
         let geometry = new BoxGeometry(10, 10, 1);
         let material = new MeshLambertMaterial({
           color: color_configs.TILE_NORMAL,
@@ -87,7 +87,7 @@ export class TileMap {
     if (this.mask != undefined) {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
-      let waterlevel = this.configs.getWaterLevel(gridX, gridY);
+      let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
       } else {
@@ -126,7 +126,7 @@ export class TileMap {
     if (this.mask !== undefined) {
       let gridX = pos2grid(this.mask.position.x);
       let gridY = pos2grid(this.mask.position.y);
-      let waterlevel = this.configs.getWaterLevel(gridX, gridY);
+      let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
       } else {
@@ -154,7 +154,7 @@ export class TileMap {
       let gridX = pos2grid(tile.position.x);
       let gridY = pos2grid(tile.position.y);
       this.updateTile(gridX, gridY);
-      let waterlevel = this.configs.getWaterLevel(gridX, gridY);
+      let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (waterlevel !== undefined) {
         if (this.mask.material instanceof MeshLambertMaterial) {
           this.mask.material.color.set(hydration_configs[waterlevel]);
