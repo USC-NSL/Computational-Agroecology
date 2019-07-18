@@ -14,7 +14,9 @@ Qlearning::Qlearning(const std::string &name, environment::Environment *env,
   }
 }
 
-Qlearning::~Qlearning() { delete[] qtable_; }
+Qlearning::~Qlearning() {
+  delete[] qtable_;
+}
 
 simulator::action::Action *Qlearning::interpreter(int action_taken_) {  // To do
   return nullptr;
@@ -24,7 +26,8 @@ int Qlearning::Execute(int days) {
   while (days > 0) {
     int current_state = RandomInt(0, row_);
     int action_taken = MaxQAction(current_state);
-    // TODO: auto action = interpreter(action_taken) and env.ReceiveAction(action) 
+    // TODO: auto action = interpreter(action_taken) and
+    // env.ReceiveAction(action)
     int next_state = RandomInt(0, row_);
     UpdateQtable(current_state, 0, next_state, action_taken);
     days--;
@@ -61,4 +64,4 @@ int Qlearning::MaxQAction(int state) {
   return index;
 }
 
-} // namespace agent
+}  // namespace agent

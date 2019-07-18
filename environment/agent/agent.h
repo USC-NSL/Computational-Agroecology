@@ -26,7 +26,7 @@ struct ActionID {
 };
 
 class Agent {
-public:
+ public:
   enum ReturnCodes { SUCCESS = 0, INVALID_ARGUMENT, NOT_ENOUGH_RESOURCES };
 
   // modifiers
@@ -53,7 +53,7 @@ public:
     return owned_resource_;
   }
 
-protected:
+ protected:
   // constructors which can only be used in heritance
   // only children can call these
   Agent(const std::string &name, environment::Environment *env);
@@ -76,6 +76,6 @@ protected:
   void DeductResources(const ResourceList &cost);
 };
 
-} // namespace agent
+}  // namespace agent
 
-#endif // COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_

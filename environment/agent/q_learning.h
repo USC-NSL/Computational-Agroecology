@@ -8,7 +8,7 @@
 namespace agent {
 
 class Qlearning : public Agent {
-public:
+ public:
   Qlearning(const std::string &name, environment::Environment *env, int row_,
             int column_);
 
@@ -27,7 +27,7 @@ public:
   // TODO: to add execute q leanring cuntion.
   int Execute(int days);
 
-private:
+ private:
   int row_;
   int column_;
   int *qtable_;
@@ -35,6 +35,6 @@ private:
   const static int kDiscount = 0.95;
 };
 
-} // namespace agent
+}  // namespace agent
 
-#endif // COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_

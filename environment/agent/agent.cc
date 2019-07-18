@@ -36,27 +36,24 @@ int Agent::RandomInt(int min, int max) {
 
 simulator::action::Action *Agent::CreateAction(const ActionID &action) {
   simulator::action::Action *new_action;
-  //Create a action at time env_->timestamp()
+  // Create a action at time env_->timestamp()
   using ::simulator::action::ActionType;
   switch (action.action_taken) {
-  case ActionType::CROP_ADD:
-    new_action = new simulator::action::crop::Add(
-        environment::Coordinate(action.row, action.col),
-        env_->timestamp(),
-        std::chrono::duration<int>(1), kCornTypeName);
-    break;
-  case ActionType::WATER_CROP:
-    new_action = new simulator::action::crop::Water(
-        environment::Coordinate(action.row, action.col),
-        env_->timestamp(),
-        std::chrono::duration<int>(1), 1);
-    break;
-  case ActionType::CROP_HARVEST:
-    new_action = new simulator::action::crop::Harvest(
-        environment::Coordinate(action.row, action.col),
-        env_->timestamp(),
-        std::chrono::duration<int>(1));
-    break;
+    case ActionType::CROP_ADD:
+      new_action = new simulator::action::crop::Add(
+          environment::Coordinate(action.row, action.col), env_->timestamp(),
+          std::chrono::duration<int>(1), kCornTypeName);
+      break;
+    case ActionType::WATER_CROP:
+      new_action = new simulator::action::crop::Water(
+          environment::Coordinate(action.row, action.col), env_->timestamp(),
+          std::chrono::duration<int>(1), 1);
+      break;
+    case ActionType::CROP_HARVEST:
+      new_action = new simulator::action::crop::Harvest(
+          environment::Coordinate(action.row, action.col), env_->timestamp(),
+          std::chrono::duration<int>(1));
+      break;
   }
   // Remember to delete action
   return new_action;
@@ -152,4 +149,4 @@ void Agent::DeductResources(const ResourceList &cost) {
   }
 }
 
-} // namespace agent
+}  // namespace agent
