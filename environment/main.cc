@@ -17,7 +17,7 @@ int main() {
   environment::Environment env(config, std::chrono::system_clock::now(),
                                std::chrono::hours(1), terrain);
 
-  const std::string kCornTypeName = "Corn";
+  const std::string kBeanTypeName = "bean";
 
   // Declare agent
   std::string agent_name = "q_learning";
@@ -29,14 +29,14 @@ int main() {
   auto action_obj = agent_test.CreateAction(action);
 
   simulator::action::crop::Add add_crop(environment::Coordinate(0, 0), 1, 0,
-                                        kCornTypeName);
+                                        kBeanTypeName);
   env.ReceiveAction(&add_crop);
   simulator::action::crop::Add add_another_crop(environment::Coordinate(1, 1),
-                                                2, 0, kCornTypeName);
+                                                2, 0, kBeanTypeName);
   env.ReceiveAction(&add_another_crop);
 
   simulator::action::crop::Add future_add_crop(environment::Coordinate(2, 2),
-                                               48, 0, kCornTypeName);
+                                               48, 0, kBeanTypeName);
   env.ReceiveAction(&future_add_crop);
 
   std::cout << env << std::endl;
