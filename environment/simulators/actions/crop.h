@@ -18,27 +18,20 @@ namespace crop {
 // Plant a crop
 class Add : public Action {
  public:
-  Add(const environment::Coordinate &target,
-      const std::chrono::system_clock::time_point &start_time,
-      const std::chrono::duration<int> &duration,
+  Add(const environment::Coordinate &target, const int64_t &start_time_step,
+      const int64_t &duration, const std::string &crop_type_name);
+
+  Add(const std::vector<environment::Coordinate> &applied_range,
+      const int64_t &start_time_step, const int64_t &duration,
+      const std::string &crop_type_name);
+
+  Add(const environment::Coordinate &target, const int64_t &start_time_step,
+      const int64_t &duration, const agent::Resources &cost,
       const std::string &crop_type_name);
 
   Add(const std::vector<environment::Coordinate> &applied_range,
-      const std::chrono::system_clock::time_point &start_time,
-      const std::chrono::duration<int> &duration,
-      const std::string &crop_type_name);
-
-  Add(const environment::Coordinate &target,
-      const std::chrono::system_clock::time_point &start_time,
-      const std::chrono::duration<int> &duration,
-      const agent::Resources &cost,
-      const std::string &crop_type_name);
-
-  Add(const std::vector<environment::Coordinate> &applied_range,
-      const std::chrono::system_clock::time_point &start_time,
-      const std::chrono::duration<int> &duration,
-      const agent::Resources &cost,
-      const std::string &crop_type_name);
+      const int64_t &start_time_step, const int64_t &duration,
+      const agent::Resources &cost, const std::string &crop_type_name);
 
   void Execute(environment::Terrain *terrain) const override;
 
@@ -51,22 +44,17 @@ class Add : public Action {
 // Remove a crop
 class Remove : public Action {
  public:
-  Remove(const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration);
+  Remove(const environment::Coordinate &target, const int64_t &start_time_step,
+         const int64_t &duration);
 
   Remove(const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration);
+         const int64_t &start_time_step, const int64_t &duration);
 
-  Remove(const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
-         const agent::Resources &cost);
+  Remove(const environment::Coordinate &target, const int64_t &start_time_step,
+         const int64_t &duration, const agent::Resources &cost);
 
   Remove(const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
+         const int64_t &start_time_step, const int64_t &duration,
          const agent::Resources &cost);
 
   void Execute(environment::Terrain *terrain) const override;
@@ -75,22 +63,17 @@ class Remove : public Action {
 // Harvest a crop
 class Harvest : public Action {
  public:
-  Harvest(const environment::Coordinate &target,
-          const std::chrono::system_clock::time_point &start_time,
-          const std::chrono::duration<int> &duration);
+  Harvest(const environment::Coordinate &target, const int64_t &start_time_step,
+          const int64_t &duration);
 
   Harvest(const std::vector<environment::Coordinate> &applied_range,
-          const std::chrono::system_clock::time_point &start_time,
-          const std::chrono::duration<int> &duration);
+          const int64_t &start_time_step, const int64_t &duration);
 
-  Harvest(const environment::Coordinate &target,
-          const std::chrono::system_clock::time_point &start_time,
-          const std::chrono::duration<int> &duration,
-          const agent::Resources &cost);
+  Harvest(const environment::Coordinate &target, const int64_t &start_time_step,
+          const int64_t &duration, const agent::Resources &cost);
 
   Harvest(const std::vector<environment::Coordinate> &applied_range,
-          const std::chrono::system_clock::time_point &start_time,
-          const std::chrono::duration<int> &duration,
+          const int64_t &start_time_step, const int64_t &duration,
           const agent::Resources &cost);
 
   void Execute(environment::Terrain *terrain) const override;
@@ -99,25 +82,20 @@ class Harvest : public Action {
 // Water a crop
 class Water : public Action {
  public:
-  Water(const environment::Coordinate &target,
-        const std::chrono::system_clock::time_point &start_time,
-        const std::chrono::duration<int> &duration, const double &water_amount);
+  Water(const environment::Coordinate &target, const int64_t &start_time_step,
+        const int64_t &duration, const double &water_amount);
 
   Water(const std::vector<environment::Coordinate> &applied_range,
-        const std::chrono::system_clock::time_point &start_time,
-        const std::chrono::duration<int> &duration, const double &water_amount);
+        const int64_t &start_time_step, const int64_t &duration,
+        const double &water_amount);
 
-  Water(const environment::Coordinate &target,
-        const std::chrono::system_clock::time_point &start_time,
-        const std::chrono::duration<int> &duration,
-        const agent::Resources &cost,
+  Water(const environment::Coordinate &target, const int64_t &start_time_step,
+        const int64_t &duration, const agent::Resources &cost,
         const double &water_amount);
 
   Water(const std::vector<environment::Coordinate> &applied_range,
-        const std::chrono::system_clock::time_point &start_time,
-        const std::chrono::duration<int> &duration,
-        const agent::Resources &cost,
-        const double &water_amount);
+        const int64_t &start_time_step, const int64_t &duration,
+        const agent::Resources &cost, const double &water_amount);
 
   void Execute(environment::Terrain *terrain) const override;
 

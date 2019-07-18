@@ -8,34 +8,27 @@ namespace action {
 
 namespace crop {
 
-Add::Add(const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
-         const std::string &crop_type_name)
-    : Action(CROP_ADD, target, start_time, duration),
+Add::Add(const environment::Coordinate &target, const int64_t &start_time_step,
+         const int64_t &duration, const std::string &crop_type_name)
+    : Action(CROP_ADD, target, start_time_step, duration),
       crop_type_name_(crop_type_name) {}
 
 Add::Add(const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
+         const int64_t &start_time_step, const int64_t &duration,
          const std::string &crop_type_name)
-    : Action(CROP_ADD, applied_range, start_time, duration),
+    : Action(CROP_ADD, applied_range, start_time_step, duration),
       crop_type_name_(crop_type_name) {}
 
-Add::Add(const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
-         const agent::Resources &cost,
+Add::Add(const environment::Coordinate &target, const int64_t &start_time_step,
+         const int64_t &duration, const agent::Resources &cost,
          const std::string &crop_type_name)
-    : Action(CROP_ADD, target, start_time, duration, cost),
+    : Action(CROP_ADD, target, start_time_step, duration, cost),
       crop_type_name_(crop_type_name) {}
 
 Add::Add(const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
-         const agent::Resources &cost,
-         const std::string &crop_type_name)
-    : Action(CROP_ADD, applied_range, start_time, duration, cost),
+         const int64_t &start_time_step, const int64_t &duration,
+         const agent::Resources &cost, const std::string &crop_type_name)
+    : Action(CROP_ADD, applied_range, start_time_step, duration, cost),
       crop_type_name_(crop_type_name) {}
 
 void Add::Execute(environment::Terrain *terrain) const {
@@ -63,26 +56,22 @@ bool Add::operator==(const Add &rhs) const {
 }
 
 Remove::Remove(const environment::Coordinate &target,
-               const std::chrono::system_clock::time_point &start_time,
-               const std::chrono::duration<int> &duration)
-    : Action(CROP_REMOVE, target, start_time, duration) {}
+               const int64_t &start_time_step, const int64_t &duration)
+    : Action(CROP_REMOVE, target, start_time_step, duration) {}
 
 Remove::Remove(const std::vector<environment::Coordinate> &applied_range,
-               const std::chrono::system_clock::time_point &start_time,
-               const std::chrono::duration<int> &duration)
-    : Action(CROP_REMOVE, applied_range, start_time, duration) {}
+               const int64_t &start_time_step, const int64_t &duration)
+    : Action(CROP_REMOVE, applied_range, start_time_step, duration) {}
 
 Remove::Remove(const environment::Coordinate &target,
-               const std::chrono::system_clock::time_point &start_time,
-               const std::chrono::duration<int> &duration,
+               const int64_t &start_time_step, const int64_t &duration,
                const agent::Resources &cost)
-    : Action(CROP_REMOVE, target, start_time, duration, cost) {}
+    : Action(CROP_REMOVE, target, start_time_step, duration, cost) {}
 
 Remove::Remove(const std::vector<environment::Coordinate> &applied_range,
-               const std::chrono::system_clock::time_point &start_time,
-               const std::chrono::duration<int> &duration,
+               const int64_t &start_time_step, const int64_t &duration,
                const agent::Resources &cost)
-    : Action(CROP_REMOVE, applied_range, start_time, duration, cost) {}
+    : Action(CROP_REMOVE, applied_range, start_time_step, duration, cost) {}
 
 void Remove::Execute(environment::Terrain *terrain) const {
   // Check if the input argument is valid
@@ -99,26 +88,22 @@ void Remove::Execute(environment::Terrain *terrain) const {
 }
 
 Harvest::Harvest(const environment::Coordinate &target,
-                 const std::chrono::system_clock::time_point &start_time,
-                 const std::chrono::duration<int> &duration)
-    : Action(CROP_HARVEST, target, start_time, duration) {}
+                 const int64_t &start_time_step, const int64_t &duration)
+    : Action(CROP_HARVEST, target, start_time_step, duration) {}
 
 Harvest::Harvest(const std::vector<environment::Coordinate> &applied_range,
-                 const std::chrono::system_clock::time_point &start_time,
-                 const std::chrono::duration<int> &duration)
-    : Action(CROP_HARVEST, applied_range, start_time, duration) {}
+                 const int64_t &start_time_step, const int64_t &duration)
+    : Action(CROP_HARVEST, applied_range, start_time_step, duration) {}
 
 Harvest::Harvest(const environment::Coordinate &target,
-                 const std::chrono::system_clock::time_point &start_time,
-                 const std::chrono::duration<int> &duration,
+                 const int64_t &start_time_step, const int64_t &duration,
                  const agent::Resources &cost)
-    : Action(CROP_HARVEST, target, start_time, duration, cost) {}
+    : Action(CROP_HARVEST, target, start_time_step, duration, cost) {}
 
 Harvest::Harvest(const std::vector<environment::Coordinate> &applied_range,
-                 const std::chrono::system_clock::time_point &start_time,
-                 const std::chrono::duration<int> &duration,
+                 const int64_t &start_time_step, const int64_t &duration,
                  const agent::Resources &cost)
-    : Action(CROP_HARVEST, applied_range, start_time, duration, cost) {}
+    : Action(CROP_HARVEST, applied_range, start_time_step, duration, cost) {}
 
 void Harvest::Execute(environment::Terrain *terrain) const {
   // Check if the input argument is valid
@@ -140,33 +125,27 @@ void Harvest::Execute(environment::Terrain *terrain) const {
 }
 
 Water::Water(const environment::Coordinate &target,
-             const std::chrono::system_clock::time_point &start_time,
-             const std::chrono::duration<int> &duration,
+             const int64_t &start_time_step, const int64_t &duration,
              const double &water_amount)
-    : Action(WATER_CROP, target, start_time, duration),
+    : Action(WATER_CROP, target, start_time_step, duration),
       water_amount_(water_amount) {}
 
 Water::Water(const std::vector<environment::Coordinate> &applied_range,
-             const std::chrono::system_clock::time_point &start_time,
-             const std::chrono::duration<int> &duration,
+             const int64_t &start_time_step, const int64_t &duration,
              const double &water_amount)
-    : Action(WATER_CROP, applied_range, start_time, duration),
+    : Action(WATER_CROP, applied_range, start_time_step, duration),
       water_amount_(water_amount) {}
 
 Water::Water(const environment::Coordinate &target,
-             const std::chrono::system_clock::time_point &start_time,
-             const std::chrono::duration<int> &duration,
-             const agent::Resources &cost,
-             const double &water_amount)
-    : Action(WATER_CROP, target, start_time, duration, cost),
+             const int64_t &start_time_step, const int64_t &duration,
+             const agent::Resources &cost, const double &water_amount)
+    : Action(WATER_CROP, target, start_time_step, duration, cost),
       water_amount_(water_amount) {}
 
 Water::Water(const std::vector<environment::Coordinate> &applied_range,
-             const std::chrono::system_clock::time_point &start_time,
-             const std::chrono::duration<int> &duration,
-             const agent::Resources &cost,
-             const double &water_amount)
-    : Action(WATER_CROP, applied_range, start_time, duration, cost),
+             const int64_t &start_time_step, const int64_t &duration,
+             const agent::Resources &cost, const double &water_amount)
+    : Action(WATER_CROP, applied_range, start_time_step, duration, cost),
       water_amount_(water_amount) {}
 
 void Water::Execute(environment::Terrain *terrain) const {

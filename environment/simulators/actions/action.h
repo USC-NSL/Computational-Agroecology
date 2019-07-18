@@ -28,10 +28,8 @@ class Action {
   const std::vector<environment::Coordinate> &applied_range() const {
     return applied_range_;
   }
-  const std::chrono::system_clock::time_point start_time() const {
-    return start_time_;
-  }
-  const std::chrono::duration<int> duration() const { return duration_; }
+  const int64_t start_time_step() const { return start_time_step_; }
+  const int64_t duration() const { return duration_; }
   const agent::Resources &cost() const { return cost_; }
 
   // operator
@@ -40,31 +38,31 @@ class Action {
  protected:
   // only children can call constructors
   Action(const ActionType type, const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration);
+         const int64_t &start_time_step, const int64_t &duration);
 
   Action(const ActionType type,
          const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration);
+         const int64_t &start_time_step, const int64_t &duration);
 
   Action(const ActionType type, const environment::Coordinate &target,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
+         const int64_t &start_time_step, const int64_t &duration,
          const agent::Resources &cost);
 
   Action(const ActionType type,
          const std::vector<environment::Coordinate> &applied_range,
-         const std::chrono::system_clock::time_point &start_time,
-         const std::chrono::duration<int> &duration,
+         const int64_t &start_time_step, const int64_t &duration,
          const agent::Resources &cost);
 
   // private accessor
   const ActionType &type() const { return type_; }
 
   const std::vector<environment::Coordinate> applied_range_;
-  const std::chrono::system_clock::time_point start_time_;
-  const std::chrono::duration<int> duration_;
+
+  // The expected start time step of this action
+  const int64_t start_time_step_;
+
+  // The expected duration in time steps of this action
+  const int64_t duration_;
   const agent::Resources cost_;
 
  private:

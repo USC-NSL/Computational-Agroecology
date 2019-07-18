@@ -1,6 +1,5 @@
 #include "agent.h"
 
-#include "simulators/actions/crop.h"
 #include "plant.h"
 
 namespace agent {
@@ -32,18 +31,18 @@ simulator::action::Action *Agent::CreateAction(const ActionID &action) {
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
       new_action = new simulator::action::crop::Add(
-          environment::Coordinate(action.row, action.col), env_->timestamp(),
-          std::chrono::duration<int>(1), kCornTypeName);
+          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
+          kCornTypeName);
       break;
     case ActionType::WATER_CROP:
       new_action = new simulator::action::crop::Water(
-          environment::Coordinate(action.row, action.col), env_->timestamp(),
-          std::chrono::duration<int>(1), 1);
+          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
+          1);
       break;
     case ActionType::CROP_HARVEST:
       new_action = new simulator::action::crop::Harvest(
-          environment::Coordinate(action.row, action.col), env_->timestamp(),
-          std::chrono::duration<int>(1));
+          environment::Coordinate(action.row, action.col), env_->time_step(),
+          1);
       break;
   }
   // Remember to delete action

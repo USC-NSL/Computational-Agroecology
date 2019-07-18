@@ -10,13 +10,15 @@ class Environment;
 
 namespace simulator {
 
+// TODO from Ralph: I am not sure which one should simulators use, time_points
+// or time steps?
 // This is the abstract definition for simulators.
 class Simulator {
  public:
   // Given a time point, the simulator should change the environment.
   virtual void SimulateToTime(
-      environment::Environment* env,
-      const std::chrono::system_clock::time_point& time) = 0;
+      environment::Environment *env,
+      const std::chrono::system_clock::time_point &time) = 0;
 };
 
 }  // namespace simulator

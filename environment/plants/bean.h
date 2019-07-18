@@ -15,7 +15,8 @@ class Bean : public Plant {
   Bean(const std::string &name) : Plant(name) {}
 
   // TODO: Fill in.
-  virtual Resources GrowStep(const Resources &available) override {
+  virtual Resources GrowStep(const int64_t num_time_step,
+                             const Resources &available) override {
     return Resources();
   }
 };

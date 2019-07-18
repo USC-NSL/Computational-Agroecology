@@ -67,11 +67,14 @@ class Plant {
 
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
-  // (e.g., light) resources, attempts to perform one growing time step.
-  // Modifies this and returns the resources consumed, which should be
-  // component-wise less than `available`.  Performs no accounting in the
-  // environment; such accounting is the responsibility of the caller.
-  virtual Resources GrowStep(const Resources &available) = 0;
+  // (e.g., light) resources, attempts to perform growing in the specified
+  // number time step(s). Modifies this and returns the resources consumed,
+  // which should be component-wise less than `available`.  Performs no
+  // accounting in the environment; such accounting is the responsibility of the
+  // caller.
+  // TODO: Figure out a way to trigger this function every timestep.
+  virtual Resources GrowStep(const int64_t num_time_step,
+                             const Resources &available) = 0;
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
