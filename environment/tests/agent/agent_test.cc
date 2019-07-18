@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "agent/agent.h"
+#include "agent/q_learning.h"
 #include "environment.h"
 #include "plant_types/plant_type.h"
 #include "simulators/actions/crop.h"
@@ -28,52 +29,12 @@ class AgentTest : public ::testing::Test {
     Terrain terrain(5);
 
     env = new Environment(config, std::chrono::system_clock::now(), terrain);
-    agent = new Agent("agent name", env);
+    agent = new Qlearning("agent name", env, 10, 54);
   }
 
   Agent* agent;
   Environment* env;
 };
-
-TEST_F(AgentTest, ConstructorTest_1) {
-  std::string name("agent name");
-  Agent agent(name, env);
-
-  EXPECT_EQ(name, agent.name());
-  EXPECT_EQ(env, agent.environment());
-  EXPECT_TRUE(agent.owned_resource().empty());
-}
-
-TEST_F(AgentTest, ConstructorTest_2) {
-  std::string name("agent name");
-  std::unordered_map<ResourceType, size_t> resources;
-  resources[ResourceType::LABOR] = 20;
-  resources[ResourceType::MONEY] = 40;
-
-  Agent agent(name, env, resources);
-
-  EXPECT_EQ(name, agent.name());
-  EXPECT_EQ(env, agent.environment());
-  EXPECT_EQ(resources, agent.owned_resource());
-}
-
-TEST_F(AgentTest, ConstructorTest_3) {
-  std::string name("agent name");
-  std::unordered_map<ResourceType, size_t> resources;
-  resources[ResourceType::LABOR] = 20;
-  resources[ResourceType::MONEY] = 40;
-  ResourceList resources_list;
-  for (const auto& resource : resources) {
-    resources_list.push_back(
-        std::pair<ResourceType, size_t>(resource.first, resource.second));
-  }
-
-  Agent agent(name, env, resources_list);
-
-  EXPECT_EQ(name, agent.name());
-  EXPECT_EQ(env, agent.environment());
-  EXPECT_EQ(resources, agent.owned_resource());
-}
 
 TEST_F(AgentTest, AddResourceTest) {
   agent->AddResource(ResourceType::MONEY, 100);

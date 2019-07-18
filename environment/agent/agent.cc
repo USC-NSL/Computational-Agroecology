@@ -37,20 +37,21 @@ int Agent::RandomInt(int min, int max) {
 simulator::action::Action *Agent::CreateAction(const ActionID &action) {
   simulator::action::Action *new_action;
   //Create a action at time env_->timestamp()
+  using ::simulator::action::ActionType;
   switch (action.action_taken) {
-  case kAdd:
+  case ActionType::CROP_ADD:
     new_action = new simulator::action::crop::Add(
         environment::Coordinate(action.row, action.col),
         env_->timestamp(),
         std::chrono::duration<int>(1), kCornTypeName);
     break;
-  case kWater:
+  case ActionType::WATER_CROP:
     new_action = new simulator::action::crop::Water(
         environment::Coordinate(action.row, action.col),
         env_->timestamp(),
         std::chrono::duration<int>(1), 1);
     break;
-  case kHarvest:
+  case ActionType::CROP_HARVEST:
     new_action = new simulator::action::crop::Harvest(
         environment::Coordinate(action.row, action.col),
         env_->timestamp(),

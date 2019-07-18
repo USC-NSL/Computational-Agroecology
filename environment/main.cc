@@ -22,12 +22,11 @@ int main() {
   // Declare agent
   std::string agent_name = "q_learning";
   environment::Environment *env_pointer = &env;
-  agent::Agent agent_test(agent_name, env_pointer);
-  // Create Action
-  agent::ActionID action = {terrain.width(), terrain.length(), 3, 2};
-  auto action_obj = agent_test.CreateAction(action);
   // Declare Qlearning
-  agent::Qlearning q_learning(agent_name, env_pointer, 10, 54);
+  agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
+  // Create Action
+  agent::ActionID action = {terrain.width(), terrain.length(), ::simulator::action::ActionType::CROP_HARVEST, 2};
+  auto action_obj = agent_test.CreateAction(action);
 
   simulator::action::crop::Add add_crop(
       environment::Coordinate(0, 0),
