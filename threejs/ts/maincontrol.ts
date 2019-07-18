@@ -5,10 +5,12 @@ import {Render} from "./render";
 import {API} from "./API";
 import {GUI} from "./GUI";
 import {TileMap} from "./tilemap";
+import {WeatherConfigs} from "./weather";
 
 export class MainControl {
   // modules
   plantConfigs: PlantConfigs;
+  weatherConfigs: WeatherConfigs;
   api: API;
   gui: GUI;
   tilemap: TileMap;
@@ -16,24 +18,27 @@ export class MainControl {
 
   constructor(width: number, height: number) {
     this.plantConfigs = new PlantConfigs(width, height);
-    this.render = new Render(this.plantConfigs);
+    this.weatherConfigs = new WeatherConfigs(width, height);
+    this.render = new Render(this.plantConfigs, this.weatherConfigs);
     this.api = new API(this.plantConfigs);
     this.gui = new GUI(this.render, this.api, this.reset.bind(this),
                        this.updateWeather.bind(this));
-    this.tilemap =
-        new TileMap(this.plantConfigs, this.render, this.updateTile.bind(this));
+    this.tilemap = new TileMap(this.plantConfigs, this.render,
+                               this.updatePlant.bind(this));
+
     // resolve cyclic dependency
     this.render.bindTileMapEvent(this.tilemap);
+    this.weatherConfigs.bindingCamera(this.render.camera);
   }
 
   async load() {
     await this.plantConfigs.loadModels();
-    await this.updateTile(0, 0, "CORN", 0);
-    await this.updateTile(0, 1, "CORN", 3);
-    await this.updateTile(0, 2, "CORN", 6);
-    await this.updateTile(1, 0, "SQUASH", 0);
-    await this.updateTile(1, 1, "SQUASH", 3);
-    await this.updateTile(1, 2, "SQUASH", 6);
+    await this.updatePlant(0, 0, "CORN", 0);
+    await this.updatePlant(0, 1, "CORN", 3);
+    await this.updatePlant(0, 2, "CORN", 6);
+    await this.updatePlant(1, 0, "SQUASH", 0);
+    await this.updatePlant(1, 1, "SQUASH", 3);
+    await this.updatePlant(1, 2, "SQUASH", 6);
     this.render.animate();
   }
 
@@ -44,9 +49,9 @@ export class MainControl {
     this.api.reset();
   }
 
-  updateTile(gridX: number, gridY: number,
-             planttype: string = this.gui.getFunctionMode(),
-             plantstatus: number = 0) {
+  updatePlant(gridX: number, gridY: number,
+              planttype: string = this.gui.getFunctionMode(),
+              plantstatus: number = 0) {
     let plant: Object3D | undefined;
     switch (planttype) {
       case FunctionMode[FunctionMode.CORN]:
@@ -80,19 +85,19 @@ export class MainControl {
   updateWeather(weatherMode: string) {
     switch (weatherMode) {
       case WeatherMode[WeatherMode.SUNNY]:
-        this.render.addSuntoScene();
-        this.render.removeCloudfromScene();
-        this.render.removeRainfromScene();
+        this.weatherConfigs.addSuntoScene(this.render.scene);
+        this.weatherConfigs.removeCloudfromScene(this.render.scene);
+        this.weatherConfigs.removeRainfromScene(this.render.scene);
         break;
       case WeatherMode[WeatherMode.CLOUDY]:
-        this.render.addCloudtoScene();
-        this.render.removeRainfromScene();
-        this.render.removeSunfromScene();
+        this.weatherConfigs.addCloudtoScene(this.render.scene);
+        this.weatherConfigs.removeRainfromScene(this.render.scene);
+        this.weatherConfigs.removeSunfromScene(this.render.scene);
         break;
       case WeatherMode[WeatherMode.RAINY]:
-        this.render.addRaintoScene();
-        this.render.addCloudtoScene();
-        this.render.removeSunfromScene();
+        this.weatherConfigs.addRaintoScene(this.render.scene);
+        this.weatherConfigs.addCloudtoScene(this.render.scene);
+        this.weatherConfigs.removeSunfromScene(this.render.scene);
         break;
       default:
         break;

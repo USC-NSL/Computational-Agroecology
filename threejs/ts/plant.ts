@@ -14,7 +14,6 @@ import {MTLLoader, MaterialCreator} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 
 export class PlantConfigs {
-  // data
   private env: Env;
   private models: model | undefined;
 
