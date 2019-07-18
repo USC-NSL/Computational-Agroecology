@@ -3,6 +3,7 @@
 
 #include <optional>
 
+#include "resource.h"
 #include "utility.h"
 
 namespace environment {
@@ -10,6 +11,7 @@ namespace environment {
 // TODO: Refactor these nutrients into a map from ResourceType to amount, as in
 // utility.h, and add to utility.h as needed.
 // TODO: Merge Soil and SoilCondition.
+// Ralph: The todos above are done.
 struct Soil {
   enum Texture { CLAY = 0, SILT, SAND };
 
@@ -21,14 +23,7 @@ struct Soil {
   double salinity;
   double organic_matter;
 
-  struct Nutrients {
-    double nitrogen;
-    double phosphorus;
-    double potassium;
-    double calcium;
-    double magnesium;
-    double sulfur;
-  };
+  Resources resources;
 
   double water_content;
 };
