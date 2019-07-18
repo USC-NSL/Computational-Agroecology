@@ -114,7 +114,6 @@ export const color_configs: {
   TILE_WATERED2: 0x843e0a,
   TILE_WATERED3: 0x492205,
   TILE_ONSELECT: 0xffffff,
-  TILE_ONCLICK: 0xff0000,
 };
 
 export const hydration_max = 3;

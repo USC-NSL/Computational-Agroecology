@@ -56,9 +56,9 @@ export class GUI {
   // TODO: deprecate it later
   updateCamera() {
     requestAnimationFrame(this.updateCamera.bind(this));
-    this.cameraX = this.render.getCamera().position.x;
-    this.cameraY = this.render.getCamera().position.y;
-    this.cameraZ = this.render.getCamera().position.z;
+    this.cameraX = this.render.camera.position.x;
+    this.cameraY = this.render.camera.position.y;
+    this.cameraZ = this.render.camera.position.z;
   };
 
   update() {

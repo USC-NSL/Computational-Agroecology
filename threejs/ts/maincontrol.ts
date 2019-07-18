@@ -6,25 +6,27 @@ import {API} from "./API";
 import {GUI} from "./GUI";
 import {TileMap} from "./tilemap";
 import {WeatherConfigs} from "./weather";
+import {SideNavigator} from "./side_navigator";
 
 export class MainControl {
-  // modules
   plantConfigs: PlantConfigs;
   weatherConfigs: WeatherConfigs;
   api: API;
   gui: GUI;
   tilemap: TileMap;
   render: Render;
+  sideNavigator: SideNavigator;
 
   constructor(width: number, height: number) {
     this.plantConfigs = new PlantConfigs(width, height);
     this.weatherConfigs = new WeatherConfigs(width, height);
     this.render = new Render(this.plantConfigs, this.weatherConfigs);
+    this.sideNavigator = new SideNavigator(this.plantConfigs);
     this.api = new API(this.plantConfigs);
     this.gui = new GUI(this.render, this.api, this.reset.bind(this),
                        this.updateWeather.bind(this));
     this.tilemap = new TileMap(this.plantConfigs, this.render,
-                               this.updatePlant.bind(this));
+                               this.sideNavigator, this.updatePlant.bind(this));
 
     // resolve cyclic dependency
     this.render.bindTileMapEvent(this.tilemap);

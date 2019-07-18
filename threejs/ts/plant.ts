@@ -6,7 +6,8 @@ import {
   plant_configs,
   grid2pos,
   clamp,
-  hydration_max
+  hydration_max,
+  Grid
 } from "./common";
 import {Group, Mesh, Object3D} from "three/src/Three";
 
@@ -83,6 +84,10 @@ export class PlantConfigs {
 
   getHeight(): number { return this.env.height; }
   getWidth(): number { return this.env.width; }
+
+  getGrid(gridX: number, gridY: number): Grid {
+    return this.env.grids[gridX][gridY];
+  }
 
   getPlantType(gridX: number, gridY: number): string | undefined {
     return this.env.grids[gridX][gridY].planttype;

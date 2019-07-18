@@ -4,7 +4,6 @@ import {
   WebGLRenderer,
   Object3D,
   Color,
-  Camera,
   PCFSoftShadowMap,
   AmbientLight,
   FogExp2,
@@ -80,8 +79,6 @@ export class Render {
 
     this.animate();
   }
-
-  getCamera(): Camera { return this.camera; }
 
   reset() {
     let plant: Object3D | undefined;

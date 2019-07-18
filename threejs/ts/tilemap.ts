@@ -17,6 +17,7 @@ import {
   file_urls
 } from "./common";
 import {PlantConfigs} from "./plant";
+import {SideNavigator} from "./side_navigator";
 
 
 export class TileMap {
@@ -31,14 +32,17 @@ export class TileMap {
   dragging: Boolean;
   clientX: number;
   clientY: number;
+  sideNavigator: SideNavigator;
 
   constructor(configs: PlantConfigs, render: Render,
+              sideNavigator: SideNavigator,
               updateTile: (gridX: number, gridY: number) => void) {
     this.tilemap = [];
     this.mask = undefined;
 
     this.plantConfigs = configs;
     this.render = render;
+    this.sideNavigator = sideNavigator;
     this.updateTile = updateTile;
     this.dragging = false;
     this.clientX = 0;
@@ -73,15 +77,12 @@ export class TileMap {
     }
   }
 
-  onDocumentMouseMove(event: {
-    clientX: number;
-    clientY: number;
-  }) {
+  onDocumentMouseMove(event: MouseEvent) {
     let mouse = new Vector2();
     let raycaster = new Raycaster();
     mouse.set((event.clientX / window.innerWidth) * 2 - 1,
               -(event.clientY / window.innerHeight) * 2 + 1);
-    raycaster.setFromCamera(mouse, this.render.getCamera());
+    raycaster.setFromCamera(mouse, this.render.camera);
     let intersects = raycaster.intersectObjects(this.tilemap);
 
     if (this.mask != undefined) {
@@ -115,12 +116,67 @@ export class TileMap {
     }
   }
 
-  clickEvent(x: number, y: number) {
+  leftClickEvent(x: number, y: number) {
     let mouse = new Vector2();
     let raycaster = new Raycaster();
     mouse.set((x / window.innerWidth) * 2 - 1,
               -(y / window.innerHeight) * 2 + 1);
-    raycaster.setFromCamera(mouse, this.render.getCamera());
+    raycaster.setFromCamera(mouse, this.render.camera);
+    let intersects = raycaster.intersectObjects(this.tilemap);
+
+    if (this.mask !== undefined) {
+      let gridX = pos2grid(this.mask.position.x);
+      let gridY = pos2grid(this.mask.position.y);
+      let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
+      if (this.mask.material instanceof MeshLambertMaterial) {
+        this.mask.material.color.set(hydration_configs[waterlevel]);
+      } else {
+        for (let material of<Material[]>this.mask.material) {
+          if (material instanceof MeshLambertMaterial) {
+            material.color.set(hydration_configs[waterlevel]);
+          }
+        }
+      }
+      this.mask = undefined;
+    }
+
+    if (intersects.length > 0) {
+      let tile = intersects[0].object;
+      this.mask = <Mesh>tile;
+      let gridX = pos2grid(tile.position.x);
+      let gridY = pos2grid(tile.position.y);
+
+      if (this.sideNavigator.isOpen) {
+        // update display info
+        this.sideNavigator.setTableContent(
+            this.plantConfigs.getGrid(gridX, gridY));
+      } else {
+        // update tile
+        this.updateTile(gridX, gridY);
+        let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
+        if (waterlevel !== undefined) {
+          if (this.mask.material instanceof MeshLambertMaterial) {
+            this.mask.material.color.set(hydration_configs[waterlevel]);
+          } else {
+            for (let material of<Material[]>this.mask.material) {
+              if (material instanceof MeshLambertMaterial) {
+                material.color.set(hydration_configs[waterlevel]);
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.sideNavigator.close();
+    }
+  }
+
+  rightClickEvent(x: number, y: number) {
+    let mouse = new Vector2();
+    let raycaster = new Raycaster();
+    mouse.set((x / window.innerWidth) * 2 - 1,
+              -(y / window.innerHeight) * 2 + 1);
+    raycaster.setFromCamera(mouse, this.render.camera);
     let intersects = raycaster.intersectObjects(this.tilemap);
 
     if (this.mask !== undefined) {
@@ -153,24 +209,25 @@ export class TileMap {
       }
       let gridX = pos2grid(tile.position.x);
       let gridY = pos2grid(tile.position.y);
-      this.updateTile(gridX, gridY);
-      let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
-      if (waterlevel !== undefined) {
-        if (this.mask.material instanceof MeshLambertMaterial) {
-          this.mask.material.color.set(hydration_configs[waterlevel]);
-        } else {
-          for (let material of<Material[]>this.mask.material) {
-            if (material instanceof MeshLambertMaterial) {
-              material.color.set(hydration_configs[waterlevel]);
-            }
-          }
-        }
-      }
+      this.sideNavigator.setTableContent(
+          this.plantConfigs.getGrid(gridX, gridY));
+      this.sideNavigator.open();
+    } else {
+      this.sideNavigator.close();
     }
   }
 
   onDocumentMouseDown(event: MouseEvent) {
-    this.clickEvent(event.clientX, event.clientY);
+    switch (event.which) {
+      case 1:
+        this.leftClickEvent(event.clientX, event.clientY);
+        break;
+      case 3:
+        this.rightClickEvent(event.clientX, event.clientY);
+        break;
+      default:
+        break;
+    }
   };
 
   onDocumentTouchStart(event: TouchEvent) {
@@ -183,7 +240,7 @@ export class TileMap {
 
   onDocumentTouchEnd() {
     if (!this.dragging) {
-      this.clickEvent(this.clientX, this.clientY);
+      this.leftClickEvent(this.clientX, this.clientY);
     }
   }
 }
