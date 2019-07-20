@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_
 
 #include <chrono>
 #include <iostream>
@@ -9,7 +9,7 @@
 #include "action.h"
 #include "plant.h"
 
-namespace simulator {
+namespace agent {
 
 namespace action {
 
@@ -109,6 +109,6 @@ class Water : public Action {
 
 }  // namespace action
 
-}  // namespace simulator
+}  // namespace agent
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_CROP_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_

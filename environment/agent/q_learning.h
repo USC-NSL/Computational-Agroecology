@@ -23,7 +23,7 @@ class Qlearning : public Agent {
   int MaxQAction(int state);
 
   //  TODO:  add function from action index to action object
-  simulator::action::Action *interpreter(int action_taken_);
+  agent::action::Action *interpreter(int action_taken_);
   // TODO: to add execute q leanring cuntion.
   int Execute(int days);
 

@@ -40,7 +40,7 @@ void MainSimulator::SimulateToTime(
 }
 
 void MainSimulator::ReceiveActions(
-    const std::vector<const action::Action *> &actions) {
+    const std::vector<const agent::action::Action *> &actions) {
   for (const auto &action : actions) {
     action_pq_.push(action);
   }

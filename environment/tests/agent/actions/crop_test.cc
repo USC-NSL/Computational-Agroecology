@@ -5,12 +5,11 @@
 
 #include <gtest/gtest.h>
 
+#include "agent/actions/crop.h"
 #include "agent/resource.h"
-#include "simulators/actions/crop.h"
 #include "terrain.h"
 
-using namespace simulator;
-using namespace simulator::action;
+using namespace agent::action;
 using namespace environment;
 
 const size_t kNumberOfRange = 5;

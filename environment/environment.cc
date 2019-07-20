@@ -30,11 +30,11 @@ void Environment::JumpForwardTimeStep(const int64_t time_step_num) {
   JumpToTime(timestamp_ + (time_step_num * time_step_length_));
 }
 
-void Environment::ReceiveAction(const simulator::action::Action *action) {
-  ReceiveActions(simulator::action::ActionList(1, action));
+void Environment::ReceiveAction(const agent::action::Action *action) {
+  ReceiveActions(agent::action::ActionList(1, action));
 }
 
-void Environment::ReceiveActions(const simulator::action::ActionList &actions) {
+void Environment::ReceiveActions(const agent::action::ActionList &actions) {
   main_simulator_.ReceiveActions(actions);
 }
 

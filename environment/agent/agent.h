@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
+#include "agent/actions/crop.h"
 #include "agent/resource.h"
 #include "environment.h"
-#include "simulators/actions/crop.h"
 
 namespace agent {
 
@@ -18,7 +18,7 @@ const std::string kCornTypeName = "Corn";
 struct ActionID {
   size_t row;
   size_t col;
-  ::simulator::action::ActionType action_taken;
+  ::agent::action::ActionType action_taken;
   int crop_ID;
 };
 
@@ -28,10 +28,10 @@ class Agent {
 
   // modifiers
   void AddResource(const agent::ResourceType &resource, size_t quantity);
-  ReturnCodes TakeAction(const simulator::action::Action *action);
+  ReturnCodes TakeAction(const agent::action::Action *action);
 
   // generate action
-  simulator::action::Action *CreateAction(const ActionID &action_id);
+  agent::action::Action *CreateAction(const ActionID &action_id);
 
   // generate random integer
   int RandomInt(int min, int max);

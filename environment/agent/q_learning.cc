@@ -18,7 +18,7 @@ Qlearning::~Qlearning() {
   delete[] qtable_;
 }
 
-simulator::action::Action *Qlearning::interpreter(int action_taken_) {  // To do
+agent::action::Action *Qlearning::interpreter(int action_taken_) {  // To do
   return nullptr;
 }
 

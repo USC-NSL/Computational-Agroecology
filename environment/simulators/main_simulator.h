@@ -3,7 +3,7 @@
 
 #include <queue>
 
-#include "actions/action.h"
+#include "agent/actions/action.h"
 #include "simulator.h"
 #include "sun_simulator.h"
 
@@ -22,31 +22,32 @@ class MainSimulator : public Simulator {
       const std::chrono::system_clock::time_point &time) override;
 
   // Receive actions from `environment::Environment`
-  void ReceiveActions(const std::vector<const action::Action *> &actions);
+  void ReceiveActions(
+      const std::vector<const agent::action::Action *> &actions);
 
   // Accessors
-  inline const std::priority_queue<const action::Action *,
-                                   std::vector<const action::Action *>,
-                                   action::ActionStartTimeComparator>
+  inline const std::priority_queue<const agent::action::Action *,
+                                   std::vector<const agent::action::Action *>,
+                                   agent::action::ActionStartTimeComparator>
       &action_pq() const {
     return action_pq_;
   }
 
-  inline const std::priority_queue<const action::Action *,
-                                   std::vector<const action::Action *>,
-                                   action::ActionEndTimeComparator>
+  inline const std::priority_queue<const agent::action::Action *,
+                                   std::vector<const agent::action::Action *>,
+                                   agent::action::ActionEndTimeComparator>
       &pending_action_pq() const {
     return pending_action_pq_;
   }
 
  private:
-  std::priority_queue<const action::Action *,
-                      std::vector<const action::Action *>,
-                      action::ActionStartTimeComparator>
+  std::priority_queue<const agent::action::Action *,
+                      std::vector<const agent::action::Action *>,
+                      agent::action::ActionStartTimeComparator>
       action_pq_;
-  std::priority_queue<const action::Action *,
-                      std::vector<const action::Action *>,
-                      action::ActionEndTimeComparator>
+  std::priority_queue<const agent::action::Action *,
+                      std::vector<const agent::action::Action *>,
+                      agent::action::ActionEndTimeComparator>
       pending_action_pq_;
   SunSimulator sun_simulator_;
 };

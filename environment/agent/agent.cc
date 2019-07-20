@@ -24,23 +24,23 @@ int Agent::RandomInt(int min, int max) {
   return integer_distributor(seed);
 }
 
-simulator::action::Action *Agent::CreateAction(const ActionID &action) {
-  simulator::action::Action *new_action;
+agent::action::Action *Agent::CreateAction(const ActionID &action) {
+  agent::action::Action *new_action;
   // Create a action at time env_->timestamp()
-  using ::simulator::action::ActionType;
+  using ::agent::action::ActionType;
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
-      new_action = new simulator::action::crop::Add(
+      new_action = new agent::action::crop::Add(
           environment::Coordinate(action.row, action.col), env_->time_step(), 1,
           kCornTypeName);
       break;
     case ActionType::WATER_CROP:
-      new_action = new simulator::action::crop::Water(
+      new_action = new agent::action::crop::Water(
           environment::Coordinate(action.row, action.col), env_->time_step(), 1,
           1);
       break;
     case ActionType::CROP_HARVEST:
-      new_action = new simulator::action::crop::Harvest(
+      new_action = new agent::action::crop::Harvest(
           environment::Coordinate(action.row, action.col), env_->time_step(),
           1);
       break;
@@ -48,7 +48,7 @@ simulator::action::Action *Agent::CreateAction(const ActionID &action) {
   // Remember to delete action
   return new_action;
 }
-Agent::ReturnCodes Agent::TakeAction(const simulator::action::Action *action) {
+Agent::ReturnCodes Agent::TakeAction(const agent::action::Action *action) {
   if (action == nullptr) {
     return INVALID_ARGUMENT;
   }

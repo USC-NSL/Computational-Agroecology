@@ -2,7 +2,7 @@
 
 #include "environment.h"
 
-namespace simulator {
+namespace agent {
 
 namespace action {
 
@@ -12,7 +12,7 @@ bool Action::operator==(const Action &rhs) const {
          (duration_ == rhs.duration_) && (cost_ == rhs.cost_);
 }
 
-Action::Action(const simulator::action::ActionType type,
+Action::Action(const agent::action::ActionType type,
                const environment::Coordinate &target,
                const int64_t &start_time_step, const int64_t &duration)
     : type_(type),
@@ -21,7 +21,7 @@ Action::Action(const simulator::action::ActionType type,
       duration_(duration),
       cost_(agent::Resources()) {}
 
-Action::Action(const simulator::action::ActionType type,
+Action::Action(const agent::action::ActionType type,
                const std::vector<environment::Coordinate> &applied_range,
                const int64_t &start_time_step, const int64_t &duration)
     : type_(type),
@@ -30,7 +30,7 @@ Action::Action(const simulator::action::ActionType type,
       duration_(duration),
       cost_(agent::Resources()) {}
 
-Action::Action(const simulator::action::ActionType type,
+Action::Action(const agent::action::ActionType type,
                const environment::Coordinate &target,
                const int64_t &start_time_step, const int64_t &duration,
                const agent::Resources &cost)
@@ -40,7 +40,7 @@ Action::Action(const simulator::action::ActionType type,
       duration_(duration),
       cost_(cost) {}
 
-Action::Action(const simulator::action::ActionType type,
+Action::Action(const agent::action::ActionType type,
                const std::vector<environment::Coordinate> &applied_range,
                const int64_t &start_time_step, const int64_t &duration,
                const agent::Resources &cost)
@@ -63,4 +63,4 @@ bool ActionEndTimeComparator::operator()(const Action *const lhs,
 
 }  // namespace action
 
-}  // namespace simulator
+}  // namespace agent

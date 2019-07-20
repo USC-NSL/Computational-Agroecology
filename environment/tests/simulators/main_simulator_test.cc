@@ -3,13 +3,13 @@
 
 #include <gtest/gtest.h>
 
+#include "agent/actions/crop.h"
 #include "environment.h"
-#include "simulators/actions/crop.h"
 #include "simulators/main_simulator.h"
 
 using namespace environment;
 using namespace simulator;
-using namespace simulator::action;
+using namespace agent::action;
 
 const size_t kNumberOfActions = 5;
 const size_t kTerrainSize = kNumberOfActions;

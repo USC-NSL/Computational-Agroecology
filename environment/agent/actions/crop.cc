@@ -2,7 +2,7 @@
 
 #include "plant_builder.h"
 
-namespace simulator {
+namespace agent {
 
 namespace action {
 
@@ -48,7 +48,7 @@ void Add::Execute(environment::Terrain *terrain) const {
 }
 
 bool Add::operator==(const Add &rhs) const {
-  using simulator::action::Action;
+  using agent::action::Action;
   const auto &action_lhs = reinterpret_cast<const Action &>(*this);
   const auto &action_rhs = reinterpret_cast<const Action &>(rhs);
 
@@ -160,7 +160,7 @@ void Water::Execute(environment::Terrain *terrain) const {
 }
 
 bool Water::operator==(const Water &rhs) const {
-  using simulator::action::Action;
+  using agent::action::Action;
   const auto &action_lhs = reinterpret_cast<const Action &>(*this);
   const auto &action_rhs = reinterpret_cast<const Action &>(rhs);
 
@@ -171,4 +171,4 @@ bool Water::operator==(const Water &rhs) const {
 
 }  // namespace action
 
-}  // namespace simulator
+}  // namespace agent

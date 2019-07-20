@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_ACTION_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_ACTION_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_ACTION_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_ACTION_H_
 
 #include <chrono>
 #include <unordered_map>
@@ -9,7 +9,7 @@
 #include "agent/resource.h"
 #include "terrain.h"
 
-namespace simulator {
+namespace agent {
 
 namespace action {
 
@@ -98,6 +98,6 @@ struct Water;
 
 }  // namespace action
 
-}  // namespace simulator
+}  // namespace agent
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATOR_ACTIONS_ACTION_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_ACTION_H_

@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 
+#include "agent/actions/action.h"
 #include "climate.h"
 #include "config.h"
-#include "simulators/actions/action.h"
 #include "simulators/main_simulator.h"
 #include "simulators/sun_simulator.h"
 #include "terrain.h"
@@ -32,11 +32,11 @@ class Environment {
 
   // This receives an action from either an agent or a human
   // telling the internal simulator to schedule a task
-  void ReceiveAction(const simulator::action::Action *action);
+  void ReceiveAction(const agent::action::Action *action);
 
   // This is identical to the member function above except that a list of
   // actions are received here
-  void ReceiveActions(const simulator::action::ActionList &actions);
+  void ReceiveActions(const agent::action::ActionList &actions);
 
   // TODO: define it
   const int score() const;
@@ -68,10 +68,10 @@ class Environment {
   friend class simulator::SunSimulator;
 
   // befriend with a list of actions
-  friend class simulator::action::crop::Add;
-  friend class simulator::action::crop::Remove;
-  friend class simulator::action::crop::Harvest;
-  friend class simulator::action::crop::Water;
+  friend class agent::action::crop::Add;
+  friend class agent::action::crop::Remove;
+  friend class agent::action::crop::Harvest;
+  friend class agent::action::crop::Water;
 
   // This tells its internal simulator to simulate to the specified time
   void JumpToTime(const std::chrono::system_clock::time_point &time);
