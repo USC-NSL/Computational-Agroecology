@@ -5,7 +5,7 @@ OPENGLLIBS := -lGL -lglut -lGLEW
 INCLUDES := -I ./
 
 MAIN_OBJ := main.o
-OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o plant.o terrain.o weather.o light.o
+OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o plant.o terrain.o weather.o
 
 AGENT_PATH := ./agent
 AGENT_OBJ := $(AGENT_PATH)/agent.o
@@ -50,8 +50,8 @@ TEST_SIMULATORS_ACTIONS := $(TEST_SIMULATORS_ACTIONS_PATH)/crop_test
 TEST_PHOTON_SIMULATOR_PATH := $(TEST_SIMULATORS_PATH)/photon_simulator
 TEST_PHOTON_SIMULATOR_MODEL_OBJ := $(TEST_PHOTON_SIMULATOR_PATH)/photon_simulator_model_test.o
 TEST_PHOTON_SIMULATOR_MODEL := $(TEST_PHOTON_SIMULATOR_PATH)/photon_simulator_model_test
-TEST_OBJ := $(TEST_PATH)/climate_test.o $(TEST_PATH)/config_test.o $(TEST_PATH)/environment_test.o $(TEST_PATH)/location_test.o $(TEST_PATH)/soil_test.o $(TEST_PATH)/terrain_test.o $(TEST_PATH)/utility_test.o $(TEST_PATH)/light_test.o $(TEST_PATH)/weather_test.o $(TEST_SIMULATORS_OBJ) $(TEST_SIMULATORS_ACTIONS_OBJ) $(TEST_PLANT_TYPES_OBJ) $(TEST_AGENT_OBJ) $(TEST_PHOTON_SIMULATOR_MODEL_OBJ) $(TEST_QLEARNING_OBJ)
-TEST_ALL := $(TEST_PATH)/climate_test $(TEST_PATH)/config_test $(TEST_PATH)/environment_test $(TEST_PATH)/location_test $(TEST_PATH)/soil_test $(TEST_PATH)/terrain_test $(TEST_PATH)/utility_test $(TEST_PATH)/light_test $(TEST_PATH)/weather_test $(TEST_SIMULATORS) $(TEST_SIMULATORS_ACTIONS) $(TEST_PLANT_TYPES) $(TEST_AGENT) $(TEST_PHOTON_SIMULATOR_MODEL) $(TEST_QLEARNING)
+TEST_OBJ := $(TEST_PATH)/climate_test.o $(TEST_PATH)/config_test.o $(TEST_PATH)/environment_test.o $(TEST_PATH)/location_test.o $(TEST_PATH)/soil_test.o $(TEST_PATH)/terrain_test.o $(TEST_PATH)/utility_test.o $(TEST_PATH)/weather_test.o $(TEST_SIMULATORS_OBJ) $(TEST_SIMULATORS_ACTIONS_OBJ) $(TEST_PLANT_TYPES_OBJ) $(TEST_AGENT_OBJ) $(TEST_PHOTON_SIMULATOR_MODEL_OBJ) $(TEST_QLEARNING_OBJ)
+TEST_ALL := $(TEST_PATH)/climate_test $(TEST_PATH)/config_test $(TEST_PATH)/environment_test $(TEST_PATH)/location_test $(TEST_PATH)/soil_test $(TEST_PATH)/terrain_test $(TEST_PATH)/utility_test $(TEST_PATH)/weather_test $(TEST_SIMULATORS) $(TEST_SIMULATORS_ACTIONS) $(TEST_PLANT_TYPES) $(TEST_AGENT) $(TEST_PHOTON_SIMULATOR_MODEL) $(TEST_QLEARNING)
 TESTFLAGS := -Igtest/include
 TESTLD := -lgtest -lpthread
 
