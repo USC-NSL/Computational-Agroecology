@@ -24,34 +24,6 @@ TEST(SoilTest, OperatorTest) {
   EXPECT_FALSE(lhs == rhs);
 }
 
-TEST(SoilRequirement, ConstructorTest) {
-  SoilRequirement soil_condition(SoilRequirement::SoilFertility::MODERATE,
-                                 SoilRequirement::kSoilSalinityMedium,
-                                 MinMaxPair<double>(7.0, 7.0),
-                                 SoilRequirement::SoilDrainage::WELL);
-
-  EXPECT_EQ(SoilRequirement::SoilFertility::MODERATE,
-            soil_condition.fertility.value());
-  EXPECT_EQ(SoilRequirement::kSoilSalinityMedium,
-            soil_condition.salinity.value());
-  EXPECT_EQ(MinMaxPair<double>(7.0, 7.0), soil_condition.pH.value());
-  EXPECT_EQ(SoilRequirement::SoilDrainage::WELL,
-            soil_condition.drainage.value());
-}
-
-TEST(SoilRequirement, OperatorTest) {
-  SoilRequirement lhs(SoilRequirement::SoilFertility::MODERATE,
-                      SoilRequirement::kSoilSalinityMedium,
-                      MinMaxPair<double>(7.0, 7.0),
-                      SoilRequirement::SoilDrainage::WELL);
-  SoilRequirement rhs(SoilRequirement::SoilFertility::MODERATE,
-                      SoilRequirement::kSoilSalinityMedium,
-                      MinMaxPair<double>(7.0, 7.0),
-                      SoilRequirement::SoilDrainage::WELL);
-
-  EXPECT_TRUE(lhs == rhs);
-}
-
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

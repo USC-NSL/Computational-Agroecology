@@ -11,6 +11,7 @@ namespace environment {
 // A generator function for constructing a new plant object.
 using PlantGenerator = std::function<Plant *()>;
 
+// TODO: Create a public method to show all available plant names.
 // A non-instantiable class to construct plant objects by model/spec.
 class PlantBuilder {
  public:
