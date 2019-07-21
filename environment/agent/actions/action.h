@@ -7,7 +7,14 @@
 #include <vector>
 
 #include "agent/resource.h"
-#include "terrain.h"
+
+// forward declaration
+namespace environment {
+
+struct Coordinate;
+class Terrain;
+
+}  // namespace environment
 
 namespace agent {
 
@@ -36,6 +43,7 @@ class Action {
   }
   const int64_t start_time_step() const { return start_time_step_; }
   const int64_t duration() const { return duration_; }
+  const int64_t end_time_step() const { return start_time_step_ + duration_; }
   const agent::Resources &cost() const { return cost_; }
 
   // operator

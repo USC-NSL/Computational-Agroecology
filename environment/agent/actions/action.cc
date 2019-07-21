@@ -57,8 +57,7 @@ bool ActionStartTimeComparator::operator()(const Action *const lhs,
 
 bool ActionEndTimeComparator::operator()(const Action *const lhs,
                                          const Action *const rhs) const {
-  return (lhs->start_time_step() + lhs->duration()) >
-         (rhs->start_time_step() + rhs->duration());
+  return lhs->end_time_step() > rhs->end_time_step();
 }
 
 }  // namespace action
