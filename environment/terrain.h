@@ -6,6 +6,7 @@
 #include <optional>
 #include <vector>
 
+#include "agent/actions/action.h"
 #include "plant.h"
 #include "soil.h"
 
@@ -57,13 +58,20 @@ class Terrain {
   // Accessors
   inline const size_t width() const { return tiles_.width(); }
   inline const size_t length() const { return tiles_.length(); }
-  inline Tiles &tiles() { return tiles_; }
-  inline const int yield() { return yield_; }
   inline const Tiles &tiles() const { return tiles_; }
-  inline void AddYield(int produce) { yield_ += produce; }
+  inline const int yield() const { return yield_; }
+
+  // Modifiers
+  void ExecuteAction(const agent::action::Action *action);
 
  private:
   friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
+
+  // befriend with a list of actions
+  friend class agent::action::crop::Add;
+  friend class agent::action::crop::Remove;
+  friend class agent::action::crop::Harvest;
+  friend class agent::action::crop::Water;
 
   Tiles tiles_;
   int yield_;
