@@ -30,9 +30,6 @@ struct Soil {
 
 bool operator==(const Soil &lhs, const Soil &rhs);
 
-// TODO: `double` should be replaced with some density units
-using SoilSalinity = MinMaxPair<double>;
-
 // `struct SoilRequirement` has been removed here.
 
 }  // namespace environment
