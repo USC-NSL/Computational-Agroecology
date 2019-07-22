@@ -1,0 +1,102 @@
+.initerary {
+    height: 70px;
+    width: 440px;
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 50%;
+    margin-left: -220px;
+    background-color: #af7c52;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transition: 0.5s;
+}
+
+#navlist {
+    position: relative;
+}
+
+#navlist li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    top: 0;
+}
+
+#navlist li, #navlist a {
+    height: 44px;
+    display: block;
+}
+
+#investigate-icon {
+    left: 10px;
+    width: 50px;
+    background: url('assets/initerary.gif') -150px 0;
+}
+
+#investigate-icon a:hover {
+    left: 10px;
+    width: 50px;
+    background: url('assets/initerary.gif') -150px -50px;
+}
+
+#corn-icon {
+    left: 70px;
+    width: 50px;
+    background: url('assets/initerary.gif') 0 0;
+}
+
+#corn-icon a:hover {
+    background: url('assets/initerary.gif') 0 -50px;
+}
+
+#bean-icon {
+    left: 130px;
+    width: 50px;
+    background: url('assets/initerary.gif') -50px 0;
+}
+
+#bean-icon a:hover {
+    background: url('assets/initerary.gif') -50px -50px;
+}
+
+#squash-icon {
+    left: 190px;
+    width: 50px;
+    background: url('assets/initerary.gif') -100px 0;
+}
+
+#squash-icon a:hover {
+    background: url('assets/initerary.gif') -100px -50px;
+}
+
+#harvest-icon {
+    left: 250px;
+    width: 50px;
+    background: url('assets/initerary.gif') -200px 0;
+}
+
+#harvest-icon a:hover {
+    background: url('assets/initerary.gif') -200px -50px;
+}
+
+#water-icon {
+    left: 310px;
+    width: 50px;
+    background: url('assets/initerary.gif') -250px 0;
+}
+
+#water-icon a:hover {
+    background: url('assets/initerary.gif') -250px -50px;
+}
+
+#remove-icon {
+    left: 370px;
+    width: 50px;
+    background: url('assets/initerary.gif') -300px 0;
+}
+
+#remove-icon a:hover {
+    background: url('assets/initerary.gif') -300px -50px;
+}
