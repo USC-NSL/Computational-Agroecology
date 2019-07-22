@@ -47,9 +47,14 @@ export const file_urls: {
   [name: string]: string;
 }
 = {
+  // texture
   CLOUD: "assets/texture/cloud.png",
   RAINDROP: "assets/texture/raindrop.png",
-  TILEMAP: "assets/texture/tilemap.png"
+  TILEMAP: "assets/texture/tilemap.png",
+  // image
+  NONE: "assets/image/none.png",
+  CORN: "assets/image/corn.png",
+  SQUASH: "assets/image/squash.png",
 };
 
 export interface model_url {
@@ -135,7 +140,7 @@ export interface plant_status {
   scaleZ: number;
 };
 
-export const plant_configs: {
+export const plant_status_configs: {
   [name: string]: plant_status[];
 }
 = {

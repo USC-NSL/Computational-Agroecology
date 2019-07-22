@@ -3,7 +3,7 @@ import {
   model_url,
   model_urls,
   model,
-  plant_configs,
+  plant_status_configs,
   grid2pos,
   clamp,
   hydration_max,
@@ -127,10 +127,10 @@ export class PlantConfigs {
       console.log("connot plant " + planttype + " in occupied tile.");
       return undefined;
     } else {
-      if (plantstatus >= plant_configs[planttype].length)
-        plantstatus = plant_configs[planttype].length - 1;
+      if (plantstatus >= plant_status_configs[planttype].length)
+        plantstatus = plant_status_configs[planttype].length - 1;
 
-      var configs = plant_configs[planttype][plantstatus];
+      var configs = plant_status_configs[planttype][plantstatus];
 
       if (this.models === undefined) {
         console.log("Models are not loaded yet.");

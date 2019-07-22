@@ -20,22 +20,35 @@
     /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.sidenav table {
+    padding: 8px 8px 8px 30px;
+}
+
 .sidenav th {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
+    display: inline-block;
+    padding: 2px;
+    font-size: 2vw;
     color: #818181;
-    display: block;
+    text-decoration: none;
+    display: inline-block;
     transition: 0.3s;
 }
 
 .sidenav td {
-    padding: 8px 8px 8px 32px;
+    padding: 2px;
+    font-size: 2vw;
+    color: #ff6b6b;
     text-decoration: none;
-    font-size: 25px;
-    color: #771616;
-    display: block;
+    display: inline-block;
     transition: 0.3s;
+}
+
+.sidenav img {
+    display: block;
+    max-width: 400px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
 }
 
 .sidenav a:hover {
@@ -55,7 +68,7 @@
     .sidenav {
         padding-top: 15px;
     }
-    .sidenav a {
+    .sidenav a th td {
         font-size: 18px;
     }
 }
