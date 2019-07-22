@@ -1,31 +1,27 @@
-#include "sun_simulator.h"
+#include "suninfo.h"
 
 #include <cassert>
 #include <cmath>
 #include <ctime>
-#include <iostream>
 
-#include "environment.h"
+namespace environment {
 
-namespace simulator {
-
-void SunSimulator::SimulateToTime(
-    environment::Environment* env,
-    const std::chrono::system_clock::time_point& time) {
+void SunInfo::SimulateToTime(const std::chrono::system_clock::time_point &time,
+                             const Location &location) {
   time_t tt = std::chrono::system_clock::to_time_t(time);
-  struct tm* tm = localtime(&tt);
-  GetResult(tm->tm_yday + 1, tm->tm_hour,
-            (env->config_.location.longitude_left +
-             env->config_.location.longitude_right) /
-                2.0,
-            (env->config_.location.latitude_bottom +
-             env->config_.location.latitude_top) /
-                2.0);
-  GetSunInfo(&env->sun_info_);
+  struct tm *tm = localtime(&tt);
+  double longitude = (location.longitude_left + location.longitude_right) / 2.0;
+  double latitude = (location.latitude_bottom + location.latitude_top) / 2.0;
+
+  GetResult(tm->tm_yday + 1, tm->tm_hour, longitude, latitude);
+
+  sun_azimuth_ = alpha_ + kPI;
+  solar_altitude_ = kPI / 2.0 - beta_;
+  hourly_irradiance_ = I_t_;
 }
 
-void SunSimulator::GetResult(const int yday, const int hour,
-                             const double longitude, const double latitude) {
+void SunInfo::GetResult(const int yday, const int hour, const double longitude,
+                        const double latitude) {
   GetSolarPosition(yday, hour, longitude, latitude);
   GetDayLength();
   GetDailyIrradiance();
@@ -34,23 +30,16 @@ void SunSimulator::GetResult(const int yday, const int hour,
   GetHourlyDiffuseIrradiance();
 }
 
-void SunSimulator::GetSunInfo(struct environment::SunInfo* suninfo) {
-  suninfo->SunAzimuth = alpha_ + kPI;
-  suninfo->SolarAltitude = kPI / 2.0 - beta_;
-  suninfo->HourlyIrradiance = I_t_;
-}
-
-double SunSimulator::DegreeToRadians(const double degree) const {
+double SunInfo::DegreeToRadians(const double degree) const {
   return degree * kPI / kPIforDegree;
 }
 
-double SunSimulator::RadiansToDegree(const double radians) const {
+double SunInfo::RadiansToDegree(const double radians) const {
   return radians / kPI * kPIforDegree;
 }
 
-void SunSimulator::GetSolarPosition(const int yday, const int hour,
-                                    const double longitude,
-                                    const double latitude) {
+void SunInfo::GetSolarPosition(const int yday, const int hour,
+                               const double longitude, const double latitude) {
   t_d_ = yday;
   sigma_ = -kTropic * kPI / kPIforDegree *
            cos(2.0 * kPI * (t_d_ + kDaysLeftPerYear) / kDaysPerYear);
@@ -75,7 +64,7 @@ void SunSimulator::GetSolarPosition(const int yday, const int hour,
   }
 }
 
-void SunSimulator::GetDayLength() {
+void SunInfo::GetDayLength() {
   t_ss_ = kHoursHalfDay +
           kHoursHalfDay / kPI *
               acos(-(sin(sigma_) * sin(lamda_)) / (cos(sigma_) * cos(lamda_)));
@@ -83,7 +72,7 @@ void SunSimulator::GetDayLength() {
   DL_ = 2 * (t_ss_ - kHoursHalfDay);
 }
 
-void SunSimulator::GetDailyIrradiance() {
+void SunInfo::GetDailyIrradiance() {
   Ic_ = 1370.0;
   // Introduction to mathematical modeling of crop growth p.36 formulat [2.18]
   epsilon_0_ =
@@ -101,7 +90,7 @@ void SunSimulator::GetDailyIrradiance() {
   I_t_d_ = I_et_d_ * (b_0_ + b_1_ * s_ / DL_);
 }
 
-void SunSimulator::GetDailyDiffuseIrradiance() {
+void SunInfo::GetDailyDiffuseIrradiance() {
   // Introduction to mathematical modeling of crop growth p.38 formulat [2.25]
   if (I_t_d_ / I_et_d_ < 0.07)
     I_df_d_ = I_t_d_;
@@ -115,7 +104,7 @@ void SunSimulator::GetDailyDiffuseIrradiance() {
   I_dr_d_ = I_t_d_ - I_df_d_;
 }
 
-void SunSimulator::GetHourlyIrradiance() {
+void SunInfo::GetHourlyIrradiance() {
   double a_ = sin(lamda_) * sin(sigma_);
   double b_ = cos(lamda_) * cos(sigma_);
   double psi_ = kPI * I_t_d_ / kSecsPerMin / kMinsPerHour / kHoursPerDay /
@@ -128,7 +117,7 @@ void SunSimulator::GetHourlyIrradiance() {
   I_et_ = Ic_prime_ * sin(beta_);
 }
 
-void SunSimulator::GetHourlyDiffuseIrradiance() {
+void SunInfo::GetHourlyDiffuseIrradiance() {
   // Introduction to mathematical modeling of crop growth p.40 formulat [2.31]
   double R_ = (0.847 - 1.61 * sin(beta_) + 1.04 * sin(beta_) * sin(beta_));
   double K_ = (1.47 - R_) / 1.66;
@@ -142,4 +131,5 @@ void SunSimulator::GetHourlyDiffuseIrradiance() {
     I_df_ = I_t_ * R_;
   I_dr_ = I_t_ - I_df_;
 }
-}  // namespace simulator
+
+}  // namespace environment

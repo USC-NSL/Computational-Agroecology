@@ -3,13 +3,12 @@
 
 #include <chrono>
 #include <iostream>
+#include <queue>
 #include <vector>
 
-#include "agent/actions/action.h"
 #include "climate.h"
 #include "config.h"
-#include "simulators/main_simulator.h"
-#include "simulators/sun_simulator.h"
+#include "suninfo.h"
 #include "terrain.h"
 #include "weather.h"
 
@@ -43,38 +42,20 @@ class Environment {
 
   // Accessors
   inline const Config &config() const { return config_; }
-
   inline const Climate &climate() const { return climate_; }
-
   inline const std::chrono::system_clock::time_point &timestamp() const {
     return timestamp_;
   }
-
   inline const std::chrono::duration<int> &time_step_length() const {
     return time_step_length_;
   }
-
   inline const int64_t &time_step() const { return time_step_; }
-
   inline const SunInfo &sun_info() const { return sun_info_; }
-
   inline const Terrain &terrain() const { return terrain_; }
-
   inline const Weather &weather() const { return weather_; }
 
  private:
   friend std::ostream &operator<<(std::ostream &os, const Environment &env);
-  friend class simulator::MainSimulator;
-  friend class simulator::SunSimulator;
-
-  // befriend with a list of actions
-  friend class agent::action::crop::Add;
-  friend class agent::action::crop::Remove;
-  friend class agent::action::crop::Harvest;
-  friend class agent::action::crop::Water;
-
-  // This tells its internal simulator to simulate to the specified time
-  void JumpToTime(const std::chrono::system_clock::time_point &time);
 
   Config config_;
   const Climate climate_;
@@ -93,7 +74,22 @@ class Environment {
   Weather weather_;
   // TODO: define a class for light information
 
-  simulator::MainSimulator main_simulator_;
+  // Simulators:
+  // collect actions which should have started or executed before the current
+  // time step
+  void SyncActionPqToTimeStep(const int64_t time_step);
+
+  // Simulate this environment to a time point
+  void SimulateToTimeStep(const int64_t time_step);
+
+  std::priority_queue<const agent::action::Action *,
+                      std::vector<const agent::action::Action *>,
+                      agent::action::ActionStartTimeComparator>
+      action_pq_;
+  std::priority_queue<const agent::action::Action *,
+                      std::vector<const agent::action::Action *>,
+                      agent::action::ActionEndTimeComparator>
+      pending_action_pq_;
 };
 
 std::ostream &operator<<(std::ostream &os, const Environment &env);

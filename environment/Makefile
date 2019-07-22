@@ -5,7 +5,7 @@ OPENGLLIBS := -lGL -lglut -lGLEW
 INCLUDES := -I ./
 
 MAIN_OBJ := main.o
-OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o plant.o terrain.o weather.o
+OBJ := climate.o config.o environment.o location.o soil.o suninfo.o plant_builder.o plant.o terrain.o weather.o
 
 AGENT_PATH := ./agent
 AGENT_OBJ := $(AGENT_PATH)/agent.o
@@ -27,9 +27,7 @@ PHOTON_SIMULATOR_MODEL_OBJ := $(PHOTON_SIMULATOR_MODEL_PATH)/face.o\
 	$(PHOTON_SIMULATOR_MODEL_PATH)/model.o\
 	$(PHOTON_SIMULATOR_LOADER_OBJ)
 PHOTON_SIMULATOR_OBJ := $(PHOTON_SIMULATOR_MODEL_OBJ)
-SIMULATOR_OBJ := $(SIMULATOR_PATH)/main_simulator.o\
-  $(SIMULATOR_PATH)/sun_simulator.o\
-  $(PHOTON_SIMULATOR_MODEL_OBJ)
+SIMULATOR_OBJ := $(PHOTON_SIMULATOR_MODEL_OBJ)
 
 TEST_PATH := ./tests
 TEST_AGENT_PATH := $(TEST_PATH)/agent
