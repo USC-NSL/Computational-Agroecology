@@ -9,44 +9,34 @@ import {
   MultiplyBlending
 } from "three/src/Three";
 import {Render} from "./render";
-import {
-  color_configs,
-  grid2pos,
-  pos2grid,
-  hydration_configs,
-  file_urls
-} from "./common";
+import {color_configs, hydration_configs, file_urls, tileSize} from "./common";
 import {PlantConfigs} from "./plant";
 import {SideNavigator} from "./side_navigator";
 
 
 export class TileMap {
-  tilemap: Mesh[];
-  mask: Mesh | undefined;
+  tilemap: Mesh[] = [];
+  mask: Mesh | undefined = undefined;
   updateTile: (gridX: number, gridY: number) => void;
 
+  // modules
   plantConfigs: PlantConfigs;
   render: Render;
-
-  // touch event
-  dragging: Boolean;
-  clientX: number;
-  clientY: number;
   sideNavigator: SideNavigator;
 
-  constructor(configs: PlantConfigs, render: Render,
+  // touch event
+  dragging = false;
+  clientX = 0;
+  clientY = 0;
+
+  constructor(plantConfigs: PlantConfigs, render: Render,
               sideNavigator: SideNavigator,
               updateTile: (gridX: number, gridY: number) => void) {
-    this.tilemap = [];
-    this.mask = undefined;
-
-    this.plantConfigs = configs;
+    this.plantConfigs = plantConfigs;
     this.render = render;
     this.sideNavigator = sideNavigator;
     this.updateTile = updateTile;
     this.dragging = false;
-    this.clientX = 0;
-    this.clientY = 0;
     this.reset();
   }
 
@@ -69,7 +59,7 @@ export class TileMap {
           blending: MultiplyBlending,
         });
         let tile = new Mesh(geometry, material);
-        tile.position.set(grid2pos(i), grid2pos(j), -0.5);
+        tile.position.set(this.gridX2posX(i), this.gridY2posY(j), -0.5);
         tile.receiveShadow = true;
         this.tilemap.push(tile);
         this.render.addModeltoScene(tile);
@@ -86,8 +76,8 @@ export class TileMap {
     let intersects = raycaster.intersectObjects(this.tilemap);
 
     if (this.mask != undefined) {
-      let gridX = pos2grid(this.mask.position.x);
-      let gridY = pos2grid(this.mask.position.y);
+      let gridX = this.posX2gridX(this.mask.position.x);
+      let gridY = this.posY2gridY(this.mask.position.y);
       let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
@@ -125,8 +115,8 @@ export class TileMap {
     let intersects = raycaster.intersectObjects(this.tilemap);
 
     if (this.mask !== undefined) {
-      let gridX = pos2grid(this.mask.position.x);
-      let gridY = pos2grid(this.mask.position.y);
+      let gridX = this.posX2gridX(this.mask.position.x);
+      let gridY = this.posY2gridY(this.mask.position.y);
       let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
@@ -143,8 +133,8 @@ export class TileMap {
     if (intersects.length > 0) {
       let tile = intersects[0].object;
       this.mask = <Mesh>tile;
-      let gridX = pos2grid(tile.position.x);
-      let gridY = pos2grid(tile.position.y);
+      let gridX = this.posX2gridX(tile.position.x);
+      let gridY = this.posY2gridY(tile.position.y);
 
       if (this.sideNavigator.isOpen) {
         // update display info
@@ -180,8 +170,8 @@ export class TileMap {
     let intersects = raycaster.intersectObjects(this.tilemap);
 
     if (this.mask !== undefined) {
-      let gridX = pos2grid(this.mask.position.x);
-      let gridY = pos2grid(this.mask.position.y);
+      let gridX = this.posX2gridX(this.mask.position.x);
+      let gridY = this.posY2gridY(this.mask.position.y);
       let waterlevel = this.plantConfigs.getWaterLevel(gridX, gridY);
       if (this.mask.material instanceof MeshLambertMaterial) {
         this.mask.material.color.set(hydration_configs[waterlevel]);
@@ -207,8 +197,8 @@ export class TileMap {
           }
         }
       }
-      let gridX = pos2grid(tile.position.x);
-      let gridY = pos2grid(tile.position.y);
+      let gridX = this.posX2gridX(tile.position.x);
+      let gridY = this.posY2gridY(tile.position.y);
       this.sideNavigator.setTableContent(
           this.plantConfigs.getGrid(gridX, gridY));
       this.sideNavigator.open();
@@ -242,5 +232,18 @@ export class TileMap {
     if (!this.dragging) {
       this.leftClickEvent(this.clientX, this.clientY);
     }
+  }
+
+  posX2gridX(posX: number) {
+    return posX / tileSize + this.plantConfigs.getHeight() / 2 - 0.5;
+  }
+  posY2gridY(posY: number) {
+    return posY / tileSize + this.plantConfigs.getWidth() / 2 - 0.5;
+  }
+  gridX2posX(gridX: number) {
+    return tileSize * (-this.plantConfigs.getHeight() / 2 + 0.5 + gridX);
+  }
+  gridY2posY(gridY: number) {
+    return tileSize * (-this.plantConfigs.getWidth() / 2 + 0.5 + gridY);
   }
 }

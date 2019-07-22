@@ -107,5 +107,5 @@ export class MainControl {
   }
 }
 
-let mainControl = new MainControl(10, 10);
+let mainControl = new MainControl(4, 16);
 mainControl.load();

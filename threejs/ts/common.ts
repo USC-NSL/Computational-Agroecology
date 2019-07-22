@@ -4,14 +4,7 @@ export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 };
 
-
-// TODO: update for arbitrary grid size
-export function pos2grid(pos: number) {
-  return (pos + 45) / 10;
-};
-export function grid2pos(grid: number) {
-  return -45 + 10 * grid;
-};
+export const tileSize = 10;
 
 export interface model { [name: string]: Group; };
 

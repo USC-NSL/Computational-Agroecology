@@ -4,10 +4,10 @@ import {
   model_urls,
   model,
   plant_status_configs,
-  grid2pos,
   clamp,
   hydration_max,
-  Grid
+  Grid,
+  tileSize
 } from "./common";
 import {Group, Mesh, Object3D} from "three/src/Three";
 
@@ -138,7 +138,7 @@ export class PlantConfigs {
       }
       var model = this.models[configs.model].clone();
       model.scale.set(configs.scaleX, configs.scaleY, configs.scaleZ);
-      model.position.set(grid2pos(gridX), grid2pos(gridY), 0);
+      model.position.set(this.gridX2posX(gridX), this.gridY2posY(gridY), 0);
       model.castShadow = true;
       model.receiveShadow = true;
 
@@ -160,5 +160,12 @@ export class PlantConfigs {
       this.env.grids[gridX][gridY].plantmodel = undefined;
     }
     return plantmodel;
+  }
+
+  gridX2posX(gridX: number) {
+    return tileSize * (-this.getHeight() / 2 + 0.5 + gridX);
+  }
+  gridY2posY(gridY: number) {
+    return tileSize * (-this.getWidth() / 2 + 0.5 + gridY);
   }
 }

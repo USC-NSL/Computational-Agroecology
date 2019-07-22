@@ -15,7 +15,7 @@ import {
   Scene,
   PerspectiveCamera,
 } from "three/src/Three";
-import {color_configs, file_urls} from "./common";
+import {color_configs, file_urls, tileSize} from "./common";
 
 export interface RainDrop { position: Vector3, velocity: number };
 
@@ -56,8 +56,8 @@ export class WeatherConfigs {
       let cloud = new Mesh(new PlaneGeometry(30, 30), cloudMaterial);
       cloud.name = "cloud";
       cloud.position.set(
-          Math.random() * width * 10 * 1.2 - width / 2 * 10 * 1.2,
-          Math.random() * height * 10 * 1.2 - height / 2 * 10 * 1.2,
+          Math.random() * height * tileSize * 1.2 - height / 2 * tileSize * 1.2,
+          Math.random() * width * tileSize * 1.2 - width / 2 * tileSize * 1.2,
           Math.random() * 10 + 70);
       cloud.scale.x = cloud.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
       cloud.castShadow = true;
@@ -71,9 +71,10 @@ export class WeatherConfigs {
     this.rainGeometry = new Geometry();
     for (let i = 0; i < width * height * 3; i++) {
       let rainDrop: RainDrop = {
-        position: new Vector3(Math.random() * width * 10 - width * 10 / 2,
-                              Math.random() * height * 10 - height * 10 / 2,
-                              Math.random() * 70),
+        position: new Vector3(
+            Math.random() * height * tileSize - height * tileSize / 2,
+            Math.random() * width * tileSize - width * tileSize / 2,
+            Math.random() * 70),
         velocity: -Math.random() * Math.random() * 1.5,
       };
       this.rainGeometry.vertices.push(rainDrop.position);
