@@ -1,49 +1,57 @@
 .initerary {
     height: 70px;
-    width: 440px;
+    width: 465px;
     position: fixed;
     z-index: 10;
     bottom: 0;
     left: 50%;
-    margin-left: -220px;
+    margin-left: -232px;
     background-color: #af7c52;
     overflow-x: hidden;
     overflow-y: hidden;
     transition: 0.5s;
 }
 
-#navlist {
-    position: relative;
-}
-
-#navlist li {
-    margin: 0;
+.initerary li {
+    margin: 5px;
     padding: 0;
     list-style: none;
     position: absolute;
+    width: 60px;
+    height: 60px;
     top: 0;
 }
 
-#navlist li, #navlist a {
+.initerary div, .initerary a, .initerary a:hover {
     height: 50px;
+    width: 50px;
     display: block;
 }
 
+.initerary div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #investigate-icon {
-    left: 10px;
-    width: 50px;
+    left: 0px;
+}
+
+#investigate-icon div {
     background: url('assets/initerary.gif') -150px 0;
 }
 
 #investigate-icon a:hover {
-    left: 10px;
-    width: 50px;
     background: url('assets/initerary.gif') -150px -50px;
 }
 
 #corn-icon {
-    left: 70px;
-    width: 50px;
+    left: 65px;
+}
+
+#corn-icon div {
     background: url('assets/initerary.gif') 0 0;
 }
 
@@ -53,7 +61,9 @@
 
 #bean-icon {
     left: 130px;
-    width: 50px;
+}
+
+#bean-icon div {
     background: url('assets/initerary.gif') -50px 0;
 }
 
@@ -62,8 +72,10 @@
 }
 
 #squash-icon {
-    left: 190px;
-    width: 50px;
+    left: 195px;
+}
+
+#squash-icon div {
     background: url('assets/initerary.gif') -100px 0;
 }
 
@@ -71,19 +83,11 @@
     background: url('assets/initerary.gif') -100px -50px;
 }
 
-#harvest-icon {
-    left: 250px;
-    width: 50px;
-    background: url('assets/initerary.gif') -200px 0;
-}
-
-#harvest-icon a:hover {
-    background: url('assets/initerary.gif') -200px -50px;
-}
-
 #water-icon {
-    left: 310px;
-    width: 50px;
+    left: 260px;
+}
+
+#water-icon div {
     background: url('assets/initerary.gif') -250px 0;
 }
 
@@ -92,11 +96,25 @@
 }
 
 #remove-icon {
-    left: 370px;
-    width: 50px;
+    left: 325px;
+}
+
+#remove-icon div {
     background: url('assets/initerary.gif') -300px 0;
 }
 
 #remove-icon a:hover {
     background: url('assets/initerary.gif') -300px -50px;
+}
+
+#harvest-icon {
+    left: 390px;
+}
+
+#harvest-icon div {
+    background: url('assets/initerary.gif') -200px 0;
+}
+
+#harvest-icon a:hover {
+    background: url('assets/initerary.gif') -200px -50px;
 }
