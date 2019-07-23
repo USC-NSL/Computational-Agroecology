@@ -22,8 +22,6 @@ export class Render {
   private renderer: WebGLRenderer;
   private mapControl: MapControls;
 
-
-
   plantConfigs: PlantConfigs;
   weatherConfigs: WeatherConfigs;
   tilemap: TileMap | undefined;

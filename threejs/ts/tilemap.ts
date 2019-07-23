@@ -36,7 +36,6 @@ export class TileMap {
     this.render = render;
     this.sideNavigator = sideNavigator;
     this.updateTile = updateTile;
-    this.dragging = false;
     this.reset();
   }
 

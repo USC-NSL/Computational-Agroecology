@@ -22,6 +22,7 @@ export interface Env {
 };
 
 export enum FunctionMode {
+  INVESTIGATE,
   CORN,
   BEAN,
   SQUASH,

@@ -7,6 +7,7 @@ import {GUI} from "./GUI";
 import {TileMap} from "./tilemap";
 import {WeatherConfigs} from "./weather";
 import {SideNavigator} from "./side_navigator";
+import {Initerary} from "./initerary";
 
 export class MainControl {
   plantConfigs: PlantConfigs;
@@ -16,6 +17,7 @@ export class MainControl {
   tilemap: TileMap;
   render: Render;
   sideNavigator: SideNavigator;
+  initerary: Initerary;
 
   constructor(width: number, height: number) {
     this.plantConfigs = new PlantConfigs(width, height);
@@ -27,6 +29,7 @@ export class MainControl {
                        this.updateWeather.bind(this));
     this.tilemap = new TileMap(this.plantConfigs, this.render,
                                this.sideNavigator, this.updatePlant.bind(this));
+    this.initerary = new Initerary();
 
     // resolve cyclic dependency
     this.render.bindTileMapEvent(this.tilemap);

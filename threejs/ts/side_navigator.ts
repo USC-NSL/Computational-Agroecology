@@ -7,12 +7,11 @@ export class SideNavigator {
   closebtn: HTMLAnchorElement;
   table: HTMLTableElement;
   image: HTMLImageElement;
-  isOpen: boolean;
+  isOpen = false;
   gridInfo = ["plant type", "plant status", "water level"];
 
   constructor(plantConfigs: PlantConfigs) {
     this.plantConfigs = plantConfigs;
-    this.isOpen = false;
 
     // side navigator
     this.sidenav = document.createElement('div');

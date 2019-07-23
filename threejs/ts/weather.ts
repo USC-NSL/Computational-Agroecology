@@ -20,18 +20,16 @@ import {color_configs, file_urls, tileSize} from "./common";
 export interface RainDrop { position: Vector3, velocity: number };
 
 export class WeatherConfigs {
-  private isSunny: boolean;
+  private isSunny = false;
   private sun: DirectionalLight;
-  private isCloudy: boolean;
-  private clouds: Mesh[];
-  private isRainy: boolean;
+  private isCloudy = false;
+  private clouds: Mesh[] = [];
+  private isRainy = false;
   private rainGeometry: Geometry;
-  private rainDrops: RainDrop[];
+  private rainDrops: RainDrop[] = [];
   private rain: Points;
-  plantConfigs: any;
 
   constructor(width: number, height: number) {  // SUN
-    this.isSunny = false;
     this.sun = new DirectionalLight(color_configs.SUN_LIGHT, 1.5);
     this.sun.name = "sun";
     this.sun.castShadow = true;
@@ -44,8 +42,6 @@ export class WeatherConfigs {
     this.sun.add(emitter);
 
     // CLOUDS
-    this.isCloudy = false;
-    this.clouds = [];
     let cloudMaterial = new MeshLambertMaterial({
       map: new TextureLoader().load(file_urls.CLOUD),
       transparent: true,
@@ -66,8 +62,6 @@ export class WeatherConfigs {
     }
 
     // RAIN
-    this.isRainy = false;
-    this.rainDrops = [];
     this.rainGeometry = new Geometry();
     for (let i = 0; i < width * height * 3; i++) {
       let rainDrop: RainDrop = {
