@@ -46,7 +46,7 @@ void PhotonSimulator::SimulateToTime(
   photons_modify();
 
   // write result to env
-  WriteResult2Env(env);
+  WriteResultToEnv(env);
 }
 
 void PhotonSimulator::FreeModels() {
@@ -59,7 +59,7 @@ void PhotonSimulator::FreeModels() {
 
 // TODO: implement these two functions after refining class plant
 void PhotonSimulator::LoadModels(environment::Environment *env) {}
-void PhotonSimulator::WriteResult2Env(environment::Environment *env){}
+void PhotonSimulator::WriteResultToEnv(environment::Environment *env) {}
 
 void PhotonSimulator::photon_emit(
     const Vector3 &sun_direction, const Vector3 &sun_strength,
