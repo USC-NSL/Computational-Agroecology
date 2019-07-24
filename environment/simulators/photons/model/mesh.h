@@ -42,7 +42,6 @@ class Mesh {
   void deleteOpenGLBuffer();
 
   // functions for photon mapping
-  void addOnePhoton(int index) { faces[index].photons++; }
   int getPhotons();
 
  private:

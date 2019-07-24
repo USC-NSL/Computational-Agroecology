@@ -52,12 +52,7 @@ class Model {
   void writeBuffer();
   void deleteBuffer();
   void render();
-  Texture getTextureInfo(GLuint texture_id) {
-    for (auto &texture_info : texture_infos) {
-      if (texture_info.texture_id == texture_id) return texture_info;
-    }
-    assert(0);
-  }
+  Texture getTextureInfo(GLuint texture_id);
 
  private:
 };
