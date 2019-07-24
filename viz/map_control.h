@@ -28,11 +28,11 @@ private:
 	// model related
 	std::vector<Model *> models;
 	Vector3 get_Intersact(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, const Vector3 &line_point, const Vector3 &line_dir);
-	bool in_Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p);
+	bool IsInTriangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p);
 
-	Vector3 get_Normal(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3);
-	Vector3 get_pixel_color(const Vector3 &ray_pos, const Vector3 &ray_dir);
-	Vector3 get_ray_dir(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up);
+	Vector3 GetNormal(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3);
+	Vector3 GetPixelColor(const Vector3 &ray_pos, const Vector3 &ray_dir);
+	Vector3 GetRayDir(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up);
 
 	// render related
 	GLuint vb_id_2d; // texture vb_id for 2D rendering
@@ -51,8 +51,8 @@ public:
 	void modify_sun_dir(Vector3 sun_dir) { this->sun_dir = sun_dir; }
 	void modify_sun_str(int sun_strength) { this->sun_strength = sun_strength; }
 	void photons_emit();
-	int Russian_roulette(float abr, float ref, float tran);
-	void photons_modify();
+	int RussianRoulette(float abr, float ref, float tran);
+	void PhotonsModify();
 	void printResult()
 	{
 		for (auto &model : models)
@@ -79,6 +79,6 @@ public:
 	void writeBuffer3D();
 	void deleteBuffer3D();
 	void render3D(GLdouble *camera);
-	Vector3 get_ray_color(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up);
+	Vector3 GetRayColor(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up);
 };
 #endif

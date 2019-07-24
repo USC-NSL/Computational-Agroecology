@@ -102,7 +102,7 @@ void PhotonMapping(void)
     start = std::chrono::system_clock::now();
     map.photons_emit();
     std::cout << "Photon emitted." << std::endl;
-    map.photons_modify();
+    map.PhotonsModify();
     map.printResult();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end - start;

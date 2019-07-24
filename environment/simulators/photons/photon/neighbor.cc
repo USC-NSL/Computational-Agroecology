@@ -16,7 +16,7 @@ Neighbor::Neighbor(real_t s, unsigned int e) {
   i = e;
 };
 
-void heap_swap(Neighbor* neighbors, int a, int b) {
+void HeapSwap(Neighbor* neighbors, int a, int b) {
   unsigned a_i = (neighbors[a]).i;
   real_t a_s = (neighbors[a]).sq_dis;
   (neighbors[a]).i = (neighbors[b]).i;
@@ -25,7 +25,7 @@ void heap_swap(Neighbor* neighbors, int a, int b) {
   (neighbors[b]).sq_dis = a_s;
 }
 
-void heap_remove(Neighbor* neighbors, int& size) {
+void HeapRemove(Neighbor* neighbors, int& size) {
   (neighbors[0]).i = (neighbors[size - 1]).i;
   (neighbors[0]).sq_dis = (neighbors[size - 1]).sq_dis;
   size--;
@@ -43,22 +43,22 @@ void heap_remove(Neighbor* neighbors, int& size) {
 	if (i_val >= left_val && i_val >= right_val)
 	  return;
 	if (left_val == -1.0 && right_val != -1.0) {
-	  heap_swap(neighbors, i, right);
+	  HeapSwap(neighbors, i, right);
 	  i = right;
 	}
 	if (left_val != -1.0 && right_val == -1.0) {
-	  heap_swap(neighbors, i, left);
+	  HeapSwap(neighbors, i, left);
 	  i = left;
 	}
 	else {
 	  bigger = (left_val > right_val) ? left : right;
-	  heap_swap(neighbors, i, bigger);
+	  HeapSwap(neighbors, i, bigger);
 	  i = bigger;
 	}
   }
 }
 
-void heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
+void HeapAdd(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
   int i = size;
   int parent;
   real_t i_val, parent_val;
@@ -73,24 +73,24 @@ void heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
 	parent_val = (neighbors[parent]).sq_dis;
 	if (parent_val >= i_val)
 	  return;
-    heap_swap(neighbors, i, parent);
+    HeapSwap(neighbors, i, parent);
 	i = parent;
   }
 }
 
-void add_neighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& point, const Vector3& norm, Neighbor* neighbors, unsigned int index, real_t& distance, const real_t kMaxDistance, int& size, const int kNumberOfPhotonsNeayby) {
+void AddNeighbor(const Vector3& p_pos, const Vector3& p_dir, const Vector3& point, const Vector3& norm, Neighbor* neighbors, unsigned int index, real_t& distance, const real_t kMaxDistance, int& size, const int kNumberOfPhotonsNeayby) {
   if (dotresult(norm, p_dir) < 0.0f)
 	return;
   real_t e_dis = squared_distance(point, p_pos);
   if (e_dis <= kMaxDistance && (size < kNumberOfPhotonsNeayby || e_dis < distance)) {
 	if (size == kNumberOfPhotonsNeayby)
-	  heap_remove(neighbors, size);
-    heap_add(neighbors, size, index, e_dis);
+	  HeapRemove(neighbors, size);
+    HeapAdd(neighbors, size, index, e_dis);
 	distance = (neighbors[0]).sq_dis;
   }
 }
 
-real_t get_split(const std::vector<Photon>&p, const unsigned int i, const int axis) {
+real_t GetSplit(const std::vector<Photon>&p, const unsigned int i, const int axis) {
   if (axis == kXAXIS)
     return p[i].pos.x;
   if (axis == kYAXIS)
@@ -100,7 +100,7 @@ real_t get_split(const std::vector<Photon>&p, const unsigned int i, const int ax
   return 0.0;
 }
 
-real_t get_p(const Vector3& p, const int axis) {
+real_t GetP(const Vector3& p, const int axis) {
   if (axis == kXAXIS)
     return p.x;
   if (axis == kYAXIS)

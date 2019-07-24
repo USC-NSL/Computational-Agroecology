@@ -15,9 +15,9 @@ class Photon {
          const char flag = 0);
 };
 
-bool compare_x(const Photon& i, const Photon& j);
-bool compare_y(const Photon& i, const Photon& j);
-bool compare_z(const Photon& i, const Photon& j);
+bool CompareX(const Photon& i, const Photon& j);
+bool CompareY(const Photon& i, const Photon& j);
+bool CompareZ(const Photon& i, const Photon& j);
 
 }  // namespace photonsimulator
 

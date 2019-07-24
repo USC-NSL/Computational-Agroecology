@@ -27,7 +27,7 @@ void PhotonSimulator::SimulateToTime(
    */
   alive_photons.clear();
   absorb_photons.clear();
-  photon_emit(Vector3(-sin(env->sun_info().SunAzimuth),
+  PhotonEmit(Vector3(-sin(env->sun_info().SunAzimuth),
                       -cos(env->sun_info().SunAzimuth),
                       -cos(env->sun_info().SolarAltitude)),
               Vector3(env->sun_info().HourlyIrradiance,
@@ -43,7 +43,7 @@ void PhotonSimulator::SimulateToTime(
               (env->config_.location.longitude_right -
                env->config_.location.longitude_left) /
                   100.0f);
-  photons_modify();
+  PhotonsModify();
 
   // write result to env
   WriteResultToEnv(env);
@@ -61,7 +61,7 @@ void PhotonSimulator::FreeModels() {
 void PhotonSimulator::LoadModels(environment::Environment *env) {}
 void PhotonSimulator::WriteResultToEnv(environment::Environment *env) {}
 
-void PhotonSimulator::photon_emit(
+void PhotonSimulator::PhotonEmit(
     const Vector3 &sun_direction, const Vector3 &sun_strength,
     const double latitude_bottom, const double latitude_top,
     const double latitudeDiff, const double longitude_left,
@@ -76,7 +76,7 @@ void PhotonSimulator::photon_emit(
   }
 }
 
-void PhotonSimulator::construct_kdtree(std::vector<Photon> &p,
+void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
                                        const unsigned int begin,
                                        const unsigned int end) {
   if (end - begin == 0)
@@ -107,22 +107,22 @@ void PhotonSimulator::construct_kdtree(std::vector<Photon> &p,
   z_var /= n;
   real_t max_var = std::max(std::max(x_var, y_var), z_var);
   if (max_var == x_var) {
-    std::sort(p.begin() + begin, p.begin() + end, compare_x);
+    std::sort(p.begin() + begin, p.begin() + end, CompareX);
     p[median].flag = kXAXIS;
   }
   if (max_var == y_var) {
-    std::sort(p.begin() + begin, p.begin() + end, compare_y);
+    std::sort(p.begin() + begin, p.begin() + end, CompareY);
     p[median].flag = kYAXIS;
   }
   if (max_var == z_var) {
-    std::sort(p.begin() + begin, p.begin() + end, compare_z);
+    std::sort(p.begin() + begin, p.begin() + end, CompareZ);
     p[median].flag = kZAXIS;
   }
-  construct_kdtree(p, begin, median);
-  construct_kdtree(p, median + 1, end);
+  ConstructKDTree(p, begin, median);
+  ConstructKDTree(p, median + 1, end);
 }
 
-void PhotonSimulator::lookup_kdtree(const std::vector<Photon> &p,
+void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
                                     const Vector3 &point, const Vector3 &norm,
                                     Neighbor *neighbors,
                                     const unsigned int begin,
@@ -131,44 +131,44 @@ void PhotonSimulator::lookup_kdtree(const std::vector<Photon> &p,
   if (begin == end)
     return;
   else if (begin + 1 == end)
-    add_neighbor(p[begin].pos, p[begin].dir, point, norm, neighbors, begin,
+    AddNeighbor(p[begin].pos, p[begin].dir, point, norm, neighbors, begin,
                  distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
-    real_t split_value = get_split(p, median, flag);
-    real_t p_value = get_p(point, flag);
+    real_t split_value = GetSplit(p, median, flag);
+    real_t p_value = GetP(point, flag);
     if (p_value <= split_value) {
-      lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
-      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
+      LookuptKDTree(p, point, norm, neighbors, begin, median, distance, size);
+      AddNeighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
                    distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance,
+        LookuptKDTree(p, point, norm, neighbors, median + 1, end, distance,
                       size);
     } else {
-      lookup_kdtree(p, point, norm, neighbors, median + 1, end, distance, size);
-      add_neighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
+      LookuptKDTree(p, point, norm, neighbors, median + 1, end, distance, size);
+      AddNeighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
                    distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        lookup_kdtree(p, point, norm, neighbors, begin, median, distance, size);
+        LookuptKDTree(p, point, norm, neighbors, begin, median, distance, size);
     }
   }
 }
 
-Vector3 PhotonSimulator::get_Intersect(const Vector3 &p1, const Vector3 &p2,
+Vector3 PhotonSimulator::GetIntersect(const Vector3 &p1, const Vector3 &p2,
                                        const Vector3 &p3,
                                        const Vector3 &line_point,
                                        const Vector3 &line_dir) {
-  Vector3 plane_normal = get_Normal(p1, p2, p3);
+  Vector3 plane_normal = GetNormal(p1, p2, p3);
   real_t d = dotresult(p1 - line_point, plane_normal) /
              dotresult(line_dir, plane_normal);
   normalize(line_dir);
   return d * line_dir + line_point;
 }
 
-bool PhotonSimulator::in_Triangle(const Vector3 &a, const Vector3 &b,
+bool PhotonSimulator::IsInTriangle(const Vector3 &a, const Vector3 &b,
                                   const Vector3 &c, const Vector3 &p) {
   Vector3 v0 = c - a;
   Vector3 v1 = b - a;
@@ -188,7 +188,7 @@ bool PhotonSimulator::in_Triangle(const Vector3 &a, const Vector3 &b,
   return u + v <= 1;
 }
 
-Vector3 PhotonSimulator::get_Normal(const Vector3 &p1, const Vector3 &p2,
+Vector3 PhotonSimulator::GetNormal(const Vector3 &p1, const Vector3 &p2,
                                     const Vector3 &p3) {
   real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
   real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
@@ -196,7 +196,7 @@ Vector3 PhotonSimulator::get_Normal(const Vector3 &p1, const Vector3 &p2,
   return Vector3(a, b, c);
 }
 
-Vector3 PhotonSimulator::get_pixel_color(const Vector3 &ray_pos,
+Vector3 PhotonSimulator::GetPixelColor(const Vector3 &ray_pos,
                                          const Vector3 &ray_dir) {
   Vector3 direct, global;
   Vector3 p(1000.0f, 1000.0f, 0.0f);
@@ -210,9 +210,9 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3 &ray_pos,
         Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
         Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
         Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-        Vector3 normal = get_Normal(a, b, c);
-        Vector3 intersect = get_Intersect(a, b, c, ray_pos, ray_dir);
-        if (in_Triangle(a, b, c, intersect)) {
+        Vector3 normal = GetNormal(a, b, c);
+        Vector3 intersect = GetIntersect(a, b, c, ray_pos, ray_dir);
+        if (IsInTriangle(a, b, c, intersect)) {
           if (distance(ray_pos, intersect) < distance(ray_pos, p)) {
             p = intersect;
             min = &face;
@@ -248,7 +248,7 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3 &ray_pos,
     float d = 0.0;
     int count = 0;
     Neighbor neighbors[kNumberOfPhotonsNeayby];
-    lookup_kdtree(absorb_photons, p, min_normal, neighbors, 0,
+    LookuptKDTree(absorb_photons, p, min_normal, neighbors, 0,
                   absorb_photons.size() - 1, d, size);
     for (int i = 0; i < size; i++) {
       real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
@@ -273,19 +273,19 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3 &ray_pos,
   return result;
 }
 
-Vector3 PhotonSimulator::get_ray_color(const int x, const int y,
+Vector3 PhotonSimulator::GetRayColor(const int x, const int y,
                                        const int scene_length,
                                        const int scene_width,
                                        const Vector3 &camera_pos,
                                        const Vector3 &camera_ctr,
                                        const Vector3 &camera_up) {
-  Vector3 dir = get_ray_dir(x, y, scene_length, scene_width, camera_pos,
+  Vector3 dir = GetRayDir(x, y, scene_length, scene_width, camera_pos,
                             camera_ctr, camera_up);
-  Vector3 color = get_pixel_color(camera_pos, dir);
+  Vector3 color = GetPixelColor(camera_pos, dir);
   return color;
 }
 
-Vector3 PhotonSimulator::get_ray_dir(const int x, const int y,
+Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
                                      const int scene_length,
                                      const int scene_width,
                                      const Vector3 &camera_pos,
@@ -304,7 +304,7 @@ Vector3 PhotonSimulator::get_ray_dir(const int x, const int y,
   return t;
 }
 
-int PhotonSimulator::Russian_roulette(const real_t abr, const real_t ref,
+int PhotonSimulator::RussianRoulette(const real_t abr, const real_t ref,
                                       const real_t trans) {
   real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
@@ -315,7 +315,7 @@ int PhotonSimulator::Russian_roulette(const real_t abr, const real_t ref,
     return kTrans;
 }
 
-void PhotonSimulator::photons_modify() {
+void PhotonSimulator::PhotonsModify() {
   while (!alive_photons.empty()) {
     for (int i = 0; i < alive_photons.size(); i++) {
       Vector3 p(-100.0f, -100.0f, -100.0f);
@@ -328,10 +328,10 @@ void PhotonSimulator::photons_modify() {
             Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
             Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
             Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-            Vector3 normal = get_Normal(a, b, c);
-            Vector3 intersect = get_Intersect(a, b, c, alive_photons[i].pos,
+            Vector3 normal = GetNormal(a, b, c);
+            Vector3 intersect = GetIntersect(a, b, c, alive_photons[i].pos,
                                               alive_photons[i].dir);
-            if (in_Triangle(a, b, c, intersect)) {
+            if (IsInTriangle(a, b, c, intersect)) {
               if (distance(alive_photons[i].pos, intersect) <
                   distance(alive_photons[i].pos, p)) {
                 p = intersect;
@@ -348,7 +348,7 @@ void PhotonSimulator::photons_modify() {
       }
       if (min) {
         int res =
-            Russian_roulette(min->material.aborption, min->material.reflection,
+            RussianRoulette(min->material.aborption, min->material.reflection,
                              min->material.transmision);
         switch (res) {
           case kAbsorb: {
@@ -359,13 +359,13 @@ void PhotonSimulator::photons_modify() {
             break;
           }
           case kReflect: {
-            Vector3 ref = get_reflect(alive_photons[i].dir, min_normal);
+            Vector3 ref = GetReflect(alive_photons[i].dir, min_normal);
             alive_photons[i].pos = p;
             alive_photons[i].dir = ref;
             break;
           }
           case kTrans: {
-            Vector3 ref = get_refract(alive_photons[i].dir, min_normal, 1.0);
+            Vector3 ref = GetRefract(alive_photons[i].dir, min_normal, 1.0);
             alive_photons[i].pos = p;
             alive_photons[i].dir = ref;
             break;
@@ -378,15 +378,15 @@ void PhotonSimulator::photons_modify() {
       }
     }
   }
-  construct_kdtree(absorb_photons, 0, absorb_photons.size());
+  ConstructKDTree(absorb_photons, 0, absorb_photons.size());
 }
 
-Vector3 PhotonSimulator::get_reflect(const Vector3 &dir, const Vector3 &norm) {
+Vector3 PhotonSimulator::GetReflect(const Vector3 &dir, const Vector3 &norm) {
   Vector3 normal = normalize(norm);
   return (dir - 2 * dot((dot(dir, normal)), normal));
 }
 
-Vector3 PhotonSimulator::get_refract(const Vector3 &dir, const Vector3 &norm,
+Vector3 PhotonSimulator::GetRefract(const Vector3 &dir, const Vector3 &norm,
                                      real_t coef) {
   return Vector3(-sqrt(1 - coef * coef *
                                (1 - squared_length(dot(dir, norm)) *
