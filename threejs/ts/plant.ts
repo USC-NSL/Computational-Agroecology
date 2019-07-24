@@ -3,18 +3,18 @@ import {
   model_url,
   model_urls,
   model,
-  plant_configs,
-  grid2pos,
+  plant_status_configs,
   clamp,
-  hydration_max
+  hydration_max,
+  Grid,
+  tileSize
 } from "./common";
 import {Group, Mesh, Object3D} from "three/src/Three";
 
 import {MTLLoader, MaterialCreator} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 
-export class Configs {
-  // data
+export class PlantConfigs {
   private env: Env;
   private models: model | undefined;
 
@@ -85,6 +85,10 @@ export class Configs {
   getHeight(): number { return this.env.height; }
   getWidth(): number { return this.env.width; }
 
+  getGrid(gridX: number, gridY: number): Grid {
+    return this.env.grids[gridX][gridY];
+  }
+
   getPlantType(gridX: number, gridY: number): string | undefined {
     return this.env.grids[gridX][gridY].planttype;
   }
@@ -123,10 +127,10 @@ export class Configs {
       console.log("connot plant " + planttype + " in occupied tile.");
       return undefined;
     } else {
-      if (plantstatus >= plant_configs[planttype].length)
-        plantstatus = plant_configs[planttype].length - 1;
+      if (plantstatus >= plant_status_configs[planttype].length)
+        plantstatus = plant_status_configs[planttype].length - 1;
 
-      var configs = plant_configs[planttype][plantstatus];
+      var configs = plant_status_configs[planttype][plantstatus];
 
       if (this.models === undefined) {
         console.log("Models are not loaded yet.");
@@ -134,7 +138,7 @@ export class Configs {
       }
       var model = this.models[configs.model].clone();
       model.scale.set(configs.scaleX, configs.scaleY, configs.scaleZ);
-      model.position.set(grid2pos(gridX), grid2pos(gridY), 0);
+      model.position.set(this.gridX2posX(gridX), this.gridY2posY(gridY), 0);
       model.castShadow = true;
       model.receiveShadow = true;
 
@@ -156,5 +160,12 @@ export class Configs {
       this.env.grids[gridX][gridY].plantmodel = undefined;
     }
     return plantmodel;
+  }
+
+  gridX2posX(gridX: number) {
+    return tileSize * (-this.getHeight() / 2 + 0.5 + gridX);
+  }
+  gridY2posY(gridY: number) {
+    return tileSize * (-this.getWidth() / 2 + 0.5 + gridY);
   }
 }

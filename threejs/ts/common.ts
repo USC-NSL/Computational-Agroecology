@@ -4,14 +4,7 @@ export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 };
 
-
-// TODO: update for arbitrary grid size
-export function pos2grid(pos: number) {
-  return (pos + 45) / 10;
-};
-export function grid2pos(grid: number) {
-  return -45 + 10 * grid;
-};
+export const tileSize = 10;
 
 export interface model { [name: string]: Group; };
 
@@ -29,6 +22,7 @@ export interface Env {
 };
 
 export enum FunctionMode {
+  INVESTIGATE,
   CORN,
   BEAN,
   SQUASH,
@@ -47,9 +41,14 @@ export const file_urls: {
   [name: string]: string;
 }
 = {
+  // texture
   CLOUD: "assets/texture/cloud.png",
   RAINDROP: "assets/texture/raindrop.png",
-  TILEMAP: "assets/texture/tilemap.png"
+  TILEMAP: "assets/texture/tilemap.png",
+  // image
+  NONE: "assets/image/none.png",
+  CORN: "assets/image/corn.png",
+  SQUASH: "assets/image/squash.png",
 };
 
 export interface model_url {
@@ -114,7 +113,6 @@ export const color_configs: {
   TILE_WATERED2: 0x843e0a,
   TILE_WATERED3: 0x492205,
   TILE_ONSELECT: 0xffffff,
-  TILE_ONCLICK: 0xff0000,
 };
 
 export const hydration_max = 3;
@@ -136,7 +134,7 @@ export interface plant_status {
   scaleZ: number;
 };
 
-export const plant_configs: {
+export const plant_status_configs: {
   [name: string]: plant_status[];
 }
 = {

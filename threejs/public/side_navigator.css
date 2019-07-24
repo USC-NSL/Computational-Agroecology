@@ -1,0 +1,74 @@
+.sidenav {
+    height: 100%;
+    /* 100% Full-height */
+    width: 0;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Stay on top */
+    top: 0;
+    /* Stay at the top */
+    right: 0;
+    background-color: #111;
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 60px;
+    /* Place content 60px from the top */
+    transition: 0.5s;
+    /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidenav table {
+    padding: 8px 8px 8px 30px;
+}
+
+.sidenav th {
+    display: inline-block;
+    padding: 2px;
+    font-size: 2vw;
+    color: #818181;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.sidenav td {
+    padding: 2px;
+    font-size: 2vw;
+    color: #ff6b6b;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.sidenav img {
+    display: block;
+    max-width: 400px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: #818181;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a th td {
+        font-size: 18px;
+    }
+}

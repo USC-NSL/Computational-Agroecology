@@ -4,25 +4,20 @@ import {API} from "./API";
 import * as dat from 'dat.gui';
 
 export class GUI {
-  functionMode: string;
-  weatherMode: string;
-  render: Render;
   api: API;
-  cameraX: number;
-  cameraY: number;
-  cameraZ: number;
+  render: Render;
+  functionMode = FunctionMode[FunctionMode.SQUASH];
+  weatherMode = WeatherMode[WeatherMode.SUNNY];
+  cameraX = 0;
+  cameraY = 0;
+  cameraZ = 0;
   restartCall: () => void;
   updateWeatherCall: (weatherMode: string) => void;
 
   constructor(render: Render, api: API, restartCall: () => void,
               updateWeatherCall: (weatherMode: string) => void) {
-    this.functionMode = FunctionMode[FunctionMode.SQUASH];
-    this.weatherMode = WeatherMode[WeatherMode.SUNNY];
     this.render = render;
     this.api = api;
-    this.cameraX = 0;
-    this.cameraY = 0;
-    this.cameraZ = 0;
     this.restartCall = restartCall;
     this.updateWeatherCall = updateWeatherCall;
 
@@ -56,9 +51,9 @@ export class GUI {
   // TODO: deprecate it later
   updateCamera() {
     requestAnimationFrame(this.updateCamera.bind(this));
-    this.cameraX = this.render.getCamera().position.x;
-    this.cameraY = this.render.getCamera().position.y;
-    this.cameraZ = this.render.getCamera().position.z;
+    this.cameraX = this.render.camera.position.x;
+    this.cameraY = this.render.camera.position.y;
+    this.cameraZ = this.render.camera.position.z;
   };
 
   update() {

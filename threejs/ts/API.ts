@@ -1,4 +1,4 @@
-import {Configs} from "./config";
+import {PlantConfigs} from "./plant";
 import {
   CreateAgentRequest,
   CreateEnvironmentRequest,
@@ -36,16 +36,14 @@ const status: {[index: number]: string} = {
 };
 
 export class API {
-  configs: Configs;
+  configs: PlantConfigs;
   server: AgentServerClient;
-  agent_name: string;
-  env_name: string;
-  constructor(configs: Configs) {
+  agent_name = 'Barath';
+  env_name = "Happy Farm";
+  constructor(configs: PlantConfigs) {
     this.configs = configs;
     /////////////  change the IP address to your server's IP
     this.server = new AgentServerClient('http://204.57.3.150:8080', null, null);
-    this.agent_name = 'Barath';
-    this.env_name = "Happy Farm";
     this.init();
   }
 

@@ -39,3 +39,11 @@ canvas {
         transform: rotate(360deg);
     }
 }
+
+/* overright dat.gui css */
+
+.dg.a {
+    position: absolute;
+    margin: 50px;
+    margin-left: 0px !important;
+}
