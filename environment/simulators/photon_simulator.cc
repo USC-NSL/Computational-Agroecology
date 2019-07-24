@@ -13,9 +13,17 @@ PhotonSimulator::PhotonSimulator(const int number, const real_t distance,
       kSunHeight(height) {}
 
 void PhotonSimulator::SimulateToTime(
-    environment::Environment* env,
-    const std::chrono::system_clock::time_point& time) {
-  // we regard north as y asix
+    environment::Environment *env,
+    const std::chrono::system_clock::time_point &time) {
+  // the part for model
+  FreeModels();
+  LoadModels(env);
+
+  // the part for photon
+  /**
+   * TODO: check terrain orientation
+   * we regard north as y asix
+   */
   alive_photons.clear();
   absorb_photons.clear();
   photon_emit(Vector3(-sin(env->sun_info().SunAzimuth),
@@ -37,8 +45,19 @@ void PhotonSimulator::SimulateToTime(
   photons_modify();
 }
 
+void PhotonSimulator::FreeModels() {
+  while (!models.empty()) {
+    Model *model = models.back();
+    models.pop_back();
+    delete model;
+  }
+}
+
+// TODO: implement this function after refining class plant
+void PhotonSimulator::LoadModels(environment::Environment *env) {}
+
 void PhotonSimulator::photon_emit(
-    const Vector3& sun_direction, const Vector3& sun_strength,
+    const Vector3 &sun_direction, const Vector3 &sun_strength,
     const double latitude_bottom, const double latitude_top,
     const double latitudeDiff, const double longitude_left,
     const double longitude_right, const double longitudeDiff) {
@@ -52,10 +71,11 @@ void PhotonSimulator::photon_emit(
   }
 }
 
-void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
+void PhotonSimulator::construct_kdtree(std::vector<Photon> &p,
                                        const unsigned int begin,
                                        const unsigned int end) {
-  if (end - begin == 0) return;
+  if (end - begin == 0)
+    return;
   if (end - begin == 1) {
     p[begin].flag = kLEAF;
     return;
@@ -97,12 +117,12 @@ void PhotonSimulator::construct_kdtree(std::vector<Photon>& p,
   construct_kdtree(p, median + 1, end);
 }
 
-void PhotonSimulator::lookup_kdtree(const std::vector<Photon>& p,
-                                    const Vector3& point, const Vector3& norm,
-                                    Neighbor* neighbors,
+void PhotonSimulator::lookup_kdtree(const std::vector<Photon> &p,
+                                    const Vector3 &point, const Vector3 &norm,
+                                    Neighbor *neighbors,
                                     const unsigned int begin,
-                                    const unsigned int end, real_t& distance,
-                                    int& size) {
+                                    const unsigned int end, real_t &distance,
+                                    int &size) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
@@ -132,10 +152,10 @@ void PhotonSimulator::lookup_kdtree(const std::vector<Photon>& p,
   }
 }
 
-Vector3 PhotonSimulator::get_Intersect(const Vector3& p1, const Vector3& p2,
-                                       const Vector3& p3,
-                                       const Vector3& line_point,
-                                       const Vector3& line_dir) {
+Vector3 PhotonSimulator::get_Intersect(const Vector3 &p1, const Vector3 &p2,
+                                       const Vector3 &p3,
+                                       const Vector3 &line_point,
+                                       const Vector3 &line_dir) {
   Vector3 plane_normal = get_Normal(p1, p2, p3);
   real_t d = dotresult(p1 - line_point, plane_normal) /
              dotresult(line_dir, plane_normal);
@@ -143,8 +163,8 @@ Vector3 PhotonSimulator::get_Intersect(const Vector3& p1, const Vector3& p2,
   return d * line_dir + line_point;
 }
 
-bool PhotonSimulator::in_Triangle(const Vector3& a, const Vector3& b,
-                                  const Vector3& c, const Vector3& p) {
+bool PhotonSimulator::in_Triangle(const Vector3 &a, const Vector3 &b,
+                                  const Vector3 &c, const Vector3 &p) {
   Vector3 v0 = c - a;
   Vector3 v1 = b - a;
   Vector3 v2 = p - a;
@@ -155,31 +175,33 @@ bool PhotonSimulator::in_Triangle(const Vector3& a, const Vector3& b,
   real_t dot12 = dotresult(v1, v2);
   real_t inverDeno = 1 / (dot00 * dot11 - dot01 * dot01);
   real_t u = (dot11 * dot02 - dot01 * dot12) * inverDeno;
-  if (u < 0 || u > 1) return false;
+  if (u < 0 || u > 1)
+    return false;
   real_t v = (dot00 * dot12 - dot01 * dot02) * inverDeno;
-  if (v < 0 || v > 1) return false;
+  if (v < 0 || v > 1)
+    return false;
   return u + v <= 1;
 }
 
-Vector3 PhotonSimulator::get_Normal(const Vector3& p1, const Vector3& p2,
-                                    const Vector3& p3) {
+Vector3 PhotonSimulator::get_Normal(const Vector3 &p1, const Vector3 &p2,
+                                    const Vector3 &p3) {
   real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
   real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
   real_t c = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
   return Vector3(a, b, c);
 }
 
-Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
-                                         const Vector3& ray_dir) {
+Vector3 PhotonSimulator::get_pixel_color(const Vector3 &ray_pos,
+                                         const Vector3 &ray_dir) {
   Vector3 direct, global;
   Vector3 p(1000.0f, 1000.0f, 0.0f);
-  Face* min = NULL;
+  Face *min = NULL;
   GLuint texture_id;
-  Model* min_model;
+  Model *min_model;
   Vector3 min_normal;
-  for (auto& model : models) {
-    for (auto& mesh : model->meshes) {
-      for (auto& face : mesh.faces) {
+  for (auto &model : models) {
+    for (auto &mesh : model->meshes) {
+      for (auto &face : mesh.faces) {
         Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
         Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
         Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
@@ -249,9 +271,9 @@ Vector3 PhotonSimulator::get_pixel_color(const Vector3& ray_pos,
 Vector3 PhotonSimulator::get_ray_color(const int x, const int y,
                                        const int scene_length,
                                        const int scene_width,
-                                       const Vector3& camera_pos,
-                                       const Vector3& camera_ctr,
-                                       const Vector3& camera_up) {
+                                       const Vector3 &camera_pos,
+                                       const Vector3 &camera_ctr,
+                                       const Vector3 &camera_up) {
   Vector3 dir = get_ray_dir(x, y, scene_length, scene_width, camera_pos,
                             camera_ctr, camera_up);
   Vector3 color = get_pixel_color(camera_pos, dir);
@@ -261,9 +283,9 @@ Vector3 PhotonSimulator::get_ray_color(const int x, const int y,
 Vector3 PhotonSimulator::get_ray_dir(const int x, const int y,
                                      const int scene_length,
                                      const int scene_width,
-                                     const Vector3& camera_pos,
-                                     const Vector3& camera_ctr,
-                                     const Vector3& camera_up) {
+                                     const Vector3 &camera_pos,
+                                     const Vector3 &camera_ctr,
+                                     const Vector3 &camera_up) {
   Vector3 dir = camera_ctr - camera_pos;
   Vector3 cR = cross(dir, camera_up);
   Vector3 cU = cross(cR, dir);
@@ -292,12 +314,12 @@ void PhotonSimulator::photons_modify() {
   while (!alive_photons.empty()) {
     for (int i = 0; i < alive_photons.size(); i++) {
       Vector3 p(-100.0f, -100.0f, -100.0f);
-      Face* min = NULL;
-      Model* min_model;
+      Face *min = NULL;
+      Model *min_model;
       Vector3 min_normal;
-      for (auto& model : models) {
-        for (auto& mesh : model->meshes) {
-          for (auto& face : mesh.faces) {
+      for (auto &model : models) {
+        for (auto &mesh : model->meshes) {
+          for (auto &face : mesh.faces) {
             Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
             Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
             Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
@@ -354,12 +376,12 @@ void PhotonSimulator::photons_modify() {
   construct_kdtree(absorb_photons, 0, absorb_photons.size());
 }
 
-Vector3 PhotonSimulator::get_reflect(const Vector3& dir, const Vector3& norm) {
+Vector3 PhotonSimulator::get_reflect(const Vector3 &dir, const Vector3 &norm) {
   Vector3 normal = normalize(norm);
   return (dir - 2 * dot((dot(dir, normal)), normal));
 }
 
-Vector3 PhotonSimulator::get_refract(const Vector3& dir, const Vector3& norm,
+Vector3 PhotonSimulator::get_refract(const Vector3 &dir, const Vector3 &norm,
                                      real_t coef) {
   return Vector3(-sqrt(1 - coef * coef *
                                (1 - squared_length(dot(dir, norm)) *

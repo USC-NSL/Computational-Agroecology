@@ -25,12 +25,16 @@ class PhotonSimulator : public Simulator {
       const std::chrono::system_clock::time_point& time) override;
 
  private:
+  // the part for model
+  std::vector<Model*> models;
+  void FreeModels();
+  void LoadModels(environment::Environment *env);
+  
   // the part for photon
   const int kNumberOfPhotonsNeayby;
   const real_t kMaxDistance;
   const real_t kSunHeight;
   std::vector<Photon> alive_photons, absorb_photons;
-  std::vector<Model*> models;
   void photon_emit(const Vector3& sun_direction, const Vector3& sun_strength,
                    const double latitude_bottom, const double latitude_top,
                    const double latitudeDiff, const double longitude_left,
