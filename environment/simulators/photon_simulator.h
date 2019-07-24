@@ -61,6 +61,9 @@ class PhotonSimulator : public Simulator {
                         const Vector3& camera_ctr, const Vector3& camera_up);
   Vector3 get_reflect(const Vector3& dir, const Vector3& norm);
   Vector3 get_refract(const Vector3& dir, const Vector3& norm, real_t coef);
+
+  // write result to environment
+  void WriteResult2Env(environment::Environment *env);
 };
 
 }  // namespace photonsimulator

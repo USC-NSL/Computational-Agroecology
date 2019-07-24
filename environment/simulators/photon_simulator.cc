@@ -6,6 +6,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
+// TODO: @Hangjie change number to meaningful name
 PhotonSimulator::PhotonSimulator(const int number, const real_t distance,
                                  const real_t height)
     : kNumberOfPhotonsNeayby(number),
@@ -43,6 +44,9 @@ void PhotonSimulator::SimulateToTime(
                env->config_.location.longitude_left) /
                   100.0f);
   photons_modify();
+
+  // write result to env
+  WriteResult2Env(env);
 }
 
 void PhotonSimulator::FreeModels() {
@@ -53,8 +57,9 @@ void PhotonSimulator::FreeModels() {
   }
 }
 
-// TODO: implement this function after refining class plant
+// TODO: implement these two functions after refining class plant
 void PhotonSimulator::LoadModels(environment::Environment *env) {}
+void PhotonSimulator::WriteResult2Env(environment::Environment *env){}
 
 void PhotonSimulator::photon_emit(
     const Vector3 &sun_direction, const Vector3 &sun_strength,
