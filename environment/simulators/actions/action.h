@@ -14,7 +14,13 @@ namespace simulator {
 namespace action {
 
 // This defines the types of actions that an agent/human can take.
-enum ActionType { CROP_ADD = 0, CROP_REMOVE, CROP_HARVEST, WATER_CROP, NUM_ACTIONS };
+enum ActionType {
+  CROP_ADD = 0,
+  CROP_REMOVE,
+  CROP_HARVEST,
+  WATER_CROP,
+  NUM_ACTIONS
+};
 
 // An agent or a human can set up this `Action` object and pass it to the
 // environment to schedule the action.

@@ -8,4 +8,4 @@ int Plant::Harvest() {
   return ret;
 }
 
-}
+}  // namespace environment

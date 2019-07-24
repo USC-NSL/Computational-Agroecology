@@ -25,7 +25,8 @@ int main() {
   // Declare Qlearning
   agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
   // Create Action
-  agent::ActionID action = {terrain.width(), terrain.length(), ::simulator::action::ActionType::CROP_HARVEST, 2};
+  agent::ActionID action = {terrain.width(), terrain.length(),
+                            ::simulator::action::ActionType::CROP_HARVEST, 2};
   auto action_obj = agent_test.CreateAction(action);
 
   simulator::action::crop::Add add_crop(environment::Coordinate(0, 0), 1, 0,
@@ -44,6 +45,6 @@ int main() {
   env.JumpForwardTimeStep(24);
 
   std::cout << env << std::endl;
-  
+
   return 0;
 }

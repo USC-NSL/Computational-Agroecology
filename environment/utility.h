@@ -6,10 +6,10 @@
 
 template <typename T>
 struct MinMaxPair {
-  MinMaxPair(const T& min, const T& max) : min(min), max(max) {}
-  MinMaxPair(const std::pair<T, T>& input)
+  MinMaxPair(const T &min, const T &max) : min(min), max(max) {}
+  MinMaxPair(const std::pair<T, T> &input)
       : min(input.first), max(input.second) {}
-  MinMaxPair(const std::initializer_list<T>& l) {
+  MinMaxPair(const std::initializer_list<T> &l) {
     if (l.size() >= 2) {
       min = *(l.begin());
       max = *(l.begin() + 1);
@@ -21,12 +21,12 @@ struct MinMaxPair {
 };
 
 template <typename T>
-bool operator==(const MinMaxPair<T>& lhs, const MinMaxPair<T>& rhs) {
+bool operator==(const MinMaxPair<T> &lhs, const MinMaxPair<T> &rhs) {
   return (lhs.min == rhs.min) && (lhs.max == rhs.max);
 }
 
 template <typename T>
-bool operator!=(const MinMaxPair<T>& lhs, const MinMaxPair<T>& rhs) {
+bool operator!=(const MinMaxPair<T> &lhs, const MinMaxPair<T> &rhs) {
   return !(lhs == rhs);
 }
 

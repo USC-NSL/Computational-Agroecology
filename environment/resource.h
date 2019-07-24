@@ -14,13 +14,13 @@ enum class ResourceType {
   POTASSIUM,
   CALCIUM,
   MAGNESIUM,
-  SULFUR  
+  SULFUR
 };
 
 // TODO: Document this Resources map based upon the right units for the value
 // type.
 using Resources = std::unordered_map<ResourceType, int64_t>;
 
-}
+}  // namespace environment
 
-#endif // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_RESOURCE_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_RESOURCE_H_

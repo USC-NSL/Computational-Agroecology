@@ -13,7 +13,6 @@ using namespace environment;
 using namespace simulator;
 using namespace simulator::action;
 
-
 class QlearningTest : public ::testing::Test {
  public:
   ~QlearningTest() {
@@ -31,8 +30,8 @@ class QlearningTest : public ::testing::Test {
     qlearning = new Qlearning("agent name", env, 10, 54);
   }
 
-  Qlearning* qlearning;
-  Environment* env;
+  Qlearning *qlearning;
+  Environment *env;
 };
 
 TEST_F(QlearningTest, ConstructorTest_1) {
@@ -43,8 +42,7 @@ TEST_F(QlearningTest, ConstructorTest_1) {
   EXPECT_EQ(env, agent.environment());
 }
 
-
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
