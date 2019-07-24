@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "location.h"
+#include "environment/location.h"
 
 namespace environment {
 

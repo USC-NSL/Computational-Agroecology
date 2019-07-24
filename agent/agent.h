@@ -9,7 +9,7 @@
 
 #include "agent/actions/crop.h"
 #include "agent/resource.h"
-#include "environment.h"
+#include "environment/environment.h"
 
 namespace agent {
 

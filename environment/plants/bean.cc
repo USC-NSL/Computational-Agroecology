@@ -1,7 +1,7 @@
 #include "bean.h"
 
-#include "plant.h"
-#include "plant_builder.h"
+#include "environment/plant.h"
+#include "environment/plant_builder.h"
 
 namespace environment {
 

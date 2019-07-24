@@ -1,13 +1,13 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_AGENT_ACTIONS_CROP_H_
+#define COMPUTATIONAL_AGROECOLOGY_AGENT_ACTIONS_CROP_H_
 
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <unordered_map>
 
-#include "action.h"
-#include "plant.h"
+#include "agent/actions/action.h"
+#include "environment/plant.h"
 
 namespace agent {
 
@@ -111,4 +111,4 @@ class Water : public Action {
 
 }  // namespace agent
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_AGENT_ACTIONS_CROP_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_AGENT_ACTIONS_CROP_H_

@@ -1,7 +1,7 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_AGENT_Q_LEARNING_H_
 #define COMPUTATIONAL_AGROECOLOGY_AGENT_Q_LEARNING_H_
 
-#include "agent.h"
+#include "agent/agent.h"
 
 #include <algorithm>
 

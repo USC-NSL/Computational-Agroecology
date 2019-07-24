@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "plant.h"
+#include "environment/plant.h"
 
 namespace environment {
 

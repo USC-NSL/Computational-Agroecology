@@ -1,7 +1,7 @@
 #include "crop.h"
 
-#include "plant_builder.h"
-#include "terrain.h"
+#include "environment/plant_builder.h"
+#include "environment/terrain.h"
 
 namespace agent {
 

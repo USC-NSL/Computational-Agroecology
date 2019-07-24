@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "agent/actions/action.h"
-#include "plant.h"
-#include "soil.h"
+#include "environment/plant.h"
+#include "environment/soil.h"
 
 namespace environment {
 

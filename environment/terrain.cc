@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "plant.h"
+#include "environment/plant.h"
 
 namespace environment {
 

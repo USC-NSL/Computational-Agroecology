@@ -4,19 +4,36 @@ OPENGLLIBS := -lGL -lglut -lGLEW
 
 INCLUDES := -I ./
 
-MAIN_OBJ := main.o
-OBJ := climate.o config.o environment.o location.o soil.o suninfo.o plant_builder.o plant.o terrain.o weather.o
+.DEFAULT_GOAL := all
 
+# TODO: migrate the rules for "agent_server" to here
+
+# components in environment
+ENVIRONMENT_PATH := ./environment
+MAIN_OBJ := $(ENVIRONMENT_PATH)/main.o
+ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
+	$(ENVIRONMENT_PATH)/config.o \
+	$(ENVIRONMENT_PATH)/environment.o \
+	$(ENVIRONMENT_PATH)/location.o \
+	$(ENVIRONMENT_PATH)/plant_builder.o \
+	$(ENVIRONMENT_PATH)/plant.o \
+	$(ENVIRONMENT_PATH)/soil.o \
+	$(ENVIRONMENT_PATH)/suninfo.o \
+	$(ENVIRONMENT_PATH)/terrain.o \
+	$(ENVIRONMENT_PATH)/weather.o
+
+# components in agent
 AGENT_PATH := ./agent
-AGENT_OBJ := $(AGENT_PATH)/agent.o
+AGENT_OBJ := $(AGENT_PATH)/agent.o $(AGENT_PATH)/q_learning.o
 ACTION_PATH := $(AGENT_PATH)/actions
 ACTION_OBJ := $(ACTION_PATH)/action.o $(ACTION_PATH)/crop.o
-QLEARNING_OBJ := $(AGENT_PATH)/q_learning.o
 
-PLANTS_PATH := ./plants
+# components in environment/plants
+PLANTS_PATH := $(ENVIRONMENT_PATH)/plants
 PLANTS_OBJ := $(PLANTS_PATH)/bean.o
 
-SIMULATOR_PATH := ./simulators
+# components in environment/simulators (should be removed)
+SIMULATOR_PATH := $(ENVIRONMENT_PATH)/simulators
 PHOTON_SIMULATOR_PATH := $(SIMULATOR_PATH)/photon_simulator
 PHOTON_SIMULATOR_LOADER_PATH := $(PHOTON_SIMULATOR_PATH)/loader
 PHOTON_SIMULATOR_LOADER_OBJ := $(PHOTON_SIMULATOR_LOADER_PATH)/tiny_obj_loader.o
@@ -29,6 +46,7 @@ PHOTON_SIMULATOR_MODEL_OBJ := $(PHOTON_SIMULATOR_MODEL_PATH)/face.o\
 PHOTON_SIMULATOR_OBJ := $(PHOTON_SIMULATOR_MODEL_OBJ)
 SIMULATOR_OBJ := $(PHOTON_SIMULATOR_MODEL_OBJ)
 
+# unit tests
 TEST_PATH := ./tests
 TEST_AGENT_PATH := $(TEST_PATH)/agent
 TEST_AGENT_OBJ := $(TEST_AGENT_PATH)/agent_test.o
@@ -52,8 +70,13 @@ TEST_ALL := $(TEST_PATH)/climate_test $(TEST_PATH)/config_test $(TEST_PATH)/envi
 TESTFLAGS := -Igtest/include
 TESTLD := -lgtest -lpthread
 
-ALL_OBJ_WITHOUT_MAIN := $(OBJ) $(AGENT_OBJ) $(ACTION_OBJ) $(PLANTS_OBJ) $(SIMULATOR_OBJ) $(QLEARNING_OBJ)
-ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
+ALL_OBJ_WITHOUT_MAIN := \
+	$(ENVIRONMENT_OBJ) \
+	$(AGENT_OBJ) \
+	$(ACTION_OBJ) \
+	$(PLANTS_OBJ) \
+	$(SIMULATOR_OBJ)
+ALL_OBJ := $(MAIN_OBJ) $(ALL_OBJ_WITHOUT_MAIN)
 
 %.o: %.cc %.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
@@ -69,6 +92,11 @@ ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
 
 all: $(ALL_OBJ)
 	$(CXX) $(ALL_OBJ) -o main $(OPENGLLIBS)
+
+environment: $(ENVIRONMENT_OBJ)
+agent: $(AGENT_OBJ)
+action: $(ACTION_OBJ)
+plants: $(PLANTS_OBJ)
 
 all_test: $(TEST_ALL)
 

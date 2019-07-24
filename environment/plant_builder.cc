@@ -1,6 +1,6 @@
 #include "plant_builder.h"
 
-#include "plant.h"
+#include "environment/plant.h"
 
 namespace environment {
 

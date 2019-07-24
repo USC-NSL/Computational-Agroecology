@@ -1,6 +1,6 @@
 #include "action.h"
 
-#include "environment.h"
+#include "environment/environment.h"
 
 namespace agent {
 

@@ -1,6 +1,6 @@
 #include "agent.h"
 
-#include "plant.h"
+#include "environment/plant.h"
 
 namespace agent {
 

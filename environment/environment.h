@@ -6,11 +6,11 @@
 #include <queue>
 #include <vector>
 
-#include "climate.h"
-#include "config.h"
-#include "suninfo.h"
-#include "terrain.h"
-#include "weather.h"
+#include "environment/climate.h"
+#include "environment/config.h"
+#include "environment/suninfo.h"
+#include "environment/terrain.h"
+#include "environment/weather.h"
 
 namespace environment {
 
