@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_TERRAIN_H_
 
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <vector>
 
@@ -18,25 +19,25 @@ struct Coordinate {
   size_t y;
 };
 
-bool operator==(const Coordinate& lhs, const Coordinate& rhs);
+bool operator==(const Coordinate &lhs, const Coordinate &rhs);
 
 struct Cell {
-  Cell(const Soil& soil);
-  Cell(const size_t size, const Soil& soil);
+  Cell(const Soil &soil);
+  Cell(const size_t size, const Soil &soil);
 
   size_t size;
-  std::optional<Plant> plant;
+  std::shared_ptr<Plant> plant;
   Soil soil;
 };
 
-bool operator==(const Cell& lhs, const Cell& rhs);
+bool operator==(const Cell &lhs, const Cell &rhs);
 
 // A collection of 2D `Cell`s
 class Tiles : public std::vector<std::vector<Cell>> {
  public:
   Tiles();
-  Tiles(const size_t width, const size_t length, const Soil& soil);
-  inline Cell& get(const Coordinate& coordinate) {
+  Tiles(const size_t width, const size_t length, const Soil &soil);
+  inline Cell &get(const Coordinate &coordinate) {
     return (*this)[coordinate.x][coordinate.y];
   }
 
@@ -56,19 +57,19 @@ class Terrain {
   // Accessors
   inline const size_t width() const { return tiles_.width(); }
   inline const size_t length() const { return tiles_.length(); }
-  inline Tiles& tiles() { return tiles_; }
+  inline Tiles &tiles() { return tiles_; }
   inline const int yield() { return yield_; }
-  inline const Tiles& tiles() const { return tiles_; }
+  inline const Tiles &tiles() const { return tiles_; }
   inline void AddYield(int produce) { yield_ += produce; }
 
  private:
-  friend std::ostream& operator<<(std::ostream& os, const Terrain& terrain);
+  friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 
   Tiles tiles_;
   int yield_;
 };
 
-std::ostream& operator<<(std::ostream& os, const Terrain& terrain);
+std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 
 }  // namespace environment
 

@@ -26,23 +26,25 @@ class MainSimulatorTest : public ::testing::Test {
  protected:
   void SetUp() override {
     auto time = std::chrono::system_clock::now();
+    auto time_step_length = std::chrono::hours(1);
 
     Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
     Terrain terrain(kTerrainSize);
-    env = new Environment(config, time, terrain);
+    env = new Environment(config, time, time_step_length, terrain);
 
-    const std::string kCornTypeName = "Corn";
-    auto duration = std::chrono::minutes(5);
+    const std::string kBeanTypeName = "bean";
+    int64_t time_step = 0;
+    int64_t duration = 1;
     for (size_t i = 0; i < kNumberOfActions; ++i) {
       actions.push_back(
-          new crop::Add(Coordinate(i, i), time, duration, kCornTypeName));
-      time += std::chrono::minutes(10);
+          new crop::Add(Coordinate(i, i), time_step, duration, kBeanTypeName));
+      time_step += 2;
     }
   }
 
-  Environment* env;
+  Environment *env;
   MainSimulator simulator;
-  std::vector<const Action*> actions;
+  std::vector<const Action *> actions;
 };
 
 TEST_F(MainSimulatorTest, ReceiveActionsTest) {
@@ -57,10 +59,10 @@ TEST_F(MainSimulatorTest, ReceiveActionsTest) {
 TEST_F(MainSimulatorTest, SimulateToTimeTest) {
   simulator.ReceiveActions(actions);
 
-  // jump to 2 minutes later
-  auto now_time = env->timestamp() + std::chrono::minutes(2);
+  // jump to 30 minutes later
+  auto now_time = env->timestamp() + std::chrono::minutes(90);
   for (size_t i = 0; i < kNumberOfActions;
-       ++i, now_time += std::chrono::minutes(10)) {
+       ++i, now_time += std::chrono::hours(2)) {
     // the ith action should have started
     simulator.SimulateToTime(env, now_time);
 
@@ -69,17 +71,17 @@ TEST_F(MainSimulatorTest, SimulateToTimeTest) {
 
     // jump to 5 minutes later
     // the ith action should have completed
-    simulator.SimulateToTime(env, now_time + std::chrono::minutes(5));
+    simulator.SimulateToTime(env, now_time + std::chrono::hours(1));
     ASSERT_EQ(kNumberOfActions - i - 1, simulator.action_pq().size());
     ASSERT_EQ(0, simulator.pending_action_pq().size());
 
     // since the action has completed
     // we should see its effect in the `terrain`
-    EXPECT_NE(std::nullopt, env->terrain().tiles()[i][i].plant);
+    EXPECT_NE(nullptr, env->terrain().tiles()[i][i].plant);
   }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

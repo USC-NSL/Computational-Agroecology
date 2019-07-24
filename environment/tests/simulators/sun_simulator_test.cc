@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "gtest/gtest.h"
 
@@ -19,80 +20,78 @@ using namespace environment;
 const double PI = 3.14159265359;
 const size_t kTerrainSize = 5;
 
-class SunSimulatorTest : public ::testing::Test {};
+class SunSimulatorTest : public ::testing::Test {
+ protected:
+  void SetUp() override {
+    terrain.reset(new Terrain(kTerrainSize));
+    time_step_length = std::chrono::hours(1);
+  }
+
+  std::unique_ptr<Terrain> terrain;
+  std::unique_ptr<Environment> env;
+  std::chrono::duration<int> time_step_length;
+};
 
 TEST_F(SunSimulatorTest, SimulateSunTest_6_22) {
   Config config("place name", Location(0, 0, 23.45, 23.45));
-  Terrain terrain(kTerrainSize);
-  Environment* env;
   struct tm tm;
   sscanf("2019-06-22 12:00:00", "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon,
          &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
   tm.tm_year -= 1900;
   tm.tm_mon -= 1;
   auto time = std::chrono::system_clock::from_time_t(mktime(&tm));
-  env = new Environment(config, time, terrain);
+  env.reset(new Environment(config, time, time_step_length, *terrain));
   struct SunInfo info;
   SunSimulator simulator;
-  simulator.SimulateToTime(env, time);
+  simulator.SimulateToTime(env.get(), time);
   EXPECT_TRUE(env->sun_info().SolarAltitude <= 1);
-  delete env;
 }
 
 TEST_F(SunSimulatorTest, SimulateSunTest_12_21) {
   Config config("place name", Location(0, 0, -23.45, -23.45));
-  Terrain terrain(kTerrainSize);
-  Environment* env;
   struct tm tm;
   sscanf("2019-12-21 12:00:00", "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon,
          &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
   tm.tm_year -= 1900;
   tm.tm_mon -= 1;
   auto time = std::chrono::system_clock::from_time_t(mktime(&tm));
-  env = new Environment(config, time, terrain);
+  env.reset(new Environment(config, time, time_step_length, *terrain));
   struct SunInfo info;
   SunSimulator simulator;
-  simulator.SimulateToTime(env, time);
+  simulator.SimulateToTime(env.get(), time);
   EXPECT_TRUE(env->sun_info().SolarAltitude <= 1);
-  delete env;
 }
 
 TEST_F(SunSimulatorTest, SimulateSunTest_3_21) {
   Config config("place name", Location(0, 0, 0, 0));
-  Terrain terrain(kTerrainSize);
-  Environment* env;
   struct tm tm;
   sscanf("2019-03-21 12:00:00", "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon,
          &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
   tm.tm_year -= 1900;
   tm.tm_mon -= 1;
   auto time = std::chrono::system_clock::from_time_t(mktime(&tm));
-  env = new Environment(config, time, terrain);
+  env.reset(new Environment(config, time, time_step_length, *terrain));
   struct SunInfo info;
   SunSimulator simulator;
-  simulator.SimulateToTime(env, time);
+  simulator.SimulateToTime(env.get(), time);
   EXPECT_TRUE(env->sun_info().SolarAltitude <= 1);
-  delete env;
 }
 
 TEST_F(SunSimulatorTest, SimulateSunTest_9_21) {
   Config config("place name", Location(0, 0, 0, 0));
-  Terrain terrain(kTerrainSize);
-  Environment* env;
   struct tm tm;
   sscanf("2019-09-21 12:00:00", "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon,
          &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
   tm.tm_year -= 1900;
   tm.tm_mon -= 1;
   auto time = std::chrono::system_clock::from_time_t(mktime(&tm));
-  env = new Environment(config, time, terrain);
+  env.reset(new Environment(config, time, time_step_length, *terrain));
   struct SunInfo info;
   SunSimulator simulator;
-  simulator.SimulateToTime(env, time);
+  simulator.SimulateToTime(env.get(), time);
   EXPECT_TRUE(env->sun_info().SolarAltitude <= 1);
-  delete env;
 }
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

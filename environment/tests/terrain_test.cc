@@ -24,7 +24,7 @@ TEST(CellTest, ConstructorTest_1) {
 
   Cell cell(soil);
   EXPECT_EQ(1, cell.size);
-  EXPECT_EQ(std::nullopt, cell.plant);
+  EXPECT_EQ(nullptr, cell.plant);
   EXPECT_EQ(soil, cell.soil);
 }
 
@@ -33,7 +33,7 @@ TEST(CellTest, ConstructorTest_2) {
 
   Cell cell(2, soil);
   EXPECT_EQ(2, cell.size);
-  EXPECT_EQ(std::nullopt, cell.plant);
+  EXPECT_EQ(nullptr, cell.plant);
   EXPECT_EQ(soil, cell.soil);
 }
 
@@ -65,8 +65,8 @@ TEST(TilesTest, ConstructorTest_2) {
   EXPECT_EQ(7, tiles.length());
 
   Cell a_default_cell(soil);
-  for (const auto& row : tiles) {
-    for (const Cell& c : row) {
+  for (const auto &row : tiles) {
+    for (const Cell &c : row) {
       EXPECT_EQ(a_default_cell, c);
     }
   }
@@ -94,7 +94,7 @@ TEST(TerrainTest, ConstructorTest) {
   EXPECT_EQ(5, terrain.tiles().length());
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

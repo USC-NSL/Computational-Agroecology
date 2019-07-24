@@ -18,32 +18,34 @@ class MainSimulator : public Simulator {
   MainSimulator();
 
   void SimulateToTime(
-      environment::Environment* env,
-      const std::chrono::system_clock::time_point& time) override;
+      environment::Environment *env,
+      const std::chrono::system_clock::time_point &time) override;
 
   // Receive actions from `environment::Environment`
-  void ReceiveActions(const std::vector<const action::Action*>& actions);
+  void ReceiveActions(const std::vector<const action::Action *> &actions);
 
   // Accessors
-  inline const std::priority_queue<const action::Action*,
-                                   std::vector<const action::Action*>,
-                                   action::ActionStartTimeComparator>&
-  action_pq() const {
+  inline const std::priority_queue<const action::Action *,
+                                   std::vector<const action::Action *>,
+                                   action::ActionStartTimeComparator>
+      &action_pq() const {
     return action_pq_;
   }
 
-  inline const std::priority_queue<const action::Action*,
-                                   std::vector<const action::Action*>,
-                                   action::ActionEndTimeComparator>&
-  pending_action_pq() const {
+  inline const std::priority_queue<const action::Action *,
+                                   std::vector<const action::Action *>,
+                                   action::ActionEndTimeComparator>
+      &pending_action_pq() const {
     return pending_action_pq_;
   }
 
  private:
-  std::priority_queue<const action::Action*, std::vector<const action::Action*>,
+  std::priority_queue<const action::Action *,
+                      std::vector<const action::Action *>,
                       action::ActionStartTimeComparator>
       action_pq_;
-  std::priority_queue<const action::Action*, std::vector<const action::Action*>,
+  std::priority_queue<const action::Action *,
+                      std::vector<const action::Action *>,
                       action::ActionEndTimeComparator>
       pending_action_pq_;
   SunSimulator sun_simulator_;
