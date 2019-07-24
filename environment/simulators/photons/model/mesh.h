@@ -13,7 +13,7 @@
 #endif
 
 #ifndef TINY_OBJ_LOADER_H_
-#include "../loader/tiny_obj_loader.h"
+#include "tinyobjloader/tiny_obj_loader.h"
 #endif
 
 namespace simulator {

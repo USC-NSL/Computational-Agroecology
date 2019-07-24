@@ -2,7 +2,7 @@
 #include "mesh.h"
 #ifndef STBI_INCLUDE_STB_IMAGE_H
 #define STB_IMAGE_IMPLEMENTATION
-#include "../loader/stb_image.h"
+#include "tinyobjloader/examples/viewer/stb_image.h"
 #endif
 #include <cmath>
 #include "../stdafx.h"
