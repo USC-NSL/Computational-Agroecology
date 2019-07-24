@@ -124,7 +124,6 @@ void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
     numTriangles =
         buffer.size() / (3 + 3 + 2) / 3;  // 3:vtx, 3:normal, 2:texcoord
 
-    // printf("shape[] # of triangles = %d\n", numTriangles);
   }
 }
 

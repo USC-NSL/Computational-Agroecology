@@ -29,8 +29,15 @@ class Face {
   // keep everything public for simplicity
   Vertex vertex1, vertex2, vertex3;
   Vector3 normal;  // face normal
+
+  /**
+   * material_id is for obj file.
+   * material is self-defined structure.
+   */
   int material_id;
   Material material;  // TODO: how to import material info
+
+  // count of photons
   int photons;
 
   Face() = delete;
