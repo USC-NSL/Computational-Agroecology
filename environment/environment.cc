@@ -39,27 +39,31 @@ void Environment::ReceiveActions(const agent::action::ActionList &actions) {
 }
 
 void Environment::SyncActionPqToTimeStep(const int64_t time_step) {
-  // Go forward in the timeline. When an action should be done in this time
-  // step, execute it. When an action starts, put it into the
-  // `pending_action_pq`.
-  // Extract one action per loop.
-  while (!action_pq_.empty() || !pending_action_pq_.empty()) {
-    // no actions should be extract at this time step
-    bool no_need_to_mark_an_action_started =
+  // Handle one action per loop.
+  while (!action_pq_.empty() || !starting_action_pq_.empty()) {
+    // `action_pq_` is empty or the start time of the very first action is after
+    // the specified time step
+    bool no_actions_to_start =
         action_pq_.empty() || action_pq_.top()->start_time_step() > time_step;
-    bool no_need_to_execute_an_action_from_pending =
-        pending_action_pq_.empty() ||
-        pending_action_pq_.top()->end_time_step() > time_step;
-    if (no_need_to_mark_an_action_started &&
-        no_need_to_execute_an_action_from_pending) {
+
+    // `startint_pq_` is empty or the end time of the very first action is after
+    // the specified time step
+    bool no_actions_to_take_effect =
+        starting_action_pq_.empty() ||
+        starting_action_pq_.top()->end_time_step() > time_step;
+
+    if (no_actions_to_start && no_actions_to_take_effect) {
+      // no actions should be pushed or poped at this time step
       break;
     }
 
-    if (!pending_action_pq_.empty() &&
-        pending_action_pq_.top()->end_time_step() <=
+    // check whose top action of the two PQ goes first
+    if (!starting_action_pq_.empty() &&
+        starting_action_pq_.top()->end_time_step() <=
             action_pq_.top()->start_time_step()) {
-      auto action = pending_action_pq_.top();
-      pending_action_pq_.pop();
+      // pop the action in `starting_action_pq_`
+      const auto action = starting_action_pq_.top();
+      starting_action_pq_.pop();
 
       // Simulate this environment before an action starts to be executed
       SimulateToTimeStep(action->end_time_step());
@@ -69,13 +73,14 @@ void Environment::SyncActionPqToTimeStep(const int64_t time_step) {
                 << "th time step\n";
       terrain_.ExecuteAction(action);
     } else if (!action_pq_.empty()) {
-      auto action = action_pq_.top();
+      // pop the action in `action_pq_`
+      const auto action = action_pq_.top();
       action_pq_.pop();
 
       // TODO: GLOG
       std::cout << "Starting an action at " << action->start_time_step()
                 << "th time step\n";
-      pending_action_pq_.push(action);
+      starting_action_pq_.push(action);
     }
   }
 }

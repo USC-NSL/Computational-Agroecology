@@ -75,21 +75,31 @@ class Environment {
   // TODO: define a class for light information
 
   // Simulators:
-  // collect actions which should have started or executed before the current
-  // time step
+
+  // Given a future time step, push actions which is starting before the time
+  // step into the `starting_action_pq_` from `action_pq_` and make actions in
+  // `starting_action_pq_` which has completed before the time step take effect.
+  // These two are done in chronological order.
+  // In `action`, we have its start time and end time. As the time step goes
+  // beyond its start time, it should be pushed into `starting_action_pq_`. As
+  // the time step goes beyond its end time, it should be poped from the
+  // `starting_action_pq_` and take effect.
   void SyncActionPqToTimeStep(const int64_t time_step);
 
   // Simulate this environment to a time point
   void SimulateToTimeStep(const int64_t time_step);
 
+  // This PQ collects all actions sent from an agent
   std::priority_queue<const agent::action::Action *,
                       std::vector<const agent::action::Action *>,
                       agent::action::ActionStartTimeComparator>
       action_pq_;
+
+  // This PQ collects all actions that are starting but have not taken effect.
   std::priority_queue<const agent::action::Action *,
                       std::vector<const agent::action::Action *>,
                       agent::action::ActionEndTimeComparator>
-      pending_action_pq_;
+      starting_action_pq_;
 };
 
 std::ostream &operator<<(std::ostream &os, const Environment &env);
