@@ -27,9 +27,10 @@ void AddNeighbor(const Vector3& p_pos, const Vector3& p_dir,
                   Neighbor* neighbors, unsigned int index, real_t& distance,
                   const real_t kMaxDistance, int& size,
                   const int kNumberOfPhotonsNeayby);
-real_t GetSplit(const std::vector<Photon>&p, const unsigned int i, const int axis);
+real_t GetSplitValueByIndex(const std::vector<Photon> &p, const unsigned int i,
+                            const int axis);
 // TODO: @Hangjie change to meaningful function name
-real_t GetP(const Vector3& p, const int axis);
+real_t GetSplitValueByPhoton(const Vector3 &p, const int axis);
 
 }  // namespace photonsimulator
 

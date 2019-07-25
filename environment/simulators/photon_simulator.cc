@@ -136,8 +136,8 @@ void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
-    real_t split_value = GetSplit(p, median, flag);
-    real_t p_value = GetP(point, flag);
+    real_t split_value = GetSplitValueByIndex(p, median, flag);
+    real_t p_value = GetSplitValueByPhoton(point, flag);
     if (p_value <= split_value) {
       LookuptKDTree(p, point, norm, neighbors, begin, median, distance, size);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, neighbors, median,
