@@ -1,4 +1,6 @@
 #include "photon.h"
+#include "Optimized-Photon-Mapping/src/math/math.hpp"
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
 namespace simulator {
 namespace photonsimulator {
@@ -11,8 +13,5 @@ bool CompareY(const Photon &i, const Photon &j) {
 bool CompareZ(const Photon &i, const Photon &j) {
   return i.pos.z < j.pos.z;
 }
-Photon::Photon(const Vector3 &dir, const Vector3 &pos, const Vector3 &power,
-               const char flag)
-    : dir(dir), pos(pos), power(power), flag(flag) {}
 }  // namespace photonsimulator
 }  // namespace simulator

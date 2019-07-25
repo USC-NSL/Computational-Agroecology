@@ -1,7 +1,7 @@
 #ifndef __FACE_H__
 #define __FACE_H__
 
-#include "../vectors.h"
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
 #include <vector>
 
@@ -28,7 +28,7 @@ class Face {
  public:
   // keep everything public for simplicity
   Vertex vertex1, vertex2, vertex3;
-  Vector3 normal;  // face normal
+  _462::Vector3 normal;  // face normal
 
   /**
    * material_id is for obj file.
@@ -41,7 +41,8 @@ class Face {
   int photons;
 
   Face() = delete;
-  Face(Vertex v1, Vertex v2, Vertex v3, Vector3 normal, int material_id_ = 0)
+  Face(Vertex v1, Vertex v2, Vertex v3, _462::Vector3 normal,
+       int material_id_ = 0)
       : vertex1(v1),
         vertex2(v2),
         vertex3(v3),
@@ -52,8 +53,9 @@ class Face {
   ~Face() {}
 
   // given point on face, return its texture coordinate
-  Vector2 getTexcoord(Vector3 pos, const std::vector<Vector3> &vertices,
-                      const std::vector<Vector2> &texcoords);
+  _462::Vector2 getTexcoord(_462::Vector3 pos,
+                            const std::vector<_462::Vector3> &vertices,
+                            const std::vector<_462::Vector2> &texcoords);
 
  private:
 };

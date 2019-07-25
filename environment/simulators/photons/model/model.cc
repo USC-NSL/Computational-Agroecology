@@ -6,7 +6,8 @@
 #endif
 #include <cmath>
 #include "../stdafx.h"
-#include "../vectors.h"
+#include "Optimized-Photon-Mapping/src/math/math.hpp"
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
 namespace simulator {
 
@@ -126,23 +127,28 @@ void Model::LoadObjModel(const char *filename) {
   }
 
   // Convert tiny_obj_loader format
-  for (std::vector<real_t>::iterator it = attrib.vertices.begin();
+  for (std::vector<tinyobj::real_t>::iterator it = attrib.vertices.begin();
        it != attrib.vertices.end(); it += 3)
-    vertices.push_back(Vector3(*it, *std::next(it), *std::next(it, 2)));
-  for (std::vector<real_t>::iterator it = attrib.normals.begin();
+    vertices.push_back(_462::Vector3((_462::real_t)*it,
+                                     (_462::real_t)*std::next(it),
+                                     (_462::real_t)*std::next(it, 2)));
+  for (std::vector<tinyobj::real_t>::iterator it = attrib.normals.begin();
        it != attrib.normals.end(); it += 3)
-    normals.push_back(Vector3(*it, *std::next(it), *std::next(it, 2)));
+    normals.push_back(_462::Vector3((_462::real_t)*it,
+                                    (_462::real_t)*std::next(it),
+                                    (_462::real_t)*std::next(it, 2)));
   // Flip y texture coordinate
-  for (std::vector<real_t>::iterator it = attrib.texcoords.begin();
+  for (std::vector<tinyobj::real_t>::iterator it = attrib.texcoords.begin();
        it != attrib.texcoords.end(); it += 2)
-    texcoords.push_back(Vector2(*it, *std::next(it)));
+    texcoords.push_back(
+        _462::Vector2((_462::real_t)*it, (_462::real_t)*std::next(it)));
 
   // Load mesh
   for (size_t s = 0; s < shapes.size(); s++) {
     Mesh mesh = Mesh();
 
     // Check for smoothing group and compute smoothing normals
-    std::map<int, Vector3> smoothVertexNormals;
+    std::map<int, _462::Vector3> smoothVertexNormals;
     if (hasSmoothingGroup(shapes[s]) == 1) {
       std::cout << "Compute smoothingNormal for shape [" << s << "]"
                 << std::endl;
@@ -247,11 +253,11 @@ void Model::LoadObjModel(const char *filename) {
 
         if (invalid_normal_index) {
           v1.vni = v2.vni = v3.vni = normals.size();
-          normals.push_back(Vector3(n[0]));
+          normals.push_back(_462::Vector3(n[0]));
         }
       }
 
-      mesh.addFace(Face(v1, v2, v3, Vector3(n[0]), material_id));
+      mesh.addFace(Face(v1, v2, v3, _462::Vector3(n[0]), material_id));
     }
 
     // update material_id for mesh
@@ -338,9 +344,9 @@ static bool hasSmoothingGroup(const tinyobj::shape_t &shape) {
 
 static void computeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
-    std::map<int, Vector3> &smoothVertexNormals) {
+    std::map<int, _462::Vector3> &smoothVertexNormals) {
   smoothVertexNormals.clear();
-  std::map<int, Vector3>::iterator iter;
+  std::map<int, _462::Vector3>::iterator iter;
 
   for (size_t f = 0; f < shape.mesh.indices.size() / 3; f++) {
     // Get the three indexes of the face (all faces are triangular)

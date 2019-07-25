@@ -1,4 +1,3 @@
-//???#define _CRT_SECURE_NO_WARNINGS
 #include "mesh.h"
 #include "../stdafx.h"
 
@@ -15,7 +14,7 @@ int Mesh::getPhotons() {
 };
 
 void Mesh::render(std::vector<tinyobj::material_t> &materials,
-                  Vector3 rel_pos) {
+                  _462::Vector3 rel_pos) {
   GLfloat mat_ambient[] = {materials[material_id].ambient[0],
                            materials[material_id].ambient[1],
                            materials[material_id].ambient[2], 1.0f};
@@ -65,9 +64,9 @@ void Mesh::render(std::vector<tinyobj::material_t> &materials,
   glPopMatrix();
 }
 
-void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
-                             const std::vector<Vector3> &normals,
-                             const std::vector<Vector2> &texcoords) {
+void Mesh::writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
+                             const std::vector<_462::Vector3> &normals,
+                             const std::vector<_462::Vector2> &texcoords) {
   std::vector<float> buffer;  // 3:vtx, 3:normal, 3:col, 2:texcoord
 
   for (auto &face : faces) {
@@ -123,11 +122,12 @@ void Mesh::writeOpenGLBuffer(const std::vector<Vector3> &vertices,
                  GL_STATIC_DRAW);
     numTriangles =
         buffer.size() / (3 + 3 + 2) / 3;  // 3:vtx, 3:normal, 2:texcoord
-
   }
 }
 
-void Mesh::deleteOpenGLBuffer() { glDeleteBuffers(1, &vb_id); }
+void Mesh::deleteOpenGLBuffer() {
+  glDeleteBuffers(1, &vb_id);
+}
 
 }  // namespace photonsimulator
 

@@ -1,7 +1,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_PHOTON_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_PHOTON_H_
 
-#include "../vectors.h"
+#include "Optimized-Photon-Mapping/src/math/math.hpp"
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
 namespace simulator {
 
@@ -9,15 +10,16 @@ namespace photonsimulator {
 
 class Photon {
  public:
-  Vector3 dir, pos, power;
+  _462::Vector3 dir, pos, power;
   char flag;
-  Photon(const Vector3& dir, const Vector3& pos, const Vector3& power,
-         const char flag = 0);
+  Photon(const _462::Vector3 &dir, const _462::Vector3 &pos,
+         const _462::Vector3 &power, const char flag = 0)
+      : dir(dir), pos(pos), power(power), flag(flag){};
 };
 
-bool CompareX(const Photon& i, const Photon& j);
-bool CompareY(const Photon& i, const Photon& j);
-bool CompareZ(const Photon& i, const Photon& j);
+bool CompareX(const Photon &i, const Photon &j);
+bool CompareY(const Photon &i, const Photon &j);
+bool CompareZ(const Photon &i, const Photon &j);
 
 }  // namespace photonsimulator
 

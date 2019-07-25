@@ -3,18 +3,9 @@
 #include <cassert>
 #include <iostream>
 #include "../stdafx.h"
-
-#ifndef __VECTORS_H__
-#include "../vectors.h"
-#endif
-
-#ifndef __FACE_H__
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 #include "face.h"
-#endif
-
-#ifndef TINY_OBJ_LOADER_H_
 #include "tinyobjloader/tiny_obj_loader.h"
-#endif
 
 namespace simulator {
 
@@ -35,10 +26,10 @@ class Mesh {
   void addFace(Face face) { faces.push_back(face); }
 
   // OpenGL rendering
-  void render(std::vector<tinyobj::material_t> &materials, Vector3 pos);
-  void writeOpenGLBuffer(const std::vector<Vector3> &vertices,
-                         const std::vector<Vector3> &normals,
-                         const std::vector<Vector2> &texcoords);
+  void render(std::vector<tinyobj::material_t> &materials, _462::Vector3 pos);
+  void writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
+                         const std::vector<_462::Vector3> &normals,
+                         const std::vector<_462::Vector2> &texcoords);
   void deleteOpenGLBuffer();
 
   // functions for photon mapping

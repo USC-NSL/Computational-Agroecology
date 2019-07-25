@@ -5,8 +5,10 @@ namespace simulator {
 
 namespace photonsimulator {
 
-// floating point precision set by this typedef
-typedef float real_t;
+// resolve macro definition in third-party library
+#ifdef PI
+#undef PI
+#endif
 
 // constant for kd-tree
 const int kXAXIS = 0;  // use x-axis

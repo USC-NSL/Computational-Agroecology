@@ -6,7 +6,7 @@
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
 #include "../stdafx.h"
-#include "../vectors.h"
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
 #include "mesh.h"
 
 namespace simulator {
@@ -28,20 +28,20 @@ class Texture {
 class Model {
  public:
   // keep everything public for simplicity
-  std::vector<Vector3> vertices;
-  std::vector<Vector3> normals;
-  std::vector<Vector2> texcoords;
+  std::vector<_462::Vector3> vertices;
+  std::vector<_462::Vector3> normals;
+  std::vector<_462::Vector2> texcoords;
   std::vector<Mesh> meshes;
   std::map<std::string, GLuint> textures;
   std::vector<tinyobj::material_t> materials;
   std::vector<Texture> texture_infos;
 
-  Vector3 rel_pos;
-  void setRelativePos(Vector3 pos) { rel_pos = pos; }
+  _462::Vector3 rel_pos;
+  void setRelativePos(_462::Vector3 pos) { rel_pos = pos; }
 
   Model() = delete;
   void LoadObjModel(const char *filename);
-  Model(const char *filename, Vector3 pos = Vector3(0.0, 0.0, 0.0))
+  Model(const char *filename, _462::Vector3 pos = _462::Vector3(0.0, 0.0, 0.0))
       : rel_pos(pos) {
     LoadObjModel(filename);
   }
@@ -64,7 +64,7 @@ static bool hasSmoothingGroup(const tinyobj::shape_t &shape);
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]);
 static void computeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
-    std::map<int, Vector3> &smoothVertexNormals);
+    std::map<int, _462::Vector3> &smoothVertexNormals);
 
 }  // namespace photonsimulator
 

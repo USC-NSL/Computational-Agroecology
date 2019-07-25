@@ -3,7 +3,8 @@ CXXFLAGS := -std=c++17
 OPENGLLIBS := -lGL -lglut -lGLEW
 
 INCLUDES := -I ./
-INCLUDES += -I ./../thirdparty
+INCLUDES += -I ../thirdparty
+INCLUDES += -I ../thirdparty/Optimized-Photon-Mapping/src
 
 MAIN_OBJ := main.o
 OBJ := climate.o config.o environment.o location.o soil.o plant_builder.o plant.o terrain.o weather.o
@@ -20,15 +21,16 @@ PHOTON_SIMULATOR_PATH := $(SIMULATOR_PATH)/photons
 PHOTON_SIMULATOR_PHOTON_PATH := $(PHOTON_SIMULATOR_PATH)/photon
 PHOTON_SIMULATOR_PHOTON_OBJ := $(PHOTON_SIMULATOR_PHOTON_PATH)/neighbor.o \
 	$(PHOTON_SIMULATOR_PHOTON_PATH)/photon.o
-PHOTON_SIMULATOR_VECTOR_OBJ := $(PHOTON_SIMULATOR_PATH)/vectors.o
 THIRDPARTY_TINY_OBJ_LOADER_PATH := ../thirdparty/tinyobjloader
+THIRDPARTY_MATH_VECTOR_PATH := ../thirdparty/Optimized-Photon-Mapping/src/math
+THIRDPARTY_MATH_VECTOR_OBJ := $(PHOTON_SIMULATOR_PATH)/vector.o
 PHOTON_SIMULATOR_MODEL_PATH := $(PHOTON_SIMULATOR_PATH)/model
 PHOTON_SIMULATOR_MODEL_OBJ := $(PHOTON_SIMULATOR_MODEL_PATH)/face.o\
 	$(PHOTON_SIMULATOR_MODEL_PATH)/material.o\
 	$(PHOTON_SIMULATOR_MODEL_PATH)/mesh.o\
 	$(PHOTON_SIMULATOR_MODEL_PATH)/model.o\
 	$(PHOTON_SIMULATOR_MODEL_PATH)/tiny_obj_loader.o
-PHOTON_SIMULATOR_OBJ := $(PHOTON_SIMULATOR_VECTOR_OBJ) \
+PHOTON_SIMULATOR_OBJ := $(THIRDPARTY_MATH_VECTOR_OBJ) \
 	$(PHOTON_SIMULATOR_MODEL_OBJ) \
 	$(PHOTON_SIMULATOR_PHOTON_OBJ)
 ACTION_PATH := ./simulators/actions
@@ -72,6 +74,9 @@ ALL_OBJ := main.o $(ALL_OBJ_WITHOUT_MAIN)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(PHOTON_SIMULATOR_MODEL_PATH)/tiny_obj_loader.o: $(THIRDPARTY_TINY_OBJ_LOADER_PATH)/tiny_obj_loader.cc $(THIRDPARTY_TINY_OBJ_LOADER_PATH)/tiny_obj_loader.h
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+$(PHOTON_SIMULATOR_PATH)/vector.o: $(THIRDPARTY_MATH_VECTOR_PATH)/vector.cpp $(THIRDPARTY_MATH_VECTOR_PATH)/vector.hpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 %_test.o: %_test.cc
