@@ -243,8 +243,9 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   }
   _462::Vector3 result;
   if (min) {
-    _462::Vector2 texcoord = min->getTexcoord(
-        p - min_model->rel_pos, min_model->vertices, min_model->texcoords);
+    _462::Vector2 texcoord =
+        getTexcoord(*min, p - min_model->rel_pos, min_model->vertices,
+                    min_model->texcoords);
     Texture texture_info = min_model->getTextureInfo(texture_id);
     int x =
         ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
@@ -259,7 +260,8 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
 
     global = _462::Vector3(0.0, 0.0, 0.0);
     int size = 0;
-    // TODO: @Hangjie I change float to _462::real_t(double), please check validity
+    // TODO: @Hangjie I change float to _462::real_t(double), please check
+    // validity
     _462::real_t d = 0.0;
     int count = 0;
     Neighbor neighbors[kNumberOfPhotonsNeayby];
@@ -396,7 +398,9 @@ void PhotonSimulator::PhotonsModify() {
       }
     }
   }
-  ConstructKDTree(absorb_photons, 0, absorb_photons.size());
+  if (isRendering) {
+    ConstructKDTree(absorb_photons, 0, absorb_photons.size());
+  }
 }
 
 _462::Vector3 PhotonSimulator::GetReflect(const _462::Vector3 &dir,

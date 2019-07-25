@@ -13,8 +13,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-class Vertex {
- public:
+struct Vertex {
   int vi;   // vertex index
   int vni;  // normal index
   int vti;  // texture coordinate index
@@ -24,9 +23,7 @@ class Vertex {
   ~Vertex() {}
 };
 
-class Face {
- public:
-  // keep everything public for simplicity
+struct Face {
   Vertex vertex1, vertex2, vertex3;
   _462::Vector3 normal;  // face normal
 
@@ -51,14 +48,12 @@ class Face {
         material(),
         normal(normal) {}
   ~Face() {}
-
-  // given point on face, return its texture coordinate
-  _462::Vector2 getTexcoord(_462::Vector3 pos,
-                            const std::vector<_462::Vector3> &vertices,
-                            const std::vector<_462::Vector2> &texcoords);
-
- private:
 };
+
+// given point on face, return its texture coordinate
+_462::Vector2 getTexcoord(Face face, _462::Vector3 pos,
+                          const std::vector<_462::Vector3> &vertices,
+                          const std::vector<_462::Vector2> &texcoords);
 
 }  // namespace photonsimulator
 
