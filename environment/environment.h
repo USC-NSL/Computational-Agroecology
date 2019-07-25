@@ -8,7 +8,7 @@
 
 #include "environment/climate.h"
 #include "environment/config.h"
-#include "environment/suninfo.h"
+#include "environment/sun_info.h"
 #include "environment/terrain.h"
 #include "environment/weather.h"
 

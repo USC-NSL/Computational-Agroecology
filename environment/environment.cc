@@ -10,6 +10,7 @@ Environment::Environment(const Config &config,
                          const Terrain &terrain)
     : config_(config),
       climate_(config),
+      sun_info_(time, config.location, climate_.climate_zone),
       timestamp_(time),
       time_step_length_(time_step_length),
       time_step_(0),
@@ -96,7 +97,8 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   // TODO: GLOG
 
   // TODO: call all other simulators
-  sun_info_.SimulateToTime(new_timestamp, config_.location);
+  sun_info_.SimulateToTime(new_timestamp, config_.location,
+                           climate_.climate_zone);
 
   // Update the information of environment
 
