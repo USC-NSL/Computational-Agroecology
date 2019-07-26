@@ -51,7 +51,7 @@ class PhotonSimulator : public Simulator {
   void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
                        const unsigned int end);
   void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
-                     const _462::Vector3 &norm, Neighbor *neighbors,
+                     const _462::Vector3 &norm, std::vector<Neighbor> &heap,
                      const unsigned int begin, const unsigned int end,
                      _462::real_t &distance, int &size);
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,

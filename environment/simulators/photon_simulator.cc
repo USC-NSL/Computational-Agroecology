@@ -151,7 +151,7 @@ void PhotonSimulator::LookuptKDTree(
                   distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        LookuptKDTree(p, point, norm, neighbors, median + 1, end, distance,
+        LookuptKDTree(p, point, norm, heap, median + 1, end, distance,
                       size);
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance, size);
@@ -189,7 +189,7 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     _462::real_t d = 0.0;
     int count = 0;
     std::vector<Neighbor> neighbors;
-    make_heap(neighbors);
+    make_heap(neighbors.begin(), neighbors.end());
     LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
                   absorb_photons.size() - 1, d, size);
     for (int i = 0; i < size; i++) {

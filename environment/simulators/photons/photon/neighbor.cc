@@ -16,8 +16,8 @@ Neighbor::Neighbor(_462::real_t s, unsigned int e) {
   i = e;
 };
 
-bool Neighbor::operator<(const Neighbot& rhs) {
-  return this.sq_dis < rhs.sq_dis;
+bool Neighbor::operator<(const Neighbor& rhs) {
+  return sq_dis < rhs.sq_dis;
 }
 
 void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
@@ -32,8 +32,8 @@ void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
       (size < kNumberOfPhotonsNeayby || e_dis < distance)) {
     if (size == kNumberOfPhotonsNeayby)
       heap.pop_back();
-    heap.push_back(Neighbor(e_dis, e));
-    distance = (neighbors[0]).sq_dis;
+    heap.push_back(Neighbor(e_dis, index));
+    distance = heap.begin()->sq_dis;
   }
 }
 
