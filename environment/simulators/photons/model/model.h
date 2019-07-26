@@ -19,7 +19,9 @@ class Texture {
   unsigned char *texture;
   int w, h;
   int comp;  // 3 = rgb, 4 = rgba
-  Texture() = delete;
+
+  // TODO: fix this
+  Texture(){};
   Texture(GLuint texture_id_, unsigned char *texture_, int w_, int h_,
           int comp_)
       : texture_id(texture_id_), texture(texture_), w(w_), h(h_), comp(comp_) {}
@@ -53,6 +55,15 @@ class Model {
   void deleteBuffer();
   void render();
   Texture getTextureInfo(GLuint texture_id);
+
+  // photon related
+  bool IsInTriangle(const Face &face, const _462::Vector3 &p);
+  _462::Vector3 GetIntersect(const Face &face, const _462::Vector3 &line_point,
+                             const _462::Vector3 &line_dir);
+  bool FindFirstIntersect(_462::real_t &distance, Face **face, Mesh **mesh,
+                          const _462::Vector3 &pos, const _462::Vector3 &dir);
+  const _462::Vector3 GetFaceTextureColor(const Face &face, const Mesh &mesh,
+                                          const _462::Vector3 &p);
 
  private:
 };

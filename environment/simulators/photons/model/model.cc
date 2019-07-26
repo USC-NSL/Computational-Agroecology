@@ -40,6 +40,77 @@ int Model::getPhotons() {
   return cnt;
 }
 
+bool Model::IsInTriangle(const Face &face, const _462::Vector3 &p) {
+  _462::Vector3 v0 = vertices[face.vertex3.vi] - vertices[face.vertex1.vi];
+  _462::Vector3 v1 = vertices[face.vertex2.vi] - vertices[face.vertex1.vi];
+  _462::Vector3 v2 = p - vertices[face.vertex1.vi];
+  _462::real_t dot00 = _462::dot(v0, v0);
+  _462::real_t dot01 = _462::dot(v0, v1);
+  _462::real_t dot02 = _462::dot(v0, v2);
+  _462::real_t dot11 = _462::dot(v1, v1);
+  _462::real_t dot12 = _462::dot(v1, v2);
+  _462::real_t inverDeno = 1 / (dot00 * dot11 - dot01 * dot01);
+  _462::real_t u = (dot11 * dot02 - dot01 * dot12) * inverDeno;
+  if (u < 0 || u > 1)
+    return false;
+  _462::real_t v = (dot00 * dot12 - dot01 * dot02) * inverDeno;
+  if (v < 0 || v > 1)
+    return false;
+  return u + v <= 1;
+}
+
+bool Model::FindFirstIntersect(_462::real_t &distance, Face **face, Mesh **mesh,
+                               const _462::Vector3 &pos,
+                               const _462::Vector3 &dir) {
+  Face *min_face = nullptr;
+  Mesh *min_mesh = nullptr;
+  bool isFound = false;
+  for (auto &mesh : meshes) {
+    for (auto &face : mesh.faces) {
+      _462::Vector3 intersect = GetIntersect(face, pos, dir);
+      if (IsInTriangle(face, intersect)) {
+        if (_462::distance(pos, intersect) < distance) {
+          min_face = &face;
+          min_mesh = &mesh;
+          distance = _462::distance(pos, intersect);
+          isFound = true;
+        }
+      }
+    }
+  }
+  *face = min_face;
+  *mesh = min_mesh;
+  return isFound;
+}
+
+const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
+                                               const Mesh &mesh,
+                                               const _462::Vector3 &p) {
+  _462::Vector2 texcoord = getTexcoord(face, p - rel_pos, vertices, texcoords);
+  Texture texture_info = getTextureInfo(mesh.texture_id);
+  int x =
+      ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
+      texture_info.w;
+  int y =
+      ((int)(texture_info.h * texcoord.y) % texture_info.h + texture_info.h) %
+      texture_info.h;
+  return _462::Vector3(
+      texture_info.texture[3 * (x + y * texture_info.w)] / 255.0f,
+      texture_info.texture[3 * (x + y * texture_info.w) + 1] / 255.0f,
+      texture_info.texture[3 * (x + y * texture_info.w) + 2] / 255.0f);
+}
+
+_462::Vector3 Model::GetIntersect(const Face &face,
+                                  const _462::Vector3 &line_point,
+                                  const _462::Vector3 &line_dir) {
+  _462::Vector3 plane_normal = face.normal;
+  _462::real_t d = _462::dot(vertices[face.vertex1.vi] + rel_pos - line_point,
+                             plane_normal) /
+                   _462::dot(line_dir, plane_normal);
+  normalize(line_dir);
+  return d * line_dir + line_point;
+}
+
 void Model::LoadObjModel(const char *filename) {
   tinyobj::attrib_t attrib;
   std::vector<tinyobj::shape_t> shapes;

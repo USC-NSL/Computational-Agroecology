@@ -164,105 +164,43 @@ void PhotonSimulator::LookuptKDTree(
   }
 }
 
-_462::Vector3 PhotonSimulator::GetIntersect(
-    const Face &face, const std::vector<_462::Vector3> &vertices,
-    const _462::Vector3 &line_point, const _462::Vector3 &line_dir) {
-  _462::Vector3 plane_normal = face.normal;
-  _462::real_t d =
-      _462::dot(vertices[face.vertex1.vi] - line_point, plane_normal) /
-      _462::dot(line_dir, plane_normal);
-  normalize(line_dir);
-  return d * line_dir + line_point;
-}
-
-bool PhotonSimulator::IsInTriangle(const _462::Vector3 &a,
-                                   const _462::Vector3 &b,
-                                   const _462::Vector3 &c,
-                                   const _462::Vector3 &p) {
-  _462::Vector3 v0 = c - a;
-  _462::Vector3 v1 = b - a;
-  _462::Vector3 v2 = p - a;
-  _462::real_t dot00 = _462::dot(v0, v0);
-  _462::real_t dot01 = _462::dot(v0, v1);
-  _462::real_t dot02 = _462::dot(v0, v2);
-  _462::real_t dot11 = _462::dot(v1, v1);
-  _462::real_t dot12 = _462::dot(v1, v2);
-  _462::real_t inverDeno = 1 / (dot00 * dot11 - dot01 * dot01);
-  _462::real_t u = (dot11 * dot02 - dot01 * dot12) * inverDeno;
-  if (u < 0 || u > 1)
-    return false;
-  _462::real_t v = (dot00 * dot12 - dot01 * dot02) * inverDeno;
-  if (v < 0 || v > 1)
-    return false;
-  return u + v <= 1;
-}
-
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
                                              const _462::Vector3 &ray_dir) {
   _462::Vector3 direct, global;
-  _462::Vector3 p(1000.0f, 1000.0f, 0.0f);
-  Face *min = NULL;
-  GLuint texture_id;
-  Model *min_model;
-  _462::Vector3 min_normal;
+  Face *min_face = nullptr;
+  Mesh *min_mesh = nullptr;
+  Model *min_model = nullptr;
+  Texture texture_info;
+  _462::real_t distance = MAXFLOAT;
   for (auto &model : models) {
-    for (auto &mesh : model->meshes) {
-      for (auto &face : mesh.faces) {
-        _462::Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
-        _462::Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
-        _462::Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-        _462::Vector3 normal = face.normal;
-        _462::Vector3 intersect =
-            GetIntersect(face, model->vertices, ray_pos, ray_dir);
-        if (IsInTriangle(a, b, c, intersect)) {
-          if (distance(ray_pos, intersect) < distance(ray_pos, p)) {
-            p = intersect;
-            min = &face;
-            texture_id = mesh.texture_id;
-            min_model = model;
-            if (_462::dot(normal, ray_dir) > 0.0f) {
-              normal *= -1.0;
-            }
-            min_normal = normal;
-          }
-        }
-      }
+    if (model->FindFirstIntersect(distance, &min_face, &min_mesh, ray_pos,
+                                  ray_dir)) {
+      min_model = model;
     }
   }
   _462::Vector3 result;
-  if (min) {
-    _462::Vector2 texcoord =
-        getTexcoord(*min, p - min_model->rel_pos, min_model->vertices,
-                    min_model->texcoords);
-    Texture texture_info = min_model->getTextureInfo(texture_id);
-    int x =
-        ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
-        texture_info.w;
-    int y =
-        ((int)(texture_info.h * texcoord.y) % texture_info.h + texture_info.h) %
-        texture_info.h;
-    direct = _462::Vector3(
-        texture_info.texture[3 * (x + y * texture_info.w)] / 255.0f,
-        texture_info.texture[3 * (x + y * texture_info.w) + 1] / 255.0f,
-        texture_info.texture[3 * (x + y * texture_info.w) + 2] / 255.0f);
+  if (min_face != nullptr) {
+    _462::Vector3 intersect =
+        min_model->GetIntersect(*min_face, ray_pos, ray_dir);
+    direct = min_model->GetFaceTextureColor(*min_face, *min_mesh, intersect);
 
     global = _462::Vector3(0.0, 0.0, 0.0);
     int size = 0;
-    // TODO: @Hangjie I change float to _462::real_t(double), please check
-    // validity
     _462::real_t d = 0.0;
     int count = 0;
     Neighbor neighbors[kNumberOfPhotonsNeayby];
-    LookuptKDTree(absorb_photons, p, min_normal, neighbors, 0,
+    LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
                   absorb_photons.size() - 1, d, size);
     for (int i = 0; i < size; i++) {
-      _462::real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
+      _462::real_t dist =
+          _462::distance(absorb_photons[neighbors[i].i].pos, intersect);
       _462::Vector3 color = absorb_photons[neighbors[i].i].power;
       if (dist >= 1.0f) {
         color /= dist;
       }
-      _462::real_t dr1 = _462::dot(absorb_photons[neighbors[i].i].dir,
-                                   absorb_photons[neighbors[i].i].pos - p);
+      _462::real_t dr1 =
+          _462::dot(absorb_photons[neighbors[i].i].dir,
+                    absorb_photons[neighbors[i].i].pos - intersect);
       global += color;
       count++;
     }
@@ -325,57 +263,44 @@ int PhotonSimulator::RussianRoulette(const _462::real_t abr,
 void PhotonSimulator::PhotonsModify() {
   while (!alive_photons.empty()) {
     for (int i = 0; i < alive_photons.size(); i++) {
-      _462::Vector3 p(-100.0f, -100.0f, -100.0f);
-      Face *min = NULL;
-      Model *min_model;
-      _462::Vector3 min_normal;
+      Face *min_face = nullptr;
+      Mesh *min_mesh = nullptr;
+      Model *min_model = nullptr;
+      Texture texture_info;
+      _462::real_t distance = MAXFLOAT;
       for (auto &model : models) {
-        for (auto &mesh : model->meshes) {
-          for (auto &face : mesh.faces) {
-            _462::Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
-            _462::Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
-            _462::Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-            _462::Vector3 normal = face.normal;
-            _462::Vector3 intersect =
-                GetIntersect(face, model->vertices, alive_photons[i].pos,
-                             alive_photons[i].dir);
-            if (IsInTriangle(a, b, c, intersect)) {
-              if (distance(alive_photons[i].pos, intersect) <
-                  distance(alive_photons[i].pos, p)) {
-                p = intersect;
-                min = &face;
-                min_model = model;
-                if (_462::dot(normal, alive_photons[i].dir) > 0.0f) {
-                  normal *= -1.0;
-                }
-                min_normal = normal;
-              }
-            }
-          }
+        if (model->FindFirstIntersect(distance, &min_face, &min_mesh,
+                                      alive_photons[i].pos,
+                                      alive_photons[i].dir)) {
+          min_model = model;
         }
       }
-      if (min) {
-        int res =
-            RussianRoulette(min->material.aborption, min->material.reflection,
-                            min->material.transmision);
+
+      if (min_face != nullptr) {
+        _462::Vector3 intersect = min_model->GetIntersect(
+            *min_face, alive_photons[i].pos, alive_photons[i].dir);
+        int res = RussianRoulette(min_face->material.aborption,
+                                  min_face->material.reflection,
+                                  min_face->material.transmision);
         switch (res) {
           case kAbsorb: {
             absorb_photons.push_back(
-                Photon(min_normal, p, alive_photons[i].power));
+                Photon(min_face->normal, intersect, alive_photons[i].power));
             alive_photons.erase(alive_photons.begin() + i--);
-            min->photons++;
+            min_face->photons++;
             break;
           }
           case kReflect: {
-            _462::Vector3 ref = GetReflect(alive_photons[i].dir, min_normal);
-            alive_photons[i].pos = p;
+            _462::Vector3 ref =
+                GetReflect(alive_photons[i].dir, min_face->normal);
+            alive_photons[i].pos = intersect;
             alive_photons[i].dir = ref;
             break;
           }
           case kTrans: {
             _462::Vector3 ref =
-                GetRefract(alive_photons[i].dir, min_normal, 1.0);
-            alive_photons[i].pos = p;
+                GetRefract(alive_photons[i].dir, min_face->normal, 1.0);
+            alive_photons[i].pos = intersect;
             alive_photons[i].dir = ref;
             break;
           }

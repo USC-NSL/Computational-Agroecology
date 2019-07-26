@@ -54,12 +54,6 @@ class PhotonSimulator : public Simulator {
                      const _462::Vector3 &norm, Neighbor *neighbors,
                      const unsigned int begin, const unsigned int end,
                      _462::real_t &distance, int &size);
-  _462::Vector3 GetIntersect(const Face &face,
-                             const std::vector<_462::Vector3> &vertices,
-                             const _462::Vector3 &line_point,
-                             const _462::Vector3 &line_dir);
-  bool IsInTriangle(const _462::Vector3 &a, const _462::Vector3 &b,
-                    const _462::Vector3 &c, const _462::Vector3 &p);
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
                               const _462::Vector3 &ray_dir);
   _462::Vector3 GetRayDir(const int x, const int y, const int scene_length,
