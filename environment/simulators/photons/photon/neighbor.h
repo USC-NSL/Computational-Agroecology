@@ -25,7 +25,7 @@ void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
                  const _462::Vector3 &point, const _462::Vector3 &norm,
                  std::vector<Neighbor> &heap, unsigned int index,
                  _462::real_t &distance, const _462::real_t kMaxDistance,
-                 const int kNumberOfPhotonsNeayby);
+                 const int kNumberOfPhotonsNearby);
 _462::real_t GetSplitValueByIndex(const std::vector<Photon> &p,
                                   const unsigned int i, const int axis);
 
