@@ -1,5 +1,7 @@
 #include "neighbor.h"
 
+#include <algorithm>
+
 namespace simulator {
 
 namespace photonsimulator {
@@ -14,71 +16,13 @@ Neighbor::Neighbor(_462::real_t s, unsigned int e) {
   i = e;
 };
 
-void HeapSwap(Neighbor *neighbors, int a, int b) {
-  unsigned a_i = (neighbors[a]).i;
-  _462::real_t a_s = (neighbors[a]).sq_dis;
-  (neighbors[a]).i = (neighbors[b]).i;
-  (neighbors[a]).sq_dis = (neighbors[b]).sq_dis;
-  (neighbors[b]).i = a_i;
-  (neighbors[b]).sq_dis = a_s;
-}
-
-void HeapRemove(Neighbor *neighbors, int &size) {
-  (neighbors[0]).i = (neighbors[size - 1]).i;
-  (neighbors[0]).sq_dis = (neighbors[size - 1]).sq_dis;
-  size--;
-  int i = 0;
-  int left, right, bigger;
-  _462::real_t i_val, left_val, right_val;
-  while (1) {
-    left = 2 * i + 1;
-    right = 2 * i + 2;
-    if (left >= size && right >= size)
-      return;
-    i_val = (neighbors[i]).sq_dis;
-    left_val = (left < size) ? (neighbors[left]).sq_dis : -1.0f;
-    right_val = (right < size) ? (neighbors[right]).sq_dis : -1.0f;
-    if (i_val >= left_val && i_val >= right_val)
-      return;
-    if (left_val == -1.0 && right_val != -1.0) {
-      HeapSwap(neighbors, i, right);
-      i = right;
-    }
-    if (left_val != -1.0 && right_val == -1.0) {
-      HeapSwap(neighbors, i, left);
-      i = left;
-    } else {
-      bigger = (left_val > right_val) ? left : right;
-      HeapSwap(neighbors, i, bigger);
-      i = bigger;
-    }
-  }
-}
-
-void HeapAdd(Neighbor *neighbors, int &size, unsigned int e,
-             _462::real_t e_dis) {
-  int i = size;
-  int parent;
-  _462::real_t i_val, parent_val;
-  (neighbors[i]).i = e;
-  (neighbors[i]).sq_dis = e_dis;
-  size++;
-  while (1) {
-    if (i == 0)
-      return;
-    parent = (i - 1) / 2;
-    i_val = (neighbors[i]).sq_dis;
-    parent_val = (neighbors[parent]).sq_dis;
-    if (parent_val >= i_val)
-      return;
-    HeapSwap(neighbors, i, parent);
-    i = parent;
-  }
+bool Neighbor::operator<(const Neighbot& rhs) {
+  return this.sq_dis < rhs.sq_dis;
 }
 
 void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
                  const _462::Vector3 &point, const _462::Vector3 &norm,
-                 Neighbor *neighbors, unsigned int index,
+                 std::vector<Neighbor> &heap, unsigned int index,
                  _462::real_t &distance, const _462::real_t kMaxDistance,
                  int &size, const int kNumberOfPhotonsNeayby) {
   if (_462::dot(norm, p_dir) < 0.0f)
@@ -87,8 +31,8 @@ void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
   if (e_dis <= kMaxDistance &&
       (size < kNumberOfPhotonsNeayby || e_dis < distance)) {
     if (size == kNumberOfPhotonsNeayby)
-      HeapRemove(neighbors, size);
-    HeapAdd(neighbors, size, index, e_dis);
+      heap.pop_back();
+    heap.push_back(Neighbor(e_dis, e));
     distance = (neighbors[0]).sq_dis;
   }
 }

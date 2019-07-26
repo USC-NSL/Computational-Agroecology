@@ -18,6 +18,7 @@ class Neighbor {
   Neighbor(_462::real_t s, unsigned int e);
   _462::real_t sq_dis;
   unsigned int i;
+  bool operator<(const Neighbot &rhs);
 };
 
 void HeapSwap(Neighbor *neighbors, int a, int b);
