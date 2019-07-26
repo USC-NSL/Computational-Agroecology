@@ -56,6 +56,7 @@ void PhotonSimulator::SimulateToTime(
 
   // write result to env
   WriteResultToEnv(env);
+  // TODO: add functionality if render is required.
 }
 
 void PhotonSimulator::FreeModels() {
@@ -131,15 +132,18 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
   ConstructKDTree(p, median + 1, end);
 }
 
-void PhotonSimulator::LookuptKDTree(
-    const std::vector<Photon> &p, const _462::Vector3 &point,
-    const _462::Vector3 &norm, std::vector<Neighbor>& heap, const unsigned int begin,
-    const unsigned int end, _462::real_t &distance, int &size) {
+void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
+                                    const _462::Vector3 &point,
+                                    const _462::Vector3 &norm,
+                                    std::vector<Neighbor> &heap,
+                                    const unsigned int begin,
+                                    const unsigned int end,
+                                    _462::real_t &distance, int &size) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
-    AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin,
-                distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
+    AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin, distance,
+                kMaxDistance, size, kNumberOfPhotonsNeayby);
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
@@ -151,8 +155,7 @@ void PhotonSimulator::LookuptKDTree(
                   distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
       if (size < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        LookuptKDTree(p, point, norm, heap, median + 1, end, distance,
-                      size);
+        LookuptKDTree(p, point, norm, heap, median + 1, end, distance, size);
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance, size);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
