@@ -188,7 +188,7 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     make_heap(neighbors.begin(), neighbors.end());
     LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
                   absorb_photons.size() - 1, d);
-    for (auto neighbor&:neighbors) {
+    for (auto &neighbor:neighbors) {
       _462::real_t dist =
           _462::distance(absorb_photons[neighbor.pos, intersect);
       _462::Vector3 color = absorb_photons[neighbor.i].power;
