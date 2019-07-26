@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
 #include <vector>
+#include <tuple>
 
 #include "photons/model/model.h"
 #include "photons/photon/neighbor.h"
@@ -13,9 +14,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-const int kAbsorb = 0;
-const int kReflect = 1;
-const int kTrans = 2;
+typedef enum {kAbsorb = 0, kReflect = 1, kRefract = 2} RadianceResult;
 
 class PhotonSimulator : public Simulator {
  public:
@@ -46,7 +45,7 @@ class PhotonSimulator : public Simulator {
                   const double latitudeDiff, const double longitude_left,
                   const double longitude_right, const double longitudeDiff);
   void PhotonsModify();
-  int RussianRoulette(const _462::real_t abr, const _462::real_t ref,
+  RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
                       const _462::real_t tran);
   void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
                        const unsigned int end);
@@ -80,3 +79,4 @@ class PhotonSimulator : public Simulator {
 }  // namespace simulator
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
+

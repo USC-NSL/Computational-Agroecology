@@ -1,7 +1,4 @@
 #include "photon_simulator.h"
-
-#include <tuple>
-
 #include "environment.h"
 
 // extend third party library
@@ -176,8 +173,7 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
   Texture texture_info;
-  std::tie<min_model, min_mesh, min_face> res =
-      FindFirstIntersect(ray_pos, ray_dir);
+  std::tie(min_model, min_mesh, min_face) = FindFirstIntersect(ray_pos, ray_dir);
   _462::Vector3 result;
   if (min_face != nullptr) {
     _462::Vector3 intersect =
@@ -249,7 +245,7 @@ _462::Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
   return t;
 }
 
-int PhotonSimulator::RussianRoulette(const _462::real_t abr,
+RadianceResult PhotonSimulator::RussianRoulette(const _462::real_t abr,
                                      const _462::real_t ref,
                                      const _462::real_t trans) {
   _462::real_t a = (rand() % 100) / 100.0f;
@@ -258,10 +254,10 @@ int PhotonSimulator::RussianRoulette(const _462::real_t abr,
   else if (a < abr + ref)
     return kReflect;
   else
-    return kTrans;
+    return kRefract;
 }
 
-std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
+std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
     const _462::Vector3 &pos, const _462::Vector3 &dir) {
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
@@ -281,12 +277,11 @@ void PhotonSimulator::PhotonsModify() {
       Face *min_face = nullptr;
       Mesh *min_mesh = nullptr;
       Model *min_model = nullptr;
-      std::tie<min_model, min_mesh, min_face> res =
-          FindFirstIntersect(alive_photons[i].pos, alive_photons[i].dir);
+      std::tie(min_model, min_mesh, min_face) = FindFirstIntersect(alive_photons[i].pos, alive_photons[i].dir);
       if (min_face != nullptr) {
         _462::Vector3 intersect = min_model->GetIntersect(
             *min_face, alive_photons[i].pos, alive_photons[i].dir);
-        int res = RussianRoulette(min_face->material.aborption,
+        RadianceResult res = RussianRoulette(min_face->material.aborption,
                                   min_face->material.reflection,
                                   min_face->material.transmision);
         switch (res) {
@@ -304,7 +299,7 @@ void PhotonSimulator::PhotonsModify() {
             alive_photons[i].dir = ref;
             break;
           }
-          case kTrans: {
+          case kRefract: {
             _462::Vector3 ref =
                 GetRefract(alive_photons[i].dir, min_face->normal, 1.0);
             alive_photons[i].pos = intersect;
@@ -344,3 +339,4 @@ _462::Vector3 PhotonSimulator::GetRefract(const _462::Vector3 &dir,
 }  // namespace photonsimulator
 
 }  // namespace simulator
+
