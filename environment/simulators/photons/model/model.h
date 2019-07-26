@@ -28,7 +28,7 @@ class Texture {
 };
 
 class Model {
- public:
+ private:
   // keep everything public for simplicity
   std::vector<_462::Vector3> vertices;
   std::vector<_462::Vector3> normals;
@@ -39,8 +39,8 @@ class Model {
   std::vector<Texture> texture_infos;
 
   _462::Vector3 rel_pos;
-  void setRelativePos(_462::Vector3 pos) { rel_pos = pos; }
 
+ public:
   Model() = delete;
   void LoadObjModel(const char *filename);
   Model(const char *filename, _462::Vector3 pos = _462::Vector3(0.0, 0.0, 0.0))
@@ -48,7 +48,9 @@ class Model {
     LoadObjModel(filename);
   }
   ~Model();
+  void setRelativePos(_462::Vector3 pos) { rel_pos = pos; }
   int getPhotons();
+  int getTotalFaces();
 
   // add to buffer for OpenGL rendering
   void writeBuffer();

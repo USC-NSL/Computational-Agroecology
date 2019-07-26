@@ -40,6 +40,14 @@ int Model::getPhotons() {
   return cnt;
 }
 
+int Model::getTotalFaces() {
+  int cnt = 0;
+  for (auto &mesh : meshes) {
+    cnt += mesh.faces.size();
+  }
+  return cnt;
+}
+
 bool Model::IsInTriangle(const Face &face, const _462::Vector3 &p) {
   _462::Vector3 v0 = vertices[face.vertex3.vi] - vertices[face.vertex1.vi];
   _462::Vector3 v1 = vertices[face.vertex2.vi] - vertices[face.vertex1.vi];

@@ -12,14 +12,15 @@ namespace simulator {
 namespace photonsimulator {
 
 class Mesh {
- public:
-  // keep everything public for simplicity
+ private:
+  friend class Model;
   std::vector<Face> faces;  // triangle faces
   GLuint vb_id;             // vertex buffer id
   int numTriangles;
   size_t material_id;
   GLuint texture_id;
 
+ public:
   Mesh() {}
   ~Mesh() {}
   void LoadObjModel(const char *filename);

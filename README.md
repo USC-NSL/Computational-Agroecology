@@ -20,6 +20,12 @@ $ [sudo] apt install gcc g++ make
 $ [sudo] apt install libgtest-dev cmake
 ```
 
+## Load submodule
+
+```shell
+$ git submodule update --init --recursive
+```
+
 **Installation**
 
 ```shell

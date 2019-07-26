@@ -27,8 +27,7 @@ TEST(ConfigTest, ConstructorTest) {
 
   strcat(filename, "/../../../environment/simulators/photon_simulator/asset/Corn1.obj");
   Model corn(filename);
-  EXPECT_TRUE(corn.vertices.size() == 81);
-  EXPECT_TRUE(corn.meshes[0].faces.size() == 90);
+  EXPECT_TRUE(corn.getTotalFaces() == 90);
 }
 
 int main(int argc, char **argv) {
