@@ -188,16 +188,16 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     make_heap(neighbors.begin(), neighbors.end());
     LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
                   absorb_photons.size() - 1, d);
-    for (int i = 0; i < size; i++) {
+    for (auto neighbor&:neighbors) {
       _462::real_t dist =
-          _462::distance(absorb_photons[neighbors[i].i].pos, intersect);
-      _462::Vector3 color = absorb_photons[neighbors[i].i].power;
+          _462::distance(absorb_photons[neighbor.pos, intersect);
+      _462::Vector3 color = absorb_photons[neighbor.i].power;
       if (dist >= 1.0f) {
         color /= dist;
       }
       _462::real_t dr1 =
-          _462::dot(absorb_photons[neighbors[i].i].dir,
-                    absorb_photons[neighbors[i].i].pos - intersect);
+          _462::dot(absorb_photons[neighbor.i].dir,
+                                   absorb_photons[neighbor.i].pos - intersect);
       global += color;
       count++;
     }
