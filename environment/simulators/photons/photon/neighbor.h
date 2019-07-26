@@ -21,10 +21,6 @@ class Neighbor {
   bool operator<(const Neighbor &rhs);
 };
 
-void HeapSwap(Neighbor *neighbors, int a, int b);
-void HeapRemove(Neighbor *neighbors, int &size);
-void HeapAdd(Neighbor *neighbors, int &size, unsigned int e,
-             _462::real_t e_dis);
 void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
                  const _462::Vector3 &point, const _462::Vector3 &norm,
                  std::vector<Neighbor> &heap, unsigned int index,
@@ -32,7 +28,7 @@ void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
                  int &size, const int kNumberOfPhotonsNeayby);
 _462::real_t GetSplitValueByIndex(const std::vector<Photon> &p,
                                   const unsigned int i, const int axis);
-// TODO: @Hangjie change to meaningful function name
+
 _462::real_t GetSplitValueByPhoton(const _462::Vector3 &p, const int axis);
 
 }  // namespace photonsimulator
