@@ -69,7 +69,8 @@ class PhotonSimulator : public Simulator {
   _462::Vector3 GetReflect(const _462::Vector3 &dir, const _462::Vector3 &norm);
   _462::Vector3 GetRefract(const _462::Vector3 &dir, const _462::Vector3 &norm,
                            _462::real_t coef);
-
+  std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
+      const _462::Vector3 &pos, const _462::Vector3 &dir);
   // write result to environment
   void WriteResultToEnv(environment::Environment *env);
 };

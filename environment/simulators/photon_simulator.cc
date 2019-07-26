@@ -1,5 +1,7 @@
 #include "photon_simulator.h"
 
+#include <tuple>
+
 #include "environment.h"
 
 // extend third party library
@@ -174,13 +176,8 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
   Texture texture_info;
-  _462::real_t distance = MAXFLOAT;
-  for (auto &model : models) {
-    if (model->FindFirstIntersect(distance, &min_face, &min_mesh, ray_pos,
-                                  ray_dir)) {
-      min_model = model;
-    }
-  }
+  std::tie<min_model, min_mesh, min_face> res =
+      FindFirstIntersect(ray_pos, ray_dir);
   _462::Vector3 result;
   if (min_face != nullptr) {
     _462::Vector3 intersect =
@@ -264,22 +261,28 @@ int PhotonSimulator::RussianRoulette(const _462::real_t abr,
     return kTrans;
 }
 
+std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
+    const _462::Vector3 &pos, const _462::Vector3 &dir) {
+  Face *min_face = nullptr;
+  Mesh *min_mesh = nullptr;
+  Model *min_model = nullptr;
+  _462::real_t distance = MAXFLOAT;
+  for (auto &model : models) {
+    if (model->FindFirstIntersect(distance, &min_face, &min_mesh, pos, dir)) {
+      min_model = model;
+    }
+  }
+  return std::make_tuple(min_model, min_mesh, min_face);
+}
+
 void PhotonSimulator::PhotonsModify() {
   while (!alive_photons.empty()) {
     for (int i = 0; i < alive_photons.size(); i++) {
       Face *min_face = nullptr;
       Mesh *min_mesh = nullptr;
       Model *min_model = nullptr;
-      Texture texture_info;
-      _462::real_t distance = MAXFLOAT;
-      for (auto &model : models) {
-        if (model->FindFirstIntersect(distance, &min_face, &min_mesh,
-                                      alive_photons[i].pos,
-                                      alive_photons[i].dir)) {
-          min_model = model;
-        }
-      }
-
+      std::tie<min_model, min_mesh, min_face> res =
+          FindFirstIntersect(alive_photons[i].pos, alive_photons[i].dir);
       if (min_face != nullptr) {
         _462::Vector3 intersect = min_model->GetIntersect(
             *min_face, alive_photons[i].pos, alive_photons[i].dir);
