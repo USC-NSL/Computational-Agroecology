@@ -5,8 +5,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-class Material {
- public:
+struct Material {
   Material(float aborption = 0.5, float reflection = 0.5,
            float transmision = 0.0)
       : aborption(aborption),
