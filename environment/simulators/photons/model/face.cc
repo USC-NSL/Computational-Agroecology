@@ -7,7 +7,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-_462::Vector2 getTexcoord(Face face, _462::Vector3 pos,
+_462::Vector2 getTexcoord(const Face &face, const _462::Vector3 &pos,
                           const std::vector<_462::Vector3> &vertices,
                           const std::vector<_462::Vector2> &texcoords) {
   _462::Vector3 vertex12, vertex13, vertex1p;

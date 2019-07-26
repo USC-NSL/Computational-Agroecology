@@ -27,7 +27,8 @@ class Mesh {
   void addFace(Face face) { faces.push_back(face); }
 
   // OpenGL rendering
-  void render(std::vector<tinyobj::material_t> &materials, _462::Vector3 pos);
+  void render(const std::vector<tinyobj::material_t> &materials,
+              const _462::Vector3 &rel_pos);
   void writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
                          const std::vector<_462::Vector3> &normals,
                          const std::vector<_462::Vector2> &texcoords);

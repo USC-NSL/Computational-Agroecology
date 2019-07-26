@@ -383,7 +383,7 @@ void Model::deleteBuffer() {
   }
 }
 
-Texture Model::getTextureInfo(GLuint texture_id) {
+Texture Model::getTextureInfo(const GLuint &texture_id) {
   for (auto &texture_info : texture_infos) {
     if (texture_info.texture_id == texture_id)
       return texture_info;

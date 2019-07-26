@@ -13,8 +13,8 @@ int Mesh::getPhotons() {
   return cnt;
 };
 
-void Mesh::render(std::vector<tinyobj::material_t> &materials,
-                  _462::Vector3 rel_pos) {
+void Mesh::render(const std::vector<tinyobj::material_t> &materials,
+                  const _462::Vector3 &rel_pos) {
   GLfloat mat_ambient[] = {materials[material_id].ambient[0],
                            materials[material_id].ambient[1],
                            materials[material_id].ambient[2], 1.0f};

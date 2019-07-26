@@ -56,7 +56,7 @@ class Model {
   void writeBuffer();
   void deleteBuffer();
   void render();
-  Texture getTextureInfo(GLuint texture_id);
+  Texture getTextureInfo(const GLuint &texture_id);
 
   // photon related
   bool IsInTriangle(const Face &face, const _462::Vector3 &p);
