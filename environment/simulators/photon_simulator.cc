@@ -164,14 +164,13 @@ void PhotonSimulator::LookuptKDTree(
   }
 }
 
-_462::Vector3 PhotonSimulator::GetIntersect(const _462::Vector3 &p1,
-                                            const _462::Vector3 &p2,
-                                            const _462::Vector3 &p3,
-                                            const _462::Vector3 &line_point,
-                                            const _462::Vector3 &line_dir) {
-  _462::Vector3 plane_normal = GetNormal(p1, p2, p3);
-  _462::real_t d = _462::dot(p1 - line_point, plane_normal) /
-                   _462::dot(line_dir, plane_normal);
+_462::Vector3 PhotonSimulator::GetIntersect(
+    const Face &face, const std::vector<_462::Vector3> &vertices,
+    const _462::Vector3 &line_point, const _462::Vector3 &line_dir) {
+  _462::Vector3 plane_normal = face.normal;
+  _462::real_t d =
+      _462::dot(vertices[face.vertex1.vi] - line_point, plane_normal) /
+      _462::dot(line_dir, plane_normal);
   normalize(line_dir);
   return d * line_dir + line_point;
 }
@@ -198,18 +197,6 @@ bool PhotonSimulator::IsInTriangle(const _462::Vector3 &a,
   return u + v <= 1;
 }
 
-_462::Vector3 PhotonSimulator::GetNormal(const _462::Vector3 &p1,
-                                         const _462::Vector3 &p2,
-                                         const _462::Vector3 &p3) {
-  _462::real_t a =
-      (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
-  _462::real_t b =
-      (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
-  _462::real_t c =
-      (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
-  return _462::Vector3(a, b, c);
-}
-
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
                                              const _462::Vector3 &ray_dir) {
   _462::Vector3 direct, global;
@@ -224,8 +211,9 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
         _462::Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
         _462::Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
         _462::Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-        _462::Vector3 normal = GetNormal(a, b, c);
-        _462::Vector3 intersect = GetIntersect(a, b, c, ray_pos, ray_dir);
+        _462::Vector3 normal = face.normal;
+        _462::Vector3 intersect =
+            GetIntersect(face, model->vertices, ray_pos, ray_dir);
         if (IsInTriangle(a, b, c, intersect)) {
           if (distance(ray_pos, intersect) < distance(ray_pos, p)) {
             p = intersect;
@@ -347,9 +335,10 @@ void PhotonSimulator::PhotonsModify() {
             _462::Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
             _462::Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
             _462::Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-            _462::Vector3 normal = GetNormal(a, b, c);
-            _462::Vector3 intersect = GetIntersect(
-                a, b, c, alive_photons[i].pos, alive_photons[i].dir);
+            _462::Vector3 normal = face.normal;
+            _462::Vector3 intersect =
+                GetIntersect(face, model->vertices, alive_photons[i].pos,
+                             alive_photons[i].dir);
             if (IsInTriangle(a, b, c, intersect)) {
               if (distance(alive_photons[i].pos, intersect) <
                   distance(alive_photons[i].pos, p)) {
