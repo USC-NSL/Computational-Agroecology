@@ -62,7 +62,7 @@ class PhotonSimulator : public Simulator {
 
   //this function is used to randomize the result of one photon, the parameters are three posibilities
   RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
-                      const _462::real_t tran);
+                                 const _462::real_t tran);
 
   void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
                        const unsigned int end);

@@ -8,7 +8,7 @@ namespace simulator {
 
 namespace photonsimulator {
 
-class Photon {
+struct Photon {
  public:
   _462::Vector3 dir, pos, power;
   char flag;

@@ -6,17 +6,11 @@ namespace simulator {
 
 namespace photonsimulator {
 
-Neighbor::Neighbor() {
-  sq_dis = -1.0;
-  i = 0;
-};
+Neighbor::Neighbor() : Neighbor(-1.0, 0) {}
 
-Neighbor::Neighbor(_462::real_t s, unsigned int e) {
-  sq_dis = s;
-  i = e;
-};
+Neighbor::Neighbor(_462::real_t s, unsigned int e) : sq_dis(s), i(e){};
 
-bool Neighbor::operator<(const Neighbor& rhs) {
+bool Neighbor::operator<(const Neighbor &rhs) {
   return sq_dis < rhs.sq_dis;
 }
 

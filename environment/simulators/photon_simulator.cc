@@ -33,24 +33,25 @@ void PhotonSimulator::SimulateToTime(
    * TODO: check terrain orientation
    * we regard north as y asix
    */
+  _462::Vector3 sun_dir(-sin(env->sun_info().SunAzimuth),
+                        -cos(env->sun_info().SunAzimuth),
+                        -cos(env->sun_info().SolarAltitude));
+  _462::Vector3 sun_strength(env->sun_info().HourlyIrradiance,
+                             env->sun_info().HourlyIrradiance,
+                             env->sun_info().HourlyIrradiance);
+  double latitude_diff = (env->config_.location.latitude_top -
+                          env->config_.location.latitude_bottom) /
+                         100.0f;
+  double longtitude_diff = (env->config_.location.longitude_right -
+                            env->config_.location.longitude_left) /
+                           100.0f;
   alive_photons.clear();
   absorb_photons.clear();
-  PhotonEmit(_462::Vector3(-sin(env->sun_info().SunAzimuth),
-                           -cos(env->sun_info().SunAzimuth),
-                           -cos(env->sun_info().SolarAltitude)),
-             _462::Vector3(env->sun_info().HourlyIrradiance,
-                           env->sun_info().HourlyIrradiance,
-                           env->sun_info().HourlyIrradiance),
-             env->config_.location.latitude_bottom,
-             env->config_.location.latitude_top,
-             (env->config_.location.latitude_top -
-              env->config_.location.latitude_bottom) /
-                 100.0f,
+  PhotonEmit(sun_dir, sun_strength, env->config_.location.latitude_bottom,
+             env->config_.location.latitude_top, latitude_diff,
              env->config_.location.longitude_left,
-             env->config_.location.longitude_right,
-             (env->config_.location.longitude_right -
-              env->config_.location.longitude_left) /
-                 100.0f);
+             env->config_.location.longitude_right, longtitude_diff);
+
   PhotonsModify();
 
   // write result to env
