@@ -31,7 +31,10 @@ class PhotonSimulator : public Simulator {
 
   // the part for model
   std::vector<Model *> models;
+
+  // free 3d-obj model from memory
   void FreeModels();
+  // load 3d-obj model from disk
   void LoadModels(environment::Environment *env);
 
   // the part for photon
@@ -39,20 +42,30 @@ class PhotonSimulator : public Simulator {
   const _462::real_t kMaxDistance;
   const _462::real_t kSunHeight;
   std::vector<Photon> alive_photons, absorb_photons;
+
+  //emit all photons to the space by specific parameters
+  /*** 
+  @para:
+  latitudeDiff : the step for latitude increment;
+  longitudeDiff : the step for longitude increment;
+  ***/
   void PhotonEmit(const _462::Vector3 &sun_direction,
                   const _462::Vector3 &sun_strength,
                   const double latitude_bottom, const double latitude_top,
                   const double latitudeDiff, const double longitude_left,
                   const double longitude_right, const double longitudeDiff);
+
+  // let all photons transmit in the space
   void PhotonsModify();
   RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
                       const _462::real_t tran);
   void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
                        const unsigned int end);
+  // heap is the min-heap returned by the function, distance is the max_distance for the nearest photon for the special point
   void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
                      const _462::Vector3 &norm, std::vector<Neighbor> &heap,
                      const unsigned int begin, const unsigned int end,
-                     _462::real_t &distance, int &size);
+                     _462::real_t &distance);
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
                               const _462::Vector3 &ray_dir);
   _462::Vector3 GetRayDir(const int x, const int y, const int scene_length,

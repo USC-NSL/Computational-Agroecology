@@ -137,31 +137,31 @@ void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
                                     std::vector<Neighbor> &heap,
                                     const unsigned int begin,
                                     const unsigned int end,
-                                    _462::real_t &distance, int &size) {
+                                    _462::real_t &distance) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
     AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin, distance,
-                kMaxDistance, size, kNumberOfPhotonsNeayby);
+                kMaxDistance, kNumberOfPhotonsNeayby);
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
     _462::real_t split_value = GetSplitValueByIndex(p, median, flag);
     _462::real_t p_value = GetSplitValueByPhoton(point, flag);
     if (p_value <= split_value) {
-      LookuptKDTree(p, point, norm, heap, begin, median, distance, size);
+      LookuptKDTree(p, point, norm, heap, begin, median, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
-      if (size < kNumberOfPhotonsNeayby ||
+                  distance, kMaxDistance, kNumberOfPhotonsNeayby);
+      if (heap.size() < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        LookuptKDTree(p, point, norm, heap, median + 1, end, distance, size);
+        LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
     } else {
-      LookuptKDTree(p, point, norm, heap, median + 1, end, distance, size);
+      LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, size, kNumberOfPhotonsNeayby);
-      if (size < kNumberOfPhotonsNeayby ||
+                  distance, kMaxDistance, kNumberOfPhotonsNeayby);
+      if (heap.size() < kNumberOfPhotonsNeayby ||
           (p_value - split_value) * (p_value - split_value) < distance)
-        LookuptKDTree(p, point, norm, heap, begin, median, distance, size);
+        LookuptKDTree(p, point, norm, heap, begin, median, distance);
     }
   }
 }
@@ -182,13 +182,12 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     direct = min_model->GetFaceTextureColor(*min_face, *min_mesh, intersect);
 
     global = _462::Vector3(0.0, 0.0, 0.0);
-    int size = 0;
-    _462::real_t d = 0.0;
+    _462::real_t d = 0.025;
     int count = 0;
     std::vector<Neighbor> neighbors;
     make_heap(neighbors.begin(), neighbors.end());
     LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
-                  absorb_photons.size() - 1, d, size);
+                  absorb_photons.size() - 1, d);
     for (int i = 0; i < size; i++) {
       _462::real_t dist =
           _462::distance(absorb_photons[neighbors[i].i].pos, intersect);

@@ -24,13 +24,13 @@ void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
                  const _462::Vector3 &point, const _462::Vector3 &norm,
                  std::vector<Neighbor> &heap, unsigned int index,
                  _462::real_t &distance, const _462::real_t kMaxDistance,
-                 int &size, const int kNumberOfPhotonsNeayby) {
+                 const int kNumberOfPhotonsNeayby) {
   if (_462::dot(norm, p_dir) < 0.0f)
     return;
   _462::real_t e_dis = squared_distance(point, p_pos);
   if (e_dis <= kMaxDistance &&
-      (size < kNumberOfPhotonsNeayby || e_dis < distance)) {
-    if (size == kNumberOfPhotonsNeayby)
+      (heap.size() < kNumberOfPhotonsNeayby || e_dis < distance)) {
+    if (heap.size() == kNumberOfPhotonsNeayby)
       heap.pop_back();
     heap.push_back(Neighbor(e_dis, index));
     distance = heap.begin()->sq_dis;
