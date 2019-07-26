@@ -67,12 +67,12 @@ bool Model::IsInTriangle(const Face &face, const _462::Vector3 &p) {
   return u + v <= 1;
 }
 
-bool Model::FindFirstIntersect(_462::real_t &distance, Face **face, Mesh **mesh,
-                               const _462::Vector3 &pos,
-                               const _462::Vector3 &dir) {
+_462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
+                                       const _462::Vector3 &pos,
+                                       const _462::Vector3 &dir) {
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
-  bool isFound = false;
+  _462::real_t distance = std::numeric_limits<double>::max();
   for (auto &mesh : meshes) {
     for (auto &face : mesh.faces) {
       _462::Vector3 intersect = GetIntersect(face, pos, dir);
@@ -81,14 +81,13 @@ bool Model::FindFirstIntersect(_462::real_t &distance, Face **face, Mesh **mesh,
           min_face = &face;
           min_mesh = &mesh;
           distance = _462::distance(pos, intersect);
-          isFound = true;
         }
       }
     }
   }
   *face = min_face;
   *mesh = min_mesh;
-  return isFound;
+  return distance;
 }
 
 const _462::Vector3 Model::GetFaceTextureColor(const Face &face,

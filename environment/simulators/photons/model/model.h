@@ -62,8 +62,9 @@ class Model {
   bool IsInTriangle(const Face &face, const _462::Vector3 &p);
   _462::Vector3 GetIntersect(const Face &face, const _462::Vector3 &line_point,
                              const _462::Vector3 &line_dir);
-  bool FindFirstIntersect(_462::real_t &distance, Face **face, Mesh **mesh,
-                          const _462::Vector3 &pos, const _462::Vector3 &dir);
+  _462::real_t FindFirstIntersect(Face **face, Mesh **mesh,
+                                  const _462::Vector3 &pos,
+                                  const _462::Vector3 &dir);
   const _462::Vector3 GetFaceTextureColor(const Face &face, const Mesh &mesh,
                                           const _462::Vector3 &p);
 
