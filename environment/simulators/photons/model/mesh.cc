@@ -125,9 +125,7 @@ void Mesh::writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
   }
 }
 
-void Mesh::deleteOpenGLBuffer() {
-  glDeleteBuffers(1, &vb_id);
-}
+void Mesh::deleteOpenGLBuffer() {}
 
 }  // namespace photonsimulator
 

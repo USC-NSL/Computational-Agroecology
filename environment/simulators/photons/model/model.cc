@@ -21,13 +21,6 @@ const char PathSeparator =
 #endif
 
 Model::~Model() {
-  for (auto &texture_info : texture_infos) {
-    delete texture_info.texture;
-  }
-  texture_infos.clear();
-  textures.clear();
-  meshes.clear();
-  materials.clear();
   deleteBuffer();
   std::cout << "model destroyed." << std::endl;
 };
@@ -94,7 +87,7 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
                                                const Mesh &mesh,
                                                const _462::Vector3 &p) {
   _462::Vector2 texcoord = getTexcoord(face, p - rel_pos, vertices, texcoords);
-  Texture texture_info = getTextureInfo(mesh.texture_id);
+  const Texture& texture_info = getTextureInfo(mesh.texture_id);
   int x =
       ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
       texture_info.w;
@@ -102,9 +95,9 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
       ((int)(texture_info.h * texcoord.y) % texture_info.h + texture_info.h) %
       texture_info.h;
   return _462::Vector3(
-      texture_info.texture[3 * (x + y * texture_info.w)] / 255.0f,
-      texture_info.texture[3 * (x + y * texture_info.w) + 1] / 255.0f,
-      texture_info.texture[3 * (x + y * texture_info.w) + 2] / 255.0f);
+      texture_info.buffer[3 * (x + y * texture_info.w)] / 255.0f,
+      texture_info.buffer[3 * (x + y * texture_info.w) + 1] / 255.0f,
+      texture_info.buffer[3 * (x + y * texture_info.w) + 2] / 255.0f);
 }
 
 _462::Vector3 Model::GetIntersect(const Face &face,
@@ -192,12 +185,12 @@ void Model::LoadObjModel(const char *filename) {
 
             // test
             // only get RGB
-            unsigned char *texture = new unsigned char[w * h * 3];
+            Texture texture(texture_id, w, h, comp);
             glBindTexture(GL_TEXTURE_2D, texture_id);
-            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                          texture.buffer);
             glBindTexture(GL_TEXTURE_2D, 0);
-
-            texture_infos.push_back(Texture(texture_id, texture, w, h, comp));
+            texture_infos.push_back(std::move(texture));
           }
         }
       }
@@ -382,7 +375,7 @@ void Model::deleteBuffer() {
   }
 }
 
-Texture Model::getTextureInfo(const GLuint &texture_id) {
+const Texture& Model::getTextureInfo(const GLuint &texture_id) {
   for (auto &texture_info : texture_infos) {
     if (texture_info.texture_id == texture_id)
       return texture_info;

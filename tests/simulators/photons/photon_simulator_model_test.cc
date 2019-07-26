@@ -25,9 +25,22 @@ TEST(ConfigTest, ConstructorTest) {
   strcpy(filename, temp.substr(0, temp.find_last_of("/\\")).c_str());
 #endif
 
-  strcat(filename, "/../../../environment/simulators/photon_simulator/asset/Corn1.obj");
-  Model corn(filename);
-  EXPECT_TRUE(corn.getTotalFaces() == 90);
+  strcat(filename, "/../../../environment/simulators/photons/asset/Corn1.obj");
+  // Model corn(filename);
+  // std::vector<Model> models;
+  // models.emplace_back(filename);
+  // models.emplace_back(filename);
+  // models.emplace_back(filename);
+  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  // models.pop_back();
+  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  // models.pop_back();
+  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  // models.pop_back();
+
+  Model *corn = new Model(filename);
+  EXPECT_TRUE(corn->getTotalFaces() == 90);
+  delete corn;
 }
 
 int main(int argc, char **argv) {

@@ -17,7 +17,7 @@ namespace photonsimulator {
 
 PhotonSimulator::PhotonSimulator(const int number, const _462::real_t distance,
                                  const _462::real_t height)
-    : kNumberOfPhotonsNeayby(number),
+    : kNumberOfPhotonsNearby(number),
       kMaxDistance(distance),
       kSunHeight(height) {}
 
@@ -132,18 +132,15 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
   ConstructKDTree(p, median + 1, end);
 }
 
-void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
-                                    const _462::Vector3 &point,
-                                    const _462::Vector3 &norm,
-                                    std::vector<Neighbor> &heap,
-                                    const unsigned int begin,
-                                    const unsigned int end,
-                                    _462::real_t &distance) {
+void PhotonSimulator::LookuptKDTree(
+    const std::vector<Photon> &p, const _462::Vector3 &point,
+    const _462::Vector3 &norm, std::vector<Neighbor> &heap,
+    const unsigned int begin, const unsigned int end, _462::real_t &distance) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
     AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin, distance,
-                kMaxDistance, kNumberOfPhotonsNeayby);
+                kMaxDistance, kNumberOfPhotonsNearby);
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
@@ -152,15 +149,15 @@ void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
     if (p_value <= split_value) {
       LookuptKDTree(p, point, norm, heap, begin, median, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, kNumberOfPhotonsNeayby);
-      if (heap.size() < kNumberOfPhotonsNeayby ||
+                  distance, kMaxDistance, kNumberOfPhotonsNearby);
+      if (heap.size() < kNumberOfPhotonsNearby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, kNumberOfPhotonsNeayby);
-      if (heap.size() < kNumberOfPhotonsNeayby ||
+                  distance, kMaxDistance, kNumberOfPhotonsNearby);
+      if (heap.size() < kNumberOfPhotonsNearby ||
           (p_value - split_value) * (p_value - split_value) < distance)
         LookuptKDTree(p, point, norm, heap, begin, median, distance);
     }
@@ -173,7 +170,6 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
-  Texture texture_info;
   std::tie(min_model, min_mesh, min_face) =
       FindFirstIntersect(ray_pos, ray_dir);
   _462::Vector3 result;
@@ -189,15 +185,14 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     make_heap(neighbors.begin(), neighbors.end());
     LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
                   absorb_photons.size() - 1, d);
-    for (auto &neighbor:neighbors) {
+    for (auto &neighbor : neighbors) {
       _462::real_t dist =
           _462::distance(absorb_photons[neighbor.i].pos, intersect);
       _462::Vector3 color = absorb_photons[neighbor.i].power;
       if (dist >= 1.0f) {
         color /= dist;
       }
-      _462::real_t dr1 =
-          _462::dot(absorb_photons[neighbor.i].dir,
+      _462::real_t dr1 = _462::dot(absorb_photons[neighbor.i].dir,
                                    absorb_photons[neighbor.i].pos - intersect);
       global += color;
       count++;
@@ -246,16 +241,16 @@ _462::Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
   return t;
 }
 
-RadianceResult PhotonSimulator::RussianRoulette(const _462::real_t abr,
+PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(const _462::real_t abr,
                                                 const _462::real_t ref,
                                                 const _462::real_t trans) {
   _462::real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
-    return kAbsorb;
+    return RadianceResult::kAbsorb;
   else if (a < abr + ref)
-    return kReflect;
+    return RadianceResult::kReflect;
   else
-    return kRefract;
+    return RadianceResult::kRefract;
 }
 
 std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
@@ -292,21 +287,21 @@ void PhotonSimulator::PhotonsModify() {
                                              min_face->material.reflection,
                                              min_face->material.transmision);
         switch (res) {
-          case kAbsorb: {
+          case RadianceResult::kAbsorb: {
             absorb_photons.push_back(
                 Photon(min_face->normal, intersect, alive_photons[i].power));
             alive_photons.erase(alive_photons.begin() + i--);
             min_face->photons++;
             break;
           }
-          case kReflect: {
+          case RadianceResult::kReflect: {
             _462::Vector3 ref =
                 GetReflect(alive_photons[i].dir, min_face->normal);
             alive_photons[i].pos = intersect;
             alive_photons[i].dir = ref;
             break;
           }
-          case kRefract: {
+          case RadianceResult::kRefract: {
             _462::Vector3 ref =
                 GetRefract(alive_photons[i].dir, min_face->normal, 1.0);
             alive_photons[i].pos = intersect;

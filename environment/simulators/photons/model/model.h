@@ -5,6 +5,7 @@
 
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
+#include <cstring>
 #include "../stdafx.h"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 #include "mesh.h"
@@ -16,20 +17,25 @@ namespace photonsimulator {
 class Texture {
  public:
   GLuint texture_id;
-  unsigned char *texture;
+  unsigned char *buffer;
   int w, h;
   int comp;  // 3 = rgb, 4 = rgba
 
-  // TODO: fix this
-  Texture(){};
-  Texture(GLuint texture_id_, unsigned char *texture_, int w_, int h_,
-          int comp_)
-      : texture_id(texture_id_), texture(texture_), w(w_), h(h_), comp(comp_) {}
+  Texture() = delete;
+  Texture(GLuint texture_id_, int w_, int h_, int comp_)
+      : texture_id(texture_id_), w(w_), h(h_), comp(comp_) {
+    buffer = new unsigned char[w * h * 3];
+  }
+  ~Texture() { delete buffer; }
+  Texture(const Texture &rhs) = delete;
+  Texture(Texture && rhs){
+      buffer = rhs.buffer;
+      rhs.buffer = nullptr;
+  };
 };
 
 class Model {
  private:
-  // keep everything public for simplicity
   std::vector<_462::Vector3> vertices;
   std::vector<_462::Vector3> normals;
   std::vector<_462::Vector2> texcoords;
@@ -56,7 +62,7 @@ class Model {
   void writeBuffer();
   void deleteBuffer();
   void render();
-  Texture getTextureInfo(const GLuint &texture_id);
+  const Texture &getTextureInfo(const GLuint &texture_id);
 
   // photon related
   bool IsInTriangle(const Face &face, const _462::Vector3 &p);

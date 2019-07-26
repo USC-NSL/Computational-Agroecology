@@ -1,8 +1,8 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
-#include <vector>
 #include <tuple>
+#include <vector>
 
 #include "photons/model/model.h"
 #include "photons/photon/neighbor.h"
@@ -13,7 +13,6 @@
 namespace simulator {
 
 namespace photonsimulator {
-
 
 class PhotonSimulator : public Simulator {
  public:
@@ -28,7 +27,7 @@ class PhotonSimulator : public Simulator {
   // TODO: add interface if necessary
   bool isRendering = false;
 
-  typedef enum { kAbsorb = 0, kReflect = 1, kRefract = 2 } RadianceResult;
+  enum class RadianceResult { kAbsorb = 0, kReflect, kRefract };
 
   // the part for model
   std::vector<Model *> models;
@@ -40,13 +39,13 @@ class PhotonSimulator : public Simulator {
   void LoadModels(environment::Environment *env);
 
   // the part for photon
-  const int kNumberOfPhotonsNeayby;
+  const int kNumberOfPhotonsNearby;
   const _462::real_t kMaxDistance;
   const _462::real_t kSunHeight;
   std::vector<Photon> alive_photons, absorb_photons;
 
-  //emit all photons to the space by specific parameters
-  /*** 
+  // emit all photons to the space by specific parameters
+  /***
   @para:
   latitudeDiff : the step for latitude increment;
   longitudeDiff : the step for longitude increment;
@@ -60,14 +59,16 @@ class PhotonSimulator : public Simulator {
   // let all photons transmit in the space
   void PhotonsModify();
 
-  //this function is used to randomize the result of one photon, the parameters are three posibilities
+  // this function is used to randomize the result of one photon, the parameters
+  // are three posibilities
   RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
                                  const _462::real_t tran);
 
   void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
                        const unsigned int end);
 
-  // heap is the min-heap returned by the function, distance is the max_distance for the nearest photon for the special point
+  // heap is the min-heap returned by the function, distance is the max_distance
+  // for the nearest photon for the special point
   void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
                      const _462::Vector3 &norm, std::vector<Neighbor> &heap,
                      const unsigned int begin, const unsigned int end,
@@ -77,28 +78,30 @@ class PhotonSimulator : public Simulator {
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
                               const _462::Vector3 &ray_dir);
 
-  //return the direction of the certain ray by coordinate x and y
+  // return the direction of the certain ray by coordinate x and y
   _462::Vector3 GetRayDir(const int x, const int y, const int scene_length,
                           const int scene_width,
                           const _462::Vector3 &camera_pos,
                           const _462::Vector3 &camera_ctr,
                           const _462::Vector3 &camera_up);
 
-  //return the pixel color for the ray identified by coord x and y, call GetPixelColor inside
+  // return the pixel color for the ray identified by coord x and y, call
+  // GetPixelColor inside
   _462::Vector3 GetRayColor(const int x, const int y, const int scene_length,
                             const int scene_width,
                             const _462::Vector3 &camera_pos,
                             const _462::Vector3 &camera_ctr,
                             const _462::Vector3 &camera_up);
 
-  //get the reflect direction of the input dir and the normal
+  // get the reflect direction of the input dir and the normal
   _462::Vector3 GetReflect(const _462::Vector3 &dir, const _462::Vector3 &norm);
 
   // get the refract direction of the input dir and the normal
   _462::Vector3 GetRefract(const _462::Vector3 &dir, const _462::Vector3 &norm,
                            _462::real_t coef);
 
-  //this function will return the Model, Mesh, and Face that is first hitted by certain ray identified by pos and dir
+  // this function will return the Model, Mesh, and Face that is first hitted by
+  // certain ray identified by pos and dir
   std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
       const _462::Vector3 &pos, const _462::Vector3 &dir);
 
@@ -111,4 +114,3 @@ class PhotonSimulator : public Simulator {
 }  // namespace simulator
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
-
