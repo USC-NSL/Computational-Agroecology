@@ -71,9 +71,9 @@ class PhotonSimulator : public Simulator {
   // heap is the min-heap returned by the function, distance is the max_distance
   // for the nearest photon for the special point
   void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
-                     const _462::Vector3 &norm, std::vector<Neighbor> &heap,
+                     const _462::Vector3 &norm, std::vector<Neighbor> *heap,
                      const unsigned int begin, const unsigned int end,
-                     _462::real_t &distance);
+                     _462::real_t *distance);
 
   // return the pixel RGB value
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,

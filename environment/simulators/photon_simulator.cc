@@ -130,8 +130,8 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
 
 void PhotonSimulator::LookuptKDTree(
     const std::vector<Photon> &p, const _462::Vector3 &point,
-    const _462::Vector3 &norm, std::vector<Neighbor> &heap,
-    const unsigned int begin, const unsigned int end, _462::real_t &distance) {
+    const _462::Vector3 &norm, std::vector<Neighbor> *heap,
+    const unsigned int begin, const unsigned int end, _462::real_t *distance) {
   if (begin == end)
     return;
   else if (begin + 1 == end)
@@ -146,15 +146,15 @@ void PhotonSimulator::LookuptKDTree(
       LookuptKDTree(p, point, norm, heap, begin, median, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
                   distance, kMaxDistance, kNumberOfPhotonsNearby);
-      if (heap.size() < kNumberOfPhotonsNearby ||
-          (p_value - split_value) * (p_value - split_value) < distance)
+      if (heap->size() < kNumberOfPhotonsNearby ||
+          (p_value - split_value) * (p_value - split_value) < *distance)
         LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
                   distance, kMaxDistance, kNumberOfPhotonsNearby);
-      if (heap.size() < kNumberOfPhotonsNearby ||
-          (p_value - split_value) * (p_value - split_value) < distance)
+      if (heap->size() < kNumberOfPhotonsNearby ||
+          (p_value - split_value) * (p_value - split_value) < *distance)
         LookuptKDTree(p, point, norm, heap, begin, median, distance);
     }
   }
@@ -179,8 +179,8 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     int count = 0;
     std::vector<Neighbor> neighbors;
     make_heap(neighbors.begin(), neighbors.end());
-    LookuptKDTree(absorb_photons, intersect, min_face->normal, neighbors, 0,
-                  absorb_photons.size() - 1, d);
+    LookuptKDTree(absorb_photons, intersect, min_face->normal, &neighbors, 0,
+                  absorb_photons.size() - 1, &d);
     for (auto &neighbor : neighbors) {
       _462::real_t dist =
           _462::distance(absorb_photons[neighbor.i].pos, intersect);
