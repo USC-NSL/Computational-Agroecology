@@ -75,10 +75,12 @@ class SunInfo {
 
   // Given the day of year, calculate solar declination δ in radians.
   double CalculateSolarDeclination(const int t_d);
+
   // Given the day of year, local time (hours), and observer's longitude,
   // convert local time (hours) to local solar time (hours).
   double CalculateLocalSolarTime(const int t_d, const int hour,
                                  const double longitude);
+
   // Given local solar time (hours), calculate the hour angle τ in radians.
   double CalculateHourAngle(const double t_h);
 
@@ -87,6 +89,7 @@ class SunInfo {
   // calculate solar altitude.
   double CalculateSolarAltitude(const double delta, const double tau,
                                 const double lambda);
+
   // Given solar declination δ, observer's latitude λ, solar altitude β, and
   // local solar time, calculate solar azimuth.
   double CalculateSolarAzimuth(const double delta, const double lambda,
@@ -108,6 +111,7 @@ class SunInfo {
   std::tuple<double, double, double> CalculateDailySolarIrradiance(
       const double I_c_prime, const double a, const double b,
       const Climate::ZoneType climate_zone, const double day_length);
+
   // Given those variables, solar altitude β, daily total solar irradiance, and
   // local solar time, calculate hourly solar irradiance, hourly diffuse
   // irradiance, and hourly direct irradiance.
