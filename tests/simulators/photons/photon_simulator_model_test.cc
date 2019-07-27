@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+
+#include <list>
 #include <vector>
 
 #ifdef _WIN32
@@ -26,10 +28,10 @@ TEST(ConfigTest, ConstructorTest) {
 #endif
 
   strcat(filename, "/../../../environment/simulators/photons/asset/Corn1.obj");
-  std::vector<Model> models;
-  models.push_back(Model(filename));
-  models.push_back(Model(filename));
-  models.push_back(Model(filename));
+  std::list<Model> models;
+  models.emplace_back(filename);
+  models.emplace_back(filename);
+  models.emplace_back(filename);
   EXPECT_TRUE(models.back().getTotalFaces() == 90);
   models.pop_back();
   EXPECT_TRUE(models.back().getTotalFaces() == 90);

@@ -28,7 +28,7 @@ class Texture {
   }
   ~Texture() { delete buffer; }
   Texture(const Texture &rhs) = delete;
-  Texture(Texture &&rhs) {
+  Texture(Texture &&rhs) noexcept : buffer(rhs.buffer) {
     buffer = rhs.buffer;
     rhs.buffer = nullptr;
   };
