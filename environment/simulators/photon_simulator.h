@@ -1,7 +1,6 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
-#include <list>
 #include <tuple>
 #include <vector>
 
@@ -34,7 +33,8 @@ class PhotonSimulator : public Simulator {
   bool isRendering_ = false;
 
   // the part for model
-  std::list<Model> models_;
+  // Ralph: I have changed it back to `vector`.
+  std::vector<Model> models_;
 
   // the part for photon
   const int kNumberOfPhotonsNearby_;

@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <list>
 #include <vector>
 
 #ifdef _WIN32
@@ -28,7 +27,7 @@ TEST(ConfigTest, ConstructorTest) {
 #endif
 
   strcat(filename, "/../../../environment/simulators/photons/asset/Corn1.obj");
-  std::list<Model> models;
+  std::vector<Model> models;
   models.emplace_back(filename);
   models.emplace_back(filename);
   models.emplace_back(filename);

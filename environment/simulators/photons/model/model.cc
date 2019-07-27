@@ -25,13 +25,26 @@ Texture::Texture(GLuint texture_id, int w, int h, int comp)
   buffer = new unsigned char[w * h * 3];
 }
 
-Textute::~Texture() {
+Texture::~Texture() {
   delete buffer;
 }
 
-Textute::Texture(Texture &&rhs) : buffer(rhs.buffer) {
+Texture::Texture(const Texture &rhs)
+    : texture_id(rhs.texture_id), w(rhs.w), h(rhs.h), comp(rhs.comp) {
+  // Ralph: This line should be removed. This just lets you experience a bit.
+  std::cout << "Copy\n";
+  buffer = new unsigned char[w * h * 3];
+  std::memcpy(buffer, rhs.buffer, sizeof(unsigned char) * w * h * 3);
+}
+
+Texture::Texture(Texture &&rhs) noexcept
+    : texture_id(rhs.texture_id),
+      w(rhs.w),
+      h(rhs.h),
+      comp(rhs.comp),
+      buffer(rhs.buffer) {
   rhs.buffer = nullptr;
-};
+}
 
 Model::~Model() {
   deleteBuffer();

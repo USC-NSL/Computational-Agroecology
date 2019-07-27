@@ -25,7 +25,15 @@ class Texture {
   Texture() = delete;
   Texture(GLuint texture_id, int w, int h, int comp);
 
-  Texture(const Texture &rhs) = delete;
+  // Ralph: I think it would be better to still use vector. So we need to
+  // define copy ctor (it is required for vector to compile its `push_back` even
+  // though we are not using it). We just won't use it in runtime if we only do
+  // `emplace_back` to this vector. On the other hand, if you could know about
+  // how long would this vector be in advance, you could call
+  // `vector<T>::reserve(const size_t)` to explicitly designate the amount of
+  // memory that a vector should allocate. In that case, `std::vector` won't
+  // resize frequently.
+  Texture(const Texture &rhs);
   Texture(Texture &&rhs) noexcept;
 
   ~Texture();
@@ -53,6 +61,11 @@ class Model {
       : rel_pos(pos) {
     LoadObjModel(filename);
   }
+  Model(const Model&) = default;
+  // Added `noexcept` qualifier to prevent `std::vector<Model>` from calling copy ctor
+  // while resizing.
+  Model(Model &&rhs) noexcept = default;
+
   ~Model();
 
   // Ralph: const _462::Vector3&
@@ -97,7 +110,8 @@ static bool FileExists(const std::string &abs_filename);
 static std::string GetBaseDir(const std::string &filepath);
 // Ralph: HasSmoothingGroup
 static bool hasSmoothingGroup(const tinyobj::shape_t &shape);
-// Ralph: Should parameters be changed to `Vector3`s? or are there existed functions in library for this?
+// Ralph: Should parameters be changed to `Vector3`s? or are there existed
+// functions in library for this?
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]);
 // Ralph: ComputeSmoothingNormals
 static void computeSmoothingNormals(
