@@ -74,7 +74,7 @@ class PhotonSimulator : public Simulator {
 
   // return the pixel RGB value
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
-                              const _462::Vector3 &ray_dir) const;
+                              const _462::Vector3 &ray_dir);
 
   // return the direction of the certain ray by coordinate x and y
   _462::Vector3 GetRayDir(const int x, const int y, const int scene_length,
@@ -89,7 +89,7 @@ class PhotonSimulator : public Simulator {
                             const int scene_width,
                             const _462::Vector3 &camera_pos,
                             const _462::Vector3 &camera_ctr,
-                            const _462::Vector3 &camera_up) const;
+                            const _462::Vector3 &camera_up);
 
   // get the reflect direction of the input dir and the normal
   _462::Vector3 GetReflect(const _462::Vector3 &dir,
@@ -102,7 +102,7 @@ class PhotonSimulator : public Simulator {
   // this function will return the Model, Mesh, and Face that is first hitted by
   // certain ray identified by pos and dir
   std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
-      const _462::Vector3 &pos, const _462::Vector3 &dir) const;
+      const _462::Vector3 &pos, const _462::Vector3 &dir);
 
   // write result to environment
   void WriteResultToEnv(environment::Environment *env);

@@ -161,7 +161,7 @@ void PhotonSimulator::LookuptKDTree(
 }
 
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
-                                             const _462::Vector3 &ray_dir) const {
+                                             const _462::Vector3 &ray_dir) {
   _462::Vector3 direct, global;
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
@@ -205,10 +205,12 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   return result;
 }
 
-_462::Vector3 PhotonSimulator::GetRayColor(
-    const int x, const int y, const int scene_length, const int scene_width,
-    const _462::Vector3 &camera_pos, const _462::Vector3 &camera_ctr,
-    const _462::Vector3 &camera_up) const {
+_462::Vector3 PhotonSimulator::GetRayColor(const int x, const int y,
+                                           const int scene_length,
+                                           const int scene_width,
+                                           const _462::Vector3 &camera_pos,
+                                           const _462::Vector3 &camera_ctr,
+                                           const _462::Vector3 &camera_up) {
   _462::Vector3 dir = GetRayDir(x, y, scene_length, scene_width, camera_pos,
                                 camera_ctr, camera_up);
   _462::Vector3 color = GetPixelColor(camera_pos, dir);
@@ -248,7 +250,7 @@ PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(
 }
 
 std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
-    const _462::Vector3 &pos, const _462::Vector3 &dir) const {
+    const _462::Vector3 &pos, const _462::Vector3 &dir) {
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
