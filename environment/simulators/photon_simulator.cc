@@ -17,9 +17,9 @@ namespace photonsimulator {
 
 PhotonSimulator::PhotonSimulator(const int number, const _462::real_t distance,
                                  const _462::real_t height)
-    : kNumberOfPhotonsNearby(number),
-      kMaxDistance(distance),
-      kSunHeight(height) {}
+    : kNumberOfPhotonsNearby_(number),
+      kMaxDistance_(distance),
+      kSunHeight_(height) {}
 
 void PhotonSimulator::SimulateToTime(
     environment::Environment *env,
@@ -45,8 +45,8 @@ void PhotonSimulator::SimulateToTime(
   double longtitude_diff = (env->config_.location.longitude_right -
                             env->config_.location.longitude_left) /
                            100.0f;
-  alive_photons.clear();
-  absorb_photons.clear();
+  alive_photons_.clear();
+  absorb_photons_.clear();
   PhotonEmit(sun_dir, sun_strength, env->config_.location.latitude_bottom,
              env->config_.location.latitude_top, latitude_diff,
              env->config_.location.longitude_left,
@@ -60,7 +60,7 @@ void PhotonSimulator::SimulateToTime(
 }
 
 void PhotonSimulator::FreeModels() {
-  models.clear();
+  models_.clear();
 }
 
 // TODO: implement these two functions after refining class plant
@@ -76,8 +76,8 @@ void PhotonSimulator::PhotonEmit(
        i <= (_462::real_t)latitude_top; i += (_462::real_t)latitudeDiff) {
     for (_462::real_t j = (_462::real_t)longitude_left;
          j <= (_462::real_t)longitude_right; j += (_462::real_t)longitudeDiff) {
-      alive_photons.push_back(
-          Photon(sun_direction, _462::Vector3(i, j, kSunHeight), sun_strength));
+      alive_photons_.push_back(
+          Photon(sun_direction, _462::Vector3(i, j, kSunHeight_), sun_strength));
     }
   }
 }
@@ -136,7 +136,7 @@ void PhotonSimulator::LookuptKDTree(
     return;
   else if (begin + 1 == end)
     AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin, distance,
-                kMaxDistance, kNumberOfPhotonsNearby);
+                kMaxDistance_, kNumberOfPhotonsNearby_);
   else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
@@ -145,15 +145,15 @@ void PhotonSimulator::LookuptKDTree(
     if (p_value <= split_value) {
       LookuptKDTree(p, point, norm, heap, begin, median, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, kNumberOfPhotonsNearby);
-      if (heap->size() < kNumberOfPhotonsNearby ||
+                  distance, kMaxDistance_, kNumberOfPhotonsNearby_);
+      if (heap->size() < kNumberOfPhotonsNearby_ ||
           (p_value - split_value) * (p_value - split_value) < *distance)
         LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance, kNumberOfPhotonsNearby);
-      if (heap->size() < kNumberOfPhotonsNearby ||
+                  distance, kMaxDistance_, kNumberOfPhotonsNearby_);
+      if (heap->size() < kNumberOfPhotonsNearby_ ||
           (p_value - split_value) * (p_value - split_value) < *distance)
         LookuptKDTree(p, point, norm, heap, begin, median, distance);
     }
@@ -161,7 +161,7 @@ void PhotonSimulator::LookuptKDTree(
 }
 
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
-                                             const _462::Vector3 &ray_dir) {
+                                             const _462::Vector3 &ray_dir) const {
   _462::Vector3 direct, global;
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
@@ -179,17 +179,17 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
     int count = 0;
     std::vector<Neighbor> neighbors;
     make_heap(neighbors.begin(), neighbors.end());
-    LookuptKDTree(absorb_photons, intersect, min_face->normal, &neighbors, 0,
-                  absorb_photons.size() - 1, &d);
+    LookuptKDTree(absorb_photons_, intersect, min_face->normal, &neighbors, 0,
+                  absorb_photons_.size() - 1, &d);
     for (auto &neighbor : neighbors) {
       _462::real_t dist =
-          _462::distance(absorb_photons[neighbor.i].pos, intersect);
-      _462::Vector3 color = absorb_photons[neighbor.i].power;
+          _462::distance(absorb_photons_[neighbor.i].pos, intersect);
+      _462::Vector3 color = absorb_photons_[neighbor.i].power;
       if (dist >= 1.0f) {
         color /= dist;
       }
-      _462::real_t dr1 = _462::dot(absorb_photons[neighbor.i].dir,
-                                   absorb_photons[neighbor.i].pos - intersect);
+      _462::real_t dr1 = _462::dot(absorb_photons_[neighbor.i].dir,
+                                   absorb_photons_[neighbor.i].pos - intersect);
       global += color;
       count++;
     }
@@ -205,12 +205,10 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   return result;
 }
 
-_462::Vector3 PhotonSimulator::GetRayColor(const int x, const int y,
-                                           const int scene_length,
-                                           const int scene_width,
-                                           const _462::Vector3 &camera_pos,
-                                           const _462::Vector3 &camera_ctr,
-                                           const _462::Vector3 &camera_up) {
+_462::Vector3 PhotonSimulator::GetRayColor(
+    const int x, const int y, const int scene_length, const int scene_width,
+    const _462::Vector3 &camera_pos, const _462::Vector3 &camera_ctr,
+    const _462::Vector3 &camera_up) const {
   _462::Vector3 dir = GetRayDir(x, y, scene_length, scene_width, camera_pos,
                                 camera_ctr, camera_up);
   _462::Vector3 color = GetPixelColor(camera_pos, dir);
@@ -222,7 +220,7 @@ _462::Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
                                          const int scene_width,
                                          const _462::Vector3 &camera_pos,
                                          const _462::Vector3 &camera_ctr,
-                                         const _462::Vector3 &camera_up) {
+                                         const _462::Vector3 &camera_up) const {
   _462::Vector3 dir = camera_ctr - camera_pos;
   _462::Vector3 cR = _462::cross(dir, camera_up);
   _462::Vector3 cU = _462::cross(cR, dir);
@@ -238,7 +236,8 @@ _462::Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
 }
 
 PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(
-    const _462::real_t abr, const _462::real_t ref, const _462::real_t trans) {
+    const _462::real_t abr, const _462::real_t ref,
+    const _462::real_t trans) const {
   _462::real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
     return RadianceResult::kAbsorb;
@@ -249,12 +248,12 @@ PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(
 }
 
 std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
-    const _462::Vector3 &pos, const _462::Vector3 &dir) {
+    const _462::Vector3 &pos, const _462::Vector3 &dir) const {
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
   _462::real_t min_distance = std::numeric_limits<double>::max();
-  for (auto &model : models) {
+  for (auto &model : models_) {
     Face *face = nullptr;
     Mesh *mesh = nullptr;
     _462::real_t distance = model.FindFirstIntersect(&face, &mesh, pos, dir);
@@ -268,63 +267,63 @@ std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
 }
 
 void PhotonSimulator::PhotonsModify() {
-  while (!alive_photons.empty()) {
-    for (int i = 0; i < alive_photons.size(); i++) {
+  while (!alive_photons_.empty()) {
+    for (int i = 0; i < alive_photons_.size(); i++) {
       Face *min_face = nullptr;
       Mesh *min_mesh = nullptr;
       Model *min_model = nullptr;
       std::tie(min_model, min_mesh, min_face) =
-          FindFirstIntersect(alive_photons[i].pos, alive_photons[i].dir);
+          FindFirstIntersect(alive_photons_[i].pos, alive_photons_[i].dir);
       if (min_face != nullptr) {
         _462::Vector3 intersect = min_model->GetIntersect(
-            *min_face, alive_photons[i].pos, alive_photons[i].dir);
+            *min_face, alive_photons_[i].pos, alive_photons_[i].dir);
         RadianceResult res = RussianRoulette(min_face->material.aborption,
                                              min_face->material.reflection,
                                              min_face->material.transmision);
         switch (res) {
           case RadianceResult::kAbsorb: {
-            absorb_photons.push_back(
-                Photon(min_face->normal, intersect, alive_photons[i].power));
-            alive_photons.erase(alive_photons.begin() + i--);
+            absorb_photons_.push_back(
+                Photon(min_face->normal, intersect, alive_photons_[i].power));
+            alive_photons_.erase(alive_photons_.begin() + i--);
             min_face->photons++;
             break;
           }
           case RadianceResult::kReflect: {
             _462::Vector3 ref =
-                GetReflect(alive_photons[i].dir, min_face->normal);
-            alive_photons[i].pos = intersect;
-            alive_photons[i].dir = ref;
+                GetReflect(alive_photons_[i].dir, min_face->normal);
+            alive_photons_[i].pos = intersect;
+            alive_photons_[i].dir = ref;
             break;
           }
           case RadianceResult::kRefract: {
             _462::Vector3 ref =
-                GetRefract(alive_photons[i].dir, min_face->normal, 1.0);
-            alive_photons[i].pos = intersect;
-            alive_photons[i].dir = ref;
+                GetRefract(alive_photons_[i].dir, min_face->normal, 1.0);
+            alive_photons_[i].pos = intersect;
+            alive_photons_[i].dir = ref;
             break;
           }
           default:
             std::cout << "Error result!" << std::endl;
         }
       } else {
-        alive_photons.erase(alive_photons.begin() + i--);
+        alive_photons_.erase(alive_photons_.begin() + i--);
       }
     }
   }
-  if (isRendering) {
-    ConstructKDTree(absorb_photons, 0, absorb_photons.size());
+  if (isRendering_) {
+    ConstructKDTree(absorb_photons_, 0, absorb_photons_.size());
   }
 }
 
 _462::Vector3 PhotonSimulator::GetReflect(const _462::Vector3 &dir,
-                                          const _462::Vector3 &norm) {
+                                          const _462::Vector3 &norm) const {
   _462::Vector3 normal = normalize(norm);
   return (dir - 2 * _462::Hadamard((_462::Hadamard(dir, normal)), normal));
 }
 
 _462::Vector3 PhotonSimulator::GetRefract(const _462::Vector3 &dir,
                                           const _462::Vector3 &norm,
-                                          _462::real_t coef) {
+                                          _462::real_t coef) const {
   return _462::Vector3(
       -sqrt(1 - coef * coef *
                     (1 - _462::squared_length(_462::Hadamard(dir, norm)) *
