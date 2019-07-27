@@ -7,6 +7,7 @@ namespace photonsimulator {
 
 int Mesh::getPhotons() {
   int cnt = 0;
+  // Ralph: const auto&
   for (auto &face : faces) {
     cnt += face.photons;
   }
@@ -54,6 +55,7 @@ void Mesh::render(const std::vector<tinyobj::material_t> &materials,
       glClear(GL_COLOR_BUFFER_BIT);
     }
     glVertexPointer(3, GL_FLOAT, stride, (const void *)0);
+    // Ralph: is it correct to have these manual pointers?
     glNormalPointer(GL_FLOAT, stride, (const void *)(sizeof(float) * 3));
     glTexCoordPointer(2, GL_FLOAT, stride, (const void *)(sizeof(float) * 6));
 
@@ -69,6 +71,7 @@ void Mesh::writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
                              const std::vector<_462::Vector2> &texcoords) {
   std::vector<float> buffer;  // 3:vtx, 3:normal, 3:col, 2:texcoord
 
+  // Ralph: const auto &
   for (auto &face : faces) {
     buffer.push_back((float)vertices[face.vertex1.vi].x);
     buffer.push_back((float)vertices[face.vertex1.vi].y);
@@ -114,17 +117,20 @@ void Mesh::writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
   }
   vb_id = 0;
 
+  // Ralph: seems redundant
   int size = (int)buffer.size();
   if (buffer.size() > 0) {
     glGenBuffers(1, &vb_id);
     glBindBuffer(GL_ARRAY_BUFFER, vb_id);
     glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer.at(0),
                  GL_STATIC_DRAW);
+    // Ralph: I think 3, 3, and 2 should have constants with meaningful names
     numTriangles =
         buffer.size() / (3 + 3 + 2) / 3;  // 3:vtx, 3:normal, 2:texcoord
   }
 }
 
+// Ralph: TODO?
 void Mesh::deleteOpenGLBuffer() {}
 
 }  // namespace photonsimulator

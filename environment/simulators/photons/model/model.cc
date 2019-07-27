@@ -20,6 +20,19 @@ const char PathSeparator =
     '/';
 #endif
 
+Texture::Texture(GLuint texture_id, int w, int h, int comp)
+    : texture_id(texture_id), w(w), h(h), comp(comp) {
+  buffer = new unsigned char[w * h * 3];
+}
+
+Textute::~Texture() {
+  delete buffer;
+}
+
+Textute::Texture(Texture &&rhs) : buffer(rhs.buffer) {
+  rhs.buffer = nullptr;
+};
+
 Model::~Model() {
   deleteBuffer();
   std::cout << "model destroyed." << std::endl;
@@ -27,6 +40,7 @@ Model::~Model() {
 
 int Model::getPhotons() {
   int cnt = 0;
+  // Ralph: const auto &mesh
   for (auto &mesh : meshes) {
     cnt += mesh.getPhotons();
   }
@@ -35,6 +49,7 @@ int Model::getPhotons() {
 
 int Model::getTotalFaces() {
   int cnt = 0;
+  // Ralph: const auto &mesh
   for (auto &mesh : meshes) {
     cnt += mesh.faces.size();
   }
@@ -66,7 +81,9 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
   _462::real_t distance = std::numeric_limits<double>::max();
+  // Ralph: const auto&
   for (auto &mesh : meshes) {
+    // Ralph: const auto&
     for (auto &face : mesh.faces) {
       _462::Vector3 intersect = GetIntersect(face, pos, dir);
       if (IsInTriangle(face, intersect)) {
@@ -94,6 +111,8 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
   int y =
       ((int)(texture_info.h * texcoord.y) % texture_info.h + texture_info.h) %
       texture_info.h;
+  // Ralph: maybe the "255.0f" should be defined as a constant
+  // Ralph: add some comments in .h file showing what returning values are
   return _462::Vector3(
       texture_info.buffer[3 * (x + y * texture_info.w)] / 255.0f,
       texture_info.buffer[3 * (x + y * texture_info.w) + 1] / 255.0f,
@@ -103,14 +122,17 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
 _462::Vector3 Model::GetIntersect(const Face &face,
                                   const _462::Vector3 &line_point,
                                   const _462::Vector3 &line_dir) {
+  // Ralph: const _462::Vector3 &plane_normal
   _462::Vector3 plane_normal = face.normal;
   _462::real_t d = _462::dot(vertices[face.vertex1.vi] + rel_pos - line_point,
                              plane_normal) /
                    _462::dot(line_dir, plane_normal);
+  // Ralph: What does this line do?
   normalize(line_dir);
   return d * line_dir + line_point;
 }
 
+// Ralph: This function looks way too long. Refactor it.
 void Model::LoadObjModel(const char *filename) {
   tinyobj::attrib_t attrib;
   std::vector<tinyobj::shape_t> shapes;
@@ -118,6 +140,7 @@ void Model::LoadObjModel(const char *filename) {
   // I/O operation
   {
     std::string base_dir = GetBaseDir(filename);
+    // Ralph: I think this should be handled by `GetBaseDir`
     if (base_dir.empty()) {
       base_dir = ".";
     }
@@ -129,6 +152,7 @@ void Model::LoadObjModel(const char *filename) {
     if (!warn.empty()) {
       std::cout << "WARN: " << warn << std::endl;
     }
+    // Ralph: If error occurs, should it continue to run?
     if (!err.empty()) {
       std::cerr << err << std::endl;
     }
@@ -138,6 +162,7 @@ void Model::LoadObjModel(const char *filename) {
     // Load diffuse textures
     {
       for (size_t m = 0; m < materials.size(); m++) {
+        // Ralph: const tinyobj::material_t &mp = materials[m];
         tinyobj::material_t *mp = &materials[m];
 
         if (mp->diffuse_texname.length() > 0) {
@@ -147,6 +172,7 @@ void Model::LoadObjModel(const char *filename) {
             int w, h;
             int comp;
 
+            // Ralph: const std::string &texture_filename = mp->diffuse_texname;
             std::string texture_filename = mp->diffuse_texname;
             if (!FileExists(texture_filename)) {
               // Append base dir.
@@ -198,16 +224,19 @@ void Model::LoadObjModel(const char *filename) {
   }
 
   // Convert tiny_obj_loader format
+  // Ralph: auto it = attrib.vertices.begin()
   for (std::vector<tinyobj::real_t>::iterator it = attrib.vertices.begin();
        it != attrib.vertices.end(); it += 3)
     vertices.push_back(_462::Vector3((_462::real_t)*it,
                                      (_462::real_t)*std::next(it),
                                      (_462::real_t)*std::next(it, 2)));
+  // Ralph: same as above
   for (std::vector<tinyobj::real_t>::iterator it = attrib.normals.begin();
        it != attrib.normals.end(); it += 3)
     normals.push_back(_462::Vector3((_462::real_t)*it,
                                     (_462::real_t)*std::next(it),
                                     (_462::real_t)*std::next(it, 2)));
+  // Ralph: same as above
   // Flip y texture coordinate
   for (std::vector<tinyobj::real_t>::iterator it = attrib.texcoords.begin();
        it != attrib.texcoords.end(); it += 2)
@@ -216,10 +245,13 @@ void Model::LoadObjModel(const char *filename) {
 
   // Load mesh
   for (size_t s = 0; s < shapes.size(); s++) {
+    // Ralph: `Mesh mesh;` is enough
     Mesh mesh = Mesh();
 
     // Check for smoothing group and compute smoothing normals
+    // Ralph: smooth_vertex_normals
     std::map<int, _462::Vector3> smoothVertexNormals;
+    // Ralph: Remove `== 1`. It looks confusing.
     if (hasSmoothingGroup(shapes[s]) == 1) {
       std::cout << "Compute smoothingNormal for shape [" << s << "]"
                 << std::endl;
@@ -406,6 +438,7 @@ static std::string GetBaseDir(const std::string &filepath) {
 }
 
 static bool hasSmoothingGroup(const tinyobj::shape_t &shape) {
+  // Ralph: Use range-based for loop
   for (size_t i = 0; i < shape.mesh.smoothing_group_ids.size(); i++) {
     if (shape.mesh.smoothing_group_ids[i] > 0) {
       return true;

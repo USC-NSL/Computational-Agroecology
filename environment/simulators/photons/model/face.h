@@ -1,3 +1,4 @@
+// Ralph: refer to the google coding style to see what this should be
 #ifndef __FACE_H__
 #define __FACE_H__
 
@@ -35,9 +36,11 @@ struct Face {
   Material material;  // TODO: how to import material info
 
   // count of photons
+  // Ralph: size_t
   int photons;
 
   Face() = delete;
+  // Ralph: const &
   Face(Vertex v1, Vertex v2, Vertex v3, _462::Vector3 normal,
        int material_id_ = 0)
       : vertex1(v1),
@@ -47,10 +50,12 @@ struct Face {
         material_id(material_id_),
         material(),
         normal(normal) {}
+  // Ralph: if you are not defining it, no need to put this
   ~Face() {}
 };
 
 // given point on face, return its texture coordinate
+// Ralph: GetTexcoord
 _462::Vector2 getTexcoord(const Face &face, const _462::Vector3 &pos,
                           const std::vector<_462::Vector3> &vertices,
                           const std::vector<_462::Vector2> &texcoords);
