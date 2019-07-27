@@ -87,7 +87,7 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
                                                const Mesh &mesh,
                                                const _462::Vector3 &p) {
   _462::Vector2 texcoord = getTexcoord(face, p - rel_pos, vertices, texcoords);
-  const Texture& texture_info = getTextureInfo(mesh.texture_id);
+  const Texture &texture_info = getTextureInfo(mesh.texture_id);
   int x =
       ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
       texture_info.w;
@@ -375,10 +375,11 @@ void Model::deleteBuffer() {
   }
 }
 
-const Texture& Model::getTextureInfo(const GLuint &texture_id) {
-  for (auto &texture_info : texture_infos) {
-    if (texture_info.texture_id == texture_id)
+const Texture &Model::getTextureInfo(const GLuint &texture_id) {
+  for (const auto &texture_info : texture_infos) {
+    if (texture_info.texture_id == texture_id) {
       return texture_info;
+    }
   }
   assert(0);
 }

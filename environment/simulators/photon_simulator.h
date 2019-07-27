@@ -1,6 +1,7 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
+#include <list>
 #include <tuple>
 #include <vector>
 
@@ -30,7 +31,7 @@ class PhotonSimulator : public Simulator {
   enum class RadianceResult { kAbsorb = 0, kReflect, kRefract };
 
   // the part for model
-  std::vector<Model *> models;
+  std::list<Model> models;
 
   // free 3d-obj model from memory
   void FreeModels();

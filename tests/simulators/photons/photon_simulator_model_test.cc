@@ -26,21 +26,16 @@ TEST(ConfigTest, ConstructorTest) {
 #endif
 
   strcat(filename, "/../../../environment/simulators/photons/asset/Corn1.obj");
-  // Model corn(filename);
-  // std::vector<Model> models;
-  // models.emplace_back(filename);
-  // models.emplace_back(filename);
-  // models.emplace_back(filename);
-  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
-  // models.pop_back();
-  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
-  // models.pop_back();
-  // EXPECT_TRUE(models.back().getTotalFaces() == 90);
-  // models.pop_back();
-
-  Model *corn = new Model(filename);
-  EXPECT_TRUE(corn->getTotalFaces() == 90);
-  delete corn;
+  std::vector<Model> models;
+  models.push_back(Model(filename));
+  models.push_back(Model(filename));
+  models.push_back(Model(filename));
+  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  models.pop_back();
+  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  models.pop_back();
+  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  models.pop_back();
 }
 
 int main(int argc, char **argv) {

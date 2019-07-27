@@ -60,11 +60,7 @@ void PhotonSimulator::SimulateToTime(
 }
 
 void PhotonSimulator::FreeModels() {
-  while (!models.empty()) {
-    Model *model = models.back();
-    models.pop_back();
-    delete model;
-  }
+  models.clear();
 }
 
 // TODO: implement these two functions after refining class plant
@@ -241,9 +237,8 @@ _462::Vector3 PhotonSimulator::GetRayDir(const int x, const int y,
   return t;
 }
 
-PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(const _462::real_t abr,
-                                                const _462::real_t ref,
-                                                const _462::real_t trans) {
+PhotonSimulator::RadianceResult PhotonSimulator::RussianRoulette(
+    const _462::real_t abr, const _462::real_t ref, const _462::real_t trans) {
   _462::real_t a = (rand() % 100) / 100.0f;
   if (a < abr)
     return RadianceResult::kAbsorb;
@@ -262,11 +257,11 @@ std::tuple<Model *, Mesh *, Face *> PhotonSimulator::FindFirstIntersect(
   for (auto &model : models) {
     Face *face = nullptr;
     Mesh *mesh = nullptr;
-    _462::real_t distance = model->FindFirstIntersect(&face, &mesh, pos, dir);
+    _462::real_t distance = model.FindFirstIntersect(&face, &mesh, pos, dir);
     if (distance < min_distance) {
       min_face = face;
       min_mesh = mesh;
-      min_model = model;
+      min_model = &model;
     }
   }
   return std::make_tuple(min_model, min_mesh, min_face);
