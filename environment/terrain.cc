@@ -36,12 +36,8 @@ Terrain::Terrain(const size_t size) : tiles_(), yield_(0) {
   tiles_ = Tiles(size, size, dumb_soil);
 }
 
-void Terrain::ExecuteAction(const agent::action::Action *action) {
-  if (action == nullptr) {
-    return;
-  }
-
-  action->Execute(this);
+void Terrain::ExecuteAction(const agent::action::Action &action) {
+  action.Execute(this);
 }
 
 std::ostream &operator<<(std::ostream &os, const Terrain &terrain) {

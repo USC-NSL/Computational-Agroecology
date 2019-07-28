@@ -240,16 +240,16 @@ std::tuple<double, double, double> SunInfo::CalculateDailySolarIrradiance(
   double I_df_d;
   double sky_clearness = I_t_d / I_et_d;
   if (sky_clearness < 0.07) {
-    // I_df_d/I_t_d = 1
+    // Formula: I_df_d/I_t_d = 1
     I_df_d = I_t_d;
   } else if (sky_clearness < 0.35) {
-    // I_df_d/I_t_d = 1 - 2.3 * (I_t_d/I_et_d - 0.07)^2
+    // Formula: I_df_d/I_t_d = 1 - 2.3 * (I_t_d/I_et_d - 0.07)^2
     I_df_d = I_t_d * (1 - 2.3 * pow(sky_clearness - 0.07, 2));
   } else if (sky_clearness < 0.75) {
-    // I_df_d/I_t_d = 1.33 - 1.46 * I_t_d / I_et_d
+    // Formula: I_df_d/I_t_d = 1.33 - 1.46 * I_t_d / I_et_d
     I_df_d = I_t_d * (1.33 - 1.46 * sky_clearness);
   } else {
-    // I_df_d/I_t_d = 0.23
+    // Formula: I_df_d/I_t_d = 0.23
     I_df_d = I_t_d * 0.23;
   }
 
@@ -287,16 +287,16 @@ std::tuple<double, double, double> SunInfo::CalculateHourlySolarIrradiance(
   double R = 0.847f - 1.61 * sin(beta) + 1.04 * pow(sin(beta), 2);
   double K = (1.47 / R) / 1.66;
   if (sky_clearness <= 0.22) {
-    // I_df/I_t = 1
+    // Formula: I_df/I_t = 1
     I_df = I_t;
   } else if (sky_clearness <= 0.35) {
-    // I_df/I_t = 1 - 6.4 * (I_t/I_et - 0.22)^2
+    // Formula: I_df/I_t = 1 - 6.4 * (I_t/I_et - 0.22)^2
     I_df = I_t * (1 - 6.4 * pow(sky_clearness - 0.22, 2));
   } else if (sky_clearness <= K) {
-    // I_df/I_t = 1.47 - 1.66 * (I_t / I_et)
+    // Formula: I_df/I_t = 1.47 - 1.66 * (I_t / I_et)
     I_df = I_t * (1.47 - 1.66 * sky_clearness);
   } else {
-    // I_df/I_t = R
+    // Formula: I_df/I_t = R
     I_df = I_t * R;
   }
 

@@ -72,7 +72,7 @@ void Environment::SyncActionPqToTimeStep(const int64_t time_step) {
       // TODO: GLOG
       std::cout << "Executed an action at " << action->end_time_step()
                 << "th time step\n";
-      terrain_.ExecuteAction(action);
+      terrain_.ExecuteAction(*action);
     } else if (!action_pq_.empty()) {
       // pop the action in `action_pq_`
       const auto action = action_pq_.top();

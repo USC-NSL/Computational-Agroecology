@@ -62,7 +62,7 @@ class Terrain {
   inline const int yield() const { return yield_; }
 
   // Modifiers
-  void ExecuteAction(const agent::action::Action *action);
+  void ExecuteAction(const agent::action::Action &action);
 
  private:
   friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);

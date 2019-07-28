@@ -116,6 +116,7 @@ void Harvest::Execute(environment::Terrain *terrain) const {
             << std::endl;
 
   for (const auto &c : applied_range_) {
+    // TODO: generalize the harvest / yield handling
     if (terrain->tiles_.get(c).plant != nullptr) {
       int yield = terrain->tiles_.get(c).plant->Harvest();
       terrain->yield_ += yield;
