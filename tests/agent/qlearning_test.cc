@@ -6,11 +6,10 @@
 #include "agent/actions/crop.h"
 #include "agent/agent.h"
 #include "agent/q_learning.h"
-#include "environment.h"
+#include "environment/environment.h"
 
 using namespace agent;
 using namespace environment;
-using namespace simulator;
 using namespace agent::action;
 
 class QlearningTest : public ::testing::Test {

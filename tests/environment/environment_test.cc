@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "agent/actions/crop.h"
-#include "environment.h"
+#include "environment/environment.h"
 
 using namespace environment;
 

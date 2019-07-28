@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "plant_builder.h"
+#include "environment/plant_builder.h"
 
 using namespace environment;
 

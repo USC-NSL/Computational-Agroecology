@@ -7,7 +7,7 @@
 
 #include "agent/actions/crop.h"
 #include "agent/resource.h"
-#include "terrain.h"
+#include "environment/terrain.h"
 
 using namespace agent::action;
 using namespace environment;

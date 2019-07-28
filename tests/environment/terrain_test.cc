@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "terrain.h"
+#include "environment/terrain.h"
 
 using namespace environment;
 

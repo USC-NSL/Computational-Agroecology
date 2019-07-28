@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <memory>
 #include <string>
 
 #include <gtest/gtest.h>
@@ -7,11 +8,10 @@
 #include "agent/agent.h"
 #include "agent/q_learning.h"
 #include "agent/resource.h"
-#include "environment.h"
+#include "environment/environment.h"
 
 using namespace agent;
 using namespace environment;
-using namespace simulator;
 using namespace agent::action;
 
 class AgentTest : public ::testing::Test {

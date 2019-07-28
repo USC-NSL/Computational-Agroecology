@@ -8,7 +8,7 @@
 #include <unistd.h>  //readlink
 #endif
 
-#include "simulators/photon_simulator/model/model.h"
+#include "environment/simulators/photon_simulator/model/model.h"
 
 using namespace simulator;
 using namespace photonsimulator;
@@ -25,7 +25,7 @@ TEST(ConfigTest, ConstructorTest) {
   strcpy(filename, temp.substr(0, temp.find_last_of("/\\")).c_str());
 #endif
 
-  strcat(filename, "/../../../simulators/photon_simulator/asset/Corn1.obj");
+  strcat(filename, "/../../../environment/simulators/photon_simulator/asset/Corn1.obj");
   Model corn(filename);
   EXPECT_TRUE(corn.vertices.size() == 81);
   EXPECT_TRUE(corn.meshes[0].faces.size() == 90);

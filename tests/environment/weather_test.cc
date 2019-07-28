@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "weather.h"
+#include "environment/weather.h"
 
 using namespace environment;
 

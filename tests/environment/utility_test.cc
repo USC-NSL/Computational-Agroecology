@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <utility.h>
+#include <environment/utility.h>
 
 TEST(MinMaxPairTest, ConstructorTest_1) {
   MinMaxPair<int> min_max_pair(10, 100);

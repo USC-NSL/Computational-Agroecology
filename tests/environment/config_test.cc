@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "config.h"
+#include "environment/config.h"
 
 using namespace environment;
 
