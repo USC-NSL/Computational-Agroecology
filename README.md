@@ -41,7 +41,7 @@ $ [sudo] apt-get install freeglut3 freeglut3-dev cmake libglew-dev mesa-common-d
 ```shell
 $ make
 ```
-The binary executable file will be named `main`.
+The binary executable file will be named `main` under the directory `environment`.
 
 # Unit tests
 
