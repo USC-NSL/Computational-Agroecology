@@ -28,7 +28,7 @@ export class MainControl {
     this.gui = new GUI(this.render, this.api, this.reset.bind(this),
                        this.updateWeather.bind(this));
     this.tilemap = new TileMap(this.plantConfigs, this.render,
-                               this.sideNavigator, this.updatePlant.bind(this));
+                               this.sideNavigator, this.updateTile.bind(this));
     this.initerary = new Initerary();
 
     // resolve cyclic dependency
@@ -38,12 +38,12 @@ export class MainControl {
 
   async load() {
     await this.plantConfigs.loadModels();
-    await this.updatePlant(0, 0, "CORN", 0);
-    await this.updatePlant(0, 1, "CORN", 3);
-    await this.updatePlant(0, 2, "CORN", 6);
-    await this.updatePlant(1, 0, "SQUASH", 0);
-    await this.updatePlant(1, 1, "SQUASH", 3);
-    await this.updatePlant(1, 2, "SQUASH", 6);
+    await this.updateTile(0, 0, FunctionMode.CORN, 0);
+    await this.updateTile(0, 1, FunctionMode.CORN, 3);
+    await this.updateTile(0, 2, FunctionMode.CORN, 6);
+    await this.updateTile(1, 0, FunctionMode.SQUASH, 0);
+    await this.updateTile(1, 1, FunctionMode.SQUASH, 3);
+    await this.updateTile(1, 2, FunctionMode.SQUASH, 6);
     this.render.animate();
   }
 
@@ -54,35 +54,40 @@ export class MainControl {
     this.api.reset();
   }
 
-  updatePlant(gridX: number, gridY: number,
-              planttype: string = this.gui.getFunctionMode(),
-              plantstatus: number = 0) {
+  updateTile(gridX: number, gridY: number,
+             planttype: FunctionMode = this.initerary.getFunctionMode(),
+             plantstatus: number = 0) {
     let plant: Object3D | undefined;
     switch (planttype) {
-      case FunctionMode[FunctionMode.CORN]:
-      case FunctionMode[FunctionMode.BEAN]:
-      case FunctionMode[FunctionMode.SQUASH]:
-        plant = this.plantConfigs.addPlantModel(planttype, plantstatus, gridX,
-                                                gridY);
+      case FunctionMode.INVESTIGATE:
+        this.sideNavigator.setTableContent(
+            this.plantConfigs.getGrid(gridX, gridY));
+        this.sideNavigator.open();
+        break;
+      case FunctionMode.CORN:
+      case FunctionMode.BEAN:
+      case FunctionMode.SQUASH:
+        plant = this.plantConfigs.addPlantModel(FunctionMode[planttype],
+                                                plantstatus, gridX, gridY);
         if (plant !== undefined) {
           this.render.addModeltoScene(plant);
-          this.api.agentAddCrop(gridX, gridY, planttype);
+          this.api.agentAddCrop(gridX, gridY, FunctionMode[planttype]);
         }
         break;
-      case FunctionMode[FunctionMode.WATER]:
+      case FunctionMode.WATER:
         return this.plantConfigs.water(gridX, gridY);
-      case FunctionMode[FunctionMode.REMOVE]:
+      case FunctionMode.REMOVE:
         plant = this.plantConfigs.removePlantModel(gridX, gridY);
         if (plant !== undefined) {
           this.render.removeModelfromScene(plant);
           this.api.agentRemoveCrop(gridX, gridY);
         }
         break;
-      case FunctionMode[FunctionMode.HARVEST]:
+      case FunctionMode.HARVEST:
         alert("method not implemented yet.");
         break;
       default:
-        console.log("invalid mode: " + this.gui.getFunctionMode());
+        console.log("invalid mode: " + this.initerary.getFunctionMode());
     }
     return undefined;
   }

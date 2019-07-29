@@ -1,8 +1,8 @@
 import {FunctionMode} from "./common";
 
 export class Initerary {
-  icon_map: {[mode: string]: string};
-  functionMode = FunctionMode.INVESTIGATE;
+  private icon_map: {[mode: string]: string};
+  private functionMode = FunctionMode.INVESTIGATE;
 
   constructor() {
     // mapping enum FunctionMode. eg. "BEAN" => "bean-icon"
@@ -29,53 +29,38 @@ export class Initerary {
           let a = document.createElement('a');
           div.appendChild(a);
         });
+    this.setFunctionMode(this.functionMode);
+  }
+
+  setFunctionMode(functionMode: FunctionMode) {
+    let last_icon =
+        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
+    if (last_icon != null) {
+      last_icon.style.backgroundColor = "#af7c52";
+    }
     let icon =
-        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
+        document.getElementById(this.icon_map[FunctionMode[functionMode]]);
     if (icon != null) {
-      icon.style.backgroundColor = "#red";
+      icon.style.backgroundColor = "red";
     }
+    this.functionMode = functionMode;
   }
 
-  setFunctionMode(mode: string) {
-    let last_icon =
-        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
-    if (last_icon != null) {
-      last_icon.style.backgroundColor = "#af7c52";
-    }
+  getFunctionMode(): FunctionMode { return this.functionMode; }
 
-    // set current icon
-    let htmlElement = ev.target as HTMLElement;
-    let li = htmlElement.closest('li');
-    if (li != null) {
-      li.style.backgroundColor = "red";
-      let id = li.id;
-      let mode =
-          Object.keys(this.icon_map).find(mode => this.icon_map[mode] === id);
-      if (typeof mode === 'string') {
-        this.functionMode = (<any>FunctionMode)[mode];
-      }
-    }
-  }
-
+  // TODO: fix handler order
   onClick(ev: MouseEvent) {
-    // unchoose last icon
-    let last_icon =
-        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
-    if (last_icon != null) {
-      last_icon.style.backgroundColor = "#af7c52";
-    }
-
-    // set current icon
     let htmlElement = ev.target as HTMLElement;
     let li = htmlElement.closest('li');
     if (li != null) {
-      li.style.backgroundColor = "red";
       let id = li.id;
       let mode =
           Object.keys(this.icon_map).find(mode => this.icon_map[mode] === id);
       if (typeof mode === 'string') {
-        this.functionMode = (<any>FunctionMode)[mode];
+        let functionMode = (<any>FunctionMode)[mode];
+        this.setFunctionMode(functionMode);
       }
     }
+    ev.stopPropagation();
   }
 }
