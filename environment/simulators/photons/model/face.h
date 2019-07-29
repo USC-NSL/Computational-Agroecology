@@ -1,7 +1,5 @@
-// Ralph: refer to the google coding style to see what this should be
-// wym: please check
-#ifndef __FACE_H__
-#define __FACE_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_FACE_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_FACE_H_
 
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
@@ -63,4 +61,4 @@ _462::Vector2 GetTexcoord(const Face &face, const _462::Vector3 &pos,
 
 }  // namespace simulator
 
-#endif /* __FACE_H__ */
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_FACE_H_

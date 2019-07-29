@@ -1,7 +1,5 @@
-// Ralph: refer to the google coding style to see what this should be
-// wym: please check
-#ifndef __MATERIAL_H__
-#define __MATERIAL_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_
 
 namespace simulator {
 
@@ -23,4 +21,4 @@ struct Material {
 
 }  // namespace simulator
 
-#endif /* __MATERIAL_H__ */
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_

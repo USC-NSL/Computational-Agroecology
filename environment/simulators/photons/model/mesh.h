@@ -1,7 +1,5 @@
-// // Ralph: refer to the google coding style to see what this should be
-// wym: Please check
-#ifndef __MESH_H__
-#define __MESH_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MESH_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MESH_H_
 #include <cassert>
 #include <iostream>
 #include "../stdafx.h"
@@ -44,4 +42,4 @@ class Mesh {
 
 }  // namespace simulator
 
-#endif /* __MESH_H__ */
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MESH_H_

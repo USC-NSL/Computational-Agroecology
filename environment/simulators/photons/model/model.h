@@ -1,10 +1,5 @@
-/*
-    the class is a wrapper for mesh
-    in order to load file and Render in GL
-*/
-// Ralph: refer to the google coding style to see what this should be
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MODEL_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MODEL_H_
 #include <cstring>
 #include "../stdafx.h"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
@@ -113,4 +108,4 @@ static void ComputeSmoothingNormals(
 
 }  // namespace simulator
 
-#endif
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MODEL_H_
