@@ -6,6 +6,7 @@
 #include "tinyobjloader/examples/viewer/stb_image.h"
 #endif
 #include <cmath>
+#include "../photon_simulator_config.h"
 #include "../stdafx.h"
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
@@ -128,12 +129,14 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
   int y =
       ((int)(texture_info.h * texcoord.y) % texture_info.h + texture_info.h) %
       texture_info.h;
-  return _462::Vector3(texture_info.buffer[3 * (x + y * texture_info.w)] /
-                           std::numeric_limits<unsigned char>::max(),
-                       texture_info.buffer[3 * (x + y * texture_info.w) + 1] /
-                           std::numeric_limits<unsigned char>::max(),
-                       texture_info.buffer[3 * (x + y * texture_info.w) + 2] /
-                           std::numeric_limits<unsigned char>::max());
+  unsigned char RGB[kNumOfChannels];
+  float rgb[kNumOfChannels];
+  memcpy(RGB, texture_info.buffer + kNumOfChannels * (x + y * texture_info.w),
+         sizeof(unsigned char) * kNumOfChannels);
+  for (int i = 0; i < kNumOfChannels; i++) {
+    rgb[i] = RGB[i] / std::numeric_limits<unsigned char>::max();
+  }
+  return _462::Vector3(rgb);
 }
 
 _462::Vector3 Model::GetIntersect(const Face &face,
@@ -312,15 +315,9 @@ void Model::LoadObjModel(const char *filename) {
       v2.vertex_index = idx1.vertex_index;
       v3.vertex_index = idx2.vertex_index;
 
-      // compute geometric normal
-      float v[3][3];  // coordinates
-      float n[3][3];  // normals
-      for (int k = 0; k < 3; k++) {
-        v[0][k] = attrib.vertices[3 * v1.vertex_index + k];
-        v[1][k] = attrib.vertices[3 * v2.vertex_index + k];
-        v[2][k] = attrib.vertices[3 * v3.vertex_index + k];
-      }
-      CalcNormal(n[0], v[0], v[1], v[2]);
+      _462::Vector3 face_normal =
+          CalcNormal(vertices_[v1.vertex_index], vertices_[v2.vertex_index],
+                     vertices_[v3.vertex_index]);
 
       // update normal index
       {
@@ -362,11 +359,11 @@ void Model::LoadObjModel(const char *filename) {
 
         if (invalid_normal_index) {
           v1.normal_index = v2.normal_index = v3.normal_index = normals_.size();
-          normals_.push_back(_462::Vector3(n[0]));
+          normals_.push_back(face_normal);
         }
       }
 
-      mesh.AddFace(Face(v1, v2, v3, _462::Vector3(n[0]), material_id_));
+      mesh.AddFace(Face(v1, v2, v3, face_normal, material_id_));
     }
 
     // update material_id_ for mesh
@@ -534,8 +531,9 @@ static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
   }
 }
 
-static _462::Vector3 CalcNormal(_462::Vector3 v0, _462::Vector3 v1,
-                                _462::Vector3 v2) {
+static _462::Vector3 CalcNormal(const _462::Vector3 &v0,
+                                const _462::Vector3 &v1,
+                                const _462::Vector3 &v2) {
   _462::Vector3 v10 = v1 - v0;
   _462::Vector3 v20 = v2 - v0;
 

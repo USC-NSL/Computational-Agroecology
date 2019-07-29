@@ -97,8 +97,9 @@ static bool HasSmoothingGroup(const tinyobj::shape_t &shape);
 // functions in library for this?
 // wym: I add following function, but I would suggest that do not modify the
 // code.
-static _462::Vector3 CalcNormal(_462::Vector3 v0, _462::Vector3 v1,
-                                _462::Vector3 v2);
+static _462::Vector3 CalcNormal(const _462::Vector3 &v0,
+                                const _462::Vector3 &v1,
+                                const _462::Vector3 &v2);
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]);
 static void ComputeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,

@@ -14,6 +14,8 @@ namespace photonsimulator {
 const size_t kSizeOfVertexBuffer = 3;
 const size_t kSizeOfNormalBuffer = 3;
 const size_t kSizeOfTexcoordBuffer = 2;
+// RGB = 3, RGBA = 4, we use RGB here
+const size_t kNumOfChannels = 3;
 
 // constant for kd-tree
 const int kXAXIS = 0;  // use x-axis
