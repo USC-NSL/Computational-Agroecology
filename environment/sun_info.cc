@@ -4,6 +4,8 @@
 #include <cmath>
 #include <ctime>
 
+#include <iostream>
+
 namespace environment {
 
 SunInfo::SunInfo(const std::chrono::system_clock::time_point &time,

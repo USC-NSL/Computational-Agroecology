@@ -60,8 +60,8 @@ void Environment::SyncActionPqToTimeStep(const int64_t time_step) {
 
     // check whose top action of the two PQ goes first
     if (!starting_action_pq_.empty() &&
-        starting_action_pq_.top()->end_time_step() <=
-            action_pq_.top()->start_time_step()) {
+        (action_pq_.empty() || starting_action_pq_.top()->end_time_step() <=
+                                   action_pq_.top()->start_time_step())) {
       // pop the action in `starting_action_pq_`
       const auto action = starting_action_pq_.top();
       starting_action_pq_.pop();

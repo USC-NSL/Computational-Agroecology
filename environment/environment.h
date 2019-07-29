@@ -53,6 +53,18 @@ class Environment {
   inline const SunInfo &sun_info() const { return sun_info_; }
   inline const Terrain &terrain() const { return terrain_; }
   inline const Weather &weather() const { return weather_; }
+  inline const std::priority_queue<const agent::action::Action *,
+                                   std::vector<const agent::action::Action *>,
+                                   agent::action::ActionStartTimeComparator>
+  action_pq() const {
+    return action_pq_;
+  }
+  inline const std::priority_queue<const agent::action::Action *,
+                                   std::vector<const agent::action::Action *>,
+                                   agent::action::ActionEndTimeComparator>
+  starting_action_pq() const {
+    return starting_action_pq_;
+  }
 
  private:
   friend std::ostream &operator<<(std::ostream &os, const Environment &env);
