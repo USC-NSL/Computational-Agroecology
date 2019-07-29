@@ -15,10 +15,12 @@ namespace photonsimulator {
 class Neighbor {
  public:
   Neighbor();
-  Neighbor(_462::real_t s, unsigned int e);
+  Neighbor(const _462::real_t &s, const unsigned int e);
+
+  bool operator<(const Neighbor &rhs);
+
   _462::real_t sq_dis;
   unsigned int i;
-  bool operator<(const Neighbor &rhs);
 };
 
 void AddNeighbor(const _462::Vector3 &p_pos, const _462::Vector3 &p_dir,
@@ -35,4 +37,4 @@ _462::real_t GetSplitValueByPhoton(const _462::Vector3 &p, const int axis);
 
 }  // namespace simulator
 
-#endif  // !COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_

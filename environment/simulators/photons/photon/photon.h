@@ -9,12 +9,12 @@ namespace simulator {
 namespace photonsimulator {
 
 struct Photon {
- public:
-  _462::Vector3 dir, pos, power;
-  char flag;
   Photon(const _462::Vector3 &dir, const _462::Vector3 &pos,
          const _462::Vector3 &power, const char flag = 0)
       : dir(dir), pos(pos), power(power), flag(flag){};
+
+  _462::Vector3 dir, pos, power;
+  char flag;
 };
 
 bool CompareX(const Photon &i, const Photon &j);

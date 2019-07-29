@@ -22,8 +22,6 @@ class PhotonSimulator : public Simulator {
       environment::Environment *env,
       const std::chrono::system_clock::time_point &time) override;
 
-  // Ralph: for read-only functions, put const at the end of function
-  // declarations
  private:
   // common
   enum class RadianceResult { kAbsorb = 0, kReflect, kRefract };
@@ -32,13 +30,12 @@ class PhotonSimulator : public Simulator {
   bool is_rendering_ = false;
 
   // the part for model
-  // Ralph: I have changed it back to `vector`.
   std::vector<Model> models_;
 
   // the part for photon
-  const int kNumberOfPhotonsNearby_;
-  const _462::real_t kMaxDistance_;
-  const _462::real_t kSunHeight_;
+  const int num_of_photons_near_by_;
+  const _462::real_t max_distance_;
+  const _462::real_t sun_height_;
   std::vector<Photon> alive_photons_, absorb_photons_;
 
   // emit all photons to the space by specific parameters
@@ -69,7 +66,7 @@ class PhotonSimulator : public Simulator {
   void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
                      const _462::Vector3 &norm, std::vector<Neighbor> *heap,
                      const unsigned int begin, const unsigned int end,
-                     _462::real_t *distance);
+                     _462::real_t *distance) const;
 
   // return the pixel RGB value
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,

@@ -1,5 +1,7 @@
 #include "face.h"
+
 #include <cassert>
+
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 

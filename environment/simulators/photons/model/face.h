@@ -1,32 +1,41 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_FACE_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_FACE_H_
 
-#include "Optimized-Photon-Mapping/src/math/vector.hpp"
-
 #include <vector>
 
-#ifndef __MATERIAL_H__
+#include "Optimized-Photon-Mapping/src/math/vector.hpp"
+
 #include "material.h"
-#endif
 
 namespace simulator {
 
 namespace photonsimulator {
 
 struct Vertex {
+  Vertex() = delete;
+  Vertex(int vertex_index, int normal_index, int texcoord_index)
+      : vertex_index(vertex_index),
+        normal_index(normal_index),
+        texcoord_index(texcoord_index) {}
+  ~Vertex() {}
+
   int vertex_index;
   int normal_index;
   int texcoord_index;
-
-  Vertex() = delete;
-  Vertex(int vertex_index_, int normal_index_, int texcoord_index_)
-      : vertex_index(vertex_index_),
-        normal_index(normal_index_),
-        texcoord_index(texcoord_index_) {}
-  ~Vertex() {}
 };
 
 struct Face {
+  Face() = delete;
+  Face(const Vertex &v1, const Vertex &v2, const Vertex &v3,
+       const _462::Vector3 &normal, const int &material_id_ = 0)
+      : vertex1(v1),
+        vertex2(v2),
+        vertex3(v3),
+        photons(0),
+        material_id_(material_id_),
+        material(),
+        normal(normal){};
+
   Vertex vertex1, vertex2, vertex3;
   _462::Vector3 normal;  // face normal
 
@@ -39,17 +48,6 @@ struct Face {
 
   // count of photons
   size_t photons;
-
-  Face() = delete;
-  Face(const Vertex &v1, const Vertex &v2, const Vertex &v3,
-       const _462::Vector3 &normal, const int &material_id_ = 0)
-      : vertex1(v1),
-        vertex2(v2),
-        vertex3(v3),
-        photons(0),
-        material_id_(material_id_),
-        material(),
-        normal(normal){};
 };
 
 // given point on face, return its texture coordinate

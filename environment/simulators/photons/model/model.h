@@ -10,15 +10,8 @@ namespace simulator {
 namespace photonsimulator {
 
 struct Texture {
-  // Ralph: Should all these variables public?
-  // wym: so convert it yo structure ?
-  GLuint texture_id_;
-  unsigned char *buffer;
-  int w, h;
-  int comp;  // 3 = rgb, 4 = rgba
-
   Texture() = delete;
-  Texture(GLuint texture_id_, int w, int h, int comp);
+  Texture(GLuint texture_id, int w, int h, int comp);
 
   // Ralph: I think it would be better to still use vector. So we need to
   // define copy ctor (it is required for vector to compile its `push_back` even
@@ -30,23 +23,18 @@ struct Texture {
   // resize frequently.
   Texture(const Texture &rhs);
   Texture(Texture &&rhs) noexcept;
+  Texture &operator=(const Texture &rhs);
+  Texture &operator=(Texture &&rhs) noexcept;
 
   ~Texture();
+
+  GLuint texture_id;
+  unsigned char *buffer;
+  int w, h;
+  int comp;  // 3 = rgb, 4 = rgba
 };
 
 class Model {
- private:
-  std::vector<_462::Vector3> vertices_;
-  std::vector<_462::Vector3> normals_;
-  std::vector<_462::Vector2> texcoords_;
-  std::vector<Mesh> meshes_;
-  std::map<std::string, GLuint> textures_;
-  std::vector<tinyobj::material_t> materials_;
-  std::vector<Texture> texture_infos_;
-  _462::Vector3 rel_pos_;
-
-  void LoadObjModel(const char *filename);
-
  public:
   Model() = delete;
   Model(const char *filename,
@@ -61,32 +49,37 @@ class Model {
 
   ~Model();
 
-  void setRelativePos(const _462::Vector3 &pos) { rel_pos_ = pos; }
+  void set_rel_pos(const _462::Vector3 &rel_pos) { rel_pos_ = rel_pos; }
   size_t GetPhotons() const;
   size_t GetTotalFaces() const;
 
-  // Ralph: Should these member functions be public?
-  // add to buffer for OpenGL rendering
-  // wym: I think so, these function are not called right now, but would be
-  // called by the IsRendering function
   void WriteBuffer();
   void DeleteBuffer();
   void Render();
 
-  const Texture &GetTextureInfo(const GLuint &texture_id_) const;
+  const Texture &GetTextureInfo(const GLuint &texture_id) const;
 
   // photon related
   bool IsInTriangle(const Face &face, const _462::Vector3 &p) const;
   _462::Vector3 GetIntersect(const Face &face, const _462::Vector3 &line_point,
                              const _462::Vector3 &line_dir) const;
-  // Ralph: same as above
-  // wym: cannot convert const, since face should be modified by function
-  // PhotonsModify
   _462::real_t FindFirstIntersect(Face **face, Mesh **mesh,
                                   const _462::Vector3 &pos,
                                   const _462::Vector3 &dir);
   const _462::Vector3 GetFaceTextureColor(const Face &face, const Mesh &mesh,
-                                          const _462::Vector3 &p);
+                                          const _462::Vector3 &p) const;
+
+ private:
+  std::vector<_462::Vector3> vertices_;
+  std::vector<_462::Vector3> normals_;
+  std::vector<_462::Vector2> texcoords_;
+  std::vector<Mesh> meshes_;
+  std::map<std::string, GLuint> textures_;
+  std::vector<tinyobj::material_t> materials_;
+  std::vector<Texture> texture_infos_;
+  _462::Vector3 rel_pos_;
+
+  void LoadObjModel(const char *filename);
 };
 
 // auxiliary functions

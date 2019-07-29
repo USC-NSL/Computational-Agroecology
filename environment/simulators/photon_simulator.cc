@@ -17,9 +17,9 @@ namespace photonsimulator {
 
 PhotonSimulator::PhotonSimulator(const int number, const _462::real_t distance,
                                  const _462::real_t height)
-    : kNumberOfPhotonsNearby_(number),
-      kMaxDistance_(distance),
-      kSunHeight_(height) {}
+    : num_of_photons_near_by_(number),
+      max_distance_(distance),
+      sun_height_(height) {}
 
 void PhotonSimulator::SimulateToTime(
     environment::Environment *env,
@@ -77,7 +77,7 @@ void PhotonSimulator::PhotonEmit(
     for (_462::real_t j = (_462::real_t)longitude_left;
          j <= (_462::real_t)longitude_right; j += (_462::real_t)longitudeDiff) {
       alive_photons_.push_back(Photon(
-          sun_direction, _462::Vector3(i, j, kSunHeight_), sun_strength));
+          sun_direction, _462::Vector3(i, j, sun_height_), sun_strength));
     }
   }
 }
@@ -85,28 +85,29 @@ void PhotonSimulator::PhotonEmit(
 void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
                                       const unsigned int begin,
                                       const unsigned int end) {
-  if (end - begin == 0)
+  if (end - begin == 0) {
     return;
+  }
   if (end - begin == 1) {
     p[begin].flag = kLEAF;
     return;
   }
   unsigned median = begin + (end - begin) / 2;
+
   _462::real_t x_avg = 0.0, y_avg = 0.0, z_avg = 0.0;
   _462::real_t x_var = 0.0, y_var = 0.0, z_var = 0.0;
   _462::real_t n = (_462::real_t)(end - begin);
   std::vector<Photon>::iterator a = p.begin() + begin;
   std::vector<Photon>::iterator b = p.begin() + end;
-  std::vector<Photon>::iterator it;
-  for (it = a; it != b; ++it) {
-    x_avg += (*it).pos.x;
-    y_avg += (*it).pos.y;
-    z_avg += (*it).pos.z;
+  for (auto it = a; it != b; ++it) {
+    x_avg += it->pos.x;
+    y_avg += it->pos.y;
+    z_avg += it->pos.z;
   }
-  for (it = a; it != b; ++it) {
-    x_var += ((*it).pos.x - x_avg) * ((*it).pos.x - x_avg);
-    y_var += ((*it).pos.y - y_avg) * ((*it).pos.y - y_avg);
-    z_var += ((*it).pos.z - z_avg) * ((*it).pos.z - z_avg);
+  for (auto it = a; it != b; ++it) {
+    x_var += (it->pos.x - x_avg) * (it->pos.x - x_avg);
+    y_var += (it->pos.y - y_avg) * (it->pos.y - y_avg);
+    z_var += (it->pos.z - z_avg) * (it->pos.z - z_avg);
   }
   x_var /= n;
   y_var /= n;
@@ -128,16 +129,19 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p,
   ConstructKDTree(p, median + 1, end);
 }
 
-void PhotonSimulator::LookuptKDTree(
-    const std::vector<Photon> &p, const _462::Vector3 &point,
-    const _462::Vector3 &norm, std::vector<Neighbor> *heap,
-    const unsigned int begin, const unsigned int end, _462::real_t *distance) {
-  if (begin == end)
+void PhotonSimulator::LookuptKDTree(const std::vector<Photon> &p,
+                                    const _462::Vector3 &point,
+                                    const _462::Vector3 &norm,
+                                    std::vector<Neighbor> *heap,
+                                    const unsigned int begin,
+                                    const unsigned int end,
+                                    _462::real_t *distance) const {
+  if (begin == end) {
     return;
-  else if (begin + 1 == end)
+  } else if (begin + 1 == end) {
     AddNeighbor(p[begin].pos, p[begin].dir, point, norm, heap, begin, distance,
-                kMaxDistance_, kNumberOfPhotonsNearby_);
-  else {
+                max_distance_, num_of_photons_near_by_);
+  } else {
     unsigned int median = begin + (end - begin) / 2;
     int flag = (p[median]).flag;
     _462::real_t split_value = GetSplitValueByIndex(p, median, flag);
@@ -145,17 +149,19 @@ void PhotonSimulator::LookuptKDTree(
     if (p_value <= split_value) {
       LookuptKDTree(p, point, norm, heap, begin, median, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance_, kNumberOfPhotonsNearby_);
-      if (heap->size() < kNumberOfPhotonsNearby_ ||
-          (p_value - split_value) * (p_value - split_value) < *distance)
+                  distance, max_distance_, num_of_photons_near_by_);
+      if (heap->size() < num_of_photons_near_by_ ||
+          (p_value - split_value) * (p_value - split_value) < *distance) {
         LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
+      }
     } else {
       LookuptKDTree(p, point, norm, heap, median + 1, end, distance);
       AddNeighbor(p[median].pos, p[median].dir, point, norm, heap, median,
-                  distance, kMaxDistance_, kNumberOfPhotonsNearby_);
-      if (heap->size() < kNumberOfPhotonsNearby_ ||
-          (p_value - split_value) * (p_value - split_value) < *distance)
+                  distance, max_distance_, num_of_photons_near_by_);
+      if (heap->size() < num_of_photons_near_by_ ||
+          (p_value - split_value) * (p_value - split_value) < *distance) {
         LookuptKDTree(p, point, norm, heap, begin, median, distance);
+      }
     }
   }
 }
@@ -165,7 +171,7 @@ _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
   _462::Vector3 direct, global;
   const Face *min_face = nullptr;
   const Mesh *min_mesh = nullptr;
-  Model *min_model = nullptr;
+  const Model *min_model = nullptr;
   std::tie(min_model, min_mesh, min_face) =
       FindFirstIntersect(ray_pos, ray_dir);
   _462::Vector3 result;

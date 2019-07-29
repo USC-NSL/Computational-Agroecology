@@ -1,4 +1,5 @@
 #include "mesh.h"
+
 #include "../photon_simulator_config.h"
 #include "../stdafx.h"
 
@@ -55,8 +56,6 @@ void Mesh::Render(const std::vector<tinyobj::material_t> &materials_,
       glClear(GL_COLOR_BUFFER_BIT);
     }
     glVertexPointer(3, GL_FLOAT, stride, (const void *)0);
-    // Ralph: is it correct to have these manual pointers?
-    // wym: these are the address indicators.
     glNormalPointer(GL_FLOAT, stride, (const void *)(sizeof(float) * 3));
     glTexCoordPointer(2, GL_FLOAT, stride, (const void *)(sizeof(float) * 6));
 

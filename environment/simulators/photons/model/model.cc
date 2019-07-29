@@ -1,15 +1,19 @@
 #include "model.h"
+
+#include <cmath>
 #include <limits>
-#include "mesh.h"
+
 #ifndef STBI_INCLUDE_STB_IMAGE_H
 #define STB_IMAGE_IMPLEMENTATION
 #include "tinyobjloader/examples/viewer/stb_image.h"
 #endif
-#include <cmath>
-#include "../photon_simulator_config.h"
-#include "../stdafx.h"
+
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
+
+#include "../photon_simulator_config.h"
+#include "../stdafx.h"
+#include "mesh.h"
 
 namespace simulator {
 
@@ -22,8 +26,8 @@ const char PathSeparator =
     '/';
 #endif
 
-Texture::Texture(GLuint texture_id_, int w, int h, int comp)
-    : texture_id_(texture_id_), w(w), h(h), comp(comp) {
+Texture::Texture(GLuint texture_id, int w, int h, int comp)
+    : texture_id(texture_id), w(w), h(h), comp(comp) {
   buffer = new unsigned char[w * h * 3];
 }
 
@@ -32,18 +36,49 @@ Texture::~Texture() {
 }
 
 Texture::Texture(const Texture &rhs)
-    : texture_id_(rhs.texture_id_), w(rhs.w), h(rhs.h), comp(rhs.comp) {
+    : texture_id(rhs.texture_id), w(rhs.w), h(rhs.h), comp(rhs.comp) {
   buffer = new unsigned char[w * h * 3];
-  std::memcpy(buffer, rhs.buffer, sizeof(unsigned char) * w * h * 3);
+  if (rhs.buffer != nullptr) {
+    std::memcpy(buffer, rhs.buffer, sizeof(unsigned char) * w * h * 3);
+  }
 }
 
 Texture::Texture(Texture &&rhs) noexcept
-    : texture_id_(rhs.texture_id_),
+    : texture_id(rhs.texture_id),
       w(rhs.w),
       h(rhs.h),
       comp(rhs.comp),
       buffer(rhs.buffer) {
   rhs.buffer = nullptr;
+}
+
+Texture &Texture::operator=(const Texture &rhs) {
+  texture_id = rhs.texture_id;
+  w = rhs.w;
+  h = rhs.h;
+  comp = rhs.comp;
+
+  if (buffer != nullptr) {
+    delete buffer;
+  }
+  buffer = new unsigned char[w * h * 3];
+  if (rhs.buffer != nullptr) {
+    std::memcpy(buffer, rhs.buffer, sizeof(unsigned char) * w * h * 3);
+  }
+
+  return *this;
+}
+
+Texture &Texture::operator=(Texture &&rhs) noexcept {
+  texture_id = rhs.texture_id;
+  w = rhs.w;
+  h = rhs.h;
+  comp = rhs.comp;
+
+  buffer = rhs.buffer;
+  rhs.buffer = nullptr;
+
+  return *this;
 }
 
 Model::~Model() {
@@ -94,13 +129,7 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
   Face *min_face = nullptr;
   Mesh *min_mesh = nullptr;
   _462::real_t distance = std::numeric_limits<double>::max();
-  // Ralph: const auto&
-  // wym: cannot convert const, since face should be modified by function
-  // PhotonsModify
   for (auto &mesh : meshes_) {
-    // Ralph: const auto&
-    // wym: cannot convert const, since face should be modified by function
-    // PhotonsModify
     for (auto &face : mesh.faces_) {
       _462::Vector3 intersect = GetIntersect(face, pos, dir);
       if (IsInTriangle(face, intersect)) {
@@ -119,7 +148,7 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
 
 const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
                                                const Mesh &mesh,
-                                               const _462::Vector3 &p) {
+                                               const _462::Vector3 &p) const {
   _462::Vector2 texcoord =
       GetTexcoord(face, p - rel_pos_, vertices_, texcoords_);
   const Texture &texture_info = GetTextureInfo(mesh.texture_id_);
@@ -414,7 +443,7 @@ void Model::DeleteBuffer() {
 
 const Texture &Model::GetTextureInfo(const GLuint &texture_id_) const {
   for (const auto &texture_info : texture_infos_) {
-    if (texture_info.texture_id_ == texture_id_) {
+    if (texture_info.texture_id == texture_id_) {
       return texture_info;
     }
   }
@@ -455,7 +484,6 @@ static void ComputeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
     std::map<int, _462::Vector3> &smooth_vertex_normals) {
   smooth_vertex_normals.clear();
-  std::map<int, _462::Vector3>::iterator iter;
 
   for (size_t f = 0; f < shape.mesh.indices.size() / 3; f++) {
     // Get the three indexes of the face (all faces_ are triangular)
@@ -483,7 +511,7 @@ static void ComputeSmoothingNormals(
 
     // Add the normal to the three vertexes
     for (size_t i = 0; i < 3; ++i) {
-      iter = smooth_vertex_normals.find(vertex_index[i]);
+      auto iter = smooth_vertex_normals.find(vertex_index[i]);
       if (iter != smooth_vertex_normals.end()) {
         // add
         iter->second.x += normal[0];
@@ -499,7 +527,7 @@ static void ComputeSmoothingNormals(
   }  // f
 
   // Normalize the normals, that is, make them unit vectors
-  for (iter = smooth_vertex_normals.begin();
+  for (auto iter = smooth_vertex_normals.begin();
        iter != smooth_vertex_normals.end(); iter++) {
     normalize(iter->second);
   }
