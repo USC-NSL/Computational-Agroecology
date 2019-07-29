@@ -24,10 +24,8 @@ export class TileMap {
   render: Render;
   sideNavigator: SideNavigator;
 
-  // touch event
-  dragging = false;
-  clientX = 0;
-  clientY = 0;
+  // mouse and touch event
+  isDragging = false;
 
   constructor(plantConfigs: PlantConfigs, render: Render,
               sideNavigator: SideNavigator,
@@ -67,6 +65,8 @@ export class TileMap {
   }
 
   onDocumentMouseMove(event: MouseEvent) {
+    this.isDragging = true;
+
     let mouse = new Vector2();
     let raycaster = new Raycaster();
     mouse.set((event.clientX / window.innerWidth) * 2 - 1,
@@ -206,30 +206,28 @@ export class TileMap {
     }
   }
 
-  onDocumentMouseDown(event: MouseEvent) {
-    switch (event.which) {
-      case 1:
-        this.leftClickEvent(event.clientX, event.clientY);
-        break;
-      case 3:
-        this.rightClickEvent(event.clientX, event.clientY);
-        break;
-      default:
-        break;
+  onDocumentMouseDown() { this.isDragging = false; };
+
+  onDocumentMouseUp(event: MouseEvent) {
+    if (!this.isDragging) {
+      switch (event.which) {
+        case 1:
+          this.leftClickEvent(event.clientX, event.clientY);
+          break;
+        case 3:
+          this.rightClickEvent(event.clientX, event.clientY);
+          break;
+        default:
+          break;
+      }
     }
   };
 
-  onDocumentTouchStart(event: TouchEvent) {
-    this.dragging = false;
-    this.clientX = event.touches[0].clientX;
-    this.clientY = event.touches[0].clientY;
-  }
-
-  onDocumentTouchMove() { this.dragging = true; }
-
-  onDocumentTouchEnd() {
-    if (!this.dragging) {
-      this.leftClickEvent(this.clientX, this.clientY);
+  onDocumentTouchStart() { this.isDragging = false; }
+  onDocumentTouchMove() { this.isDragging = true; }
+  onDocumentTouchEnd(event: TouchEvent) {
+    if (!this.isDragging) {
+      this.leftClickEvent(event.touches[0].clientX, event.touches[0].clientY);
     }
   }
 
