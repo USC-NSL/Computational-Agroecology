@@ -10,6 +10,11 @@ namespace photonsimulator {
 #undef PI
 #endif
 
+// OpenGL rendering coefficients
+const size_t kSizeOfVertexBuffer = 3;
+const size_t kSizeOfNormalBuffer = 3;
+const size_t kSizeOfTexcoordBuffer = 2;
+
 // constant for kd-tree
 const int kXAXIS = 0;  // use x-axis
 const int kYAXIS = 1;  // use y-axis

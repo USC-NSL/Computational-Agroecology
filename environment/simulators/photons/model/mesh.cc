@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include "../photon_simulator_config.h"
 #include "../stdafx.h"
 
 namespace simulator {
@@ -55,6 +56,7 @@ void Mesh::Render(const std::vector<tinyobj::material_t> &materials_,
     }
     glVertexPointer(3, GL_FLOAT, stride, (const void *)0);
     // Ralph: is it correct to have these manual pointers?
+    // wym: these are the address indicators.
     glNormalPointer(GL_FLOAT, stride, (const void *)(sizeof(float) * 3));
     glTexCoordPointer(2, GL_FLOAT, stride, (const void *)(sizeof(float) * 6));
 
@@ -115,20 +117,18 @@ void Mesh::WriteOpenGLBuffer(const std::vector<_462::Vector3> &vertices_,
   }
   vb_id_ = 0;
 
-  // Ralph: seems redundant
-  int size = (int)buffer.size();
   if (buffer.size() > 0) {
     glGenBuffers(1, &vb_id_);
     glBindBuffer(GL_ARRAY_BUFFER, vb_id_);
     glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer.at(0),
                  GL_STATIC_DRAW);
-    // Ralph: I think 3, 3, and 2 should have constants with meaningful names
     num_triangles_ =
-        buffer.size() / (3 + 3 + 2) / 3;  // 3:vtx, 3:normal, 2:texcoord
+        buffer.size() /
+        (kSizeOfVertexBuffer + kSizeOfNormalBuffer + kSizeOfTexcoordBuffer) / 3;
   }
 }
 
-// Ralph: TODO?
+// TODO: check if necessary to free buffer manually
 void Mesh::DeleteOpenGLBuffer() {}
 
 }  // namespace photonsimulator

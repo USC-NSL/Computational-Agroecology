@@ -100,10 +100,14 @@ static std::string GetBaseDir(const std::string &filepath);
 static bool HasSmoothingGroup(const tinyobj::shape_t &shape);
 // Ralph: Should parameters be changed to `Vector3`s? or are there existed
 // functions in library for this?
+// wym: I add following function, but I would suggest that do not modify the
+// code.
+static _462::Vector3 CalcNormal(_462::Vector3 v0, _462::Vector3 v1,
+                                _462::Vector3 v2);
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]);
 static void ComputeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
-    std::map<int, _462::Vector3> &smoothVertexNormals);
+    std::map<int, _462::Vector3> &smooth_vertex_normals);
 
 }  // namespace photonsimulator
 
