@@ -22,9 +22,10 @@ class PhotonSimulator : public Simulator {
       environment::Environment *env,
       const std::chrono::system_clock::time_point &time) override;
 
- // Ralph: private member variable names should have trailing undderscores
- // Ralph: I think it would be better if we separate variables and functions
- // Ralph: for read-only functions, put const at the end of function declarations
+  // Ralph: private member variable names should have trailing undderscores
+  // Ralph: I think it would be better if we separate variables and functions
+  // Ralph: for read-only functions, put const at the end of function
+  // declarations
  private:
   // common
   enum class RadianceResult { kAbsorb = 0, kReflect, kRefract };

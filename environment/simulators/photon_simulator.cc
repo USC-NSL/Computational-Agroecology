@@ -76,8 +76,8 @@ void PhotonSimulator::PhotonEmit(
        i <= (_462::real_t)latitude_top; i += (_462::real_t)latitudeDiff) {
     for (_462::real_t j = (_462::real_t)longitude_left;
          j <= (_462::real_t)longitude_right; j += (_462::real_t)longitudeDiff) {
-      alive_photons_.push_back(
-          Photon(sun_direction, _462::Vector3(i, j, kSunHeight_), sun_strength));
+      alive_photons_.push_back(Photon(
+          sun_direction, _462::Vector3(i, j, kSunHeight_), sun_strength));
     }
   }
 }
@@ -163,8 +163,8 @@ void PhotonSimulator::LookuptKDTree(
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
                                              const _462::Vector3 &ray_dir) {
   _462::Vector3 direct, global;
-  Face *min_face = nullptr;
-  Mesh *min_mesh = nullptr;
+  const Face *min_face = nullptr;
+  const Mesh *min_mesh = nullptr;
   Model *min_model = nullptr;
   std::tie(min_model, min_mesh, min_face) =
       FindFirstIntersect(ray_pos, ray_dir);

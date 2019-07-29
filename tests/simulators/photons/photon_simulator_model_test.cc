@@ -31,11 +31,11 @@ TEST(ConfigTest, ConstructorTest) {
   models.emplace_back(filename);
   models.emplace_back(filename);
   models.emplace_back(filename);
-  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
   models.pop_back();
-  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
   models.pop_back();
-  EXPECT_TRUE(models.back().getTotalFaces() == 90);
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
   models.pop_back();
 }
 

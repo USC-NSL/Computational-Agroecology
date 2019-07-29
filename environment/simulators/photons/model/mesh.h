@@ -1,4 +1,5 @@
 // // Ralph: refer to the google coding style to see what this should be
+// wym: Please check
 #ifndef __MESH_H__
 #define __MESH_H__
 #include <cassert>
@@ -22,14 +23,14 @@ class Mesh {
   size_t material_id_;
   GLuint texture_id_;
 
- public:
-  // Ralph: Should this be private?
   void LoadObjModel(const char *filename);
+
+ public:
   void AddFace(const Face &face) { faces_.push_back(face); }
 
   // OpenGL rendering
-  void Render(const std::vector<tinyobj::material_t> &materials,
-              const _462::Vector3 &rel_pos);
+  void Render(const std::vector<tinyobj::material_t> &materials_,
+              const _462::Vector3 &rel_pos_);
   void WriteOpenGLBuffer(const std::vector<_462::Vector3> &vertices_,
                          const std::vector<_462::Vector3> &normals_,
                          const std::vector<_462::Vector2> &texcoords_);

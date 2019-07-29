@@ -13,24 +13,24 @@ size_t Mesh::GetPhotons() const {
   return cnt;
 };
 
-void Mesh::Render(const std::vector<tinyobj::material_t> &materials,
-                  const _462::Vector3 &rel_pos) {
-  GLfloat mat_ambient[] = {materials[material_id_].ambient[0],
-                           materials[material_id_].ambient[1],
-                           materials[material_id_].ambient[2], 1.0f};
-  GLfloat mat_diffuse[] = {materials[material_id_].diffuse[0],
-                           materials[material_id_].diffuse[1],
-                           materials[material_id_].diffuse[2], 1.0f};
-  GLfloat mat_specular[] = {materials[material_id_].specular[0],
-                            materials[material_id_].specular[1],
-                            materials[material_id_].specular[2], 1.0f};
-  GLfloat mat_shininess[] = {materials[material_id_].shininess};
+void Mesh::Render(const std::vector<tinyobj::material_t> &materials_,
+                  const _462::Vector3 &rel_pos_) {
+  GLfloat mat_ambient[] = {materials_[material_id_].ambient[0],
+                           materials_[material_id_].ambient[1],
+                           materials_[material_id_].ambient[2], 1.0f};
+  GLfloat mat_diffuse[] = {materials_[material_id_].diffuse[0],
+                           materials_[material_id_].diffuse[1],
+                           materials_[material_id_].diffuse[2], 1.0f};
+  GLfloat mat_specular[] = {materials_[material_id_].specular[0],
+                            materials_[material_id_].specular[1],
+                            materials_[material_id_].specular[2], 1.0f};
+  GLfloat mat_shininess[] = {materials_[material_id_].shininess};
   glPushMatrix();
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-  glTranslatef(rel_pos.x, rel_pos.y, rel_pos.z);
+  glTranslatef(rel_pos_.x, rel_pos_.y, rel_pos_.z);
 
   glPolygonMode(GL_FRONT, GL_FILL);
   glPolygonMode(GL_BACK, GL_FILL);
@@ -70,8 +70,7 @@ void Mesh::WriteOpenGLBuffer(const std::vector<_462::Vector3> &vertices_,
                              const std::vector<_462::Vector2> &texcoords_) {
   std::vector<float> buffer;  // 3:vtx, 3:normal, 3:col, 2:texcoord
 
-  // Ralph: const auto &
-  for (auto &face : faces_) {
+  for (const auto &face : faces_) {
     buffer.push_back((float)vertices_[face.vertex1.vertex_index].x);
     buffer.push_back((float)vertices_[face.vertex1.vertex_index].y);
     buffer.push_back((float)vertices_[face.vertex1.vertex_index].z);

@@ -1,4 +1,5 @@
-// // Ralph: refer to the google coding style to see what this should be
+// Ralph: refer to the google coding style to see what this should be
+// wym: please check
 #ifndef __MATERIAL_H__
 #define __MATERIAL_H__
 
@@ -13,8 +14,6 @@ struct Material {
       : aborption(aborption),
         reflection(reflection),
         transmision(transmision) {}
-  // Ralph: remove this
-  ~Material(){};
   float aborption;
   float reflection;
   float transmision;

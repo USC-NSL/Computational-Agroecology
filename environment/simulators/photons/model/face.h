@@ -1,4 +1,5 @@
 // Ralph: refer to the google coding style to see what this should be
+// wym: please check
 #ifndef __FACE_H__
 #define __FACE_H__
 
@@ -42,7 +43,6 @@ struct Face {
   size_t photons;
 
   Face() = delete;
-  // Ralph: const
   Face(const Vertex &v1, const Vertex &v2, const Vertex &v3,
        const _462::Vector3 &normal, const int &material_id_ = 0)
       : vertex1(v1),
@@ -51,7 +51,7 @@ struct Face {
         photons(0),
         material_id_(material_id_),
         material(),
-        normal(normal) {}
+        normal(normal){};
 };
 
 // given point on face, return its texture coordinate

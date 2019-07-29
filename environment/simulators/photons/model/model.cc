@@ -31,8 +31,6 @@ Texture::~Texture() {
 
 Texture::Texture(const Texture &rhs)
     : texture_id_(rhs.texture_id_), w(rhs.w), h(rhs.h), comp(rhs.comp) {
-  // Ralph: This line should be removed. This just lets you experience a bit.
-  std::cout << "Copy\n";
   buffer = new unsigned char[w * h * 3];
   std::memcpy(buffer, rhs.buffer, sizeof(unsigned char) * w * h * 3);
 }
@@ -47,32 +45,31 @@ Texture::Texture(Texture &&rhs) noexcept
 }
 
 Model::~Model() {
-  deleteBuffer();
+  DeleteBuffer();
   std::cout << "model destroyed." << std::endl;
 };
 
 size_t Model::GetPhotons() const {
   size_t cnt = 0;
-  for (const auto &mesh : meshes) {
+  for (const auto &mesh : meshes_) {
     cnt += mesh.GetPhotons();
   }
   return cnt;
 }
 
-int Model::getTotalFaces() {
-  int cnt = 0;
-  // Ralph: const auto &mesh
-  for (auto &mesh : meshes) {
+size_t Model::GetTotalFaces() const {
+  size_t cnt = 0;
+  for (const auto &mesh : meshes_) {
     cnt += mesh.faces_.size();
   }
   return cnt;
 }
 
-bool Model::IsInTriangle(const Face &face, const _462::Vector3 &p) {
-  _462::Vector3 v0 =
-      vertices_[face.vertex3.vertex_index] - vertices_[face.vertex1.vertex_index];
-  _462::Vector3 v1 =
-      vertices_[face.vertex2.vertex_index] - vertices_[face.vertex1.vertex_index];
+bool Model::IsInTriangle(const Face &face, const _462::Vector3 &p) const {
+  _462::Vector3 v0 = vertices_[face.vertex3.vertex_index] -
+                     vertices_[face.vertex1.vertex_index];
+  _462::Vector3 v1 = vertices_[face.vertex2.vertex_index] -
+                     vertices_[face.vertex1.vertex_index];
   _462::Vector3 v2 = p - vertices_[face.vertex1.vertex_index];
   _462::real_t dot00 = _462::dot(v0, v0);
   _462::real_t dot01 = _462::dot(v0, v1);
@@ -96,8 +93,12 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
   Mesh *min_mesh = nullptr;
   _462::real_t distance = std::numeric_limits<double>::max();
   // Ralph: const auto&
-  for (auto &mesh : meshes) {
+  // wym: cannot convert const, since face should be modified by function
+  // PhotonsModify
+  for (auto &mesh : meshes_) {
     // Ralph: const auto&
+    // wym: cannot convert const, since face should be modified by function
+    // PhotonsModify
     for (auto &face : mesh.faces_) {
       _462::Vector3 intersect = GetIntersect(face, pos, dir);
       if (IsInTriangle(face, intersect)) {
@@ -117,8 +118,9 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
 const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
                                                const Mesh &mesh,
                                                const _462::Vector3 &p) {
-  _462::Vector2 texcoord = GetTexcoord(face, p - rel_pos, vertices_, texcoords_);
-  const Texture &texture_info = getTextureInfo(mesh.texture_id_);
+  _462::Vector2 texcoord =
+      GetTexcoord(face, p - rel_pos_, vertices_, texcoords_);
+  const Texture &texture_info = GetTextureInfo(mesh.texture_id_);
   int x =
       ((int)(texture_info.w * texcoord.x) % texture_info.w + texture_info.w) %
       texture_info.w;
@@ -135,11 +137,11 @@ const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
 
 _462::Vector3 Model::GetIntersect(const Face &face,
                                   const _462::Vector3 &line_point,
-                                  const _462::Vector3 &line_dir) {
+                                  const _462::Vector3 &line_dir) const {
   // Ralph: const _462::Vector3 &plane_normal
   _462::Vector3 plane_normal = face.normal;
   _462::real_t d =
-      _462::dot(vertices_[face.vertex1.vertex_index] + rel_pos - line_point,
+      _462::dot(vertices_[face.vertex1.vertex_index] + rel_pos_ - line_point,
                 plane_normal) /
       _462::dot(line_dir, plane_normal);
   // Ralph: What does this line do?
@@ -162,7 +164,7 @@ void Model::LoadObjModel(const char *filename) {
     base_dir += PathSeparator;
     std::string warn;
     std::string err;
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials_, &warn, &err,
                                 filename, base_dir.c_str());
     if (!warn.empty()) {
       std::cout << "WARN: " << warn << std::endl;
@@ -172,17 +174,17 @@ void Model::LoadObjModel(const char *filename) {
       std::cerr << err << std::endl;
     }
     // Append `default` material
-    materials.push_back(tinyobj::material_t());
+    materials_.push_back(tinyobj::material_t());
 
     // Load diffuse textures
     {
-      for (size_t m = 0; m < materials.size(); m++) {
-        // Ralph: const tinyobj::material_t &mp = materials[m];
-        tinyobj::material_t *mp = &materials[m];
+      for (size_t m = 0; m < materials_.size(); m++) {
+        // Ralph: const tinyobj::material_t &mp = materials_[m];
+        tinyobj::material_t *mp = &materials_[m];
 
         if (mp->diffuse_texname.length() > 0) {
           // Only load the texture if it is not already loaded
-          if (textures.find(mp->diffuse_texname) == textures.end()) {
+          if (textures_.find(mp->diffuse_texname) == textures_.end()) {
             GLuint texture_id_;
             int w, h;
             int comp;
@@ -222,7 +224,7 @@ void Model::LoadObjModel(const char *filename) {
             }
             glBindTexture(GL_TEXTURE_2D, 0);
             stbi_image_free(image);
-            textures.insert(std::make_pair(mp->diffuse_texname, texture_id_));
+            textures_.insert(std::make_pair(mp->diffuse_texname, texture_id_));
 
             // test
             // only get RGB
@@ -231,7 +233,7 @@ void Model::LoadObjModel(const char *filename) {
             glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE,
                           texture.buffer);
             glBindTexture(GL_TEXTURE_2D, 0);
-            texture_infos.push_back(std::move(texture));
+            texture_infos_.push_back(std::move(texture));
           }
         }
       }
@@ -243,14 +245,14 @@ void Model::LoadObjModel(const char *filename) {
   for (std::vector<tinyobj::real_t>::iterator it = attrib.vertices.begin();
        it != attrib.vertices.end(); it += 3)
     vertices_.push_back(_462::Vector3((_462::real_t)*it,
-                                     (_462::real_t)*std::next(it),
-                                     (_462::real_t)*std::next(it, 2)));
+                                      (_462::real_t)*std::next(it),
+                                      (_462::real_t)*std::next(it, 2)));
   // Ralph: same as above
   for (std::vector<tinyobj::real_t>::iterator it = attrib.normals.begin();
        it != attrib.normals.end(); it += 3)
     normals_.push_back(_462::Vector3((_462::real_t)*it,
-                                    (_462::real_t)*std::next(it),
-                                    (_462::real_t)*std::next(it, 2)));
+                                     (_462::real_t)*std::next(it),
+                                     (_462::real_t)*std::next(it, 2)));
   // Ralph: same as above
   // Flip y texture coordinate
   for (std::vector<tinyobj::real_t>::iterator it = attrib.texcoords.begin();
@@ -267,10 +269,10 @@ void Model::LoadObjModel(const char *filename) {
     // Ralph: smooth_vertex_normals
     std::map<int, _462::Vector3> smoothVertexNormals;
     // Ralph: Remove `== 1`. It looks confusing.
-    if (hasSmoothingGroup(shapes[s]) == 1) {
+    if (HasSmoothingGroup(shapes[s]) == 1) {
       std::cout << "Compute smoothingNormal for shape [" << s << "]"
                 << std::endl;
-      computeSmoothingNormals(attrib, shapes[s], smoothVertexNormals);
+      ComputeSmoothingNormals(attrib, shapes[s], smoothVertexNormals);
     }
 
     for (size_t f = 0; f < shapes[s].mesh.indices.size() / 3; f++) {
@@ -283,15 +285,15 @@ void Model::LoadObjModel(const char *filename) {
       // update material_id_ for face
       int material_id_ = shapes[s].mesh.material_ids[f];
       if ((material_id_ < 0) ||
-          (material_id_ >= static_cast<int>(materials.size()))) {
+          (material_id_ >= static_cast<int>(materials_.size()))) {
         // Invaid material ID. Use default material.
         // Default material is added to the last item in `materials`.
-        material_id_ = materials.size() - 1;
+        material_id_ = materials_.size() - 1;
       }
 
       float diffuse[3];
       for (size_t i = 0; i < 3; i++) {
-        diffuse[i] = materials[material_id_].diffuse[i];
+        diffuse[i] = materials_[material_id_].diffuse[i];
       }
 
       // update texcoord index
@@ -382,17 +384,19 @@ void Model::LoadObjModel(const char *filename) {
     // OpenGL viewer does not support texturing with per-face material.
     if (shapes[s].mesh.material_ids.size() > 0 &&
         shapes[s].mesh.material_ids.size() > s) {
-      mesh.material_id_ = shapes[s].mesh.material_ids[0];  // use the material ID
-                                                          // of the first face.
+      mesh.material_id_ =
+          shapes[s].mesh.material_ids[0];  // use the material ID
+                                           // of the first face.
     } else {
-      mesh.material_id_ = materials.size() - 1;  // = ID for default material.
+      mesh.material_id_ = materials_.size() - 1;  // = ID for default material.
     }
 
     // update texture_id_
-    if ((mesh.material_id_ < materials.size())) {
-      std::string diffuse_texname = materials[mesh.material_id_].diffuse_texname;
-      if (textures.find(diffuse_texname) != textures.end()) {
-        mesh.texture_id_ = textures[diffuse_texname];
+    if ((mesh.material_id_ < materials_.size())) {
+      std::string diffuse_texname =
+          materials_[mesh.material_id_].diffuse_texname;
+      if (textures_.find(diffuse_texname) != textures_.end()) {
+        mesh.texture_id_ = textures_[diffuse_texname];
       }
     } else {
       mesh.texture_id_ = -1;
@@ -400,30 +404,30 @@ void Model::LoadObjModel(const char *filename) {
     }
 
     // update mesh
-    meshes.push_back(mesh);
+    meshes_.push_back(mesh);
   }
 }
 
 void Model::Render() {
-  for (auto &mesh : meshes) {
-    mesh.Render(materials, rel_pos);
+  for (auto &mesh : meshes_) {
+    mesh.Render(materials_, rel_pos_);
   }
 }
 
-void Model::writeBuffer() {
-  for (auto &mesh : meshes) {
+void Model::WriteBuffer() {
+  for (auto &mesh : meshes_) {
     mesh.WriteOpenGLBuffer(vertices_, normals_, texcoords_);
   }
 }
 
-void Model::deleteBuffer() {
-  for (auto &mesh : meshes) {
+void Model::DeleteBuffer() {
+  for (auto &mesh : meshes_) {
     mesh.DeleteOpenGLBuffer();
   }
 }
 
-const Texture &Model::getTextureInfo(const GLuint &texture_id_) {
-  for (const auto &texture_info : texture_infos) {
+const Texture &Model::GetTextureInfo(const GLuint &texture_id_) const {
+  for (const auto &texture_info : texture_infos_) {
     if (texture_info.texture_id_ == texture_id_) {
       return texture_info;
     }
@@ -452,7 +456,7 @@ static std::string GetBaseDir(const std::string &filepath) {
   return "";
 }
 
-static bool hasSmoothingGroup(const tinyobj::shape_t &shape) {
+static bool HasSmoothingGroup(const tinyobj::shape_t &shape) {
   // Ralph: Use range-based for loop
   for (size_t i = 0; i < shape.mesh.smoothing_group_ids.size(); i++) {
     if (shape.mesh.smoothing_group_ids[i] > 0) {
@@ -462,7 +466,7 @@ static bool hasSmoothingGroup(const tinyobj::shape_t &shape) {
   return false;
 }
 
-static void computeSmoothingNormals(
+static void ComputeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
     std::map<int, _462::Vector3> &smoothVertexNormals) {
   smoothVertexNormals.clear();
@@ -515,7 +519,7 @@ static void computeSmoothingNormals(
     normalize(iter->second);
   }
 
-}  // computeSmoothingNormals
+}  // ComputeSmoothingNormals
 
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]) {
   float v10[3];

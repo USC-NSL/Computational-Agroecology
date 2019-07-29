@@ -14,9 +14,9 @@ namespace simulator {
 
 namespace photonsimulator {
 
-class Texture {
- public:
+struct Texture {
   // Ralph: Should all these variables public?
+  // wym: so convert it yo structure ?
   GLuint texture_id_;
   unsigned char *buffer;
   int w, h;
@@ -41,24 +41,22 @@ class Texture {
 
 class Model {
  private:
-  // Ralph: all private member variable names should have a trailing underscore
   std::vector<_462::Vector3> vertices_;
   std::vector<_462::Vector3> normals_;
   std::vector<_462::Vector2> texcoords_;
-  std::vector<Mesh> meshes;
-  std::map<std::string, GLuint> textures;
-  std::vector<tinyobj::material_t> materials;
-  std::vector<Texture> texture_infos;
+  std::vector<Mesh> meshes_;
+  std::map<std::string, GLuint> textures_;
+  std::vector<tinyobj::material_t> materials_;
+  std::vector<Texture> texture_infos_;
+  _462::Vector3 rel_pos_;
 
-  _462::Vector3 rel_pos;
+  void LoadObjModel(const char *filename);
 
  public:
   Model() = delete;
-  // Ralph: Should it be private?
-  void LoadObjModel(const char *filename);
-  // Ralph: const _462::Vector3&
-  Model(const char *filename, _462::Vector3 pos = _462::Vector3(0.0, 0.0, 0.0))
-      : rel_pos(pos) {
+  Model(const char *filename,
+        const _462::Vector3 &pos = _462::Vector3(0.0, 0.0, 0.0))
+      : rel_pos_(pos) {
     LoadObjModel(filename);
   }
   Model(const Model &) = default;
@@ -68,53 +66,42 @@ class Model {
 
   ~Model();
 
-  // Ralph: const _462::Vector3&
-  void setRelativePos(_462::Vector3 pos) { rel_pos = pos; }
-  // Ralph: size_t GetPhotons() const;
+  void setRelativePos(const _462::Vector3 &pos) { rel_pos_ = pos; }
   size_t GetPhotons() const;
-  // Ralph: size_t GetTotalFaces() const;
-  int getTotalFaces();
+  size_t GetTotalFaces() const;
 
   // Ralph: Should these member functions be public?
   // add to buffer for OpenGL rendering
-  // Ralph: WriteBuffer();
-  void writeBuffer();
-  // Ralph: DeleteBuffer();
-  void deleteBuffer();
-  // Ralph: Render();
+  // wym: I think so, these function are not called right now, but would be
+  // called by the IsRendering function
+  void WriteBuffer();
+  void DeleteBuffer();
   void Render();
 
-  // Ralph: const Texture &GetTextureInfo const (const GLuint &texture_id_);
-  const Texture &getTextureInfo(const GLuint &texture_id_);
+  const Texture &GetTextureInfo(const GLuint &texture_id_) const;
 
   // photon related
-  // Ralph: bool IsInTriangle const (const Face &face, const _462::Vector3 &p);
-  bool IsInTriangle(const Face &face, const _462::Vector3 &p);
-  // Ralph: same as above
+  bool IsInTriangle(const Face &face, const _462::Vector3 &p) const;
   _462::Vector3 GetIntersect(const Face &face, const _462::Vector3 &line_point,
-                             const _462::Vector3 &line_dir);
+                             const _462::Vector3 &line_dir) const;
   // Ralph: same as above
+  // wym: cannot convert const, since face should be modified by function
+  // PhotonsModify
   _462::real_t FindFirstIntersect(Face **face, Mesh **mesh,
                                   const _462::Vector3 &pos,
                                   const _462::Vector3 &dir);
-  // Ralph: same as above
   const _462::Vector3 GetFaceTextureColor(const Face &face, const Mesh &mesh,
                                           const _462::Vector3 &p);
-
-  // Ralph: remove the below line
- private:
 };
 
 // auxiliary functions
 static bool FileExists(const std::string &abs_filename);
 static std::string GetBaseDir(const std::string &filepath);
-// Ralph: HasSmoothingGroup
-static bool hasSmoothingGroup(const tinyobj::shape_t &shape);
+static bool HasSmoothingGroup(const tinyobj::shape_t &shape);
 // Ralph: Should parameters be changed to `Vector3`s? or are there existed
 // functions in library for this?
 static void CalcNormal(float N[3], float v0[3], float v1[3], float v2[3]);
-// Ralph: ComputeSmoothingNormals
-static void computeSmoothingNormals(
+static void ComputeSmoothingNormals(
     const tinyobj::attrib_t &attrib, const tinyobj::shape_t &shape,
     std::map<int, _462::Vector3> &smoothVertexNormals);
 
