@@ -29,21 +29,46 @@ export class Initerary {
           let a = document.createElement('a');
           div.appendChild(a);
         });
+    let icon =
+        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
+    if (icon != null) {
+      icon.style.backgroundColor = "#red";
+    }
   }
 
-
-  onClick(ev: MouseEvent) {
-    // unchoose last icon
-    let last_id = this.icon_map[FunctionMode[this.functionMode]];
-    let last_icon = document.getElementById(last_id);
-    if (last_icon instanceof HTMLLIElement) {
+  setFunctionMode(mode: string) {
+    let last_icon =
+        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
+    if (last_icon != null) {
       last_icon.style.backgroundColor = "#af7c52";
     }
 
     // set current icon
     let htmlElement = ev.target as HTMLElement;
     let li = htmlElement.closest('li');
-    if (li instanceof HTMLLIElement) {
+    if (li != null) {
+      li.style.backgroundColor = "red";
+      let id = li.id;
+      let mode =
+          Object.keys(this.icon_map).find(mode => this.icon_map[mode] === id);
+      if (typeof mode === 'string') {
+        this.functionMode = (<any>FunctionMode)[mode];
+      }
+    }
+  }
+
+  onClick(ev: MouseEvent) {
+    // unchoose last icon
+    let last_icon =
+        document.getElementById(this.icon_map[FunctionMode[this.functionMode]]);
+    if (last_icon != null) {
+      last_icon.style.backgroundColor = "#af7c52";
+    }
+
+    // set current icon
+    let htmlElement = ev.target as HTMLElement;
+    let li = htmlElement.closest('li');
+    if (li != null) {
       li.style.backgroundColor = "red";
       let id = li.id;
       let mode =
