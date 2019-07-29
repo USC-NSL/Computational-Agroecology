@@ -24,7 +24,7 @@ class SunInfoTest : public ::testing::Test {
   }
 
   // just randomly pick one
-  Climate::ZoneType climate_zone_ = Climate::TemperateOceanic;  
+  Climate::ZoneType climate_zone_ = Climate::TemperateOceanic;
 };
 
 TEST_F(SunInfoTest, On_06_21) {

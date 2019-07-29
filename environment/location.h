@@ -14,7 +14,7 @@ struct Location {
   const double latitude_bottom;
 };
 
-bool operator==(const Location& lhs, const Location& rhs);
+bool operator==(const Location &lhs, const Location &rhs);
 
 }  // namespace environment
 

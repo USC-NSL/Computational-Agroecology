@@ -25,21 +25,21 @@ struct Climate {
   };
 
   // Construct this based on the `config`
-  Climate(const environment::Config& config);
+  Climate(const environment::Config &config);
 
   // TODO: include other existing libraries to replace the current types with
   // unit types
   Climate(const double temp_min, const double temp_max, const double rain_min,
           const double rain_max, const ZoneType type);
-  Climate(const MinMaxTemperature& yearly_temperature,
-          const MinMaxRainfall& yearly_rainfall, const ZoneType type);
+  Climate(const MinMaxTemperature &yearly_temperature,
+          const MinMaxRainfall &yearly_rainfall, const ZoneType type);
 
   const ZoneType climate_zone;
   const MinMaxTemperature yearly_temperature;
   const MinMaxRainfall yearly_rainfall;
 };
 
-bool operator==(const Climate& lhs, const Climate& rhs);
+bool operator==(const Climate &lhs, const Climate &rhs);
 
 }  // namespace environment
 

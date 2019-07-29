@@ -43,7 +43,7 @@ TEST(MinMaxPairTest, OperatorTest) {
   EXPECT_FALSE(min_max_pair_1 != min_max_pair_2);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
