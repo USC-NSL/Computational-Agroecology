@@ -1,1 +1,0 @@
-TODO: external library installation guide

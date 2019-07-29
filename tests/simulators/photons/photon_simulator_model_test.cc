@@ -3,10 +3,10 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <windows.h>  //GetModuleFileNameW
+#include <windows.h>  // GetModuleFileNameW
 #else
 #include <limits.h>
-#include <unistd.h>  //readlink
+#include <unistd.h>  // readlink
 #endif
 
 #include "environment/simulators/photons/model/model.h"

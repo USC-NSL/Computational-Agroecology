@@ -1,6 +1,6 @@
 /*
     the class is a wrapper for mesh
-    in order to load file and render in GL
+    in order to load file and Render in GL
 */
 // Ralph: refer to the google coding style to see what this should be
 #ifndef __OBJECT_H__
@@ -17,13 +17,13 @@ namespace photonsimulator {
 class Texture {
  public:
   // Ralph: Should all these variables public?
-  GLuint texture_id;
+  GLuint texture_id_;
   unsigned char *buffer;
   int w, h;
   int comp;  // 3 = rgb, 4 = rgba
 
   Texture() = delete;
-  Texture(GLuint texture_id, int w, int h, int comp);
+  Texture(GLuint texture_id_, int w, int h, int comp);
 
   // Ralph: I think it would be better to still use vector. So we need to
   // define copy ctor (it is required for vector to compile its `push_back` even
@@ -42,9 +42,9 @@ class Texture {
 class Model {
  private:
   // Ralph: all private member variable names should have a trailing underscore
-  std::vector<_462::Vector3> vertices;
-  std::vector<_462::Vector3> normals;
-  std::vector<_462::Vector2> texcoords;
+  std::vector<_462::Vector3> vertices_;
+  std::vector<_462::Vector3> normals_;
+  std::vector<_462::Vector2> texcoords_;
   std::vector<Mesh> meshes;
   std::map<std::string, GLuint> textures;
   std::vector<tinyobj::material_t> materials;
@@ -61,9 +61,9 @@ class Model {
       : rel_pos(pos) {
     LoadObjModel(filename);
   }
-  Model(const Model&) = default;
-  // Added `noexcept` qualifier to prevent `std::vector<Model>` from calling copy ctor
-  // while resizing.
+  Model(const Model &) = default;
+  // Added `noexcept` qualifier to prevent `std::vector<Model>` from calling
+  // copy ctor while resizing.
   Model(Model &&rhs) noexcept = default;
 
   ~Model();
@@ -71,7 +71,7 @@ class Model {
   // Ralph: const _462::Vector3&
   void setRelativePos(_462::Vector3 pos) { rel_pos = pos; }
   // Ralph: size_t GetPhotons() const;
-  int getPhotons();
+  size_t GetPhotons() const;
   // Ralph: size_t GetTotalFaces() const;
   int getTotalFaces();
 
@@ -82,10 +82,10 @@ class Model {
   // Ralph: DeleteBuffer();
   void deleteBuffer();
   // Ralph: Render();
-  void render();
+  void Render();
 
-  // Ralph: const Texture &GetTextureInfo const (const GLuint &texture_id);
-  const Texture &getTextureInfo(const GLuint &texture_id);
+  // Ralph: const Texture &GetTextureInfo const (const GLuint &texture_id_);
+  const Texture &getTextureInfo(const GLuint &texture_id_);
 
   // photon related
   // Ralph: bool IsInTriangle const (const Face &face, const _462::Vector3 &p);

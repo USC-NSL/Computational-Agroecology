@@ -16,37 +16,27 @@ class Mesh {
  private:
   friend class Model;
 
-  // Ralph: private member variable names should have trailing underscores.
-  std::vector<Face> faces;  // triangle faces
-  GLuint vb_id;             // vertex buffer id
-  // Ralph: num_triangles_
-  int numTriangles;
-  size_t material_id;
-  GLuint texture_id;
+  std::vector<Face> faces_;  // triangle faces_
+  GLuint vb_id_;             // vertex buffer id
+  int num_triangles_;
+  size_t material_id_;
+  GLuint texture_id_;
 
  public:
-  // Ralph: Remove ctor and dtor
-  Mesh() {}
-  ~Mesh() {}
   // Ralph: Should this be private?
   void LoadObjModel(const char *filename);
-  // Ralph: const Face& and `AddFace`
-  void addFace(Face face) { faces.push_back(face); }
+  void AddFace(const Face &face) { faces_.push_back(face); }
 
   // OpenGL rendering
-  // Ralph: naming
-  void render(const std::vector<tinyobj::material_t> &materials,
+  void Render(const std::vector<tinyobj::material_t> &materials,
               const _462::Vector3 &rel_pos);
-  void writeOpenGLBuffer(const std::vector<_462::Vector3> &vertices,
-                         const std::vector<_462::Vector3> &normals,
-                         const std::vector<_462::Vector2> &texcoords);
-  void deleteOpenGLBuffer();
+  void WriteOpenGLBuffer(const std::vector<_462::Vector3> &vertices_,
+                         const std::vector<_462::Vector3> &normals_,
+                         const std::vector<_462::Vector2> &texcoords_);
+  void DeleteOpenGLBuffer();
 
   // functions for photon mapping
-  // Ralph: naming
-  int getPhotons();
-// Ralph: remove this
- private:
+  size_t GetPhotons() const;
 };
 
 }  // namespace photonsimulator
