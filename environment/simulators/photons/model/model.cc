@@ -176,11 +176,8 @@ _462::Vector3 Model::GetIntersect(const Face &face,
       _462::dot(vertices_[face.vertex1.vertex_index] + rel_pos_ - line_point,
                 plane_normal) /
       _462::dot(line_dir, plane_normal);
-  // Ralph: What does this line do?
-  // wym: @Hangjie
-  // Hangjie : just use the formula to calculate the intersection
-  normalize(line_dir);
-  return d * line_dir + line_point;
+  Vector3 dir_norm = normalize(line_dir);
+  return d * dir_norm + line_point;
 }
 
 // Ralph: This function looks way too long. Refactor it.
