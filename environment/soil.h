@@ -3,8 +3,8 @@
 
 #include <optional>
 
-#include "resource.h"
-#include "utility.h"
+#include "environment/resource.h"
+#include "environment/utility.h"
 
 namespace environment {
 
