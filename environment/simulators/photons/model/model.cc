@@ -140,10 +140,9 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
       }
     }
   }
-}
-*face = min_face;
-*mesh = min_mesh;
-return distance;
+  *face = min_face;
+  *mesh = min_mesh;
+  return distance;
 }
 
 const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
@@ -176,7 +175,7 @@ _462::Vector3 Model::GetIntersect(const Face &face,
       _462::dot(vertices_[face.vertex1.vertex_index] + rel_pos_ - line_point,
                 plane_normal) /
       _462::dot(line_dir, plane_normal);
-  Vector3 dir_norm = normalize(line_dir);
+  _462::Vector3 dir_norm = normalize(line_dir);
   return d * dir_norm + line_point;
 }
 
