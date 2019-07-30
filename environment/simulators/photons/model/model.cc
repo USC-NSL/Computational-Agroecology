@@ -132,18 +132,18 @@ _462::real_t Model::FindFirstIntersect(Face **face, Mesh **mesh,
   for (auto &mesh : meshes_) {
     for (auto &face : mesh.faces_) {
       _462::Vector3 intersect = GetIntersect(face, pos, dir);
-      if (IsInTriangle(face, intersect)) {
-        if (_462::distance(pos, intersect) < distance) {
-          min_face = &face;
-          min_mesh = &mesh;
-          distance = _462::distance(pos, intersect);
-        }
+      if (IsInTriangle(face, intersect) &&
+          _462::distance(pos, intersect) < distance) {
+        min_face = &face;
+        min_mesh = &mesh;
+        distance = _462::distance(pos, intersect);
       }
     }
   }
-  *face = min_face;
-  *mesh = min_mesh;
-  return distance;
+}
+*face = min_face;
+*mesh = min_mesh;
+return distance;
 }
 
 const _462::Vector3 Model::GetFaceTextureColor(const Face &face,
@@ -178,6 +178,7 @@ _462::Vector3 Model::GetIntersect(const Face &face,
       _462::dot(line_dir, plane_normal);
   // Ralph: What does this line do?
   // wym: @Hangjie
+  // Hangjie : just use the formula to calculate the intersection
   normalize(line_dir);
   return d * line_dir + line_point;
 }
