@@ -1,12 +1,21 @@
-#ifndef __PHOTON_SIMULATOR_CONFIG_H__
-#define __PHOTON_SIMULATOR_CONFIG_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_PHOTON_SIMULATOR_CONFIG_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_PHOTON_SIMULATOR_CONFIG_H_
 
 namespace simulator {
 
 namespace photonsimulator {
 
-// floating point precision set by this typedef
-typedef float real_t;
+// resolve macro definition in third-party library
+#ifdef PI
+#undef PI
+#endif
+
+// OpenGL rendering coefficients
+const size_t kSizeOfVertexBuffer = 3;
+const size_t kSizeOfNormalBuffer = 3;
+const size_t kSizeOfTexcoordBuffer = 2;
+// RGB = 3, RGBA = 4, we use RGB here
+const size_t kNumOfChannels = 3;
 
 // constant for kd-tree
 const int kXAXIS = 0;  // use x-axis
@@ -28,4 +37,4 @@ const char squash3[] = "Squash3.obj";
 
 }  // namespace simulator
 
-#endif  // __PHOTON_SIMULATOR_CONFIG_H__
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_PHOTON_SIMULATOR_CONFIG_H_

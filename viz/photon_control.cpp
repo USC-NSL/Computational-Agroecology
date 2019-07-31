@@ -1,11 +1,11 @@
 #include "photon_control.h"
 
-void Photon_Control::photon_add(const Vector3& dir, const Vector3& pos, const Vector3& power) {
+void Photon_Control::PhotonAdd(const Vector3& dir, const Vector3& pos, const Vector3& power) {
 	photons.push_back(Photon(dir, pos, power));
 	photons_num++;
 }
 
-void Photon_Control::construct_kdtree(unsigned int begin, unsigned int end) {
+void Photon_Control::ConstructKDTree(unsigned int begin, unsigned int end) {
 	if (end - begin == 0) {
 		return;
 	}
@@ -42,79 +42,79 @@ void Photon_Control::construct_kdtree(unsigned int begin, unsigned int end) {
 
 	// split the dimension and indicate the splitting axis
 	if (max_var == x_var) {
-		std::sort(photons.begin() + begin, photons.begin() + end, compare_x);
+		std::sort(photons.begin() + begin, photons.begin() + end, CompareX);
 		photons[median].flag = X_AXIS;
 	}
 	if (max_var == y_var) {
-		std::sort(photons.begin() + begin, photons.begin() + end, compare_y);
+		std::sort(photons.begin() + begin, photons.begin() + end, CompareY);
 		photons[median].flag = Y_AXIS;
 	}
 	if (max_var == z_var) {
-		std::sort(photons.begin() + begin, photons.begin() + end, compare_z);
+		std::sort(photons.begin() + begin, photons.begin() + end, CompareZ);
 		photons[median].flag = Z_AXIS;
 	}
 
 	// recurse on left and right children 
-	construct_kdtree(begin, median);
-	construct_kdtree(median + 1, end);
+	ConstructKDTree(begin, median);
+	ConstructKDTree(median + 1, end);
 }
 
-void Photon_Control::construct_kdtree() {
-	construct_kdtree(0, photons_num);
+void Photon_Control::ConstructKDTree() {
+	ConstructKDTree(0, photons_num);
 }
 
-void Photon_Control::photon_del(int index) {
+void Photon_Control::PhotonDel(int index) {
 	photons.erase(photons.begin() + index);
 	photons_num--;
 }
 
-void Photon_Control::photon_emit(Vector3 dir, Vector3 pos, Vector3 power) {
-	photon_add(dir, pos, power);
+void Photon_Control::PhotonEmit(Vector3 dir, Vector3 pos, Vector3 power) {
+	PhotonAdd(dir, pos, power);
 }
 
-void Photon_Control::photon_absorb(int index) {
-	photon_del(index);
+void Photon_Control::PhotonAbsorb(int index) {
+	PhotonDel(index);
 }
 
-Neighbor* Photon_Control::lookup_kdtree(const Vector3& pos, const Vector3& normal, real_t max_d,  real_t& distance,  int& size, int num) {
+Neighbor* Photon_Control::LookuptKDTree(const Vector3& pos, const Vector3& normal, real_t max_d,  real_t& distance,  int& size, int num) {
 	Neighbor* res = new Neighbor[num];
 	EPSILON = max_d;
 	NUM_PHOTON_RADIANCE = num;
-	lookup_kdtree(pos, normal, res, 0, photons_num, distance, size);
+	LookuptKDTree(pos, normal, res, 0, photons_num, distance, size);
 	return res;
 }
 
-void Photon_Control::lookup_kdtree(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int begin, unsigned int end, real_t& D, int& size) {
+void Photon_Control::LookuptKDTree(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int begin, unsigned int end, real_t& D, int& size) {
 	if (begin == end)
 		return;
 	if (begin + 1 == end)
 		// add photon at leaf node to neighbors heap
-		return add_neighbor(p, norm, neighbors, begin, D, size);
+		return AddNeighbor(p, norm, neighbors, begin, D, size);
 
 	unsigned int median = begin + (end - begin) / 2;
 	// get splitting axis
 	int flag = (photons[median]).flag;
-	real_t split_value = get_split(median, flag);
-	real_t p_value = get_p(p, flag);
+	real_t split_value = GetSplit(median, flag);
+	real_t p_value = GetP(p, flag);
 	// check which side of the splitting axis to traverse
 	if (p_value <= split_value) {
 		// traverse left sub-tree first
-		lookup_kdtree(p, norm, neighbors, begin, median, D, size);
+		LookuptKDTree(p, norm, neighbors, begin, median, D, size);
 		// add the current node
-		add_neighbor(p, norm, neighbors, median, D, size);
+		AddNeighbor(p, norm, neighbors, median, D, size);
 		// return if neighbors heap is full and all nodes in the
 	// right sub-tree is further than those in neighbors heap
 		if (size >= NUM_PHOTON_RADIANCE && (p_value - split_value) * (p_value - split_value) > D) {
 			return;
 		}
 		// traverse right sub-tree
-		return lookup_kdtree(p, norm, neighbors, median + 1, end, D, size);
+		return LookuptKDTree(p, norm, neighbors, median + 1, end, D, size);
 	}
 	else {
 		// traverse right sub-tree first
-		lookup_kdtree(p, norm, neighbors, median + 1, end, D, size);
+		LookuptKDTree(p, norm, neighbors, median + 1, end, D, size);
 		// add the current node
-		add_neighbor(p, norm, neighbors, median, D, size);
+		AddNeighbor(p, norm, neighbors, median, D, size);
 		// return if neighbors heap is full and all nodes in the
 	// left sub-tree is further than those in neighbors heap
 		if (size >= NUM_PHOTON_RADIANCE &&
@@ -122,11 +122,11 @@ void Photon_Control::lookup_kdtree(const Vector3& p, const Vector3& norm, Neighb
 			return;
 		}
 		// traverse left sub-tree
-		return lookup_kdtree(p, norm, neighbors, begin, median, D, size);
+		return LookuptKDTree(p, norm, neighbors, begin, median, D, size);
 	}
 }
 
-void Photon_Control::heap_swap(Neighbor* neighbors, int a, int b) {
+void Photon_Control::HeapSwap(Neighbor* neighbors, int a, int b) {
 	 unsigned a_i = (neighbors[a]).i;
 	 real_t a_s = (neighbors[a]).sq_dis;
 
@@ -136,7 +136,7 @@ void Photon_Control::heap_swap(Neighbor* neighbors, int a, int b) {
 	 (neighbors[b]).sq_dis = a_s;
  }
 
-void Photon_Control::heap_remove(Neighbor* neighbors,  int& size) {
+void Photon_Control::HeapRemove(Neighbor* neighbors,  int& size) {
 	 // move the last element to the root node so that
 	 // the max element is replaced
 	 (neighbors[0]).i = (neighbors[size - 1]).i;
@@ -164,18 +164,18 @@ void Photon_Control::heap_remove(Neighbor* neighbors,  int& size) {
 		 }
 		 if (left_val == -1.0 && right_val != -1.0) {
 			 // i is smaller than right child 
-			 heap_swap(neighbors, i, right);
+			 HeapSwap(neighbors, i, right);
 			 i = right;
 		 }
 		 if (left_val != -1.0 && right_val == -1.0) {
 			 // i is smaller than left child 
-			 heap_swap(neighbors, i, left);
+			 HeapSwap(neighbors, i, left);
 			 i = left;
 		 }
 		 else {
 			 // i is smaller than at least one of the child
 			 bigger = (left_val > right_val) ? left : right;
-			 heap_swap(neighbors, i, bigger);
+			 HeapSwap(neighbors, i, bigger);
 			 i = bigger;
 		 }
 	 }
@@ -183,7 +183,7 @@ void Photon_Control::heap_remove(Neighbor* neighbors,  int& size) {
 	 return;
  }
 
-void Photon_Control::heap_add(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
+void Photon_Control::HeapAdd(Neighbor* neighbors, int& size, unsigned int e, real_t e_dis) {
 	// insert a new element to the last element of max heap 
 	int i = size;
 	(neighbors[i]).i = e;
@@ -207,14 +207,14 @@ void Photon_Control::heap_add(Neighbor* neighbors, int& size, unsigned int e, re
 			return;
 		}
 
-		heap_swap(neighbors, i, parent);
+		HeapSwap(neighbors, i, parent);
 		i = parent;
 	}
 
 	return;
 }
 
-void Photon_Control::add_neighbor(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int e, real_t& D, int& size) {
+void Photon_Control::AddNeighbor(const Vector3& p, const Vector3& norm, Neighbor* neighbors, unsigned int e, real_t& D, int& size) {
 	if (dotresult(norm, photons[e].dir) < 0.0f) {
 		return;
 	}
@@ -222,17 +222,17 @@ void Photon_Control::add_neighbor(const Vector3& p, const Vector3& norm, Neighbo
 	if (e_dis <= EPSILON && (size < NUM_PHOTON_RADIANCE || e_dis < D)) {
 		// maintain the size of the max heap 
 		if (size == NUM_PHOTON_RADIANCE) {
-			heap_remove(neighbors, size);
+			HeapRemove(neighbors, size);
 		}
 
-		heap_add(neighbors, size, e, e_dis);
+		HeapAdd(neighbors, size, e, e_dis);
 
 		// update the maximum square distance
 		D = (neighbors[0]).sq_dis;
 	}
 }
 
-real_t Photon_Control::get_split(unsigned int i, int axis) {
+real_t Photon_Control::GetSplit(unsigned int i, int axis) {
 	if (axis == X_AXIS)
 		return (photons[i]).pos.x;
 	if (axis == Y_AXIS)
@@ -242,7 +242,7 @@ real_t Photon_Control::get_split(unsigned int i, int axis) {
 	return 0.0;
 }
 
-real_t Photon_Control::get_p(Vector3 p, int axis) {
+real_t Photon_Control::GetP(Vector3 p, int axis) {
 	if (axis == X_AXIS)
 		return p.x;
 	if (axis == Y_AXIS)

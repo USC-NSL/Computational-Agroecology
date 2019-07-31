@@ -7,12 +7,9 @@
 #include "environment/climate.h"
 #include "environment/location.h"
 
-namespace environment {
-
 const double kPI = 3.14159265358979323846;
 const double k2PI = 2.0 * kPI;
 const double kPIforDegree = 180.0;
-const double kTropic = 23.45;
 
 const int kDaysPerYear = 365;
 const int kHoursPerDay = 24;
@@ -21,7 +18,11 @@ const int kHoursHalfDay = 12;
 const int kMinsPerHour = 60;
 const int kSecsPerMin = 60;
 
-const double kPiDividedBy12 = kPI / kHoursHalfDay;
+static const double kTropic = 23.45;
+
+static const double kPiDividedBy12 = kPI / kHoursHalfDay;
+
+namespace environment {
 
 class SunInfo {
  public:

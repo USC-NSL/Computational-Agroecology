@@ -1,18 +1,17 @@
-#ifndef __MATERIAL_H__
-#define __MATERIAL_H__
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_
 
 namespace simulator {
 
 namespace photonsimulator {
 
-class Material {
- public:
+struct Material {
+  // const parameters
   Material(float aborption = 0.5, float reflection = 0.5,
            float transmision = 0.0)
       : aborption(aborption),
         reflection(reflection),
         transmision(transmision) {}
-  ~Material(){};
   float aborption;
   float reflection;
   float transmision;
@@ -22,4 +21,4 @@ class Material {
 
 }  // namespace simulator
 
-#endif /* __MATERIAL_H__ */
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MATERIAL_H_

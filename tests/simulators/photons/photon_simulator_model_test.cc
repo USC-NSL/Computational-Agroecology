@@ -1,14 +1,15 @@
 #include <gtest/gtest.h>
+
 #include <vector>
 
 #ifdef _WIN32
-#include <windows.h>  //GetModuleFileNameW
+#include <windows.h>  // GetModuleFileNameW
 #else
 #include <limits.h>
-#include <unistd.h>  //readlink
+#include <unistd.h>  // readlink
 #endif
 
-#include "environment/simulators/photon_simulator/model/model.h"
+#include "environment/simulators/photons/model/model.h"
 
 using namespace simulator;
 using namespace photonsimulator;
@@ -25,10 +26,17 @@ TEST(ConfigTest, ConstructorTest) {
   strcpy(filename, temp.substr(0, temp.find_last_of("/\\")).c_str());
 #endif
 
-  strcat(filename, "/../../../environment/simulators/photon_simulator/asset/Corn1.obj");
-  Model corn(filename);
-  EXPECT_TRUE(corn.vertices.size() == 81);
-  EXPECT_TRUE(corn.meshes[0].faces.size() == 90);
+  strcat(filename, "/../../../environment/simulators/photons/asset/Corn1.obj");
+  std::vector<Model> models;
+  models.emplace_back(filename);
+  models.emplace_back(filename);
+  models.emplace_back(filename);
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
+  models.pop_back();
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
+  models.pop_back();
+  EXPECT_TRUE(models.back().GetTotalFaces() == 90);
+  models.pop_back();
 }
 
 int main(int argc, char **argv) {

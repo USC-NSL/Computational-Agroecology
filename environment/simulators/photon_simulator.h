@@ -1,62 +1,117 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
 
-#include "photon_simulator/photon_simulator_config.h"
-#include "simulator.h"
-
+#include <tuple>
 #include <vector>
+
+#include "photons/model/model.h"
+#include "photons/photon/neighbor.h"
+#include "photons/photon/photon.h"
+#include "photons/photon_simulator_config.h"
+#include "simulator.h"
 
 namespace simulator {
 
 namespace photonsimulator {
 
-const int kAbsorb = 0;
-const int kReflect = 1;
-const int kTrans = 2;
-
 class PhotonSimulator : public Simulator {
  public:
-  PhotonSimulator(const int number, const real_t distance, const real_t height);
+  PhotonSimulator(const int number, const _462::real_t distance,
+                  const _462::real_t height);
   void SimulateToTime(
-      environment::Environment* env,
-      const std::chrono::system_clock::time_point& time) override;
+      environment::Environment *env,
+      const std::chrono::system_clock::time_point &time) override;
 
  private:
+  // common
+  enum class RadianceResult { kAbsorb = 0, kReflect, kRefract };
+
+  // TODO: add interface if necessary
+  bool is_rendering_ = false;
+
+  // the part for model
+  std::vector<Model> models_;
+
   // the part for photon
-  const int kNumberOfPhotonsNeayby;
-  const real_t kMaxDistance;
-  const real_t kSunHeight;
-  std::vector<Photon> alive_photons, absorb_photons;
-  std::vector<Model*> models;
-  void photon_emit(const Vector3& sun_direction, const Vector3& sun_strength,
-                   const double latitude_bottom, const double latitude_top,
-                   const double latitudeDiff, const double longitude_left,
-                   const double longitude_right, const double longitudeDiff);
-  void photons_modify();
-  int Russian_roulette(const real_t abr, const real_t ref, const real_t tran);
-  void construct_kdtree(std::vector<Photon>& p, const unsigned int begin,
-                        const unsigned int end);
-  void lookup_kdtree(std::vector<Photon>& p, const Vector3& point,
-                     const Vector3& norm, Neighbor* neighbors,
+  const int num_of_photons_near_by_;
+  const _462::real_t max_distance_;
+  const _462::real_t sun_height_;
+  std::vector<Photon> alive_photons_, absorb_photons_;
+
+  // emit all photons to the space by specific parameters
+  /***
+  @para:
+  latitudeDiff : the step for latitude increment;
+  longitudeDiff : the step for longitude increment;
+  ***/
+  void PhotonEmit(const _462::Vector3 &sun_direction,
+                  const _462::Vector3 &sun_strength,
+                  const double latitude_bottom, const double latitude_top,
+                  const double latitudeDiff, const double longitude_left,
+                  const double longitude_right, const double longitudeDiff);
+
+  // let all photons transmit in the space
+  void PhotonsModify();
+
+  // this function is used to randomize the result of one photon, the parameters
+  // are three posibilities
+  RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
+                                 const _462::real_t tran) const;
+
+  void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
+                       const unsigned int end);
+
+  // heap is the min-heap returned by the function, distance is the max_distance
+  // for the nearest photon for the special point
+  void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
+                     const _462::Vector3 &norm, std::vector<Neighbor> *heap,
                      const unsigned int begin, const unsigned int end,
-                     real_t& distance, int& size);
-  Vector3 get_Intersect(const Vector3& p1, const Vector3& p2, const Vector3& p3,
-                        const Vector3& line_point, const Vector3& line_dir);
-  bool in_Triangle(const Vector3& a, const Vector3& b, const Vector3& c,
-                   const Vector3& p);
-  Vector3 get_Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3);
-  Vector3 get_pixel_color(const Vector3& ray_pos, const Vector3& ray_dir);
-  Vector3 get_ray_dir(const int x, const int y, const int scene_length,
-                      const int scene_width, const Vector3& camera_pos,
-                      const Vector3& camera_ctr, const Vector3& camera_up);
-  Vector3 get_ray_color(const int x, const int y, const int scene_length,
-                        const int scene_width, const Vector3& camera_pos,
-                        const Vector3& camera_ctr, const Vector3& camera_up);
-  Vector3 get_reflect(const Vector3& dir, const Vector3& norm);
-  Vector3 get_refract(const Vector3& dir, const Vector3& norm, real_t coef);
+                     _462::real_t *distance) const;
+
+  // return the pixel RGB value
+  _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
+                              const _462::Vector3 &ray_dir);
+
+  // return the direction of the certain ray by coordinate x and y
+  _462::Vector3 GetRayDir(const int x, const int y, const int scene_length,
+                          const int scene_width,
+                          const _462::Vector3 &camera_pos,
+                          const _462::Vector3 &camera_ctr,
+                          const _462::Vector3 &camera_up) const;
+
+  // return the pixel color for the ray identified by coord x and y, call
+  // GetPixelColor inside
+  _462::Vector3 GetRayColor(const int x, const int y, const int scene_length,
+                            const int scene_width,
+                            const _462::Vector3 &camera_pos,
+                            const _462::Vector3 &camera_ctr,
+                            const _462::Vector3 &camera_up);
+
+  // get the reflect direction of the input dir and the normal
+  _462::Vector3 GetReflect(const _462::Vector3 &dir,
+                           const _462::Vector3 &norm) const;
+
+  // get the refract direction of the input dir and the normal
+  _462::Vector3 GetRefract(const _462::Vector3 &dir, const _462::Vector3 &norm,
+                           _462::real_t coef) const;
+
+  // this function will return the Model, Mesh, and Face that is first hitted by
+  // certain ray identified by pos and dir
+  std::tuple<Model *, Mesh *, Face *> FindFirstIntersect(
+      const _462::Vector3 &pos, const _462::Vector3 &dir);
+
+  // write result to environment
+  void WriteResultToEnv(environment::Environment *env);
+
+  // free 3d-obj model from memory
+  void FreeModels();
+
+  // load 3d-obj model from disk
+  void LoadModels(environment::Environment *env);
 };
 
 }  // namespace photonsimulator
 
 }  // namespace simulator
+
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_

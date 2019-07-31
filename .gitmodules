@@ -1,0 +1,6 @@
+[submodule "thirdparty/tinyobjloader"]
+	path = thirdparty/tinyobjloader
+	url = https://github.com/syoyo/tinyobjloader
+[submodule "thirdparty/Optimized-Photon-Mapping"]
+	path = thirdparty/Optimized-Photon-Mapping
+	url = https://github.com/miuho/Optimized-Photon-Mapping

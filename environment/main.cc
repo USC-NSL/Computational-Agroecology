@@ -10,7 +10,7 @@
 
 // This is an experimental main
 int main() {
-  environment::Location location(100, 100, 200, 200);
+  environment::Location location(100, 101, 201, 200);
   environment::Config config("place name", location);
   environment::Terrain terrain(3);
 

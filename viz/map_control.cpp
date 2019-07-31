@@ -2,16 +2,16 @@
 #include <random>
 #include <time.h>
 #include <thread>
-inline Vector3 get_reflect(const Vector3& dir, const Vector3& norm) {
+inline Vector3 GetReflect(const Vector3& dir, const Vector3& norm) {
 	Vector3 normal = normalize(norm);
 	return (dir - 2 * dot((dot(dir, normal)), normal));
 }
 
-inline Vector3 get_refract(const Vector3& dir, const Vector3 & norm, real_t coef) {
+inline Vector3 GetRefract(const Vector3& dir, const Vector3 & norm, real_t coef) {
 	return Vector3(-sqrt(1 - coef * coef * (1 - squared_length(dot(dir, norm)) * squared_length(dot(dir, norm)))) * norm + coef * (dir + squared_length(dot(dir, norm)) * norm));
 }
 
-inline Vector3 get_Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
+inline Vector3 GetNormal(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
 	real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
 	real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
 	real_t c = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
@@ -24,7 +24,7 @@ inline Vector3 get_Intersact(const Vector3& plane_normal, const Vector3& plane_p
 	return d * line_dir + line_point;
 }
 
-inline bool in_Triangle(const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& p)
+inline bool IsInTriangle(const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& p)
 {
 	Vector3 v0 = c - a;
 	Vector3 v1 = b - a;
@@ -61,13 +61,13 @@ void map_control::photons_emit()
 	{
 		for (real_t j = 0.0f; j < grid_width; j += 0.05f)
 		{
-			p_ctrl.photon_emit(sun_dir, Vector3(i, j, 100.0f), Vector3(1.0f, 1.0f, 1.0f) * (real_t)sun_strength / 255);
+			p_ctrl.PhotonEmit(sun_dir, Vector3(i, j, 100.0f), Vector3(1.0f, 1.0f, 1.0f) * (real_t)sun_strength / 255);
 		}
 	}
-	p_ctrl.construct_kdtree();
+	p_ctrl.ConstructKDTree();
 }
 
-int map_control::Russian_roulette(float abr, float ref, float tran)
+int map_control::RussianRoulette(float abr, float ref, float tran)
 {
 	float a = (rand() % 100) / 100.0f;
 	if (a < abr)
@@ -78,7 +78,7 @@ int map_control::Russian_roulette(float abr, float ref, float tran)
 		return DEF_TRAN;
 }
 
-void map_control::photons_modify()
+void map_control::PhotonsModify()
 {
 	while (p_ctrl.size())
 	{
@@ -98,9 +98,9 @@ void map_control::photons_modify()
 						Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
 						Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
 						Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-						Vector3 normal = get_Normal(a, b, c);
+						Vector3 normal = GetNormal(a, b, c);
 						Vector3 intersect = get_Intersact(a, b, c, p_ctrl[i].pos, p_ctrl[i].dir);
-						if(in_Triangle(a, b, c, intersect))
+						if(IsInTriangle(a, b, c, intersect))
 						{
 							if (distance(p_ctrl[i].pos, intersect) < distance(p_ctrl[i].pos, p))
 							{
@@ -119,26 +119,26 @@ void map_control::photons_modify()
 			}
 			if (min)
 			{
-				int res = Russian_roulette(min->material.aborption, min->material.reflection, min->material.transmision);
+				int res = RussianRoulette(min->material.aborption, min->material.reflection, min->material.transmision);
 				switch (res)
 				{
 				case DEF_ABR:
 				{
-					absorb_photons.photon_emit(min_normal, p, p_ctrl[i].power);
-					p_ctrl.photon_absorb(i--);
+					absorb_photons.PhotonEmit(min_normal, p, p_ctrl[i].power);
+					p_ctrl.PhotonAbsorb(i--);
 					min->photons++;
 					break;
 				}
 				case DEF_REF:
 				{
-					Vector3 ref = get_reflect(p_ctrl[i].dir, min_normal);
+					Vector3 ref = GetReflect(p_ctrl[i].dir, min_normal);
 					p_ctrl[i].pos = p;
 					p_ctrl[i].dir = ref;
 					break;
 				}
 				case DEF_TRAN:
 				{
-					Vector3 ref = get_refract(p_ctrl[i].dir, min_normal, 1.0);
+					Vector3 ref = GetRefract(p_ctrl[i].dir, min_normal, 1.0);
 					p_ctrl[i].pos = p;
 					p_ctrl[i].dir = ref;
 					break;
@@ -149,11 +149,11 @@ void map_control::photons_modify()
 			}
 			else
 			{
-				p_ctrl.photon_absorb(i--);
+				p_ctrl.PhotonAbsorb(i--);
 			}
 		}
 	}
-	absorb_photons.construct_kdtree();
+	absorb_photons.ConstructKDTree();
 }
 
 void map_control::add_model(Model *item)
@@ -231,7 +231,7 @@ void map_control::writeBuffer2D(GLdouble *camera, int scrn_width, int scrn_heigh
 			{
 				for (int x = 0; x < scrn_width; x++)
 				{
-					rgb = get_ray_color(x, y, scrn_width, scrn_height,
+					rgb = GetRayColor(x, y, scrn_width, scrn_height,
 										Vector3((real_t)camera[0], (real_t)camera[1], (real_t)camera[2]),
 										Vector3((real_t)camera[3], (real_t)camera[4], (real_t)camera[5]),
 										Vector3((real_t)camera[6], (real_t)camera[7], (real_t)camera[8]));
@@ -297,7 +297,7 @@ void map_control::render2D()
 	glFlush();
 };
 
-Vector3 map_control::get_Normal(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3)
+Vector3 map_control::GetNormal(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3)
 {
 	real_t a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z);
 	real_t b = (p2.z - p1.z) * (p3.x - p1.x) - (p2.x - p1.x) * (p3.z - p1.z);
@@ -307,13 +307,13 @@ Vector3 map_control::get_Normal(const Vector3 &p1, const Vector3 &p2, const Vect
 
 Vector3 map_control::get_Intersact(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, const Vector3 &line_point, const Vector3 &line_dir)
 {
-	Vector3 plane_normal = get_Normal(p1, p2, p3);
+	Vector3 plane_normal = GetNormal(p1, p2, p3);
 	real_t d = dotresult(p1 - line_point, plane_normal) / dotresult(line_dir, plane_normal);
 	normalize(line_dir);
 	return d * line_dir + line_point;
 }
 
-bool map_control::in_Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p)
+bool map_control::IsInTriangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p)
 {
 	Vector3 v0 = c - a;
 	Vector3 v1 = b - a;
@@ -337,7 +337,7 @@ bool map_control::in_Triangle(Vector3 a, Vector3 b, Vector3 c, Vector3 p)
 	return u + v <= 1;
 }
 
-Vector3 map_control::get_ray_dir(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up)
+Vector3 map_control::GetRayDir(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up)
 {
 	Vector3 dir = camera_ctr - camera_pos;
 	Vector3 cR = cross(dir, camera_up);
@@ -349,7 +349,7 @@ Vector3 map_control::get_ray_dir(int x, int y, int scene_length, int scene_width
 	return t;
 }
 
-Vector3 map_control::get_pixel_color(const Vector3 &ray_pos, const Vector3 &ray_dir)
+Vector3 map_control::GetPixelColor(const Vector3 &ray_pos, const Vector3 &ray_dir)
 {
 	Vector3 direct, global;
 	Vector3 p(1000.0f, 1000.0f, 0.0f);
@@ -366,9 +366,9 @@ Vector3 map_control::get_pixel_color(const Vector3 &ray_pos, const Vector3 &ray_
 				Vector3 a = model->vertices[face.vertex1.vi] + model->rel_pos;
 				Vector3 b = model->vertices[face.vertex2.vi] + model->rel_pos;
 				Vector3 c = model->vertices[face.vertex3.vi] + model->rel_pos;
-				Vector3 normal = get_Normal(a, b, c);
+				Vector3 normal = GetNormal(a, b, c);
 				Vector3 intersect = get_Intersact(a, b, c, ray_pos, ray_dir);
-				if (in_Triangle(a, b, c, intersect))
+				if (IsInTriangle(a, b, c, intersect))
 				{
 					if (distance(ray_pos, intersect) < distance(ray_pos, p))
 					{
@@ -400,7 +400,7 @@ Vector3 map_control::get_pixel_color(const Vector3 &ray_pos, const Vector3 &ray_
 		int size = 0;
 		float d = 0.0;
 		int count = 0;
-		auto neighbors = absorb_photons.lookup_kdtree(p, min_normal, 0.0025f, d, size, 50);
+		auto neighbors = absorb_photons.LookuptKDTree(p, min_normal, 0.0025f, d, size, 50);
 		for (int i = 0; i < size; i++)
 		{
 			real_t dist = distance(absorb_photons[neighbors[i].i].pos, p);
@@ -427,9 +427,9 @@ Vector3 map_control::get_pixel_color(const Vector3 &ray_pos, const Vector3 &ray_
 	return result;
 }
 
-Vector3 map_control::get_ray_color(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up)
+Vector3 map_control::GetRayColor(int x, int y, int scene_length, int scene_width, const Vector3 &camera_pos, const Vector3 &camera_ctr, const Vector3 &camera_up)
 {
-	Vector3 dir = get_ray_dir(x, y, scene_length, scene_width, camera_pos, camera_ctr, camera_up);
-	Vector3 color = get_pixel_color(camera_pos, dir);
+	Vector3 dir = GetRayDir(x, y, scene_length, scene_width, camera_pos, camera_ctr, camera_up);
+	Vector3 color = GetPixelColor(camera_pos, dir);
 	return color;
 }
