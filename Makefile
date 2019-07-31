@@ -23,7 +23,7 @@ ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
 	$(ENVIRONMENT_PATH)/plant_builder.o \
 	$(ENVIRONMENT_PATH)/plant.o \
 	$(ENVIRONMENT_PATH)/soil.o \
-	$(ENVIRONMENT_PATH)/sun_info.o \
+	$(ENVIRONMENT_PATH)/meteo_info.o \
 	$(ENVIRONMENT_PATH)/terrain.o \
 	$(ENVIRONMENT_PATH)/weather.o
 
@@ -80,7 +80,7 @@ TEST_ENVIRONMENT := $(TEST_ENVIRONMENT_PATH)/climate_test \
 	$(TEST_ENVIRONMENT_PATH)/environment_test \
 	$(TEST_ENVIRONMENT_PATH)/location_test \
 	$(TEST_ENVIRONMENT_PATH)/soil_test \
-	$(TEST_ENVIRONMENT_PATH)/sun_info_test \
+	$(TEST_ENVIRONMENT_PATH)/meteo_info_test \
 	$(TEST_ENVIRONMENT_PATH)/terrain_test \
 	$(TEST_ENVIRONMENT_PATH)/utility_test \
 	$(TEST_ENVIRONMENT_PATH)/weather_test

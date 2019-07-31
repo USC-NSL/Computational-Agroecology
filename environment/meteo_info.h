@@ -1,11 +1,12 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_
 
 #include <chrono>
 #include <tuple>
 
 #include "environment/climate.h"
 #include "environment/location.h"
+#include "environment/weather.h"
 
 const double kPI = 3.14159265358979323846;
 const double k2PI = 2.0 * kPI;
@@ -24,10 +25,11 @@ static const double kPiDividedBy12 = kPI / kHoursHalfDay;
 
 namespace environment {
 
-class SunInfo {
+class MeteoInfo {
  public:
-  SunInfo(const std::chrono::system_clock::time_point &time,
-          const Location &location, const Climate::ZoneType climate_zone);
+  MeteoInfo(const std::chrono::system_clock::time_point &time,
+            const Location &location, const Climate::ZoneType climate_zone,
+            const Weather &weather);
 
   const double &solar_azimuth() const { return solar_azimuth_; }
   const double solar_inclination() const {
@@ -35,10 +37,13 @@ class SunInfo {
     return kPI / 2.0 - solar_altitude_;
   }
   const double &hourly_irradiance() const { return I_t_; }
+  const double &saturated_vapor_pressure() const { return e_s_T_a_; }
+  const double &air_temperature() const { return T_a_; }
 
   void SimulateToTime(const std::chrono::system_clock::time_point &time,
                       const Location &location,
-                      const Climate::ZoneType climate_zone);
+                      const Climate::ZoneType climate_zone,
+                      const Weather &weather);
 
  private:
   double solar_azimuth_;
@@ -65,14 +70,21 @@ class SunInfo {
   // Hourly direct irradiance on a horizontal surface
   double I_dr_;
 
-  // TODO: Air vapor pressure, wind speed, and air temperature haven't
-  // implemented.
+  // Saturated vapor pressure (mbar)
+  double e_s_T_a_;
+
+  // TODO: In the book, the wind speed is assumed constant. However, we don't
+  // have the data for wind speed. Just leave it blank for now.
+
+  // Air temperature
+  double T_a_;
 
   static const double DegreeToRadians(const double degree);
   static const double RadiansToDegree(const double radians);
 
   void Update(const int t_d, const int hour, const double longitude,
-              const double latitude, const Climate::ZoneType climate_zone);
+              const double latitude, const Climate::ZoneType climate_zone,
+              const double temp_min, const double temp_max);
 
   // Given the day of year, calculate solar declination δ in radians.
   double CalculateSolarDeclination(const int t_d);
@@ -119,7 +131,13 @@ class SunInfo {
   std::tuple<double, double, double> CalculateHourlySolarIrradiance(
       const double beta, const double I_c_prime, const double a, const double b,
       const double I_t_d, const int t_h);
+
+  double CalculateSaturatedVaporPressure(const double temperature);
+
+  double CalculateAirTemperature(double t_h, const double temp_min,
+                                 const double temp_max, const double t_sr,
+                                 const double t_ss);
 };
 
 }  // namespace environment
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_

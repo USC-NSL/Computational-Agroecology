@@ -8,7 +8,7 @@
 
 #include "environment/climate.h"
 #include "environment/config.h"
-#include "environment/sun_info.h"
+#include "environment/meteo_info.h"
 #include "environment/terrain.h"
 #include "environment/weather.h"
 
@@ -50,7 +50,7 @@ class Environment {
     return time_step_length_;
   }
   inline const int64_t &time_step() const { return time_step_; }
-  inline const SunInfo &sun_info() const { return sun_info_; }
+  inline const MeteoInfo &meteo_info() const { return meteo_info_; }
   inline const Terrain &terrain() const { return terrain_; }
   inline const Weather &weather() const { return weather_; }
   inline const std::priority_queue<const agent::action::Action *,
@@ -73,7 +73,7 @@ class Environment {
   const Climate climate_;
 
   // the information of sun from the simulator
-  SunInfo sun_info_;
+  MeteoInfo meteo_info_;
 
   // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;
