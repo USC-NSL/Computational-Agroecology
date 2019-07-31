@@ -1,7 +1,7 @@
 #include "mesh.h"
 
-#include "../photon_simulator_config.h"
-#include "../stdafx.h"
+#include "environment/simulators/photons/photon_simulator_config.h"
+#include "environment/simulators/photons/stdafx.h"
 
 namespace simulator {
 

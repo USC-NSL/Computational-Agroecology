@@ -1,11 +1,12 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_PHOTON_SIMULATOR_NEIGHBOR_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_PHOTON_SIMULATOR_NEIGHBOR_H_
 
 #include <vector>
 
-#include "../photon_simulator_config.h"
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
+
+#include "environment/simulators/photons/photon_simulator_config.h"
 #include "photon.h"
 
 namespace simulator {
@@ -37,4 +38,4 @@ _462::real_t GetSplitValueByPhoton(const _462::Vector3 &p, const int axis);
 
 }  // namespace simulator
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_NEIGHBOR_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_PHOTON_SIMULATOR_NEIGHBOR_H_

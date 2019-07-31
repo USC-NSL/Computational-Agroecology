@@ -1,5 +1,7 @@
 #include "photon_simulator.h"
-#include "environment.h"
+
+#include "environment/environment.h"
+#include "environment/sun_info.h"
 
 // extend third party library
 namespace _462 {
@@ -33,24 +35,25 @@ void PhotonSimulator::SimulateToTime(
    * TODO: check terrain orientation
    * we regard north as y asix
    */
-  _462::Vector3 sun_dir(-sin(env->sun_info().SunAzimuth),
-                        -cos(env->sun_info().SunAzimuth),
-                        -cos(env->sun_info().SolarAltitude));
-  _462::Vector3 sun_strength(env->sun_info().HourlyIrradiance,
-                             env->sun_info().HourlyIrradiance,
-                             env->sun_info().HourlyIrradiance);
-  double latitude_diff = (env->config_.location.latitude_top -
-                          env->config_.location.latitude_bottom) /
+  // TODO: Since the sun info may not be correct, we may need to fix this.
+  _462::Vector3 sun_dir(-sin(env->sun_info().solar_azimuth()),
+                        -cos(env->sun_info().solar_azimuth()),
+                        -cos(env->sun_info().solar_inclination()));
+  _462::Vector3 sun_strength(env->sun_info().hourly_irradiance(),
+                             env->sun_info().hourly_irradiance(),
+                             env->sun_info().hourly_irradiance());
+  double latitude_diff = (env->config().location.latitude_top -
+                          env->config().location.latitude_bottom) /
                          100.0f;
-  double longtitude_diff = (env->config_.location.longitude_right -
-                            env->config_.location.longitude_left) /
+  double longtitude_diff = (env->config().location.longitude_right -
+                            env->config().location.longitude_left) /
                            100.0f;
   alive_photons_.clear();
   absorb_photons_.clear();
-  PhotonEmit(sun_dir, sun_strength, env->config_.location.latitude_bottom,
-             env->config_.location.latitude_top, latitude_diff,
-             env->config_.location.longitude_left,
-             env->config_.location.longitude_right, longtitude_diff);
+  PhotonEmit(sun_dir, sun_strength, env->config().location.latitude_bottom,
+             env->config().location.latitude_top, latitude_diff,
+             env->config().location.longitude_left,
+             env->config().location.longitude_right, longtitude_diff);
 
   PhotonsModify();
 

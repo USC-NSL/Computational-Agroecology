@@ -7,7 +7,7 @@
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 #include "tinyobjloader/tiny_obj_loader.h"
 
-#include "../stdafx.h"
+#include "environment/simulators/photons/stdafx.h"
 #include "face.h"
 
 namespace simulator {

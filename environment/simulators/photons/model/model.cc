@@ -11,8 +11,8 @@
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 
-#include "../photon_simulator_config.h"
-#include "../stdafx.h"
+#include "environment/simulators/photons/photon_simulator_config.h"
+#include "environment/simulators/photons/stdafx.h"
 #include "mesh.h"
 
 namespace simulator {

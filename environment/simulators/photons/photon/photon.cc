@@ -1,4 +1,5 @@
 #include "photon.h"
+
 #include "Optimized-Photon-Mapping/src/math/math.hpp"
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
 

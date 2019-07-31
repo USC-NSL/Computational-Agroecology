@@ -1,8 +1,10 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MODEL_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTONS_MODEL_MODEL_H_
 #include <cstring>
-#include "../stdafx.h"
+
 #include "Optimized-Photon-Mapping/src/math/vector.hpp"
+
+#include "environment/simulators/photons/stdafx.h"
 #include "mesh.h"
 
 namespace simulator {
