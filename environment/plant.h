@@ -80,6 +80,7 @@ class Plant {
   // Constructs a generic plant with default values, only for child class use.
   Plant(const std::string &name)
       : name_(name),
+        trunk_size_(0.0),
         health_(kMaxHealth),
         flowering_(false),
         accumulated_gdd_(0),
@@ -99,6 +100,9 @@ class Plant {
 
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;
+
+  // The trunk size of the plant
+  double trunk_size_;
 
   // Health of the plant in range [kMinHealth, kMaxHealth].
   int health_;
