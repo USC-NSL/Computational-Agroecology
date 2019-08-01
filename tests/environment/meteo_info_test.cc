@@ -33,6 +33,8 @@ class MeteoInfoTest : public ::testing::Test {
 
   // dummy weather
   std::shared_ptr<Weather> weather_;
+
+  const double kOneDegreeInRadians = 1.0 * kPI / kPIforDegree;
 };
 
 TEST_F(MeteoInfoTest, On_06_21) {
@@ -41,8 +43,11 @@ TEST_F(MeteoInfoTest, On_06_21) {
 
   MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
 
+  std::cout << "Solar inclination: "
+            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_azimuth(), 1);
+  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
 }
 
 TEST_F(MeteoInfoTest, On_12_21) {
@@ -51,8 +56,11 @@ TEST_F(MeteoInfoTest, On_12_21) {
 
   MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
 
+  std::cout << "Solar inclination: "
+            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_azimuth(), 1);
+  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
 }
 
 TEST_F(MeteoInfoTest, On_03_21) {
@@ -61,8 +69,11 @@ TEST_F(MeteoInfoTest, On_03_21) {
 
   MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
 
+  std::cout << "Solar inclination: "
+            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_azimuth(), 1);
+  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
 }
 
 TEST_F(MeteoInfoTest, On_09_21) {
@@ -71,8 +82,11 @@ TEST_F(MeteoInfoTest, On_09_21) {
 
   MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
 
+  std::cout << "Solar inclination: "
+            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_azimuth(), 1);
+  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
 }
 
 // TODO: add more tests

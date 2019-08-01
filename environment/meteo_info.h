@@ -32,9 +32,10 @@ class MeteoInfo {
             const Weather &weather);
 
   const double &solar_azimuth() const { return solar_azimuth_; }
+  const double &solar_elevation() const { return solar_elevation_; }
   const double solar_inclination() const {
     // 90 degrees - solar_altitude
-    return kPI / 2.0 - solar_altitude_;
+    return kPI / 2.0 - solar_elevation_;
   }
   const double &hourly_irradiance() const { return I_t_; }
   const double &saturated_vapor_pressure() const { return e_s_T_a_; }
@@ -47,7 +48,9 @@ class MeteoInfo {
 
  private:
   double solar_azimuth_;
-  double solar_altitude_;  // aka β
+
+  // Solar angle from horizontal (aka β) in radians
+  double solar_elevation_;
 
   // Local solar time for sunrise (hours)
   double t_sr_;
@@ -97,11 +100,10 @@ class MeteoInfo {
   // Given local solar time (hours), calculate the hour angle τ in radians.
   double CalculateHourAngle(const double t_h);
 
-  // Solar position and time
   // Given solar declination δ, hour angle τ, and observer's latitude λ,
-  // calculate solar altitude.
-  double CalculateSolarAltitude(const double delta, const double tau,
-                                const double lambda);
+  // calculate solar angle from horizontal (radians).
+  double CalculateSolarElevation(const double delta, const double tau,
+                                 const double lambda);
 
   // Given solar declination δ, observer's latitude λ, solar altitude β, and
   // local solar time, calculate solar azimuth.

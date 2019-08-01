@@ -51,10 +51,10 @@ void MeteoInfo::Update(const int t_d, const int hour, const double longitude,
   double lambda = DegreeToRadians(latitude);
 
   // Update Solar Altitude
-  solar_altitude_ = CalculateSolarAltitude(delta, tau, lambda);
+  solar_elevation_ = CalculateSolarElevation(delta, tau, lambda);
   // Update Solar Azimuth
   solar_azimuth_ =
-      CalculateSolarAzimuth(delta, lambda, solar_altitude_, local_solar_time);
+      CalculateSolarAzimuth(delta, lambda, solar_elevation_, local_solar_time);
 
   // Update day length
   std::tie(t_sr_, t_ss_, day_length_) = CalculateDayLength(delta, tau, lambda);
@@ -84,7 +84,7 @@ void MeteoInfo::Update(const int t_d, const int hour, const double longitude,
 
   // Update hourly irradiance
   std::tie(I_t_, I_df_, I_dr_) = CalculateHourlySolarIrradiance(
-      solar_altitude_, I_c_prime, a, b, I_t_d_, local_solar_time);
+      solar_elevation_, I_c_prime, a, b, I_t_d_, local_solar_time);
 
   // Update air temperature
   T_a_ = CalculateAirTemperature(local_solar_time, temp_min, temp_max, t_sr_,
@@ -138,10 +138,10 @@ double MeteoInfo::CalculateHourAngle(const double t_h) {
   return kPiDividedBy12 * (t_h - kHoursHalfDay);
 }
 
-double MeteoInfo::CalculateSolarAltitude(const double delta, const double tau,
-                                         const double lambda) {
+double MeteoInfo::CalculateSolarElevation(const double delta, const double tau,
+                                          const double lambda) {
   // Formula [2.8] in book p.30
-  // β: Solar's altitude with respect to the observer
+  // β: Solar angle from horizontal in radians
   // sin(β) = sin(δ) * sin(λ) + cos(δ) * cos(λ) * cos(τ)
   double sin_beta =
       sin(delta) * sin(lambda) + cos(delta) * cos(lambda) * cos(tau);
