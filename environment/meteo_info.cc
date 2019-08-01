@@ -338,14 +338,17 @@ double MeteoInfo::CalculateAirTemperature(double t_h, const double temp_min,
   }
 
   if (t_h > t_ss) {
-    // Formula [2.47] when t_h > t_ss in book p.50
-    // T_a = T_set + ((T_min - T_set) * (t_h - t_ss) / ((t_sr + 1.5) + (24 -
-    // t_ss)))
-
-    // calling itself to get the temperature at sunset (T_set)
+    // get the temperature at sunset (T_set)
+    // Formula [2.47] when t_h == t_ss in book p.50
+    // T_set = T_min + (T_max - T_min) * sin(π * (t_ss - t_sr - 1.5) / (t_ss -
+    // t_sr))
     double temp_sunset =
         temp_min + (temp_max - temp_min) *
                        sin(kPI * (t_ss - t_sr - kOffset) / (t_ss - t_sr));
+
+    // Formula [2.47] when t_h > t_ss in book p.50
+    // T_a = T_set + ((T_min - T_set) * (t_h - t_ss) / ((t_sr + 1.5) + (24 -
+    // t_ss)))
     return temp_sunset + ((temp_min - temp_sunset) * (t_h - t_ss) /
                           ((t_sr + kOffset) + (kHoursPerDay - t_ss)));
   } else {
