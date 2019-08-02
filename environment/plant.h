@@ -141,3 +141,4 @@ class Plant {
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
+
