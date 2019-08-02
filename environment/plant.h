@@ -46,7 +46,7 @@ const PlantParams kDefaultParams = {
     {PlantProperty::GDD_UNITS_AFTER_FULL_BLOOM, 1000000}  // 1000 degree-days.
 };
 
-class PlantBuilder;  // Forward refere`	nce.
+class PlantBuilder;  // Forward reference.
 
 // Represents a single plant.
 class Plant {
@@ -65,8 +65,8 @@ class Plant {
   void SetPosition(const std::vector<double> position) { position_ = position; }
   const double trunk_size() const { return trunk_size_; }
   void SetTrunk(const double trunk_size) { trunk_size_ = trunk_size; }
-      // Harvest this plant. This should return the value of yeild.
-      int Harvest();
+  // Harvest this plant. This should return the value of yeild.
+  int Harvest();
 
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
@@ -141,4 +141,3 @@ class Plant {
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANT_H_
-

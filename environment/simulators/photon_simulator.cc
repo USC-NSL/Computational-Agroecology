@@ -98,7 +98,7 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p) {
 }
 
 indexArr PhotonSimulator::LookuptKDTree(const _462::Vector3 &point,
-                                    const _462::real_t distance) const {
+                                        const _462::real_t distance) const {
   point_t pt = {point.x, point.y, point.z};
   return kdtree_->neighborhood_indices(pt, distance);
 }
@@ -275,4 +275,3 @@ _462::Vector3 PhotonSimulator::GetRefract(const _462::Vector3 &dir,
 }  // namespace photonsimulator
 
 }  // namespace simulator
-
