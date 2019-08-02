@@ -2,17 +2,41 @@
 
 namespace environment {
 
-bool PlantContainer::AddPlant(Plant *new_plant) {
-  if (!CheckPosition(new_plant->position(), new_plant->trunk_size()))
+bool PlantContainer::AddPlant(Plant *plant) {
+  if (!CheckPosition(plant->position(), plant->trunk_size()))
     return false;
-  plants_.push_back(new_plant);
+  plants_.push_back(plant);
   ContructPlantKDTree();
+  return true;
 }
 
-bool PlantContainer::DelPlant(const int index) {
-  delete plants_[index];
-  plants_.erase(plants_.begin() + index);
-  ContructPlantKDTree();
+bool PlantContainer::DelPlant(const Plant &plant) {
+  size_t index = kdtree_->nearest_index(plant.position());
+  if (*plants_[index] == plant) {
+    plants_.erase(plants_.begin() + index);
+    ContructPlantKDTree();
+    return true;
+  }
+  return false;
+}
+
+bool PlantContainer::DelPlant(const std::vector<double> position) {
+  size_t index = kdtree_->nearest_index(position);
+  if (SamePlant(plants_[index]->position(), position)) {
+    // delete plants_[index];
+    plants_.erase(plants_.begin() + index);
+    ContructPlantKDTree();
+    return true;
+  }
+  return false;
+}  // namespace environment
+
+bool PlantContainer::SamePlant(const point_t &lhs, const point_t &rhs) const {
+  for (int i = 0; i < kDims; i++) {
+    if (lhs[i] != rhs[i])
+      return false;
+  }
+  return true;
 }
 
 bool PlantContainer::CheckPosition(const point_t &position, const double size) {
@@ -28,7 +52,11 @@ bool PlantContainer::CheckPosition(const point_t &position, const double size) {
 void PlantContainer::ContructPlantKDTree() {
   pointVec points;
   for (const auto &plant : plants_) {
-    points.push_back(plant->position());
+    point_t position;
+    for (int i = 0; i < kDims; i++) {
+      position.push_back(plant->position()[i]);
+    }
+    points.push_back(position);
   }
   if (kdtree_)
     delete kdtree_;
