@@ -11,6 +11,8 @@
 #include "environment/sun_info.h"
 #include "environment/terrain.h"
 #include "environment/weather.h"
+#include "environment/plant.h"
+#include "KDTree/KDTree.hpp"
 
 namespace environment {
 
@@ -72,7 +74,11 @@ class Environment {
   Config config_;
   const Climate climate_;
 
-  // the information of sun from the simulator
+  // The information of all plants and the kd-tree for all plants
+  std::vector<Plant*> plants_;
+  KDTree *kdtree_;
+
+  // The information of sun from the simulator
   SunInfo sun_info_;
 
   // Current time in this environment
@@ -84,17 +90,22 @@ class Environment {
 
   Terrain terrain_;
   Weather weather_;
+
+  bool AddPlant(Plant * new_plant);
+  bool DelPlant(const int index);
+  bool CheckPosition(const point_t &position, const double size);
+  void ContructPlantKDTree();
   // TODO: define a class for light information
 
   // Simulators:
 
-  // Given a future time step, push actions which is starting before the time
-  // step into the `starting_action_pq_` from `action_pq_` and make actions in
-  // `starting_action_pq_` which has completed before the time step take effect.
-  // These two are done in chronological order.
-  // In `action`, we have its start time and end time. As the time step goes
-  // beyond its start time, it should be pushed into `starting_action_pq_`. As
-  // the time step goes beyond its end time, it should be poped from the
+  // Given a future time step, push actions which is starting before the
+  // time step into the `starting_action_pq_` from `action_pq_` and make
+  // actions in `starting_action_pq_` which has completed before the time
+  // step take effect. These two are done in chronological order. In
+  // `action`, we have its start time and end time. As the time step goes
+  // beyond its start time, it should be pushed into `starting_action_pq_`.
+  // As the time step goes beyond its end time, it should be poped from the
   // `starting_action_pq_` and take effect.
   void SyncActionPqToTimeStep(const int64_t time_step);
 

@@ -37,7 +37,7 @@ class PhotonSimulator : public Simulator {
   const _462::real_t max_distance_;
   const _462::real_t sun_height_;
   std::vector<Photon> alive_photons_, absorb_photons_;
-  KDTree *kdtree;
+  KDTree *kdtree_;
 
   // emit all photons to the space by specific parameters
   /***

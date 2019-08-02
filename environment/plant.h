@@ -46,7 +46,7 @@ const PlantParams kDefaultParams = {
     {PlantProperty::GDD_UNITS_AFTER_FULL_BLOOM, 1000000}  // 1000 degree-days.
 };
 
-class PlantBuilder;  // Forward reference.
+class PlantBuilder;  // Forward refere`	nce.
 
 // Represents a single plant.
 class Plant {
@@ -61,7 +61,8 @@ class Plant {
   virtual ~Plant() {}
 
   const std::string &name() const { return name_; }
-
+  const std::vector<double> &position() const { return position_; }
+  const double trunk_size() const { return trunk_size_; }
   // Harvest this plant. This should return the value of yeild.
   int Harvest();
 
@@ -78,8 +79,10 @@ class Plant {
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name)
+  Plant(const std::string &name, const std::vector<double> position)
       : name_(name),
+        dims_(position.size()),
+        position_(position),
         trunk_size_(0.0),
         health_(kMaxHealth),
         flowering_(false),
@@ -101,6 +104,9 @@ class Plant {
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;
 
+  // The information of the location
+  const int dims_;
+  std::vector<double> position_;
   // The trunk size of the plant
   double trunk_size_;
 

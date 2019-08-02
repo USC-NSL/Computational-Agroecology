@@ -22,7 +22,7 @@ PhotonSimulator::PhotonSimulator(const int number, const _462::real_t distance,
     : num_of_photons_near_by_(number),
       max_distance_(distance),
       sun_height_(height),
-      kdtree(nullptr) {}
+      kdtree_(nullptr) {}
 
 void PhotonSimulator::SimulateToTime(
     environment::Environment *env,
@@ -92,15 +92,15 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p) {
     point_t pt = {photon.pos.x, photon.pos.y, photon.pos.z};
     points.push_back(pt);
   }
-  if (kdtree)
-    delete kdtree;
-  kdtree = new KDTree(points);
+  if (kdtree_)
+    delete kdtree_;
+  kdtree_ = new KDTree(points);
 }
 
 indexArr PhotonSimulator::LookuptKDTree(const _462::Vector3 &point,
                                     const _462::real_t distance) const {
   point_t pt = {point.x, point.y, point.z};
-  return kdtree->neighborhood_indices(pt, distance);
+  return kdtree_->neighborhood_indices(pt, distance);
 }
 
 _462::Vector3 PhotonSimulator::GetPixelColor(const _462::Vector3 &ray_pos,
