@@ -16,7 +16,6 @@ Environment::Environment(const Config &config,
       terrain_(terrain),
       weather_(climate_, time),
       sun_info_(time, config.location, climate_.climate_zone, weather_) {
-  kdtree_ = NULL;
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -105,40 +104,6 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
 
   time_step_ = time_step;
   timestamp_ = new_timestamp;
-}
-
-bool Environment::AddPlant(Plant* new_plant) {
-  if (!CheckPosition(new_plant->position(), new_plant->trunk_size()))
-    return false;
-  plants_.push_back(new_plant);
-  ContructPlantKDTree();
-}
-
-bool Environment::DelPlant(const int index) {
-  delete plants_[index];
-  plants_.erase(plants_.begin() + index);
-  ContructPlantKDTree();
-}
-
-bool Environment::CheckPosition(const point_t &position,
-                                const double size) {
-  if (!kdtree_)
-    return true;
-  auto res = kdtree_->neighborhood(position, size);
-  if (!res.empty())
-    return false;
-  else
-    return true;
-}
-
-void Environment::ContructPlantKDTree() {
-  pointVec points;
-  for (const auto &plant : plants_) {
-    points.push_back(plant->position());
-  }
-  if (kdtree_)
-    delete kdtree_;
-  kdtree_ = new KDTree(points);
 }
 
 std::ostream &operator<<(std::ostream &os, const Environment &env) {

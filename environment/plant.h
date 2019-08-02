@@ -62,9 +62,11 @@ class Plant {
 
   const std::string &name() const { return name_; }
   const std::vector<double> &position() const { return position_; }
+  void SetPosition(const std::vector<double> position) { position_ = position; }
   const double trunk_size() const { return trunk_size_; }
-  // Harvest this plant. This should return the value of yeild.
-  int Harvest();
+  void SetTrunk(const double trunk_size) { trunk_size_ = trunk_size; }
+      // Harvest this plant. This should return the value of yeild.
+      int Harvest();
 
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
@@ -79,11 +81,13 @@ class Plant {
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name, const std::vector<double> position)
+  Plant(const std::string &name,
+        const std::vector<double> position = {0.0, 0.0},
+        const double trunk_size = 0.0)
       : name_(name),
         dims_(position.size()),
         position_(position),
-        trunk_size_(0.0),
+        trunk_size_(trunk_size),
         health_(kMaxHealth),
         flowering_(false),
         accumulated_gdd_(0),
