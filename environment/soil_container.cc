@@ -3,8 +3,9 @@
 namespace environment {
 
 Soil* SoilContainer::FindSoilByCoord(double x, double y) {
-  return &soils_[size_t(x)][size_t(y)];
+  return &((soils_[size_t(x)])[size_t(y)]);
 }
+
 std::vector<Soil *> SoilContainer::FindSoilByCoords(double x, double y,
                                                     double x_length,
                                                     double y_length) {
@@ -16,7 +17,5 @@ std::vector<Soil *> SoilContainer::FindSoilByCoords(double x, double y,
   }
   return soils;
 }
-
-};  // namespace environment
 
 }  // namespace environment

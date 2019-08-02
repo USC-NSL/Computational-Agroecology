@@ -1,7 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOIL_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOIL_H_
-
-#include <optional>
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_
 
 #include <vector>
 
@@ -17,9 +15,9 @@ class SoilContainer {
                                        double y_length);
 
  private:
-  std::vector<std::vector<Soil>> soils_;
+  std::vector<std::vector<Soil> > soils_;
 };
 
 }  // namespace environment
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOIL_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_

@@ -1,3 +1,5 @@
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
 
 #include "KDTree/KDTree.hpp"
 #include "environment/plant.h"
@@ -19,3 +21,5 @@ class PlantContainer {
 };
 
 }  // namespace environment
+
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
