@@ -5,15 +5,15 @@ namespace environment {
 
 class PlantContainer {
  public:
-
   bool AddPlant(Plant *new_plant);
   bool DelPlant(const int index);
-  bool CheckPosition(const point_t &position, const double size);
-  void ContructPlantKDTree();
+  PlantContainer() : kdtree_(nullptr){};
 
  private:
   std::vector<Plant *> plants_;
   KDTree *kdtree_;
+  bool CheckPosition(const point_t &position, const double size);
+  void ContructPlantKDTree();
 };
 
 }  // namespace environment

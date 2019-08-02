@@ -81,6 +81,7 @@ TEST_ENVIRONMENT_PATH := $(TEST_PATH)/environment
 TEST_ENVIRONMENT := $(TEST_ENVIRONMENT_PATH)/climate_test \
 	$(TEST_ENVIRONMENT_PATH)/config_test \
 	$(TEST_ENVIRONMENT_PATH)/environment_test \
+	$(TEST_ENVIRONMENT_PATH)/plant_container_test \
 	$(TEST_ENVIRONMENT_PATH)/location_test \
 	$(TEST_ENVIRONMENT_PATH)/soil_test \
 	$(TEST_ENVIRONMENT_PATH)/sun_info_test \
