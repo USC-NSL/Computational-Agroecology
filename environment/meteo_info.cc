@@ -23,7 +23,11 @@ void MeteoInfo::SimulateToTime(
   double longitude = (location.longitude_left + location.longitude_right) / 2.0;
   double latitude = (location.latitude_bottom + location.latitude_top) / 2.0;
 
-  Update(tm->tm_yday + 1, tm->tm_hour, longitude, latitude, climate_zone,
+  int total_sec =
+      tm->tm_sec + (kSecsPerMin * tm->tm_min) + (kSecsPerHour * tm->tm_hour);
+  double local_hour = double(total_sec) / kSecsPerHour;
+
+  Update(tm->tm_yday + 1, local_hour, longitude, latitude, climate_zone,
          weather.temperature.min, weather.temperature.max);
 }
 
@@ -35,7 +39,7 @@ const double MeteoInfo::RadiansToDegree(const double radians) {
   return radians / kPI * kPIforDegree;
 }
 
-void MeteoInfo::Update(const int t_d, const int hour, const double longitude,
+void MeteoInfo::Update(const int t_d, const double hour, const double longitude,
                        const double latitude,
                        const Climate::ZoneType climate_zone,
                        const double temp_min, const double temp_max) {
@@ -113,7 +117,7 @@ double MeteoInfo::CalculateSolarDeclination(const int t_d) {
   return A * cos(k2PI * (t_d + kDaysLeftPerYear) / kDaysPerYear);
 }
 
-double MeteoInfo::CalculateLocalSolarTime(const int t_d, const int hour,
+double MeteoInfo::CalculateLocalSolarTime(const int t_d, const double hour,
                                           const double longitude) {
   // Formula [2.4], [2,5], [2.6] in book p.27
   // t_h = t + ((γ_sm - γ) / (π / 12)) + (EoT / 60)
@@ -205,8 +209,7 @@ std::tuple<double, double, double> MeteoInfo::CalculateDailySolarIrradiance(
   // (a/b)^2))
   // a: sin(λ) * sin(δ)
   // b: cos(λ) * cos(δ)
-  double I_et_d = kSecsPerMin * kMinsPerHour * I_c_prime *
-                  (kHoursPerDay / kPI) *
+  double I_et_d = kSecsPerHour * I_c_prime * (kHoursPerDay / kPI) *
                   (a * acos(-a / b) + b * sqrt(1 - pow(a / b, 2)));
 
   // b_0 and b_1 are constants based on climate zones
@@ -282,7 +285,7 @@ std::tuple<double, double, double> MeteoInfo::CalculateHourlySolarIrradiance(
   // a = sin(λ) * sin(δ)
   // b = cos(λ) * cos(δ)
   // ψ = (π * I_t_d / 86400) / (a * acos(-a / b) + b * sqrt(1 - (a / b)^2))
-  double psi = (kPI * I_t_d / (kSecsPerMin * kMinsPerHour * kHoursPerDay)) /
+  double psi = (kPI * I_t_d / kSecsPerDay) /
                (a * acos(-a / b) + b * sqrt(1 - pow(a / b, 2)));
   double A = -b * psi;
   double B = a * psi;

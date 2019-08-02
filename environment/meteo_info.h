@@ -8,20 +8,27 @@
 #include "environment/location.h"
 #include "environment/weather.h"
 
-const double kPI = 3.14159265358979323846;
-const double k2PI = 2.0 * kPI;
-const double kPIforDegree = 180.0;
+constexpr double kPI = 3.14159265358979323846;
+constexpr double k2PI = 2.0 * kPI;
+constexpr double kPIforDegree = 180.0;
 
-const int kDaysPerYear = 365;
-const int kHoursPerDay = 24;
-const int kDaysLeftPerYear = 10;
-const int kHoursHalfDay = 12;
-const int kMinsPerHour = 60;
-const int kSecsPerMin = 60;
+constexpr int kDaysPerYear = 365;
+constexpr int kHoursPerDay = 24;
+constexpr int kHoursHalfDay = kHoursPerDay / 2;
+constexpr int kMinsPerHour = 60;
+constexpr int kMinsPerDay = kMinsPerHour * kHoursPerDay;
+constexpr int kSecsPerMin = 60;
+constexpr int kSecsPerHour = kSecsPerMin * kMinsPerHour;
+constexpr int kSecsPerDay = kSecsPerMin * kMinsPerHour * kHoursPerDay;
+constexpr int kDaysLeftPerYear = 10;
 
-static const double kTropic = 23.45;
+// constant variables only for this file
+namespace {
 
-static const double kPiDividedBy12 = kPI / kHoursHalfDay;
+constexpr double kTropic = 23.45;
+constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
+
+}  // namespace
 
 namespace environment {
 
@@ -85,7 +92,7 @@ class MeteoInfo {
   static const double DegreeToRadians(const double degree);
   static const double RadiansToDegree(const double radians);
 
-  void Update(const int t_d, const int hour, const double longitude,
+  void Update(const int t_d, const double hour, const double longitude,
               const double latitude, const Climate::ZoneType climate_zone,
               const double temp_min, const double temp_max);
 
@@ -94,7 +101,7 @@ class MeteoInfo {
 
   // Given the day of year, local time (hours), and observer's longitude,
   // convert local time (hours) to local solar time (hours).
-  double CalculateLocalSolarTime(const int t_d, const int hour,
+  double CalculateLocalSolarTime(const int t_d, const double hour,
                                  const double longitude);
 
   // Given local solar time (hours), calculate the hour angle τ in radians.
