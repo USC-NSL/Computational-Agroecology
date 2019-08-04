@@ -1,7 +1,7 @@
 #include "photon_simulator.h"
 
 #include "environment/environment.h"
-#include "environment/meteo_info.h"
+#include "environment/sun_info.h"
 
 // extend third party library
 namespace _462 {
@@ -36,12 +36,12 @@ void PhotonSimulator::SimulateToTime(
    * we regard north as y asix
    */
   // TODO: Since the sun info may not be correct, we may need to fix this.
-  _462::Vector3 sun_dir(-sin(env->meteo_info().solar_azimuth()),
-                        -cos(env->meteo_info().solar_azimuth()),
-                        -cos(env->meteo_info().solar_inclination()));
-  _462::Vector3 sun_strength(env->meteo_info().hourly_irradiance(),
-                             env->meteo_info().hourly_irradiance(),
-                             env->meteo_info().hourly_irradiance());
+  _462::Vector3 sun_dir(-sin(env->sun_info().solar_azimuth()),
+                        -cos(env->sun_info().solar_azimuth()),
+                        -cos(env->sun_info().solar_inclination()));
+  _462::Vector3 sun_strength(env->sun_info().hourly_irradiance(),
+                             env->sun_info().hourly_irradiance(),
+                             env->sun_info().hourly_irradiance());
   double latitude_diff = (env->config().location.latitude_top -
                           env->config().location.latitude_bottom) /
                          100.0f;

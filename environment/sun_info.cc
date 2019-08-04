@@ -1,4 +1,4 @@
-#include "meteo_info.h"
+#include "sun_info.h"
 
 #include <cassert>
 #include <cmath>
@@ -8,16 +8,16 @@
 
 namespace environment {
 
-MeteoInfo::MeteoInfo(const std::chrono::system_clock::time_point &time,
-                     const Location &location,
-                     const Climate::ZoneType climate_zone,
-                     const Weather &weather) {
+SunInfo::SunInfo(const std::chrono::system_clock::time_point &time,
+                 const Location &location, const Climate::ZoneType climate_zone,
+                 const Weather &weather) {
   SimulateToTime(time, location, climate_zone, weather);
 }
 
-void MeteoInfo::SimulateToTime(
-    const std::chrono::system_clock::time_point &time, const Location &location,
-    const Climate::ZoneType climate_zone, const Weather &weather) {
+void SunInfo::SimulateToTime(const std::chrono::system_clock::time_point &time,
+                             const Location &location,
+                             const Climate::ZoneType climate_zone,
+                             const Weather &weather) {
   time_t tt = std::chrono::system_clock::to_time_t(time);
   struct tm *tm = localtime(&tt);
   double longitude = (location.longitude_left + location.longitude_right) / 2.0;
@@ -31,18 +31,18 @@ void MeteoInfo::SimulateToTime(
          weather.temperature.min, weather.temperature.max);
 }
 
-const double MeteoInfo::DegreeToRadians(const double degree) {
+const double SunInfo::DegreeToRadians(const double degree) {
   return degree * kPI / kPIforDegree;
 }
 
-const double MeteoInfo::RadiansToDegree(const double radians) {
+const double SunInfo::RadiansToDegree(const double radians) {
   return radians / kPI * kPIforDegree;
 }
 
-void MeteoInfo::Update(const int t_d, const double hour, const double longitude,
-                       const double latitude,
-                       const Climate::ZoneType climate_zone,
-                       const double temp_min, const double temp_max) {
+void SunInfo::Update(const int t_d, const double hour, const double longitude,
+                     const double latitude,
+                     const Climate::ZoneType climate_zone,
+                     const double temp_min, const double temp_max) {
   // Local solar time (hours)
   double local_solar_time = CalculateLocalSolarTime(t_d, hour, longitude);
 
@@ -98,7 +98,7 @@ void MeteoInfo::Update(const int t_d, const double hour, const double longitude,
   e_s_T_a_ = CalculateSaturatedVaporPressure(T_a_);
 }
 
-double MeteoInfo::CalculateSolarDeclination(const int t_d) {
+double SunInfo::CalculateSolarDeclination(const int t_d) {
   // Formula [2.1], [2.2] in book p.25
   // y = A cos (2 * π * x / P) + B
   // A: Amplitude (highest peak and lowest vallet for the cycle)
@@ -117,8 +117,8 @@ double MeteoInfo::CalculateSolarDeclination(const int t_d) {
   return A * cos(k2PI * (t_d + kDaysLeftPerYear) / kDaysPerYear);
 }
 
-double MeteoInfo::CalculateLocalSolarTime(const int t_d, const double hour,
-                                          const double longitude) {
+double SunInfo::CalculateLocalSolarTime(const int t_d, const double hour,
+                                        const double longitude) {
   // Formula [2.4], [2,5], [2.6] in book p.27
   // t_h = t + ((γ_sm - γ) / (π / 12)) + (EoT / 60)
   // t: local time (hours)
@@ -136,14 +136,14 @@ double MeteoInfo::CalculateLocalSolarTime(const int t_d, const double hour,
          (EoT / kMinsPerHour);
 }
 
-double MeteoInfo::CalculateHourAngle(const double t_h) {
+double SunInfo::CalculateHourAngle(const double t_h) {
   // Formula [2.3] in book p.27
   // τ = (π / 12) * (t_h - 12)
   return kPiDividedBy12 * (t_h - kHoursHalfDay);
 }
 
-double MeteoInfo::CalculateSolarElevation(const double delta, const double tau,
-                                          const double lambda) {
+double SunInfo::CalculateSolarElevation(const double delta, const double tau,
+                                        const double lambda) {
   // Formula [2.8] in book p.30
   // β: Solar angle from horizontal in radians
   // sin(β) = sin(δ) * sin(λ) + cos(δ) * cos(λ) * cos(τ)
@@ -152,8 +152,8 @@ double MeteoInfo::CalculateSolarElevation(const double delta, const double tau,
   return asin(sin_beta);
 }
 
-double MeteoInfo::CalculateSolarAzimuth(const double delta, const double lambda,
-                                        const double beta, const double t_h) {
+double SunInfo::CalculateSolarAzimuth(const double delta, const double lambda,
+                                      const double beta, const double t_h) {
   // Formula [2.9], [2.10] in book p.30, p.31
   // β: Solar's altitude with respect to the observer
   // ϕ: Solar Azimuth
@@ -173,7 +173,7 @@ double MeteoInfo::CalculateSolarAzimuth(const double delta, const double lambda,
   return kPI + alpha;
 }
 
-std::tuple<double, double, double> MeteoInfo::CalculateDayLength(
+std::tuple<double, double, double> SunInfo::CalculateDayLength(
     const double delta, const double tau, const double lambda) {
   // Formula [2.11] in book p.31
   // t_ss = 12 + (12 / π) * acos(-(sin(δ) * sin(λ) / (cos(δ) * cos(λ))))
@@ -194,7 +194,7 @@ std::tuple<double, double, double> MeteoInfo::CalculateDayLength(
   return std::make_tuple(t_sr, t_ss, day_length);
 }
 
-std::tuple<double, double, double> MeteoInfo::CalculateDailySolarIrradiance(
+std::tuple<double, double, double> SunInfo::CalculateDailySolarIrradiance(
     const double I_c_prime, const double a, const double b,
     const Climate::ZoneType climate_zone, const double day_length) {
   // Formula [2.14] in book p.33
@@ -275,7 +275,7 @@ std::tuple<double, double, double> MeteoInfo::CalculateDailySolarIrradiance(
   return std::make_tuple(I_t_d, I_df_d, I_dr_d);
 }
 
-std::tuple<double, double, double> MeteoInfo::CalculateHourlySolarIrradiance(
+std::tuple<double, double, double> SunInfo::CalculateHourlySolarIrradiance(
     const double beta, const double I_c_prime, const double a, const double b,
     const double I_t_d, const int t_h) {
   // Formula [2.27] in book p.39
@@ -322,16 +322,15 @@ std::tuple<double, double, double> MeteoInfo::CalculateHourlySolarIrradiance(
   return std::make_tuple(I_t, I_df, I_dr);
 }
 
-double MeteoInfo::CalculateSaturatedVaporPressure(const double temperature) {
+double SunInfo::CalculateSaturatedVaporPressure(const double temperature) {
   // Formula [2.40] in book p.43
   // e_s(T_a) = 6.1078 * exp(17.269 * (T_a / (T_a + 237.3)))
   return 6.1078 * exp(17.269 * temperature / (temperature + 237.3));
 }
 
-double MeteoInfo::CalculateAirTemperature(double t_h, const double temp_min,
-                                          const double temp_max,
-                                          const double t_sr,
-                                          const double t_ss) {
+double SunInfo::CalculateAirTemperature(double t_h, const double temp_min,
+                                        const double temp_max,
+                                        const double t_sr, const double t_ss) {
   // offset 1.5 hour after sunrise
   const double kOffset = 1.5;
 

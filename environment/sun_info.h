@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_
 
 #include <chrono>
 #include <tuple>
@@ -32,11 +32,11 @@ constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
 
 namespace environment {
 
-class MeteoInfo {
+class SunInfo {
  public:
-  MeteoInfo(const std::chrono::system_clock::time_point &time,
-            const Location &location, const Climate::ZoneType climate_zone,
-            const Weather &weather);
+  SunInfo(const std::chrono::system_clock::time_point &time,
+          const Location &location, const Climate::ZoneType climate_zone,
+          const Weather &weather);
 
   const double &solar_azimuth() const { return solar_azimuth_; }
   const double &solar_elevation() const { return solar_elevation_; }
@@ -149,4 +149,4 @@ class MeteoInfo {
 };
 
 }  // namespace environment
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_METEO_INFO_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_

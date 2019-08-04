@@ -4,11 +4,11 @@
 
 #include <gtest/gtest.h>
 
-#include "environment/meteo_info.h"
+#include "environment/sun_info.h"
 
 using namespace environment;
 
-class MeteoInfoTest : public ::testing::Test {
+class SunInfoTest : public ::testing::Test {
  protected:
   void SetUp() override {
     weather_ = std::make_shared<Weather>(26.0, 32.0, 0.0);
@@ -37,56 +37,56 @@ class MeteoInfoTest : public ::testing::Test {
   const double kOneDegreeInRadians = 1.0 * kPI / kPIforDegree;
 };
 
-TEST_F(MeteoInfoTest, On_06_21) {
+TEST_F(SunInfoTest, On_06_21) {
   Location location(0, 0, 23.45, 23.45);
   auto tp = CreateTimePoint(2019, 6, 21, 12, 0, 0);
 
-  MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
+  SunInfo sun_info(tp, location, climate_zone_, *weather_);
 
   std::cout << "Solar inclination: "
-            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << sun_info.solar_inclination() * kPIforDegree / kPI
             << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
+  EXPECT_LE(sun_info.solar_inclination(), kOneDegreeInRadians);
 }
 
-TEST_F(MeteoInfoTest, On_12_21) {
+TEST_F(SunInfoTest, On_12_21) {
   Location location(0, 0, -23.45, -23.45);
   auto tp = CreateTimePoint(2019, 12, 21, 12, 0, 0);
 
-  MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
+  SunInfo sun_info(tp, location, climate_zone_, *weather_);
 
   std::cout << "Solar inclination: "
-            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << sun_info.solar_inclination() * kPIforDegree / kPI
             << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
+  EXPECT_LE(sun_info.solar_inclination(), kOneDegreeInRadians);
 }
 
-TEST_F(MeteoInfoTest, On_03_21) {
+TEST_F(SunInfoTest, On_03_21) {
   Location location(0, 0, 0, 0);
   auto tp = CreateTimePoint(2019, 3, 21, 12, 0, 0);
 
-  MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
+  SunInfo sun_info(tp, location, climate_zone_, *weather_);
 
   std::cout << "Solar inclination: "
-            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << sun_info.solar_inclination() * kPIforDegree / kPI
             << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
+  EXPECT_LE(sun_info.solar_inclination(), kOneDegreeInRadians);
 }
 
-TEST_F(MeteoInfoTest, On_09_21) {
+TEST_F(SunInfoTest, On_09_21) {
   Location location(0, 0, 0, 0);
   auto tp = CreateTimePoint(2019, 9, 21, 12, 0, 0);
 
-  MeteoInfo meteo_info(tp, location, climate_zone_, *weather_);
+  SunInfo sun_info(tp, location, climate_zone_, *weather_);
 
   std::cout << "Solar inclination: "
-            << meteo_info.solar_inclination() * kPIforDegree / kPI
+            << sun_info.solar_inclination() * kPIforDegree / kPI
             << " degree(s).\n";
   // TODO: figure the expected value
-  EXPECT_LE(meteo_info.solar_inclination(), kOneDegreeInRadians);
+  EXPECT_LE(sun_info.solar_inclination(), kOneDegreeInRadians);
 }
 
 // TODO: add more tests

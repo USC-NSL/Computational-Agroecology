@@ -15,7 +15,7 @@ Environment::Environment(const Config &config,
       time_step_(0),
       terrain_(terrain),
       weather_(climate_, time),
-      meteo_info_(time, config.location, climate_.climate_zone, weather_) {
+      sun_info_(time, config.location, climate_.climate_zone, weather_) {
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -97,8 +97,8 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   // TODO: GLOG
 
   // TODO: call all other simulators
-  meteo_info_.SimulateToTime(new_timestamp, config_.location,
-                             climate_.climate_zone, weather_);
+  sun_info_.SimulateToTime(new_timestamp, config_.location,
+                           climate_.climate_zone, weather_);
 
   // Update the information of environment
 
