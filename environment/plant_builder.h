@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "environment/plant.h"
 
@@ -30,6 +31,9 @@ class PlantBuilder {
   static Plant *NewPlant(const std::string &model_name);
   static Plant *NewPlant(const std::string &model_name,
                          const PlantParams &overrides);
+
+  // Returns a list of all registered plant model names
+  static std::vector<std::string> GetPlantList();
 
  private:
   PlantBuilder() {}

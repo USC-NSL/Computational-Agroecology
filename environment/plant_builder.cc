@@ -31,6 +31,17 @@ Plant *PlantBuilder::NewPlant(const std::string &model_name,
   return nullptr;
 }
 
+std::vector<std::string> PlantBuilder::GetPlantList() {
+  std::vector<std::string> plant_list;
+  plant_list.reserve(models_.size());
+
+  for (const auto &p : models_) {
+    plant_list.push_back(p.first);
+  }
+
+  return plant_list;
+}
+
 // Definition
 std::unordered_map<std::string, PlantGenerator> PlantBuilder::models_;
 
