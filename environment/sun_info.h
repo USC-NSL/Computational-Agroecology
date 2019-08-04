@@ -45,6 +45,9 @@ class SunInfo {
     return kPI / 2.0 - solar_elevation_;
   }
   const double &hourly_irradiance() const { return I_t_; }
+  const double &hourly_diffuse_irradiance() const { return I_df_; }
+  const double &hourly_direct_irradiance() const { return I_dr_; }
+
   const double &saturated_vapor_pressure() const { return e_s_T_a_; }
   const double &air_temperature() const { return T_a_; }
 
@@ -57,6 +60,8 @@ class SunInfo {
   // when calculating the daily intercepted of total solar radiation. This
   // function does not update any information in this function. It only uses
   // some variables in `ConstantCaches` to help itself.
+  // Given local solar time, calculate hourly solar irradiance, hourly diffuse
+  // irradiance, and hourly direct irradiance.
   std::tuple<double, double, double> CalculateHourlySolarIrradiance(
       const double t_h) const;
 
