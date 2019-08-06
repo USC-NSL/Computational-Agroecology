@@ -3,8 +3,12 @@
 namespace environment {
 
 bool PlantContainer::AddPlant(Plant *plant) {
-  if (!CheckPosition(plant->position(), plant->trunk_size()))
+  if (!CheckPosition(plant->position(), plant->trunk_size())) {
+    // TODO: remove this comment after implementing action
+    // ALERT: if there is no space to add plant, the plant would be destroyed.
+    delete plant;
     return false;
+  }
   plants_.push_back(plant);
   ContructPlantKDTree();
   return true;
