@@ -10,12 +10,12 @@ Environment::Environment(const Config &config,
                          const Terrain &terrain)
     : config_(config),
       climate_(config),
-      sun_info_(time, config.location, climate_.climate_zone),
       timestamp_(time),
       time_step_length_(time_step_length),
       time_step_(0),
       terrain_(terrain),
-      weather_(climate_, time) {
+      weather_(climate_, time),
+      sun_info_(time, config.location, climate_.climate_zone, weather_) {
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -98,7 +98,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
 
   // TODO: call all other simulators
   sun_info_.SimulateToTime(new_timestamp, config_.location,
-                           climate_.climate_zone);
+                           climate_.climate_zone, weather_);
 
   // Update the information of environment
 

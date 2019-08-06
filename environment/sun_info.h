@@ -1,48 +1,63 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_
+#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_
 
 #include <chrono>
 #include <tuple>
 
 #include "environment/climate.h"
 #include "environment/location.h"
+#include "environment/weather.h"
 
-const double kPI = 3.14159265358979323846;
-const double k2PI = 2.0 * kPI;
-const double kPIforDegree = 180.0;
+constexpr double kPI = 3.14159265358979323846;
+constexpr double k2PI = 2.0 * kPI;
+constexpr double kPIforDegree = 180.0;
 
-const int kDaysPerYear = 365;
-const int kHoursPerDay = 24;
-const int kDaysLeftPerYear = 10;
-const int kHoursHalfDay = 12;
-const int kMinsPerHour = 60;
-const int kSecsPerMin = 60;
+constexpr int kDaysPerYear = 365;
+constexpr int kHoursPerDay = 24;
+constexpr int kHoursHalfDay = kHoursPerDay / 2;
+constexpr int kMinsPerHour = 60;
+constexpr int kMinsPerDay = kMinsPerHour * kHoursPerDay;
+constexpr int kSecsPerMin = 60;
+constexpr int kSecsPerHour = kSecsPerMin * kMinsPerHour;
+constexpr int kSecsPerDay = kSecsPerMin * kMinsPerHour * kHoursPerDay;
+constexpr int kDaysLeftPerYear = 10;
 
-static const double kTropic = 23.45;
+// constant variables only for this file
+namespace {
 
-static const double kPiDividedBy12 = kPI / kHoursHalfDay;
+constexpr double kTropic = 23.45;
+constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
+
+}  // namespace
 
 namespace environment {
 
 class SunInfo {
  public:
   SunInfo(const std::chrono::system_clock::time_point &time,
-          const Location &location, const Climate::ZoneType climate_zone);
+          const Location &location, const Climate::ZoneType climate_zone,
+          const Weather &weather);
 
   const double &solar_azimuth() const { return solar_azimuth_; }
+  const double &solar_elevation() const { return solar_elevation_; }
   const double solar_inclination() const {
     // 90 degrees - solar_altitude
-    return kPI / 2.0 - solar_altitude_;
+    return kPI / 2.0 - solar_elevation_;
   }
   const double &hourly_irradiance() const { return I_t_; }
+  const double &saturated_vapor_pressure() const { return e_s_T_a_; }
+  const double &air_temperature() const { return T_a_; }
 
   void SimulateToTime(const std::chrono::system_clock::time_point &time,
                       const Location &location,
-                      const Climate::ZoneType climate_zone);
+                      const Climate::ZoneType climate_zone,
+                      const Weather &weather);
 
  private:
   double solar_azimuth_;
-  double solar_altitude_;  // aka β
+
+  // Solar angle from horizontal (aka β) in radians
+  double solar_elevation_;
 
   // Local solar time for sunrise (hours)
   double t_sr_;
@@ -65,31 +80,37 @@ class SunInfo {
   // Hourly direct irradiance on a horizontal surface
   double I_dr_;
 
-  // TODO: Air vapor pressure, wind speed, and air temperature haven't
-  // implemented.
+  // Saturated vapor pressure (mbar)
+  double e_s_T_a_;
+
+  // TODO: In the book, the wind speed is assumed constant. However, we don't
+  // have the data for wind speed. Just leave it blank for now.
+
+  // Air temperature
+  double T_a_;
 
   static const double DegreeToRadians(const double degree);
   static const double RadiansToDegree(const double radians);
 
-  void Update(const int t_d, const int hour, const double longitude,
-              const double latitude, const Climate::ZoneType climate_zone);
+  void Update(const int t_d, const double hour, const double longitude,
+              const double latitude, const Climate::ZoneType climate_zone,
+              const double temp_min, const double temp_max);
 
   // Given the day of year, calculate solar declination δ in radians.
   double CalculateSolarDeclination(const int t_d);
 
   // Given the day of year, local time (hours), and observer's longitude,
   // convert local time (hours) to local solar time (hours).
-  double CalculateLocalSolarTime(const int t_d, const int hour,
+  double CalculateLocalSolarTime(const int t_d, const double hour,
                                  const double longitude);
 
   // Given local solar time (hours), calculate the hour angle τ in radians.
   double CalculateHourAngle(const double t_h);
 
-  // Solar position and time
   // Given solar declination δ, hour angle τ, and observer's latitude λ,
-  // calculate solar altitude.
-  double CalculateSolarAltitude(const double delta, const double tau,
-                                const double lambda);
+  // calculate solar angle from horizontal (radians).
+  double CalculateSolarElevation(const double delta, const double tau,
+                                 const double lambda);
 
   // Given solar declination δ, observer's latitude λ, solar altitude β, and
   // local solar time, calculate solar azimuth.
@@ -119,7 +140,13 @@ class SunInfo {
   std::tuple<double, double, double> CalculateHourlySolarIrradiance(
       const double beta, const double I_c_prime, const double a, const double b,
       const double I_t_d, const int t_h);
+
+  double CalculateSaturatedVaporPressure(const double temperature);
+
+  double CalculateAirTemperature(double t_h, const double temp_min,
+                                 const double temp_max, const double t_sr,
+                                 const double t_ss);
 };
 
 }  // namespace environment
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUNINFO_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SUN_INFO_H_
