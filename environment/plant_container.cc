@@ -12,7 +12,7 @@ bool PlantContainer::AddPlant(Plant *plant) {
 
 bool PlantContainer::DelPlant(const Plant &plant) {
   size_t index = kdtree_->nearest_index(plant.position());
-  if (*plants_[index] == plant) {
+  if (IsSamePlant(*plants_[index], plant)) {
     plants_.erase(plants_.begin() + index);
     ContructPlantKDTree();
     return true;
@@ -22,7 +22,7 @@ bool PlantContainer::DelPlant(const Plant &plant) {
 
 bool PlantContainer::DelPlant(const std::vector<double> position) {
   size_t index = kdtree_->nearest_index(position);
-  if (SamePlant(plants_[index]->position(), position)) {
+  if (IsSamePlant(*plants_[index], position)) {
     plants_.erase(plants_.begin() + index);
     ContructPlantKDTree();
     return true;
@@ -30,9 +30,19 @@ bool PlantContainer::DelPlant(const std::vector<double> position) {
   return false;
 }
 
-bool PlantContainer::SamePlant(const point_t &lhs, const point_t &rhs) const {
+bool PlantContainer::IsSamePlant(const Plant &plant,
+                                 const point_t &position) const {
   for (int i = 0; i < kDimsOfKDTree; i++) {
-    if (lhs[i] != rhs[i])
+    if (plant.position()[i] != position[i])
+      return false;
+  }
+  return true;
+}
+
+bool PlantContainer::IsSamePlant(const Plant &plant_a,
+                                 const Plant &plant_b) const {
+  for (int i = 0; i < kDimsOfKDTree; i++) {
+    if (plant_a.position()[i] != plant_b.position()[i])
       return false;
   }
   return true;

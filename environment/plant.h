@@ -65,6 +65,8 @@ class Plant {
 
   const std::string &name() const { return name_; }
   const std::vector<double> &position() const { return position_; }
+  // TODO: deprecate SetPosition later. It should be initialized in plant
+  // builder.
   void SetPosition(const std::vector<double> position) { position_ = position; }
   const double trunk_size() const { return trunk_size_; }
   // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
@@ -72,7 +74,6 @@ class Plant {
   void SetTrunkSize(const double trunk_size) { trunk_size_ = trunk_size; }
   // Harvest this plant. This should return the value of yeild.
   int Harvest();
-  bool operator==(const Plant &rhs);
 
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
@@ -91,7 +92,6 @@ class Plant {
         const std::vector<double> position = {0.0, 0.0},
         const double trunk_size = 0.0)
       : name_(name),
-        dims_(position.size()),
         position_(position),
         trunk_size_(trunk_size),
         health_(kMaxHealth),
@@ -114,11 +114,11 @@ class Plant {
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;
 
-  // The information of the location
-  const int dims_;
   std::vector<double> position_;
-  // The trunk size of the plant
+  // Trunk size of the plant
   double trunk_size_;
+  // Root size or canopy size
+  double root_size_;
 
   // Health of the plant in range [kMinHealth, kMaxHealth].
   int health_;

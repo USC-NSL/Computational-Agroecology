@@ -15,7 +15,8 @@ class PlantContainer {
  private:
   std::vector<Plant *> plants_;
   std::shared_ptr<KDTree> kdtree_;
-  bool SamePlant(const point_t &lhs, const point_t &rhs) const;
+  bool IsSamePlant(const Plant &plant_a, const Plant &plant_b) const;
+  bool IsSamePlant(const Plant &plant, const point_t &position) const;
   bool CheckPosition(const point_t &position, const double size);
   void ContructPlantKDTree();
 };

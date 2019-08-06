@@ -8,12 +8,4 @@ int Plant::Harvest() {
   return ret;
 }
 
-bool Plant::operator==(const Plant& rhs){
-  for(int i=0;i<kDimsOfKDTree;i++){
-    if(this->position_[i] != rhs.position_[i])
-    return false;
-  }
-  return true;
-}
-
 }  // namespace environment
