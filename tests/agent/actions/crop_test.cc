@@ -129,8 +129,8 @@ TEST_F(AddTest, ExecuteTest_1) {
 
   action.Execute(&terrain);
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
@@ -214,8 +214,8 @@ TEST_F(RemoveTest, ExecuteTest_1) {
 
   action.Execute(&terrain);
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(kBeanTypeName, terrain.tiles()[i][j].plant->name());
@@ -228,8 +228,8 @@ TEST_F(RemoveTest, ExecuteTest_1) {
   crop::Remove remove_action(applied_range.front(), time_step, duration);
 
   remove_action.Execute(&terrain);
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         EXPECT_EQ(nullptr, terrain.tiles()[i][j].plant);
       }
@@ -243,8 +243,8 @@ TEST_F(RemoveTest, ExecuteTest_2) {
 
   action.Execute(&terrain);
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
@@ -260,8 +260,8 @@ TEST_F(RemoveTest, ExecuteTest_2) {
   crop::Remove remove_action(applied_range, time_step, duration);
 
   remove_action.Execute(&terrain);
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
@@ -378,8 +378,8 @@ TEST_F(AddWaterTest, AddToRange1) {
   crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
   water_action.Execute(&terrain);
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(15.0, terrain.tiles()[i][j].soil.water_content);
@@ -399,8 +399,8 @@ TEST_F(AddWaterTest, AddToRange2) {
   crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
   water_action.Execute(&terrain);
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    for (size_t j = 0; j < terrain.length(); ++j) {
+  for (size_t i = 0; i < terrain.size(); ++i) {
+    for (size_t j = 0; j < terrain.size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, terrain.tiles()[i][j].plant);
         EXPECT_EQ(15.0, terrain.tiles()[i][j].soil.water_content);
