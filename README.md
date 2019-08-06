@@ -20,12 +20,6 @@ $ [sudo] apt install gcc g++ make
 $ [sudo] apt install libgtest-dev cmake
 ```
 
-## Load submodule
-
-```shell
-$ git submodule update --init --recursive
-```
-
 **Installation**
 
 ```shell
@@ -41,6 +35,12 @@ $ [sudo] cp *.a /usr/lib
 
 ```shell
 $ [sudo] apt-get install freeglut3 freeglut3-dev cmake libglew-dev mesa-common-dev build-essential libglew-dev libglm-dev
+```
+
+## Load submodule
+
+```shell
+$ git submodule update --init --recursive
 ```
 
 ## Build
