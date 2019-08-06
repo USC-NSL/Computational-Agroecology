@@ -1,14 +1,21 @@
 #include "terrain.h"
-
+#include <assert.h>
 #include <vector>
-
 #include "environment/plant.h"
 
 namespace environment {
 
 // `struct Coordinate`
-Coordinate::Coordinate(const size_t x, const size_t y) : x(x), y(y) {}
+Coordinate::Coordinate(const double x, const double y, const double z)
+    : x(x), y(y), z(z) {}
+Coordinate::Coordinate(std::vector<double> position) {
+  assert(position.size() >= 3);
+  x = position[0];
+  y = position[1];
+  z = position[2];
+}
 
+// We assume that there are no two plants with same x,y coordinates
 bool operator==(const Coordinate &lhs, const Coordinate &rhs) {
   return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }

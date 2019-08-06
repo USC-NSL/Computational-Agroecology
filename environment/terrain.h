@@ -14,10 +14,12 @@ namespace environment {
 
 // A wrapper to represent the position on the `Tiles`
 struct Coordinate {
-  Coordinate(const size_t x, const size_t y);
+  Coordinate(const double x, const double y, const double z = 0);
+  Coordinate(std::vector<double> position);
 
-  size_t x;
-  size_t y;
+  double x;
+  double y;
+  double z;
 };
 
 bool operator==(const Coordinate &lhs, const Coordinate &rhs);
