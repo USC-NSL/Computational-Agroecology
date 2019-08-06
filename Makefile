@@ -26,6 +26,7 @@ ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
 	$(ENVIRONMENT_PATH)/soil.o \
 	$(ENVIRONMENT_PATH)/soil_container.o \
 	$(ENVIRONMENT_PATH)/sun_info.o \
+	$(ENVIRONMENT_PATH)/coordinate.o \
 	$(ENVIRONMENT_PATH)/terrain.o \
 	$(ENVIRONMENT_PATH)/weather.o
 

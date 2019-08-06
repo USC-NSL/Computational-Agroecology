@@ -2,7 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_
 
 #include <vector>
-
+#include "environment/coordinate.h"
 #include "environment/soil.h"
 
 namespace environment {
@@ -10,7 +10,10 @@ namespace environment {
 class SoilContainer {
  public:
   // TODO: implement the constructor by physical unit
-  SoilContainer() {}
+  SoilContainer(size_t size)
+      : soils_(size,
+               std::vector<Soil>(size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0))) {}
+  Soil *FindSoilByCoord(const Coordinate &coordinate);
   Soil *FindSoilByCoord(double x, double y);
   std::vector<Soil *> FindSoilByCoords(double x, double y, double x_length,
                                        double y_length);

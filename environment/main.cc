@@ -25,7 +25,7 @@ int main() {
   // Declare Qlearning
   agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
   // Create Action
-  agent::ActionID action = {terrain.width(), terrain.length(),
+  agent::ActionID action = {terrain.size(), terrain.size(),
                             ::agent::action::ActionType::CROP_HARVEST, 2};
   auto action_obj = agent_test.CreateAction(action);
 

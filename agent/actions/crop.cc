@@ -43,7 +43,10 @@ void Add::Execute(environment::Terrain *terrain) const {
 
   using environment::PlantBuilder;
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).plant.reset(PlantBuilder::NewPlant(crop_type_name_));
+    auto *new_plant = PlantBuilder::NewPlant(crop_type_name_);
+    if (!terrain->plant_container_.AddPlant(new_plant)) {
+      delete new_plant;
+    }
   }
 }
 
@@ -83,7 +86,7 @@ void Remove::Execute(environment::Terrain *terrain) const {
   std::cout << "Removing " << applied_range_.size() << " crop(s)." << std::endl;
 
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).plant.reset();
+    terrain->plant_container_.DelPlant(c);
   }
 }
 
@@ -117,8 +120,10 @@ void Harvest::Execute(environment::Terrain *terrain) const {
 
   for (const auto &c : applied_range_) {
     // TODO: generalize the harvest / yield handling
-    if (terrain->tiles_.get(c).plant != nullptr) {
-      int yield = terrain->tiles_.get(c).plant->Harvest();
+    terrain->plant_container_.DelPlant(c);
+    environment::Plant *plant = terrain->plant_container_.FindPlant(c);
+    if (plant != nullptr) {
+      int yield = plant->Harvest();
       terrain->yield_ += yield;
     }
   }
@@ -156,7 +161,7 @@ void Water::Execute(environment::Terrain *terrain) const {
   }
 
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).soil.water_content += water_amount_;
+    terrain->soil_container_.FindSoilByCoord(c)->water_content += water_amount_;
   }
 }
 

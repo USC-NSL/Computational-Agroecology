@@ -6,6 +6,10 @@ Soil *SoilContainer::FindSoilByCoord(double x, double y) {
   return &((soils_[size_t(x)])[size_t(y)]);
 }
 
+Soil *SoilContainer::FindSoilByCoord(const Coordinate &coordinate) {
+  return &((soils_[size_t(coordinate.x)])[size_t(coordinate.y)]);
+}
+
 std::vector<Soil *> SoilContainer::FindSoilByCoords(double x, double y,
                                                     double x_length,
                                                     double y_length) {

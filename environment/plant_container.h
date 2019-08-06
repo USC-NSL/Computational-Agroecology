@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
 
 #include "KDTree/KDTree.hpp"
+#include "environment/coordinate.h"
 #include "environment/plant.h"
 namespace environment {
 
@@ -9,7 +10,8 @@ class PlantContainer {
  public:
   bool AddPlant(Plant *plant);
   bool DelPlant(const Plant &plant);
-  bool DelPlant(const std::vector<double> position);
+  bool DelPlant(const Coordinate &coordinate);
+  Plant *FindPlant(const Coordinate &coordinate);
   PlantContainer() : kdtree_(nullptr){};
 
  private:

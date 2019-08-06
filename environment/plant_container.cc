@@ -4,9 +4,6 @@ namespace environment {
 
 bool PlantContainer::AddPlant(Plant *plant) {
   if (!CheckPosition(plant->position(), plant->trunk_size())) {
-    // TODO: remove this comment after implementing action
-    // ALERT: if there is no space to add plant, the plant would be destroyed.
-    delete plant;
     return false;
   }
   plants_.push_back(plant);
@@ -24,7 +21,17 @@ bool PlantContainer::DelPlant(const Plant &plant) {
   return false;
 }
 
-bool PlantContainer::DelPlant(const std::vector<double> position) {
+Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
+  point_t position = coordinate.ToVector();
+  size_t index = kdtree_->nearest_index(position);
+  if (IsSamePlant(*plants_[index], position)) {
+    return plants_[index];
+  }
+  return nullptr;
+}
+
+bool PlantContainer::DelPlant(const Coordinate &coordinate) {
+  point_t position = coordinate.ToVector();
   size_t index = kdtree_->nearest_index(position);
   if (IsSamePlant(*plants_[index], position)) {
     plants_.erase(plants_.begin() + index);

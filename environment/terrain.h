@@ -7,49 +7,12 @@
 #include <vector>
 
 #include "agent/actions/action.h"
-#include "environment/plant.h"
-#include "environment/soil.h"
+#include "environment/coordinate.h"
+#include "environment/plant_container.h"
+#include "environment/soil_container.h"
 
 namespace environment {
 
-// A wrapper to represent the position on the `Tiles`
-struct Coordinate {
-  Coordinate(const double x, const double y, const double z = 0);
-  Coordinate(std::vector<double> position);
-
-  double x;
-  double y;
-  double z;
-};
-
-bool operator==(const Coordinate &lhs, const Coordinate &rhs);
-
-struct Cell {
-  Cell(const Soil &soil);
-  Cell(const size_t size, const Soil &soil);
-
-  size_t size;
-  std::shared_ptr<Plant> plant;
-  Soil soil;
-};
-
-bool operator==(const Cell &lhs, const Cell &rhs);
-
-// A collection of 2D `Cell`s
-class Tiles : public std::vector<std::vector<Cell>> {
- public:
-  Tiles();
-  Tiles(const size_t width, const size_t length, const Soil &soil);
-  inline Cell &get(const Coordinate &coordinate) {
-    return (*this)[coordinate.x][coordinate.y];
-  }
-
-  inline const size_t width() const { return size(); }
-  inline const size_t length() const { return empty() ? 0 : front().size(); }
-};
-
-// TODO: think about whether it is necessary to define a `class Tiles`
-// The data structure that stores the data of the crop field
 class Terrain {
  public:
   // Constructor
@@ -58,15 +21,15 @@ class Terrain {
   Terrain(const size_t size);
 
   // Accessors
-  inline const size_t width() const { return tiles_.width(); }
-  inline const size_t length() const { return tiles_.length(); }
-  inline const Tiles &tiles() const { return tiles_; }
   inline const int yield() const { return yield_; }
+  inline const size_t size() const { return size_; }
 
   // Modifiers
   void ExecuteAction(const agent::action::Action &action);
 
  private:
+  PlantContainer plant_container_;
+  SoilContainer soil_container_;
   friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 
   // befriend with a list of actions
@@ -75,8 +38,8 @@ class Terrain {
   friend class agent::action::crop::Harvest;
   friend class agent::action::crop::Water;
 
-  Tiles tiles_;
   int yield_;
+  size_t size_;
 };
 
 std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
