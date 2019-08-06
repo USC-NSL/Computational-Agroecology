@@ -9,13 +9,14 @@ namespace environment {
 
 class SoilContainer {
  public:
+  // TODO: implement the constructor by physical unit
   SoilContainer() {}
-  Soil* FindSoilByCoord(double x, double y);
+  Soil *FindSoilByCoord(double x, double y);
   std::vector<Soil *> FindSoilByCoords(double x, double y, double x_length,
                                        double y_length);
 
  private:
-  std::vector<std::vector<Soil> > soils_;
+  std::vector<std::vector<Soil>> soils_;
 };
 
 }  // namespace environment

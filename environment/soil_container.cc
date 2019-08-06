@@ -2,7 +2,7 @@
 
 namespace environment {
 
-Soil* SoilContainer::FindSoilByCoord(double x, double y) {
+Soil *SoilContainer::FindSoilByCoord(double x, double y) {
   return &((soils_[size_t(x)])[size_t(y)]);
 }
 

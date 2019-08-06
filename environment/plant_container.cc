@@ -23,16 +23,15 @@ bool PlantContainer::DelPlant(const Plant &plant) {
 bool PlantContainer::DelPlant(const std::vector<double> position) {
   size_t index = kdtree_->nearest_index(position);
   if (SamePlant(plants_[index]->position(), position)) {
-    // delete plants_[index];
     plants_.erase(plants_.begin() + index);
     ContructPlantKDTree();
     return true;
   }
   return false;
-}  // namespace environment
+}
 
 bool PlantContainer::SamePlant(const point_t &lhs, const point_t &rhs) const {
-  for (int i = 0; i < kDims; i++) {
+  for (int i = 0; i < kDimsOfKDTree; i++) {
     if (lhs[i] != rhs[i])
       return false;
   }
@@ -43,24 +42,17 @@ bool PlantContainer::CheckPosition(const point_t &position, const double size) {
   if (!kdtree_)
     return true;
   auto res = kdtree_->neighborhood(position, size);
-  if (!res.empty())
-    return false;
-  else
-    return true;
+  return res.empty();
 }
 
 void PlantContainer::ContructPlantKDTree() {
   pointVec points;
   for (const auto &plant : plants_) {
-    point_t position;
-    for (int i = 0; i < kDims; i++) {
-      position.push_back(plant->position()[i]);
-    }
+    point_t position(plant->position().begin(),
+                     plant->position().begin() + kDimsOfKDTree);
     points.push_back(position);
   }
-  if (kdtree_)
-    delete kdtree_;
-  kdtree_ = new KDTree(points);
+  kdtree_ = std::make_shared<KDTree>(points);
 }
 
 }  // namespace environment

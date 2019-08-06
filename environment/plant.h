@@ -10,7 +10,7 @@
 namespace environment {
 
 // the number of dimensions that we used to construct kd-tree
-const int kDims = 2;
+const int kDimsOfKDTree = 2;
 
 // Static properties as used for parameters in plant models.
 // All values are stored using integer types to avoid floating-point error.
@@ -67,10 +67,12 @@ class Plant {
   const std::vector<double> &position() const { return position_; }
   void SetPosition(const std::vector<double> position) { position_ = position; }
   const double trunk_size() const { return trunk_size_; }
+  // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
+  // modify the test as well.
   void SetTrunkSize(const double trunk_size) { trunk_size_ = trunk_size; }
   // Harvest this plant. This should return the value of yeild.
   int Harvest();
-  bool operator==(const Plant& rhs);
+  bool operator==(const Plant &rhs);
 
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
@@ -140,7 +142,6 @@ class Plant {
 
   // A collection of static parameters of this plant.
   PlantParams params_;
-
 };
 
 }  // namespace environment
