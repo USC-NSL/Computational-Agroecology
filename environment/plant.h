@@ -64,6 +64,10 @@ class Plant {
   virtual ~Plant() {}
 
   const std::string &name() const { return name_; }
+
+  const double canopy_size() const { return canopy_size_; }
+  void SetCanpoySize(const douvle canopy_size) { canopy_size_ = canopy_size; }
+
   const std::vector<double> &position() const { return position_; }
   // TODO: deprecate SetPosition later. It should be initialized in plant
   // builder.
@@ -90,10 +94,11 @@ class Plant {
   // Constructs a generic plant with default values, only for child class use.
   Plant(const std::string &name,
         const std::vector<double> position = {0.0, 0.0},
-        const double trunk_size = 0.0)
+        const double trunk_size = 0.0, const double canopy_size = 0.0)
       : name_(name),
         position_(position),
         trunk_size_(trunk_size),
+        canopy_size_(canopy_size),
         health_(kMaxHealth),
         flowering_(false),
         accumulated_gdd_(0),
@@ -115,6 +120,9 @@ class Plant {
   std::string name_;
 
   std::vector<double> position_;
+
+  // Canopy size of the plant;
+  double canopy_size_;
   // Trunk size of the plant
   double trunk_size_;
   // Root size or canopy size
