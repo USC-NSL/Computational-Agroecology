@@ -66,7 +66,7 @@ class Plant {
   const std::string &name() const { return name_; }
 
   const double canopy_size() const { return canopy_size_; }
-  void SetCanpoySize(const douvle canopy_size) { canopy_size_ = canopy_size; }
+  void SetCanopySize(const double canopy_size) { canopy_size_ = canopy_size; }
 
   const std::vector<double> &position() const { return position_; }
   // TODO: deprecate SetPosition later. It should be initialized in plant
