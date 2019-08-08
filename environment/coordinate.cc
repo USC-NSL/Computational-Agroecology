@@ -23,7 +23,7 @@ point_t Coordinate::To2DVector() const {
   return {x, y};
 }
 
-bool operator== (const Coordinate &lhs, const Coordinate &rhs) {
+bool operator==(const Coordinate &lhs, const Coordinate &rhs) {
   return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
 }
 

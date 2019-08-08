@@ -43,12 +43,12 @@ bool PlantContainer::DelPlant(const Coordinate &coordinate) {
 
 bool PlantContainer::IsSamePlant(const Plant &plant,
                                  const point_t &position) const {
-    return plant.position() == position;
+  return plant.position() == position;
 }
 
 bool PlantContainer::IsSamePlant(const Plant &plant_a,
                                  const Plant &plant_b) const {
-    return plant_a.position() == plant_b.position();
+  return plant_a.position() == plant_b.position();
 }
 
 bool PlantContainer::CheckPosition(const point_t &position, const double size) {

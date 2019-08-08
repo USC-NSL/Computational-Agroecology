@@ -16,9 +16,9 @@ void Terrain::ExecuteAction(const agent::action::Action &action) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Terrain &terrain) {
-  //TODO: add output
-  os << "this is plant."<<std::endl;
-  os << "this is soil."<<std::endl;
+  // TODO: add output
+  os << "this is plant." << std::endl;
+  os << "this is soil." << std::endl;
   return os;
 }
 

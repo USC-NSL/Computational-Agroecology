@@ -90,8 +90,7 @@ class Plant {
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name,
-        const Coordinate position = {0.0, 0.0},
+  Plant(const std::string &name, const Coordinate position = {0.0, 0.0},
         const double trunk_size = 0.0, const double canopy_size = 0.0)
       : name_(name),
         position_(position),
@@ -117,7 +116,7 @@ class Plant {
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;
 
-  Coordinate  position_;
+  Coordinate position_;
 
   // Canopy size of the plant;
   double canopy_size_;
