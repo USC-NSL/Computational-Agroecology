@@ -2,8 +2,10 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
 
 #include "KDTree/KDTree.hpp"
+
 #include "environment/coordinate.h"
 #include "environment/plant.h"
+
 namespace environment {
 
 class PlantContainer {

@@ -2,6 +2,7 @@
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_COORDINATE_H_
 
 #include <vector>
+
 #include "KDTree/KDTree.hpp"
 
 namespace environment {
@@ -13,10 +14,12 @@ struct Coordinate {
   double x;
   double y;
   double z;
-  point_t ToVector() const;
+  point_t To3DVector() const;
+  point_t To2DVector() const;
 };
 
 bool operator==(const Coordinate &lhs, const Coordinate &rhs);
+bool IsSameLocationIn2D(const Coordinate &lhs, const Coordinate &rhs);
 
 }  // namespace environment
 

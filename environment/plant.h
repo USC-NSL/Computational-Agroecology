@@ -6,11 +6,9 @@
 #include <unordered_map>
 
 #include "environment/soil.h"
+#include "environment/coordinate.h"
 
 namespace environment {
-
-// the number of dimensions that we used to construct kd-tree
-const int kDimsOfKDTree = 2;
 
 // Static properties as used for parameters in plant models.
 // All values are stored using integer types to avoid floating-point error.
@@ -66,16 +64,16 @@ class Plant {
   const std::string &name() const { return name_; }
 
   const double canopy_size() const { return canopy_size_; }
-  void SetCanopySize(const double canopy_size) { canopy_size_ = canopy_size; }
+  void set_canopy_size(const double canopy_size) { canopy_size_ = canopy_size; }
 
-  const std::vector<double> &position() const { return position_; }
+  const Coordinate &position() const { return position_; }
   // TODO: deprecate SetPosition later. It should be initialized in plant
   // builder.
   void SetPosition(const std::vector<double> position) { position_ = position; }
   const double trunk_size() const { return trunk_size_; }
   // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
   // modify the test as well.
-  void SetTrunkSize(const double trunk_size) { trunk_size_ = trunk_size; }
+  void set_trunk_size(const double trunk_size) { trunk_size_ = trunk_size; }
   // Harvest this plant. This should return the value of yeild.
   int Harvest();
 
@@ -93,7 +91,7 @@ class Plant {
  protected:
   // Constructs a generic plant with default values, only for child class use.
   Plant(const std::string &name,
-        const std::vector<double> position = {0.0, 0.0},
+        const Coordinate position = {0.0, 0.0},
         const double trunk_size = 0.0, const double canopy_size = 0.0)
       : name_(name),
         position_(position),
@@ -119,7 +117,7 @@ class Plant {
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;
 
-  std::vector<double> position_;
+  Coordinate  position_;
 
   // Canopy size of the plant;
   double canopy_size_;
