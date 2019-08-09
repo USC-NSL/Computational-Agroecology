@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "KDTree/KDTree.hpp"
+
 #include "photons/model/model.h"
 #include "photons/photon/photon.h"
 #include "photons/photon_simulator_config.h"

@@ -12,13 +12,7 @@ bool PlantContainer::AddPlant(Plant *plant) {
 }
 
 bool PlantContainer::DelPlant(const Plant &plant) {
-  size_t index = kdtree_->nearest_index(plant.position().To2DVector());
-  if (IsSamePlant(*plants_[index], plant)) {
-    plants_.erase(plants_.begin() + index);
-    ContructPlantKDTree();
-    return true;
-  }
-  return false;
+  return DelPlant(plant.position());
 }
 
 Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
@@ -42,19 +36,20 @@ bool PlantContainer::DelPlant(const Coordinate &coordinate) {
 }
 
 bool PlantContainer::IsSamePlant(const Plant &plant,
-                                 const point_t &position) const {
-  return plant.position() == position;
+                                 const Coordinate &position) const {
+  return IsSameLocationIn2D(plant.position(), position);
 }
 
 bool PlantContainer::IsSamePlant(const Plant &plant_a,
                                  const Plant &plant_b) const {
-  return plant_a.position() == plant_b.position();
+  return IsSameLocationIn2D(plant_a.position(), plant_b.position());
 }
 
-bool PlantContainer::CheckPosition(const point_t &position, const double size) {
+bool PlantContainer::CheckPosition(const Coordinate &position,
+                                   const double size) {
   if (!kdtree_)
     return true;
-  auto res = kdtree_->neighborhood(position, size);
+  auto res = kdtree_->neighborhood(position.To2DVector(), size);
   return res.empty();
 }
 

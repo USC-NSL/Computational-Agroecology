@@ -9,7 +9,7 @@ namespace environment {
 
 struct Coordinate {
   Coordinate(const double x, const double y, const double z = 0);
-  Coordinate(std::vector<double> position);
+  Coordinate(const std::vector<double>& position);
 
   double x;
   double y;

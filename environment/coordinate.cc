@@ -8,7 +8,7 @@ namespace environment {
 Coordinate::Coordinate(const double x, const double y, const double z)
     : x(x), y(y), z(z) {}
 
-Coordinate::Coordinate(std::vector<double> position) {
+Coordinate::Coordinate(const std::vector<double>& position) {
   assert(position.size() >= 3);
   x = position[0];
   y = position[1];

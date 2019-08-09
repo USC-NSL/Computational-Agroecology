@@ -5,8 +5,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "environment/soil.h"
 #include "environment/coordinate.h"
+#include "environment/soil.h"
 
 namespace environment {
 
@@ -91,11 +91,11 @@ class Plant {
  protected:
   // Constructs a generic plant with default values, only for child class use.
   Plant(const std::string &name, const Coordinate position = {0.0, 0.0},
-        const double trunk_size = 0.0, const double canopy_size = 0.0)
+        const double trunk_size = 0.0, const double root_size_ = 0.0)
       : name_(name),
         position_(position),
         trunk_size_(trunk_size),
-        canopy_size_(canopy_size),
+        root_size_(root_size_),
         health_(kMaxHealth),
         flowering_(false),
         accumulated_gdd_(0),
@@ -118,8 +118,6 @@ class Plant {
 
   Coordinate position_;
 
-  // Canopy size of the plant;
-  double canopy_size_;
   // Trunk size of the plant
   double trunk_size_;
   // Root size or canopy size
