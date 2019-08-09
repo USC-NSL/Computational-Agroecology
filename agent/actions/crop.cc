@@ -1,6 +1,5 @@
 #include "crop.h"
 
-#include "environment/plant_builder.h"
 #include "environment/terrain.h"
 
 namespace agent {
@@ -43,10 +42,7 @@ void Add::Execute(environment::Terrain *terrain) const {
 
   using environment::PlantBuilder;
   for (const auto &c : applied_range_) {
-    auto *new_plant = PlantBuilder::NewPlant(crop_type_name_);
-    if (!terrain->plant_container_.AddPlant(new_plant)) {
-      delete new_plant;
-    }
+    terrain->plant_container_.AddPlant(crop_type_name_, c);
   }
 }
 

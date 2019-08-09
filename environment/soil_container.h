@@ -16,6 +16,9 @@ class SoilContainer {
                std::vector<Soil>(size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0))) {}
   Soil *FindSoilByCoord(const Coordinate &coordinate);
   Soil *FindSoilByCoord(const double x, const double y);
+  std::vector<Soil *> FindSoilByCoords(const Coordinate &coordinate,
+                                       const double x_length,
+                                       const double y_length);
   std::vector<Soil *> FindSoilByCoords(const double x, const double y,
                                        const double x_length,
                                        const double y_length);

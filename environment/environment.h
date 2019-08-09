@@ -125,4 +125,3 @@ std::ostream &operator<<(std::ostream &os, const Environment &env);
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_ENVIRONMENT_H_
-

@@ -114,4 +114,3 @@ class PhotonSimulator : public Simulator {
 }  // namespace simulator
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_PHOTON_SIMULATOR_H_
-

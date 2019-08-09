@@ -34,8 +34,6 @@ class Terrain {
   void ExecuteAction(const agent::action::Action &action);
 
  private:
-  PlantContainer plant_container_;
-  SoilContainer soil_container_;
   friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 
   // befriend with a list of actions
@@ -43,6 +41,9 @@ class Terrain {
   friend class agent::action::crop::Remove;
   friend class agent::action::crop::Harvest;
   friend class agent::action::crop::Water;
+
+  PlantContainer plant_container_;
+  SoilContainer soil_container_;
 
   int yield_;
   size_t size_;
@@ -53,4 +54,3 @@ std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_TERRAIN_H_
-

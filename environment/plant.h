@@ -67,13 +67,12 @@ class Plant {
   void set_root_size(const double root_size) { root_size_ = root_size; }
 
   const Coordinate &position() const { return position_; }
-  // TODO: deprecate SetPosition later. It should be initialized in plant
-  // builder.
-  void SetPosition(const std::vector<double> position) { position_ = position; }
+
   const double trunk_size() const { return trunk_size_; }
   // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
   // modify the test as well.
   void set_trunk_size(const double trunk_size) { trunk_size_ = trunk_size; }
+
   // Harvest this plant. This should return the value of yeild.
   int Harvest();
 
@@ -90,10 +89,10 @@ class Plant {
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name, const Coordinate position = {0.0, 0.0},
-        const double trunk_size = 0.0, const double root_size_ = 0.0)
+  Plant(const std::string &name, const double trunk_size = 0.0,
+        const double root_size_ = 0.0)
       : name_(name),
-        position_(position),
+        position_(),
         trunk_size_(trunk_size),
         root_size_(root_size_),
         health_(kMaxHealth),
@@ -112,6 +111,7 @@ class Plant {
 
  private:
   friend class PlantBuilder;
+  friend class PlantContainer;
 
   // A descriptive string for this plant (e.g., "avocado").
   std::string name_;

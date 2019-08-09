@@ -1,48 +1,57 @@
 #include "plant_container.h"
 
+#include "environment/plant_builder.h"
+
 namespace environment {
 
-bool PlantContainer::AddPlant(Plant *plant) {
-  if (!CheckPosition(plant->position().To2DVector(), plant->trunk_size())) {
-    return false;
+PlantContainer::~PlantContainer() {
+  for (const auto *p : plants_) {
+    delete p;
   }
-  plants_.push_back(plant);
-  ContructPlantKDTree();
-  return true;
+}
+
+Plant *PlantContainer::AddPlant(const std::string &plant_name,
+                                const Coordinate &coordinate) {
+  Plant *new_plant = PlantBuilder::NewPlant(plant_name);
+  if (new_plant == nullptr) {
+    return nullptr;
+  }
+
+  new_plant->position_ = coordinate;
+  if (!CheckPosition(coordinate.To2DVector(), new_plant->trunk_size())) {
+    delete new_plant;
+    return nullptr;
+  }
+
+  plants_.push_back(new_plant);
+  ConstructPlantKDTree();
+  return new_plant;
 }
 
 bool PlantContainer::DelPlant(const Plant &plant) {
   return DelPlant(plant.position());
 }
 
-Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
-  point_t position = coordinate.To2DVector();
-  size_t index = kdtree_->nearest_index(position);
-  if (IsSamePlant(*plants_[index], position)) {
-    return plants_[index];
-  }
-  return nullptr;
-}
-
 bool PlantContainer::DelPlant(const Coordinate &coordinate) {
   point_t position = coordinate.To2DVector();
   size_t index = kdtree_->nearest_index(position);
-  if (IsSamePlant(*plants_[index], position)) {
+  if (IsSameLocationIn2D(plants_[index]->position(), coordinate)) {
+    delete plants_[index];
     plants_.erase(plants_.begin() + index);
-    ContructPlantKDTree();
+    ConstructPlantKDTree();
     return true;
   }
   return false;
 }
 
-bool PlantContainer::IsSamePlant(const Plant &plant,
-                                 const Coordinate &position) const {
-  return IsSameLocationIn2D(plant.position(), position);
-}
-
-bool PlantContainer::IsSamePlant(const Plant &plant_a,
-                                 const Plant &plant_b) const {
-  return IsSameLocationIn2D(plant_a.position(), plant_b.position());
+Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
+  point_t position = coordinate.To2DVector();
+  size_t index = kdtree_->nearest_index(position);
+  if (index < plants_.size() &&
+      IsSameLocationIn2D(plants_[index]->position(), coordinate)) {
+    return plants_[index];
+  }
+  return nullptr;
 }
 
 bool PlantContainer::CheckPosition(const Coordinate &position,
@@ -53,7 +62,7 @@ bool PlantContainer::CheckPosition(const Coordinate &position,
   return res.empty();
 }
 
-void PlantContainer::ContructPlantKDTree() {
+void PlantContainer::ConstructPlantKDTree() {
   pointVec points;
   for (const auto &plant : plants_) {
     points.push_back(plant->position().To2DVector());

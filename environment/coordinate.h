@@ -8,8 +8,8 @@
 namespace environment {
 
 struct Coordinate {
-  Coordinate(const double x, const double y, const double z = 0);
-  Coordinate(const std::vector<double>& position);
+  Coordinate(const double x = 0, const double y = 0, const double z = 0);
+  Coordinate(const std::vector<double> &position);
 
   double x;
   double y;
