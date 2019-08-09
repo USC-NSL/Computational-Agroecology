@@ -1,11 +1,10 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SOILCONTAINER_H_
 
-#include "environment/soil.h"
-
 #include <vector>
 
 #include "environment/coordinate.h"
+#include "environment/soil.h"
 
 namespace environment {
 

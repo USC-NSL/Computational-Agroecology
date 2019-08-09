@@ -92,9 +92,7 @@ void PhotonSimulator::ConstructKDTree(std::vector<Photon> &p) {
     point_t pt = {photon.pos.x, photon.pos.y, photon.pos.z};
     points.push_back(pt);
   }
-  if (kdtree_)
-    delete kdtree_;
-  kdtree_ = new KDTree(points);
+  kdtree_ = kdtree_ = std::make_shared<KDTree>(points);
 }
 
 indexArr PhotonSimulator::LookuptKDTree(const _462::Vector3 &point,

@@ -4,10 +4,10 @@
 #include <tuple>
 #include <vector>
 
+#include "KDTree/KDTree.hpp"
 #include "photons/model/model.h"
 #include "photons/photon/photon.h"
 #include "photons/photon_simulator_config.h"
-#include "KDTree/KDTree.hpp"
 #include "simulator.h"
 
 namespace simulator {
@@ -37,7 +37,7 @@ class PhotonSimulator : public Simulator {
   const _462::real_t max_distance_;
   const _462::real_t sun_height_;
   std::vector<Photon> alive_photons_, absorb_photons_;
-  KDTree *kdtree_;
+  std::shared_ptr<KDTree> kdtree_;
 
   // emit all photons to the space by specific parameters
   /***
@@ -64,7 +64,7 @@ class PhotonSimulator : public Simulator {
   // heap is the min-heap returned by the function, distance is the max_distance
   // for the nearest photon for the special point
   indexArr LookuptKDTree(const _462::Vector3 &point,
-                     const _462::real_t distance) const;
+                         const _462::real_t distance) const;
 
   // return the pixel RGB value
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
