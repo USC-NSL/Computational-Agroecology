@@ -72,7 +72,7 @@ TEST_F(EnvironmentTest, JumpToTimeStepTest) {
 
     // since the action has completed
     // we should see its effect in the `terrain`
-    EXPECT_NE(nullptr, env->terrain().tiles()[i][i].plant);
+    EXPECT_NE(nullptr, env->GetPlant(Coordinate(i, i)));
   }
 }
 
@@ -94,3 +94,4 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+

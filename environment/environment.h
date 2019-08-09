@@ -53,6 +53,12 @@ class Environment {
   inline const SunInfo &sun_info() const { return sun_info_; }
   inline const Terrain &terrain() const { return terrain_; }
   inline const Weather &weather() const { return weather_; }
+  inline const Plant *GetPlant(const Coordinate &coord) {
+    return terrain_.GetPlant(coord);
+  }
+  inline const Soil *GetSoil(const Coordinate &coord) {
+    return terrain_.GetSoil(coord);
+  }
   inline const std::priority_queue<const agent::action::Action *,
                                    std::vector<const agent::action::Action *>,
                                    agent::action::ActionStartTimeComparator>
@@ -119,3 +125,4 @@ std::ostream &operator<<(std::ostream &os, const Environment &env);
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_ENVIRONMENT_H_
+

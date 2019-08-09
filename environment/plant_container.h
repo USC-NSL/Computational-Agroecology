@@ -28,3 +28,4 @@ class PlantContainer {
 }  // namespace environment
 
 #endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PLANTCONTAINER_H_
+

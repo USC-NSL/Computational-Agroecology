@@ -32,7 +32,7 @@ TEST(PlantContainerTest, DeletePlantTest) {
   plant2->SetPosition({0.0, 0.0});
   plant_container.AddPlant(&(*plant1));
   plant_container.AddPlant(&(*plant2));
-  point_t position = plant1->position();
+  point_t position = plant1->position().To2DVector();
   EXPECT_FALSE(plant_container.DelPlant({1.0, 1.0}));
   EXPECT_TRUE(plant_container.DelPlant(position));
   EXPECT_TRUE(plant_container.DelPlant(*plant2));
@@ -43,3 +43,4 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
