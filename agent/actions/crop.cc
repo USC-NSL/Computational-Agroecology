@@ -120,11 +120,11 @@ void Harvest::Execute(environment::Terrain *terrain) const {
 
   for (const auto &c : applied_range_) {
     // TODO: generalize the harvest / yield handling
-    terrain->plant_container_.DelPlant(c);
     environment::Plant *plant = terrain->plant_container_.FindPlant(c);
     if (plant != nullptr) {
       int yield = plant->Harvest();
       terrain->yield_ += yield;
+      terrain->plant_container_.DelPlant(c);
     }
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
