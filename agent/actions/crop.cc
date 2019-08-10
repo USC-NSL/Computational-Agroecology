@@ -1,6 +1,5 @@
 #include "crop.h"
 
-#include "environment/plant_builder.h"
 #include "environment/terrain.h"
 
 namespace agent {
@@ -43,7 +42,7 @@ void Add::Execute(environment::Terrain *terrain) const {
 
   using environment::PlantBuilder;
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).plant.reset(PlantBuilder::NewPlant(crop_type_name_));
+    terrain->plant_container_.AddPlant(crop_type_name_, c);
   }
 }
 
@@ -83,7 +82,7 @@ void Remove::Execute(environment::Terrain *terrain) const {
   std::cout << "Removing " << applied_range_.size() << " crop(s)." << std::endl;
 
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).plant.reset();
+    terrain->plant_container_.DelPlant(c);
   }
 }
 
@@ -117,9 +116,11 @@ void Harvest::Execute(environment::Terrain *terrain) const {
 
   for (const auto &c : applied_range_) {
     // TODO: generalize the harvest / yield handling
-    if (terrain->tiles_.get(c).plant != nullptr) {
-      int yield = terrain->tiles_.get(c).plant->Harvest();
+    environment::Plant *plant = terrain->plant_container_.FindPlant(c);
+    if (plant != nullptr) {
+      int yield = plant->Harvest();
       terrain->yield_ += yield;
+      terrain->plant_container_.DelPlant(c);
     }
   }
   std::cout << "Yield of terrain: " << terrain->yield() << "kg." << std::endl;
@@ -156,7 +157,7 @@ void Water::Execute(environment::Terrain *terrain) const {
   }
 
   for (const auto &c : applied_range_) {
-    terrain->tiles_.get(c).soil.water_content += water_amount_;
+    terrain->soil_container_.FindSoilByCoord(c)->water_content += water_amount_;
   }
 }
 

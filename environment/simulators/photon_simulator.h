@@ -4,8 +4,9 @@
 #include <tuple>
 #include <vector>
 
+#include "KDTree/KDTree.hpp"
+
 #include "photons/model/model.h"
-#include "photons/photon/neighbor.h"
 #include "photons/photon/photon.h"
 #include "photons/photon_simulator_config.h"
 #include "simulator.h"
@@ -37,6 +38,7 @@ class PhotonSimulator : public Simulator {
   const _462::real_t max_distance_;
   const _462::real_t sun_height_;
   std::vector<Photon> alive_photons_, absorb_photons_;
+  std::shared_ptr<KDTree> kdtree_;
 
   // emit all photons to the space by specific parameters
   /***
@@ -58,15 +60,12 @@ class PhotonSimulator : public Simulator {
   RadianceResult RussianRoulette(const _462::real_t abr, const _462::real_t ref,
                                  const _462::real_t tran) const;
 
-  void ConstructKDTree(std::vector<Photon> &p, const unsigned int begin,
-                       const unsigned int end);
+  void ConstructKDTree(std::vector<Photon> &p);
 
   // heap is the min-heap returned by the function, distance is the max_distance
   // for the nearest photon for the special point
-  void LookuptKDTree(const std::vector<Photon> &p, const _462::Vector3 &point,
-                     const _462::Vector3 &norm, std::vector<Neighbor> *heap,
-                     const unsigned int begin, const unsigned int end,
-                     _462::real_t *distance) const;
+  indexArr LookuptKDTree(const _462::Vector3 &point,
+                         const _462::real_t distance) const;
 
   // return the pixel RGB value
   _462::Vector3 GetPixelColor(const _462::Vector3 &ray_pos,
