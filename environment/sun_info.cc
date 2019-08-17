@@ -1,101 +1,140 @@
 #include "sun_info.h"
 
-#include <cassert>
 #include <cmath>
 #include <ctime>
-
-#include <iostream>
 
 namespace environment {
 
 SunInfo::SunInfo(const std::chrono::system_clock::time_point &time,
                  const Location &location, const Climate::ZoneType climate_zone,
-                 const Weather &weather) {
-  SimulateToTime(time, location, climate_zone, weather);
+                 const Weather &weather)
+    : geo_location_(location), climate_zone_(climate_zone) {
+  UpdateGeoData();
+  Update(time, weather);
 }
 
-void SunInfo::SimulateToTime(const std::chrono::system_clock::time_point &time,
-                             const Location &location,
-                             const Climate::ZoneType climate_zone,
-                             const Weather &weather) {
+void SunInfo::Update(const std::chrono::system_clock::time_point &time,
+                     const Weather &weather) {
   time_t tt = std::chrono::system_clock::to_time_t(time);
   struct tm *tm = localtime(&tt);
-  double longitude = (location.longitude_left + location.longitude_right) / 2.0;
-  double latitude = (location.latitude_bottom + location.latitude_top) / 2.0;
-
-  int total_sec =
-      tm->tm_sec + (kSecsPerMin * tm->tm_min) + (kSecsPerHour * tm->tm_hour);
-  double local_hour = double(total_sec) / kSecsPerHour;
-
-  Update(tm->tm_yday + 1, local_hour, longitude, latitude, climate_zone,
-         weather.temperature.min, weather.temperature.max);
+  Update(tm->tm_yday + 1, tm->tm_hour, tm->tm_min, tm->tm_sec, weather);
 }
 
-const double SunInfo::DegreeToRadians(const double degree) {
-  return degree * kPI / kPIforDegree;
+void SunInfo::Update(const int day_of_year, const int hour, const int minute,
+                     const int second, const Weather &weather) {
+  UpdateDayOfYear(day_of_year);
+  UpdateLocalTime(hour, minute, second);
+  UpdateWeather(weather);
 }
 
-const double SunInfo::RadiansToDegree(const double radians) {
-  return radians / kPI * kPIforDegree;
-}
+void SunInfo::UpdateGeoData() {
+  double latitude =
+      (geo_location_.latitude_bottom + geo_location_.latitude_top) / 2.0;
 
-void SunInfo::Update(const int t_d, const double hour, const double longitude,
-                     const double latitude,
-                     const Climate::ZoneType climate_zone,
-                     const double temp_min, const double temp_max) {
-  // Local solar time (hours)
-  double local_solar_time = CalculateLocalSolarTime(t_d, hour, longitude);
-
-  // Calculate shared constants, delta δ, tau τ, and labmda λ
-  // Solar declination δ (radians)
-  double delta = CalculateSolarDeclination(t_d);
-  // The hour angle τ (radians)
-  double tau = CalculateHourAngle(local_solar_time);
   // Observer's latitude λ
-  double lambda = DegreeToRadians(latitude);
+  constant_caches_.lambda = DegreeToRadians(latitude);
+}
 
-  // Update Solar Altitude
-  solar_elevation_ = CalculateSolarElevation(delta, tau, lambda);
-  // Update Solar Azimuth
-  solar_azimuth_ =
-      CalculateSolarAzimuth(delta, lambda, solar_elevation_, local_solar_time);
+void SunInfo::UpdateDayOfYear(const int day_of_year) {
+  // Solar declination δ (radians)
+  constant_caches_.delta = CalculateSolarDeclination(day_of_year);
 
   // Update day length
-  std::tie(t_sr_, t_ss_, day_length_) = CalculateDayLength(delta, tau, lambda);
+  std::tie(t_sr_, t_ss_, day_length_) =
+      CalculateDayLength(constant_caches_.delta, constant_caches_.lambda);
 
-  // Prepare some shared constants for solar irradiance
   // Formula [2.18] in book p.36
   // Solar constant
-  const double I_c = 1370.0f;
+  constexpr double I_c = 1370.0f;
 
   // Formula [2.21] in book p.37
   // ε_0 is approximated by the following equation
   // ε_0 ≈ 1 + 0.033 * cos(2 * π * (t_d - 10) / 365)
   double epsilon_0 =
-      1 + 0.033 * cos(k2PI * (t_d - kDaysLeftPerYear) / kDaysPerYear);
+      1 + 0.033 * cos(k2PI * (day_of_year - kDaysLeftPerYear) / kDaysPerYear);
 
   // Formula [2.19] in book p.37
   // I_c_prime = ε_0 * I_c a = sin(λ) * sin(δ) b = cos(λ) * cos(δ)
-  double I_c_prime = epsilon_0 * I_c;
+  constant_caches_.I_c_prime = epsilon_0 * I_c;
 
   // to solve integral sin(β), we need the following a and b
-  double a = sin(lambda) * sin(delta);
-  double b = cos(lambda) * cos(delta);
+  constant_caches_.a =
+      sin(constant_caches_.lambda) * sin(constant_caches_.delta);
+  constant_caches_.b =
+      cos(constant_caches_.lambda) * cos(constant_caches_.delta);
 
   // Update daily irradiance
-  std::tie(I_t_d_, I_df_d_, I_dr_d_) =
-      CalculateDailySolarIrradiance(I_c_prime, a, b, climate_zone, day_length_);
+  std::tie(I_t_d_, I_df_d_, I_dr_d_) = CalculateDailySolarIrradiance(
+      constant_caches_.I_c_prime, constant_caches_.a, constant_caches_.b,
+      climate_zone_, day_length_);
+
+  day_of_year_ = day_of_year;
+}
+
+void SunInfo::UpdateLocalTime(const int hour, const int minute,
+                              const int second) {
+  int total_sec = second + (kSecsPerMin * minute) + (kSecsPerHour * hour);
+  double total_hour = double(total_sec) / kSecsPerHour;
+
+  double longitude =
+      (geo_location_.longitude_left + geo_location_.longitude_right) / 2.0;
+
+  // Local solar time (hours)
+  double local_solar_time =
+      CalculateLocalSolarTime(day_of_year_, total_hour, longitude);
+
+  UpdateLocalSolarHour(local_solar_time);
+}
+
+void SunInfo::UpdateLocalSolarHour(const double t_h) {
+  // The hour angle τ (radians)
+  double tau = CalculateHourAngle(t_h);
+
+  // Update Solar Elevation
+  solar_elevation_ = CalculateSolarElevation(constant_caches_.delta, tau,
+                                             constant_caches_.lambda);
+  // Update Solar Azimuth
+  solar_azimuth_ = CalculateSolarAzimuth(
+      constant_caches_.delta, constant_caches_.lambda, solar_elevation_, t_h);
 
   // Update hourly irradiance
   std::tie(I_t_, I_df_, I_dr_) = CalculateHourlySolarIrradiance(
-      solar_elevation_, I_c_prime, a, b, I_t_d_, local_solar_time);
+      solar_elevation_, constant_caches_.I_c_prime, constant_caches_.a,
+      constant_caches_.b, I_t_d_, t_h);
 
+  local_solar_hour_ = t_h;
+}
+
+void SunInfo::UpdateWeather(const Weather &weather) {
   // Update air temperature
-  T_a_ = CalculateAirTemperature(local_solar_time, temp_min, temp_max, t_sr_,
-                                 t_ss_);
+  T_a_ = CalculateAirTemperature(local_solar_hour_, weather.temperature.min,
+                                 weather.temperature.max, t_sr_, t_ss_);
 
   // Update saturated vapor pressure
   e_s_T_a_ = CalculateSaturatedVaporPressure(T_a_);
+}
+
+std::tuple<double, double, double> SunInfo::CalculateHourlySolarIrradiance(
+    const double t_h) const {
+  // The hour angle τ (radians)
+  double tau = CalculateHourAngle(t_h);
+
+  // Solar Elevation
+  double solar_elevation = CalculateSolarElevation(constant_caches_.delta, tau,
+                                                   constant_caches_.lambda);
+
+  // Return hourly irradiance
+  return CalculateHourlySolarIrradiance(
+      solar_elevation, constant_caches_.I_c_prime, constant_caches_.a,
+      constant_caches_.b, I_t_d_, t_h);
+}
+
+double SunInfo::DegreeToRadians(const double degree) {
+  return degree * kPI / kPIforDegree;
+}
+
+double SunInfo::RadiansToDegree(const double radians) {
+  return radians / kPI * kPIforDegree;
 }
 
 double SunInfo::CalculateSolarDeclination(const int t_d) {
@@ -174,7 +213,7 @@ double SunInfo::CalculateSolarAzimuth(const double delta, const double lambda,
 }
 
 std::tuple<double, double, double> SunInfo::CalculateDayLength(
-    const double delta, const double tau, const double lambda) {
+    const double delta, const double lambda) {
   // Formula [2.11] in book p.31
   // t_ss = 12 + (12 / π) * acos(-(sin(δ) * sin(λ) / (cos(δ) * cos(λ))))
 
@@ -246,7 +285,8 @@ std::tuple<double, double, double> SunInfo::CalculateDailySolarIrradiance(
   }
 
   // I_t_d = I_et_d * (b_0 + b_1 * (s / DL))
-  // Assume "s/DL" = 1 here
+  // TODO: We assume "s/DL = 1" here, so `s` is assigned to `day_length`. We
+  // need to figure out the true value of this.
   double s = day_length;
   double I_t_d = I_et_d * (b_0 + b_1 * (s / day_length));
 
@@ -277,7 +317,7 @@ std::tuple<double, double, double> SunInfo::CalculateDailySolarIrradiance(
 
 std::tuple<double, double, double> SunInfo::CalculateHourlySolarIrradiance(
     const double beta, const double I_c_prime, const double a, const double b,
-    const double I_t_d, const int t_h) {
+    const double I_t_d, const double t_h) {
   // Formula [2.27] in book p.39
   // I_t = A * cos(2 * π * t_h / 24) + B
   // A = -b * ψ

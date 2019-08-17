@@ -48,12 +48,52 @@ class SunInfo {
   const double &saturated_vapor_pressure() const { return e_s_T_a_; }
   const double &air_temperature() const { return T_a_; }
 
-  void SimulateToTime(const std::chrono::system_clock::time_point &time,
-                      const Location &location,
-                      const Climate::ZoneType climate_zone,
-                      const Weather &weather);
+  void Update(const std::chrono::system_clock::time_point &time,
+              const Weather &weather);
+  void Update(const int day_of_year, const int hour, const int minute,
+              const int second, const Weather &weather);
+
+  // This is designed to be used by `class PlantRadiationInfo`. We need this
+  // when calculating the daily intercepted of total solar radiation. This
+  // function does not update any information in this function. It only uses
+  // some variables in `ConstantCaches` to help itself.
+  std::tuple<double, double, double> CalculateHourlySolarIrradiance(
+      const double t_h) const;
 
  private:
+  // Information binded to the current geographic location
+  const Location &geo_location_;
+  const Climate::ZoneType &climate_zone_;
+
+  // Information about the current date and time
+  double day_of_year_;
+  double local_solar_hour_;
+
+  // This stores some caches of constants related to geographic information and
+  // day of a year. These variables are useful when we need to frequently call
+  // `CalculateHourlySolarIrradiance()`.
+  struct ConstantCaches {
+    // Constants related to geographic information
+    // Observer's latitude λ
+    double lambda;
+
+    // Constants related to day of a year
+    // Solar declination δ (radians)
+    double delta;
+
+    // Constants used to calculate irradiance
+    double I_c_prime;
+    // To solve integral sin(β), we need the following a and b
+    double a;
+    double b;
+  };
+
+  ConstantCaches constant_caches_;
+
+  // TODO: The following may need refactor. It may not need so many private
+  // variables. Keeping them just in case some functions may use them. The
+  // refactor should start when the first version of the whole plant growth
+  // model finishs.
   double solar_azimuth_;
 
   // Solar angle from horizontal (aka β) in radians
@@ -89,63 +129,76 @@ class SunInfo {
   // Air temperature
   double T_a_;
 
-  static const double DegreeToRadians(const double degree);
-  static const double RadiansToDegree(const double radians);
+  // Update variables related to geographic data. This should only be called
+  // once during construction because we assume the geographic location and
+  // climate remain unchanged.
+  void UpdateGeoData();
 
-  void Update(const int t_d, const double hour, const double longitude,
-              const double latitude, const Climate::ZoneType climate_zone,
-              const double temp_min, const double temp_max);
+  // We separate these functions on purpose. When simulating the plant growth,
+  // it is likely that we do not need to update all the information but a factor
+  // among them. Any class or function needs these should be a friend of this
+  // class because using them wrongly may cause data inconsistency. These
+  // interfaces may be revised in future refactor.
+  void UpdateDayOfYear(const int day_of_year);
+  void UpdateLocalTime(const int hour, const int minute, const int second);
+  void UpdateLocalSolarHour(const double t_h);
+  void UpdateWeather(const Weather &weather);
+
+  // These functions below are static, which means they are independent to
+  // member variables. We use these functions to calculate member variables in
+  // this class.
+  static double DegreeToRadians(const double degree);
+  static double RadiansToDegree(const double radians);
 
   // Given the day of year, calculate solar declination δ in radians.
-  double CalculateSolarDeclination(const int t_d);
+  static double CalculateSolarDeclination(const int t_d);
 
   // Given the day of year, local time (hours), and observer's longitude,
   // convert local time (hours) to local solar time (hours).
-  double CalculateLocalSolarTime(const int t_d, const double hour,
-                                 const double longitude);
+  static double CalculateLocalSolarTime(const int t_d, const double hour,
+                                        const double longitude);
 
   // Given local solar time (hours), calculate the hour angle τ in radians.
-  double CalculateHourAngle(const double t_h);
+  static double CalculateHourAngle(const double t_h);
 
   // Given solar declination δ, hour angle τ, and observer's latitude λ,
   // calculate solar angle from horizontal (radians).
-  double CalculateSolarElevation(const double delta, const double tau,
-                                 const double lambda);
+  static double CalculateSolarElevation(const double delta, const double tau,
+                                        const double lambda);
 
   // Given solar declination δ, observer's latitude λ, solar altitude β, and
   // local solar time, calculate solar azimuth.
-  double CalculateSolarAzimuth(const double delta, const double lambda,
-                               const double beta, const double t_h);
+  static double CalculateSolarAzimuth(const double delta, const double lambda,
+                                      const double beta, const double t_h);
 
   // Day length and times of sunrise and sunset
   // Given solar declination δ, hour angle τ, and observer's latitude λ,
   // calculate local solar time for sunrise, local solar time for sunset, and
   // day length in hours.
-  std::tuple<double, double, double> CalculateDayLength(const double delta,
-                                                        const double tau,
-                                                        const double lambda);
+  static std::tuple<double, double, double> CalculateDayLength(
+      const double delta, const double lambda);
 
   // Solar irradiance
   // These two functions need other variables.
   // Given those variables, climate zone, and day length, calculate daily
   // total solar irradiance, daily diffuse irradiance, and daily direct
   // irradiance.
-  std::tuple<double, double, double> CalculateDailySolarIrradiance(
+  static std::tuple<double, double, double> CalculateDailySolarIrradiance(
       const double I_c_prime, const double a, const double b,
       const Climate::ZoneType climate_zone, const double day_length);
 
   // Given those variables, solar altitude β, daily total solar irradiance, and
   // local solar time, calculate hourly solar irradiance, hourly diffuse
   // irradiance, and hourly direct irradiance.
-  std::tuple<double, double, double> CalculateHourlySolarIrradiance(
+  static std::tuple<double, double, double> CalculateHourlySolarIrradiance(
       const double beta, const double I_c_prime, const double a, const double b,
-      const double I_t_d, const int t_h);
+      const double I_t_d, const double t_h);
 
-  double CalculateSaturatedVaporPressure(const double temperature);
+  static double CalculateSaturatedVaporPressure(const double temperature);
 
-  double CalculateAirTemperature(double t_h, const double temp_min,
-                                 const double temp_max, const double t_sr,
-                                 const double t_ss);
+  static double CalculateAirTemperature(double t_h, const double temp_min,
+                                        const double temp_max,
+                                        const double t_sr, const double t_ss);
 };
 
 }  // namespace environment

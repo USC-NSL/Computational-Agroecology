@@ -97,8 +97,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   // TODO: GLOG
 
   // TODO: call all other simulators
-  sun_info_.SimulateToTime(new_timestamp, config_.location,
-                           climate_.climate_zone, weather_);
+  // TODO: plant growth model
 
   // Update the information of environment
 
