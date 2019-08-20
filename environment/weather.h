@@ -4,7 +4,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "environment/climate.h"
+#include "environment/location.h"
 #include "environment/utility.h"
 
 namespace environment {
@@ -12,15 +12,24 @@ namespace environment {
 // Moved from the original code base
 // Weather specify condition on everyday
 struct Weather {
-  // We should be able to get the weather data from the climate and a specific
+  // We should be able to get the weather data from the location and a specific
   // time point
-  Weather(const environment::Climate &climate,
+  Weather(const environment::Location &location,
           const std::chrono::system_clock::time_point &time);
 
-  Weather(const double temp_min, const double temp_max, const double rainfall);
-  Weather(const MinMaxTemperature &temperature, const double rainfall);
+  // TODO: These should be removed in the future
+  Weather(const double total_sunshine_hour, const double air_temp_min,
+          const double air_temp_max, const double relative_humidity,
+          const double wind_speed, const double rainfall);
+  Weather(const double total_sunshine_hour,
+          const MinMaxTemperature &air_temperature,
+          const double relative_humidity, const double wind_speed,
+          const double rainfall);
 
-  const MinMaxTemperature temperature;
+  const double total_sunshine_hour;
+  const MinMaxTemperature air_temperature;
+  const double relative_humidity;
+  const double wind_speed;
   const double rainfall;
 };
 

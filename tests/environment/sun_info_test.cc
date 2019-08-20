@@ -11,7 +11,7 @@ using namespace environment;
 class SunInfoTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    weather_ = std::make_shared<Weather>(26.0, 32.0, 0.0);
+    weather_ = std::make_shared<Weather>(0.0, 26.0, 32.0, 0.0, 0.0, 0.0);
   }
 
   std::chrono::system_clock::time_point CreateTimePoint(
