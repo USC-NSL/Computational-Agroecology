@@ -4,30 +4,26 @@
 #include <functional>
 #include <utility>
 
+#include "environment/sun_info.h"
+
 namespace environment {
 
 class PlantRadiationInfo {
  public:
-  PlantRadiationInfo(
-      const double lai, const double t_sr, const double t_ss, const double t_h,
-      const std::function<double(const double)> &calculate_solar_elevation,
-      const std::function<std::tuple<double, double, double>(const double)>
-          &calculate_hourly_radiance);
+  PlantRadiationInfo(const double lai, const SunInfo &sun_info);
 
-  // Update all information by specifying the sunrise solar hour, the sunset
-  // solar hour, and the current solar hour
-  void UpdateDaily(const double t_sr, const double t_ss, const double t_h);
+  // Update all information according to the provided `SunInfo`.
+  void Update(const SunInfo &sun_info);
 
-  // Only update information about the current solar hour
-  void UpdateSolarHour(const double t_h);
+  // Update all information by specifying the sunrise solar hour, the day of the
+  // year. Calling this function utilizes the private `sun_info_`.
+  void Update(const int day_of_year, const double t_h);
 
  private:
-  // reference labmda functions
-  // They are used to call some functions related to and implemented in `class
-  // SunInfo`.
-  const std::function<double(const double)> &calculate_solar_elevation_;
-  const std::function<std::tuple<double, double, double>(const double)>
-      &calculate_hourly_radiance_;
+  // Have a private sun info so that this class can work independently. Though
+  // it may seem to weird to have another `SunInfo` here, this class needs this
+  // in some cases, such as calling `CalculateInterceptDailyRadiance()`.
+  SunInfo sun_info_;
 
   // Leaf area index
   // The information in this class is all about this leaf area index
@@ -59,9 +55,13 @@ class PlantRadiationInfo {
   // area)
   double lai_shaded_;
 
-  // Given a solar hour, calculate the extinction coefficient for direct
-  // fluexes.
-  double CalculateKDrBySolarHour(const double t_h) const;
+  // Only update information about the current solar hour according to the
+  // provided `sun_info`.
+  void UpdateSolarHour(const SunInfo &sun_info);
+  // Only update information about the current solar hour. Calling this utilizes
+  // the private `sun_info_`.
+  void UpdateSolarHour(const double t_h);
+
   // Given solar elevation (in radians), calculate the extinction coefficient
   // for direct fluexes.
   static double CalculateKDr(const double solar_elevation);
@@ -69,11 +69,6 @@ class PlantRadiationInfo {
   // Calculate canopy extinction coefficient for diffuse solar irradiance (k_df)
   double CalculateKDf() const;
 
-  // Given a solar hour, calculate the interception of direct and diffuse solar
-  // radiation. Notice: This should only be called by
-  // `CalculateInterceptDailyRadiance()`.
-  std::pair<double, double> CalculateInterceptHourlyRadiance(
-      const double t_h) const;
   // Given direct and diffuse radiation, k_dr, and k_df, calculate the
   // interception of direct and diffuse solar radiation.
   std::pair<double, double> CalculateInterceptHourlyRadiance(
@@ -82,8 +77,8 @@ class PlantRadiationInfo {
 
   // Given the solar time of sunrise and sunset, calculate the daily direct and
   // diffuse solar radiation.
-  std::pair<double, double> CalculateInterceptDailyRadiance(
-      const double t_sr, const double t_ss) const;
+  std::pair<double, double> CalculateInterceptDailyRadiance(const double t_sr,
+                                                            const double t_ss);
 
   // Given direct, diffuse radiation, and k_dr, calculate the total flux density
   // absorbed by sunlit leaves and shaded leaves.
