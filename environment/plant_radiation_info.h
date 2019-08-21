@@ -27,33 +27,35 @@ class PlantRadiationInfo {
 
   // Leaf area index
   // The information in this class is all about this leaf area index
-  const double lai_;
-
-  // A constant that is only related by `lai_`. We store this because it can
-  // be shared by many member functions.
-  const double k_df_;
-
-  // Hourly direct solar radiation intercepted by the canopies
-  double I_i_dr_;
-  // Hourly diffuse solar radiation intercepted by the canopies
-  double I_i_df_;
-
-  // Daily direct solar radiation intercepted by the canopies
-  double I_i_dr_d_;
-  // Daily diffuse solar radiation intercepted by the canopies
-  double I_i_df_d_;
-
-  // The total flux density absorbed by the sunlit leaves
-  double I_sunlit_;
-  // The total flux density absorbed by the shaded leaves
-  double I_shaded_;
-
+  const double total_lai_;
   // Sunlit leaf area index (the total area of sunlit leaves in a unit ground
   // area)
   double lai_sunlit_;
   // Shaded leaf area index (the total area of shaded leaves in a unit ground
   // area)
   double lai_shaded_;
+
+  // A constant that is only related by `lai_`. We store this because it can
+  // be shared by many member functions.
+  const double k_df_;
+
+  // Solar radiation intercepted by the canopies
+  struct InterceptRadiance {
+    // Direct solar radiation intercepted by the canopies
+    double direct;
+    // Diffuse solar radiation intercepted by the canopies
+    double diffuse;
+  };
+  // Hourly direct and diffuse solar radiation intercepted by the canopies
+  InterceptRadiance I_i_;
+
+  // Daily direct and diffuse solar radiation intercepted by the canopies
+  InterceptRadiance I_i_d_;
+
+  // The total flux density absorbed by the sunlit leaves per unit leaf area
+  double I_sunlit_;
+  // The total flux density absorbed by the shaded leaves per unit leaf area
+  double I_shaded_;
 
   // Only update information about the current solar hour according to the
   // provided `sun_info`.
@@ -71,24 +73,36 @@ class PlantRadiationInfo {
 
   // Given direct and diffuse radiation, k_dr, and k_df, calculate the
   // interception of direct and diffuse solar radiation.
-  std::pair<double, double> CalculateInterceptHourlyRadiance(
-      const double I_dr, const double k_dr, const double I_df,
-      const double k_df) const;
+  InterceptRadiance CalculateInterceptHourlyRadiance(const double I_dr,
+                                                     const double k_dr,
+                                                     const double I_df,
+                                                     const double k_df) const;
 
   // Given the solar time of sunrise and sunset, calculate the daily direct and
   // diffuse solar radiation.
-  std::pair<double, double> CalculateInterceptDailyRadiance(const double t_sr,
-                                                            const double t_ss);
+  InterceptRadiance CalculateInterceptDailyRadiance(const double t_sr,
+                                                    const double t_ss);
 
+  struct AbsorbedPAR {
+    // PAR absored by sunlit leaves
+    double sunlit;
+    // PAR absored by shaded leaves
+    double shaded;
+  };
   // Given direct, diffuse radiation, and k_dr, calculate the total flux density
   // absorbed by sunlit leaves and shaded leaves.
-  std::pair<double, double> CalculateAbsorbedHourPAR(const double I_dr,
-                                                     const double I_df,
-                                                     const double k_dr) const;
+  AbsorbedPAR CalculateAbsorbedHourPAR(const double I_dr, const double I_df,
+                                       const double k_dr) const;
 
+  struct Lai {
+    // Sunlit leaf area index
+    double sunlit;
+    // Shaded leaf area index
+    double shaded;
+  };
   // Given k_dr, calculate the sunlit leaf area index and shaded leaf area
   // index.
-  std::pair<double, double> CalculateLai(const double k_dr) const;
+  Lai CalculateLai(const double k_dr) const;
 };
 
 }  // namespace environment
