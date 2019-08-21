@@ -4,40 +4,41 @@
 
 namespace environment {
 
-PlantRadiationInfo::PlantRadiationInfo(
-    const double lai, const double t_sr, const double t_ss, const double t_h,
-    const std::function<double(const double)> &calculate_solar_elevation,
-    const std::function<std::tuple<double, double, double>(const double)>
-        &calculate_hourly_radiance)
-    : lai_(lai),
-      k_df_(CalculateKDf()),
-      calculate_solar_elevation_(calculate_solar_elevation),
-      calculate_hourly_radiance_(calculate_hourly_radiance) {
-  UpdateDaily(t_sr, t_ss, t_h);
+PlantRadiationInfo::PlantRadiationInfo(const double lai,
+                                       const SunInfo &sun_info)
+    : sun_info_(sun_info), lai_(lai), k_df_(CalculateKDf()) {
+  Update(sun_info_);
 }
 
-void PlantRadiationInfo::UpdateDaily(const double t_sr, const double t_ss,
-                                     const double t_h) {
-  std::tie(I_i_dr_d_, I_i_df_d_) = CalculateInterceptDailyRadiance(t_sr, t_ss);
-  UpdateSolarHour(t_h);
+void PlantRadiationInfo::Update(const SunInfo &sun_info) {
+  std::tie(I_i_dr_d_, I_i_df_d_) =
+      CalculateInterceptDailyRadiance(sun_info.t_sr_, sun_info.t_ss_);
+  UpdateSolarHour(sun_info);
 }
 
-void PlantRadiationInfo::UpdateSolarHour(const double t_h) {
-  double k_dr = CalculateKDrBySolarHour(t_h);
-  double I_t, I_dr, I_df;
-  std::tie(I_t, I_dr, I_df) = calculate_hourly_radiance_(t_h);
+void PlantRadiationInfo::Update(const int day_of_year, const double t_h) {
+  // Cautious: we are using the private update function.
+  sun_info_.UpdateDayOfYear(day_of_year);
+  // Cautious: we are using the private update function.
+  sun_info_.UpdateLocalSolarHour(t_h);
+  Update(sun_info_);
+}
 
-  std::tie(I_i_dr_, I_i_df_) =
-      CalculateInterceptHourlyRadiance(I_dr, k_dr, I_df, k_df_);
+void PlantRadiationInfo::UpdateSolarHour(const SunInfo &sun_info) {
+  double k_dr = CalculateKDr(sun_info.solar_elevation());
 
-  std::tie(I_sunlit_, I_shaded_) = CalculateAbsorbedHourPAR(I_dr, I_df, k_dr);
+  std::tie(I_i_dr_, I_i_df_) = CalculateInterceptHourlyRadiance(
+      sun_info.I_dr_, k_dr, sun_info.I_df_, k_df_);
+
+  std::tie(I_sunlit_, I_shaded_) =
+      CalculateAbsorbedHourPAR(sun_info.I_dr_, sun_info.I_df_, k_dr);
 
   std::tie(lai_sunlit_, lai_shaded_) = CalculateLai(k_dr);
 }
 
-double PlantRadiationInfo::CalculateKDrBySolarHour(const double t_h) const {
-  double solar_elevation = calculate_solar_elevation_(t_h);
-  return CalculateKDr(solar_elevation);
+void PlantRadiationInfo::UpdateSolarHour(const double t_h) {
+  sun_info_.UpdateLocalSolarHour(t_h);
+  UpdateSolarHour(sun_info_);
 }
 
 double PlantRadiationInfo::CalculateKDr(const double solar_elevation) {
@@ -56,16 +57,6 @@ double PlantRadiationInfo::CalculateKDf() const {
   // k_df = (1 + 0.1174 * sqrt(L)) / (1 + 0.3732 * sqrt(L))
   double sqrt_L = std::sqrt(lai_);
   return (1.0f + 0.1174 * sqrt_L) / (1.0f + 0.3732 * sqrt_L);
-}
-
-std::pair<double, double> PlantRadiationInfo::CalculateInterceptHourlyRadiance(
-    const double t_h) const {
-  double I_t, I_dr, I_df;
-  std::tie(I_t, I_dr, I_df) = calculate_hourly_radiance_(t_h);
-
-  double k_dr = CalculateKDr(t_h);
-
-  return CalculateInterceptHourlyRadiance(I_dr, k_dr, I_df, k_df_);
 }
 
 std::pair<double, double> PlantRadiationInfo::CalculateInterceptHourlyRadiance(
@@ -88,12 +79,12 @@ std::pair<double, double> PlantRadiationInfo::CalculateInterceptHourlyRadiance(
 }
 
 std::pair<double, double> PlantRadiationInfo::CalculateInterceptDailyRadiance(
-    const double t_sr, const double t_ss) const {
+    const double t_sr, const double t_ss) {
   // TODO: This should be filled in
 
   // It is sure that this function would be used, so having it here just to test
   // the dependency.
-  CalculateInterceptHourlyRadiance(0);
+  UpdateSolarHour(0);
 
   return std::pair<double, double>(0, 0);
 }
