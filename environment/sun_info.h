@@ -33,7 +33,7 @@ constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
 namespace environment {
 
 // Forward declaration
-class PlantRadiationInfo;
+class PlantRadiation;
 
 // The public interfaces are mainly for showing the current states of the sun.
 class SunInfo {
@@ -70,7 +70,7 @@ class SunInfo {
       const double t_h) const;
 
  private:
-  friend class PlantRadiationInfo;
+  friend class PlantRadiation;
 
   // Information binded to the current geographic location
   const Location &geo_location_;

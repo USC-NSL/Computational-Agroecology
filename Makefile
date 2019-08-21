@@ -23,7 +23,7 @@ ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
 	$(ENVIRONMENT_PATH)/location.o \
 	$(ENVIRONMENT_PATH)/plant_builder.o \
 	$(ENVIRONMENT_PATH)/plant_container.o \
-	$(ENVIRONMENT_PATH)/plant_radiation_info.o \
+	$(ENVIRONMENT_PATH)/plant_radiation.o \
 	$(ENVIRONMENT_PATH)/plant.o \
 	$(ENVIRONMENT_PATH)/soil_container.o \
 	$(ENVIRONMENT_PATH)/soil.o \
