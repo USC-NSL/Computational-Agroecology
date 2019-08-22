@@ -4,7 +4,7 @@
 #include <functional>
 #include <utility>
 
-#include "environment/sun_info.h"
+#include "environment/meteorology.h"
 
 namespace environment {
 
@@ -13,22 +13,23 @@ namespace environment {
 // environment to make this class work. This class focuses on a single plant.
 class PlantRadiation {
  public:
-  PlantRadiation(const double leaf_index_area, const SunInfo &sun_info);
+  PlantRadiation(const double leaf_index_area, const Meteorology &meteorology);
 
-  // Update all information according to the provided `SunInfo`.
-  void Update(const SunInfo &sun_info);
+  // Update all information according to the provided `Meteorology`.
+  void Update(const Meteorology &meteorology);
 
   // Update all information by specifying the sunrise solar hour, the day of the
-  // year. Calling this function utilizes the private `sun_info_`.
+  // year. Calling this function utilizes the private `meteorology_`.
   void Update(const int day_of_year, const double solar_hour);
 
   // TODO: add accessors for other classes to use
 
  private:
-  // Have a private sun info so that this class can work independently. Though
-  // it may seem to weird to have another `SunInfo` here, this class needs this
-  // in some cases, such as calling `CalculateInterceptDailyRadiance()`.
-  SunInfo sun_info_;
+  // Have a private `meteorology_` so that this class can work independently.
+  // Though it may seem to weird to have another `class Meteorology` here, this
+  // class needs this in some cases, such as calling
+  // `CalculateInterceptDailyRadiance()`.
+  Meteorology meteorology_;
 
   // Leaf area index: leaf area per unit ground area (unit-less)
   // This is denoted as L in the book.
@@ -70,10 +71,10 @@ class PlantRadiation {
   double total_flux_density_shaded_;
 
   // Only update information about the current solar hour according to the
-  // provided `sun_info`.
-  void UpdateSolarHour(const SunInfo &sun_info);
+  // provided `meteorology`.
+  void UpdateSolarHour(const Meteorology &meteorology);
   // Only update information about the current solar hour (in hours). Calling
-  // this utilizes the private `sun_info_`.
+  // this utilizes the private `meteorology_`.
   void UpdateSolarHour(const double solar_hour);
 
   // Given solar elevation (in radians), calculate the extinction coefficient

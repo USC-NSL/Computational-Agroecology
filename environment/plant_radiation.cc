@@ -5,42 +5,44 @@
 namespace environment {
 
 PlantRadiation::PlantRadiation(const double leaf_index_area,
-                               const SunInfo &sun_info)
-    : sun_info_(sun_info),
+                               const Meteorology &meteorology)
+    : meteorology_(meteorology),
       total_leaf_area_index_(leaf_index_area),
       kExtinctionCoefficientForDiffuse(
           CalculateExtinctionCoefficientForDiffuse()) {
-  // Update (Initialize) this class with the given `sun_info`.
-  Update(sun_info_);
+  // Update (Initialize) this class with the given `meteorology`.
+  Update(meteorology_);
 }
 
-void PlantRadiation::Update(const SunInfo &sun_info) {
+void PlantRadiation::Update(const Meteorology &meteorology) {
   // Update daily solar radiation.
-  daily_solar_radiation_ =
-      CalculateInterceptDailyRadiance(sun_info.t_sr_, sun_info.t_ss_);
+  daily_solar_radiation_ = CalculateInterceptDailyRadiance(
+      meteorology.solar_hour_sunrise_, meteorology.solar_hour_sunset_);
   // Update other member variables related to solar hour.
-  UpdateSolarHour(sun_info);
+  UpdateSolarHour(meteorology);
 }
 
 void PlantRadiation::Update(const int day_of_year, const double solar_hour) {
   // Cautious: we are using the private update function.
-  sun_info_.UpdateDayOfYear(day_of_year);
+  meteorology_.UpdateDayOfYear(day_of_year);
   // Cautious: we are using the private update function.
-  sun_info_.UpdateLocalSolarHour(solar_hour);
-  // This is using the private `sun_info_`.
-  Update(sun_info_);
+  meteorology_.UpdateLocalSolarHour(solar_hour);
+  // This is using the private `meteorology_`.
+  Update(meteorology_);
 }
 
-void PlantRadiation::UpdateSolarHour(const SunInfo &sun_info) {
+void PlantRadiation::UpdateSolarHour(const Meteorology &meteorology) {
   const double kExtinctionCoefficientForDirect =
-      CalculateExtinctionCoefficientForDirect(sun_info.solar_elevation());
+      CalculateExtinctionCoefficientForDirect(meteorology.solar_elevation());
 
   hourly_solar_radiation_ = CalculateInterceptHourlyRadiance(
-      sun_info.I_dr_, kExtinctionCoefficientForDirect, sun_info.I_df_,
+      meteorology.hourly_direct_irradiance(), kExtinctionCoefficientForDirect,
+      meteorology.hourly_diffuse_irradiance(),
       kExtinctionCoefficientForDiffuse);
 
   AbsorbedPhotosyntheticallyActiveRadiation par = CalculateAbsorbedHourPAR(
-      sun_info.I_dr_, sun_info.I_df_, kExtinctionCoefficientForDirect);
+      meteorology.hourly_direct_irradiance(),
+      meteorology.hourly_diffuse_irradiance(), kExtinctionCoefficientForDirect);
   total_flux_density_sunlit_ = par.sunlit;
   total_flux_density_shaded_ = par.shaded;
 
@@ -50,20 +52,20 @@ void PlantRadiation::UpdateSolarHour(const SunInfo &sun_info) {
 }
 
 void PlantRadiation::UpdateSolarHour(const double solar_hour) {
-  sun_info_.UpdateLocalSolarHour(solar_hour);
-  UpdateSolarHour(sun_info_);
+  meteorology_.UpdateLocalSolarHour(solar_hour);
+  UpdateSolarHour(meteorology_);
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDirect(
     const double solar_elevation) {
   // Sun is below horizon
   if (solar_elevation < 0.00000001) {
-    return 0.0;
+    return 0.0f;
   }
 
   // Formula [3.3] in book p.55
   // k_dr = 0.5 / sin(β)
-  return (1 / (2 * std::sin(solar_elevation)));
+  return (1.0f / (2.0f * std::sin(solar_elevation)));
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDiffuse() const {
@@ -99,8 +101,8 @@ PlantRadiation::CalculateInterceptHourlyRadiance(
 }
 
 PlantRadiation::InterceptRadiance
-PlantRadiation::CalculateInterceptDailyRadiance(const double t_sr,
-                                                const double t_ss) {
+PlantRadiation::CalculateInterceptDailyRadiance(
+    const double solar_hour_sunrise, const double solar_hour_sunset) {
   // TODO: This should be filled in
 
   // It is sure that this function would be used, so having it here just to test
