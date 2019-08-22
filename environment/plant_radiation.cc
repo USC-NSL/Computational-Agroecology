@@ -64,7 +64,7 @@ double PlantRadiation::CalculateExtinctionCoefficientForDirect(
   }
 
   // k_dr = 0.5 / sin(β)
-  return (1 / (2 * std::sin(solar_elevation)));
+  return (1.0f / (2.0f * std::sin(solar_elevation)));
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDiffuse() const {
