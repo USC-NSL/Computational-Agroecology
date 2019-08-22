@@ -2,11 +2,6 @@
 
 namespace environment {
 
-// TODO: do some magical things to implement this
-Weather::Weather(const environment::Location &location,
-                 const std::chrono::system_clock::time_point &time)
-    : Weather(0, 0, 0, 0, 0, 0) {}
-
 Weather::Weather(const double total_sunshine_hour, const double air_temp_min,
                  const double air_temp_max, const double relative_humidity,
                  const double wind_speed, const double rainfall)
