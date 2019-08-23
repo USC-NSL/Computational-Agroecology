@@ -44,6 +44,9 @@ void Meteorology::UpdateDayOfYear(const int day_of_year) {
   // Update day length
   DayLengthAndTimesSunriseSunset times = CalculateDayLength(
       constant_caches_.solar_declination, constant_caches_.observer_latitude);
+  solar_hour_sunrise_ = times.solar_hour_sunrise;
+  solar_hour_sunset_ = times.solar_hour_sunset;
+  day_length_ = times.day_length;
 
   // Formula [2.18] in book p.36
   // Solar constant
@@ -115,8 +118,12 @@ void Meteorology::UpdateWeather(const Weather &weather) {
       local_solar_hour_, weather.temperature.min, weather.temperature.max,
       solar_hour_sunrise_, solar_hour_sunset_);
 
-  // Update saturated vapor pressure
-  saturated_vapor_pressure_ = CalculateSaturatedVaporPressure(air_temperature_);
+  // TODO: We need relative humidity from weather data to fill in this variable.
+  // Declare a variable here just to make this compilable.
+  double relative_humidity;
+
+  // Update vapor pressure
+  vapor_pressure_ = CalculateVaporPressure(air_temperature_, relative_humidity);
 }
 
 double Meteorology::DegreeToRadians(const double degree) {
@@ -358,12 +365,22 @@ Meteorology::SolarIrradiance Meteorology::CalculateHourlySolarIrradiance(
   // Calculate direct irradiance
   // Formula [2.32] in book p.41
   double I_dr = I_t - I_df;
+
+  return {I_t, I_dr, I_df};
 }
 
-double Meteorology::CalculateSaturatedVaporPressure(const double temperature) {
+Meteorology::VaporPressure Meteorology::CalculateVaporPressure(
+    const double temperature, const double relative_humidity) {
   // Formula [2.40] in book p.43
   // e_s(T_a) = 6.1078 * exp(17.269 * (T_a / (T_a + 237.3)))
-  return 6.1078 * exp(17.269 * temperature / (temperature + 237.3));
+  double saturated = 6.1078 * exp(17.269 * temperature / (temperature + 237.3));
+
+  // Formula [2.39] in book p.42
+  // RH = 100 * (e_a / e_s(T_a))
+  // e_a = RH * e_s(T_a) / 100
+  double actual = relative_humidity * saturated / 100.0f;
+
+  return {saturated, actual};
 }
 
 double Meteorology::CalculateAirTemperature(double solar_hour,

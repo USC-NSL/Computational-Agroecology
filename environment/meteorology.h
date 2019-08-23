@@ -69,11 +69,13 @@ class Meteorology {
   const double &hourly_diffuse_irradiance() const {
     return hourly_solar_irradiance_.diffuse;
   }
-
+  const double &actual_vapor_pressure() const { return vapor_pressure_.actual; }
   const double &saturated_vapor_pressure() const {
-    return saturated_vapor_pressure_;
+    return vapor_pressure_.saturated;
   }
   const double &air_temperature() const { return air_temperature_; }
+
+  double wind_speed() const { return wind_speed_; }
 
  private:
   friend class PlantRadiation;
@@ -146,12 +148,21 @@ class Meteorology {
   // They are denoted as I_t, I_dr, and I_df (W m^-2) in the book.
   SolarIrradiance hourly_solar_irradiance_;
 
-  // Saturated vapor pressure (mbar)
-  // This is denoted as e_s(T_a) in the book.
-  double saturated_vapor_pressure_;
+  struct VaporPressure {
+    // Saturated vapor pressure (mbar)
+    // This is denoted as e_s(T_a) in the book.
+    double saturated;
+
+    // Actual vapor pressure (mbar)
+    // This is denoted as e_a in the book.
+    double actual;
+  };
+
+  VaporPressure vapor_pressure_;
 
   // TODO: In the book, the wind speed is assumed constant. However, we don't
   // have the data for wind speed. Just leave it blank for now.
+  double wind_speed_ = 0.0f;
 
   // Air temperature (°C)
   // This is denoted as T_a in the book.
@@ -233,7 +244,8 @@ class Meteorology {
       const double b, const double daily_total_solar_irradiance,
       const double solar_hour);
 
-  static double CalculateSaturatedVaporPressure(const double temperature);
+  static VaporPressure CalculateVaporPressure(const double temperature,
+                                              const double relative_humidity);
 
   static double CalculateAirTemperature(double solar_hour,
                                         const double temp_min,

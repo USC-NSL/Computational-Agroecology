@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -std=c++17
+CXXFLAGS := -std=c++17 -Wall
 OPENGLLIBS := -lGL -lglut -lGLEW
 
 THIRD_PARTY_PATH := ./thirdparty
