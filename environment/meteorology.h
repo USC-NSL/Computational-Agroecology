@@ -33,6 +33,7 @@ constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
 namespace environment {
 
 // Forward declaration
+class EnergyBalanceInfo;
 class PlantRadiation;
 
 // Represents information about the meteorology, such as the Sun, vapor
@@ -148,6 +149,9 @@ class Meteorology {
   // They are denoted as I_t, I_dr, and I_df (W m^-2) in the book.
   SolarIrradiance hourly_solar_irradiance_;
 
+  // This is denoted as R_n (W m^-2) in the book.
+  double hourly_net_radiation_;
+
   struct VaporPressure {
     // Saturated vapor pressure (mbar)
     // This is denoted as e_s(T_a) in the book.
@@ -182,6 +186,7 @@ class Meteorology {
   void UpdateLocalTime(const int hour, const int minute, const int second);
   void UpdateLocalSolarHour(const double solar_hour);
   void UpdateWeather(const Weather &weather);
+  void UpdateHourlyNetRadiation(const Weather &weather);
 
   // These functions below are static, which means they are independent to
   // member variables. We use these functions to calculate member variables in
@@ -252,6 +257,11 @@ class Meteorology {
                                         const double temp_max,
                                         const double solar_hour_sunrise,
                                         const double solar_hour_sunset);
+
+  static double CalculateHourlyNetRadiation(const double hourly_total_irradiance,
+                                           const double air_temp,
+                                           const double sunshine_hour,
+                                           const double day_length);
 };
 
 }  // namespace environment

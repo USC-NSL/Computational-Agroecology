@@ -25,6 +25,8 @@ class PlantRadiation {
   // TODO: add accessors for other classes to use
 
  private:
+  friend class EnergyBalance;
+
   // Have a private `meteorology_` so that this class can work independently.
   // Though it may seem to weird to have another `class Meteorology` here, this
   // class needs this in some cases, such as calling

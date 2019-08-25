@@ -28,6 +28,7 @@ void Meteorology::Update(const int day_of_year, const int local_hour,
   UpdateDayOfYear(day_of_year);
   UpdateLocalTime(local_hour, local_minute, local_second);
   UpdateWeather(weather);
+  UpdateHourlyNetRadiation(weather);
 }
 
 void Meteorology::UpdateGeoData() {
@@ -124,6 +125,17 @@ void Meteorology::UpdateWeather(const Weather &weather) {
 
   // Update vapor pressure
   vapor_pressure_ = CalculateVaporPressure(air_temperature_, relative_humidity);
+}
+
+void Meteorology::UpdateHourlyNetRadiation(const Weather &weather) {
+  // TODO: fill in this value from weather data
+  // We need sunshine hour to calculate hourly net radiation. Currently, we
+  // assume the weather is always clear sky, so the sunshine hour is identical
+  // to the day length.
+  double sunshine_hour = day_length_;
+  hourly_net_radiation_ =
+      CalculateHourlyNetRadiation(hourly_solar_irradiance_.total,
+                                  air_temperature_, sunshine_hour, day_length_);
 }
 
 double Meteorology::DegreeToRadians(const double degree) {
@@ -423,6 +435,42 @@ double Meteorology::CalculateAirTemperature(double solar_hour,
                sin(kPI * (solar_hour - solar_hour_sunrise - kOffset) /
                    (solar_hour_sunset - solar_hour_sunrise));
   }
+}
+
+double Meteorology::CalculateHourlyNetRadiation(
+    const double hourly_total_irradiance, const double air_temp,
+    const double sunshine_hour, const double day_length) {
+  constexpr double proportion_shortwave = 0.15f;
+  double net_total_radiance =
+      (1.0 - proportion_shortwave) * hourly_total_irradiance;
+
+  // Stefan-Boltzmann constant
+  // This is denoted as σ and is mentioned in book p.35.
+  constexpr double S_B_constant = 5.67e-8;
+
+  // This is denoted as T_a,K in the book.
+  double temp_in_Kelvin = air_temp + 237.3;
+
+  // Formula [2.35] in book p.41
+  // R_Lu = σ * T_a,K^4
+  double R_Lu = S_B_constant * std::pow(temp_in_Kelvin, 4);
+
+  // Formula [2.37] in book p.42
+  // R_Ld = 9.35 * 10^-6 * σ * T_a,K^6
+  double R_Ld = 9.35e-6 * S_B_constant * std::pow(temp_in_Kelvin, 6);
+
+  // Formula [2.34] in book p.41
+  // R_nL_prime = R_Ld - R_Lu
+  double R_nL_prime = R_Ld - R_Lu;
+
+  // An empirical coefficient. This is mentioned in book p.42.
+  constexpr double b = 0.2;
+
+  // Formula [2.38] in book p.42
+  // R_nL = R_nL_prime * (b + (1 - b) * s / DL)
+  double R_nL = R_nL_prime * (b + (1.0 - b) * sunshine_hour / day_length);
+
+  return net_total_radiance - R_nL;
 }
 
 }  // namespace environment
