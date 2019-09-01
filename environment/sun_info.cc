@@ -107,8 +107,8 @@ void SunInfo::UpdateLocalSolarHour(const double t_h) {
 
 void SunInfo::UpdateWeather(const Weather &weather) {
   // Update air temperature
-  T_a_ = CalculateAirTemperature(local_solar_hour_, weather.temperature.min,
-                                 weather.temperature.max, t_sr_, t_ss_);
+  T_a_ = CalculateAirTemperature(local_solar_hour_, weather.air_temperature.min,
+                                 weather.air_temperature.max, t_sr_, t_ss_);
 
   // Update saturated vapor pressure
   e_s_T_a_ = CalculateSaturatedVaporPressure(T_a_);
