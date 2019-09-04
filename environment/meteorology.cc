@@ -115,7 +115,7 @@ void Meteorology::UpdateLocalSolarHour(const double solar_hour) {
 void Meteorology::UpdateWeather(const Weather &weather) {
   // Update air temperature
   air_temperature_ = CalculateAirTemperature(
-      local_solar_hour_, weather.temperature.min, weather.temperature.max,
+      local_solar_hour_, weather.air_temperature.min, weather.air_temperature.max,
       solar_hour_sunrise_, solar_hour_sunset_);
 
   // TODO: We need relative humidity from weather data to fill in this variable.
