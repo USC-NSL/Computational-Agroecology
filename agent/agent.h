@@ -1,6 +1,7 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_
 #define COMPUTATIONAL_AGROECOLOGY_AGENT_AGENT_H_
 
+#include <iostream>
 #include <random>
 #include <string>
 #include <unordered_map>
@@ -13,7 +14,7 @@
 
 namespace agent {
 
-const std::string kCornTypeName = "Corn";
+const std::string kBeanTypeName = "bean";
 
 struct ActionID {
   size_t row;
@@ -35,6 +36,10 @@ class Agent {
 
   // generate random integer
   int RandomInt(int min, int max);
+
+  // Applyed random action to the encironment
+  // TODO: Applyed random plant
+  void RandomAction(int action_tyoe, int timestep);
 
   std::vector<std::string> GetQualifiedPlants();
 

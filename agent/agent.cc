@@ -24,30 +24,39 @@ int Agent::RandomInt(int min, int max) {
   return integer_distributor(seed);
 }
 
+void Agent::RandomAction(int action_tyoe, int timestep) {
+  while (timestep > 0) {
+    agent::ActionID action = {
+        (size_t)RandomInt(0, env_->terrain().size() - 1),
+        (size_t)RandomInt(0, (0, env_->terrain().size() - 1)),
+        ::agent::action::ActionType(0), 2};
+    TakeAction(CreateAction(action));
+    timestep--;
+  }
+}
+
 agent::action::Action *Agent::CreateAction(const ActionID &action) {
-  agent::action::Action *new_action;
   // Create a action at time env_->timestamp()
   using ::agent::action::ActionType;
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
-      new_action = new agent::action::crop::Add(
-          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
-          kCornTypeName);
-      break;
-    case ActionType::WATER_CROP:
-      new_action = new agent::action::crop::Water(
-          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
-          1);
-      break;
+      // std::cout<<action.row<<action.col<<std::endl;
+      return new agent::action::crop::Add(
+          environment::Coordinate(action.row, action.col), 1, 0, kBeanTypeName);
+      // env_->ReceiveAction(new_action);
+    case ActionType::CROP_REMOVE:
+      return new agent::action::crop::Remove(
+          environment::Coordinate(action.row, action.col), 1, 0);
     case ActionType::CROP_HARVEST:
-      new_action = new agent::action::crop::Harvest(
-          environment::Coordinate(action.row, action.col), env_->time_step(),
-          1);
-      break;
+      return new agent::action::crop::Harvest(
+          environment::Coordinate(action.row, action.col), 1, 0);
+    case ActionType::WATER_CROP:
+      return new agent::action::crop::Water(
+          environment::Coordinate(action.row, action.col), 1, 0, 1);
   }
-  // Remember to delete action
-  return new_action;
+  return nullptr;
 }
+
 Agent::ReturnCodes Agent::TakeAction(const agent::action::Action *action) {
   if (action == nullptr) {
     return INVALID_ARGUMENT;
@@ -59,7 +68,6 @@ Agent::ReturnCodes Agent::TakeAction(const agent::action::Action *action) {
 
   env_->ReceiveAction(action);
   DeductResources(action->cost());
-
   return SUCCESS;
 }
 
