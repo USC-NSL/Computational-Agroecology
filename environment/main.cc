@@ -36,6 +36,8 @@ int main() {
   // Appied RandomAction function on envionment
   agent_test.RandomAction(0, 1);
 
+  agent::action::crop::Remove remove_crop(environment::Coordinate(0, 0), 1, 0);
+
   agent::action::crop::Add add_crop(environment::Coordinate(0, 0), 1, 0,
                                     kBeanTypeName);
   env.ReceiveAction(&add_crop);
