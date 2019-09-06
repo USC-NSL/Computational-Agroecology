@@ -14,8 +14,9 @@ Environment::Environment(const Config &config,
       time_step_length_(time_step_length),
       time_step_(0),
       terrain_(terrain),
-      weather_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // TODO: Get weather data and put them into this struct.
-      sun_info_(time, config.location, climate_.climate_zone, weather_) {
+      weather_(0.0, 0.0, 0.0, 0.0, 0.0,
+               0.0),  // TODO: Get weather data and put them into this struct.
+      meteorology_(time, config.location, climate_.climate_zone, weather_) {
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }

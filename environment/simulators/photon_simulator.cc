@@ -1,7 +1,7 @@
 #include "photon_simulator.h"
 
 #include "environment/environment.h"
-#include "environment/sun_info.h"
+#include "environment/meteorology.h"
 
 // extend third party library
 namespace _462 {
@@ -37,12 +37,12 @@ void PhotonSimulator::SimulateToTime(
    * we regard north as y asix
    */
   // TODO: Since the sun info may not be correct, we may need to fix this.
-  _462::Vector3 sun_dir(-sin(env->sun_info().solar_azimuth()),
-                        -cos(env->sun_info().solar_azimuth()),
-                        -cos(env->sun_info().solar_inclination()));
-  _462::Vector3 sun_strength(env->sun_info().hourly_irradiance(),
-                             env->sun_info().hourly_irradiance(),
-                             env->sun_info().hourly_irradiance());
+  _462::Vector3 sun_dir(-sin(env->meteorology().solar_azimuth()),
+                        -cos(env->meteorology().solar_azimuth()),
+                        -cos(env->meteorology().solar_inclination()));
+  _462::Vector3 sun_strength(env->meteorology().hourly_total_irradiance(),
+                             env->meteorology().hourly_total_irradiance(),
+                             env->meteorology().hourly_total_irradiance());
   double latitude_diff = (env->config().location.latitude_top -
                           env->config().location.latitude_bottom) /
                          100.0f;
@@ -63,9 +63,7 @@ void PhotonSimulator::SimulateToTime(
   // TODO: add functionality if render is required.
 }
 
-void PhotonSimulator::FreeModels() {
-  models_.clear();
-}
+void PhotonSimulator::FreeModels() { models_.clear(); }
 
 // TODO: implement these two functions after refining class plant
 void PhotonSimulator::LoadModels(environment::Environment *env) {}

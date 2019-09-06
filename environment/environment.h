@@ -8,7 +8,7 @@
 
 #include "environment/climate.h"
 #include "environment/config.h"
-#include "environment/sun_info.h"
+#include "environment/meteorology.h"
 #include "environment/terrain.h"
 #include "environment/weather.h"
 
@@ -50,7 +50,7 @@ class Environment {
     return time_step_length_;
   }
   inline const int64_t &time_step() const { return time_step_; }
-  inline const SunInfo &sun_info() const { return sun_info_; }
+  inline const Meteorology &meteorology() const { return meteorology_; }
   inline const Terrain &terrain() const { return terrain_; }
   inline const Weather &weather() const { return weather_; }
   inline const Plant *GetPlant(const Coordinate &coord) {
@@ -78,8 +78,8 @@ class Environment {
   Config config_;
   const Climate climate_;
 
-  // the information of sun from the simulator
-  SunInfo sun_info_;
+  // the information of meteorology from the simulator
+  Meteorology meteorology_;
 
   // Current time in this environment
   std::chrono::system_clock::time_point timestamp_;
