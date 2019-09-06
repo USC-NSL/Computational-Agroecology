@@ -99,6 +99,7 @@ class Meteorology {
 
  private:
   friend class PlantRadiation;
+  friend class EnergyBalance;
 
   // Information binded to the current geographic location
   const Location &geo_location_;

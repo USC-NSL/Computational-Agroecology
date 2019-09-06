@@ -63,11 +63,14 @@ double PlantRadiation::CalculateExtinctionCoefficientForDirect(
     return 0.0f;
   }
 
+  // Formula [3.3] in book p.55
   // k_dr = 0.5 / sin(β)
   return (1.0f / (2.0f * std::sin(solar_elevation)));
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDiffuse() const {
+  // TODO: move these hard-coded constants to constant variables
+
   // Formula [3.29] in book p.65
   // k_df = (1 + 0.1174 * sqrt(L)) / (1 + 0.3732 * sqrt(L))
   double sqrt_lai = std::sqrt(total_leaf_area_index_);
