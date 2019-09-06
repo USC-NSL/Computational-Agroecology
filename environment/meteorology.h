@@ -77,17 +77,6 @@ class Meteorology {
 
   double wind_speed() const { return wind_speed_; }
 
- private:
-  friend class PlantRadiation;
-
-  // Information binded to the current geographic location
-  const Location &geo_location_;
-  const Climate::ZoneType &climate_zone_;
-
-  // Information about the current date and time
-  double day_of_year_;
-  double local_solar_hour_;
-
   // This stores some caches of constants related to geographic information and
   // day of a year. These variables are useful when we need to frequently call
   // `CalculateHourlySolarIrradiance()`.
@@ -106,6 +95,17 @@ class Meteorology {
     double a;
     double b;
   };
+
+ private:
+  friend class PlantRadiation;
+
+  // Information binded to the current geographic location
+  const Location &geo_location_;
+  const Climate::ZoneType &climate_zone_;
+
+  // Information about the current date and time
+  double day_of_year_;
+  double local_solar_hour_;
 
   ConstantCaches constant_caches_;
 

@@ -69,6 +69,8 @@ double PlantRadiation::CalculateExtinctionCoefficientForDirect(
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDiffuse() const {
+  // TODO: move these hard-coded constants to constant variables
+
   // Formula [3.29] in book p.65
   // k_df = (1 + 0.1174 * sqrt(L)) / (1 + 0.3732 * sqrt(L))
   double sqrt_lai = std::sqrt(total_leaf_area_index_);
@@ -137,20 +139,21 @@ PlantRadiation::CalculateAbsorbedHourPAR(
 
   // Formula [3.33] in book p.67
   // Q_p_dr = (1 - p) * tau_dr_alpha * Q_dr
-  double I_p_dr = (1.0 - P) * tau_dr_alpha * direct_radiation;
+  double total_direct_par = (1.0 - P) * tau_dr_alpha * direct_radiation;
 
   // Formula [3.34] in book p.67
   // Q_p_dr_dr = (1 - p) * tau_dr * Q_dr
-  double I_p_dr_dr = (1.0 - P) * tau_dr * direct_radiation;
+  double direct_total_direct_par = (1.0 - P) * tau_dr * direct_radiation;
 
   // Formula [3.36] in book p.68
   // Q_p_dr_α = (Q_p_dr - Q_p_dr_dr) / 2
-  double I_p_dr_alpha = (I_p_dr - I_p_dr_dr) / 2.0;
+  double half_irradiance_scattered =
+      (total_direct_par - direct_total_direct_par) / 2.0;
 
   // Formula [3.37] in book p.68
   // Q_p_df_bar = (1 - p) * Q_df * (1 - exp(-sqrt(α) * k_df * L)) /
   //              (sqrt(α) * k_df * L)
-  double I_p_df_bar =
+  double avg_diffuse_solar_irradiance =
       (1.0 - P) * diffuse_radiation *
       (1.0 - std::exp(-sqrt_alpha * kExtinctionCoefficientForDiffuse *
                       total_leaf_area_index_)) /
@@ -160,11 +163,12 @@ PlantRadiation::CalculateAbsorbedHourPAR(
   // Q_sl = α * (k_dr * Q_dr + Q_p_df_bar + Q_p_dr_α)
   double I_sunlit =
       alpha * (kExtinctionCoefficientForDiffuse * direct_radiation +
-               I_p_df_bar + I_p_dr_alpha);
+               avg_diffuse_solar_irradiance + half_irradiance_scattered);
 
   // Formula [3.39] in book p.69
   // Q_sh = α * (Q_p_df_bar + Q_p_dr_α)
-  double I_shaded = alpha * (I_p_df_bar + I_p_dr_alpha);
+  double I_shaded =
+      alpha * (avg_diffuse_solar_irradiance + half_irradiance_scattered);
 
   return {I_sunlit, I_shaded};
 }
@@ -173,16 +177,16 @@ PlantRadiation::LeafIndexArea PlantRadiation::CalculateLai(
     const double k_dr) const {
   // Formula [3.41] in book p.69
   // L_sl = (1 - exp(-k_dr * L)) / k_dr
-  double L_sl = 0.0;
+  double lai_sl = 0.0;
   if (k_dr > 0.0) {
-    L_sl = (1 - std::exp(-k_dr * total_leaf_area_index_)) / k_dr;
+    lai_sl = (1 - std::exp(-k_dr * total_leaf_area_index_)) / k_dr;
   }
 
   // Formula [3.42] in book p.69
   // L_sh = L - L_sl
-  double L_sh = total_leaf_area_index_ - L_sl;
+  double lai_sh = total_leaf_area_index_ - lai_sl;
 
-  return {L_sl, L_sh};
+  return {lai_sl, lai_sh};
 }
 
 }  // namespace environment
