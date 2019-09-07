@@ -25,25 +25,22 @@ int Agent::RandomInt(int min, int max) {
 }
 
 void Agent::RandomAction(int action_tyoe, int timestep) {
-  while (timestep > 0) {
+  while (timestep-- > 0) {
     agent::ActionID action = {
         (size_t)RandomInt(0, env_->terrain().size() - 1),
         (size_t)RandomInt(0, (0, env_->terrain().size() - 1)),
         ::agent::action::ActionType(0), 2};
     TakeAction(CreateAction(action));
-    timestep--;
   }
 }
 
 agent::action::Action *Agent::CreateAction(const ActionID &action) {
-  // Create a action at time env_->timestamp()
+  // Create a action
   using ::agent::action::ActionType;
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
-      // std::cout<<action.row<<action.col<<std::endl;
       return new agent::action::crop::Add(
           environment::Coordinate(action.row, action.col), 1, 0, kBeanTypeName);
-      // env_->ReceiveAction(new_action);
     case ActionType::CROP_REMOVE:
       return new agent::action::crop::Remove(
           environment::Coordinate(action.row, action.col), 1, 0);

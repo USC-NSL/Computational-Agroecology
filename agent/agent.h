@@ -37,8 +37,8 @@ class Agent {
   // generate random integer
   int RandomInt(int min, int max);
 
-  // Applyed random action to the encironment
-  // TODO: Applyed random plant
+  // Applied random action to the encironment
+  // TODO: Appliedrandom plant
   void RandomAction(int action_tyoe, int timestep);
 
   std::vector<std::string> GetQualifiedPlants();
