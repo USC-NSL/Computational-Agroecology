@@ -6,7 +6,15 @@ Soil *SoilContainer::FindSoilByCoord(const double x, const double y) {
   return &((soils_[size_t(x)])[size_t(y)]);
 }
 
+const Soil *SoilContainer::FindSoilByCoord(const double x, const double y) const {
+  return &((soils_[size_t(x)])[size_t(y)]);
+}
+
 Soil *SoilContainer::FindSoilByCoord(const Coordinate &coordinate) {
+  return &((soils_[size_t(coordinate.x)])[size_t(coordinate.y)]);
+}
+
+const Soil *SoilContainer::FindSoilByCoord(const Coordinate &coordinate) const {
   return &((soils_[size_t(coordinate.x)])[size_t(coordinate.y)]);
 }
 

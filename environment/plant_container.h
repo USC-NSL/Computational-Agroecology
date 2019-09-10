@@ -20,6 +20,8 @@ class PlantContainer {
   Plant *FindPlant(const Coordinate &coordinate);
   PlantContainer() : kdtree_(nullptr){};
 
+  const std::vector<Plant *> &plants() const { return plants_; }
+
  private:
   bool CheckPosition(const Coordinate &position, const double size);
   void ConstructPlantKDTree();

@@ -1,6 +1,6 @@
 #include "message_convertor.h"
 
-std::chrono::system_clock::time_point FromProtobuf(
+std::chrono::system_clock::time_point FromProtobufTimePoint(
     const int64_t timestamp_epoch_count) {
   auto epoch_count = std::chrono::nanoseconds(timestamp_epoch_count);
   return std::chrono::system_clock::time_point(epoch_count);
@@ -8,6 +8,14 @@ std::chrono::system_clock::time_point FromProtobuf(
 
 int64_t ToProtobuf(const std::chrono::system_clock::time_point& timestamp) {
   return timestamp.time_since_epoch().count();
+}
+
+std::chrono::duration<int> FromProtobufDuration(
+    const int64_t time_step_epoch_count) {
+  return std::chrono::seconds(time_step_epoch_count);
+}
+int64_t ToProtobuf(const std::chrono::duration<int>& time_step_length) {
+  return time_step_length.count();
 }
 
 environment::Location FromProtobuf(
@@ -42,48 +50,18 @@ data_format::Config ToProtobuf(const environment::Config& config) {
   return config_protobuf;
 }
 
-environment::Plant FromProtobuf(const data_format::Plant& protobuf_plant) {
-  environment::Plant plant(protobuf_plant.type_name());
-
-  plant.health = protobuf_plant.health();
-  plant.flowering = protobuf_plant.flowering();
-  plant.accumulated_gdd = protobuf_plant.accumulated_gdd();
-
-  switch (protobuf_plant.maturity()) {
-    case data_format::Plant_Maturity_SEED:
-      plant.maturity = environment::Plant::SEED;
-      break;
-    case data_format::Plant_Maturity_SEEDLING:
-      plant.maturity = environment::Plant::SEEDLING;
-      break;
-    case data_format::Plant_Maturity_JUVENILE:
-      plant.maturity = environment::Plant::JUVENILE;
-      break;
-    case data_format::Plant_Maturity_MATURE:
-      plant.maturity = environment::Plant::MATURE;
-      break;
-    case data_format::Plant_Maturity_OLD:
-      plant.maturity = environment::Plant::OLD;
-      break;
-  }
-
-  plant.base_temperature = protobuf_plant.base_temperature();
-  plant.gdd_thresholds =
-      std::vector<int>(protobuf_plant.gdd_thresholds().begin(),
-                       protobuf_plant.gdd_thresholds().end());
-
-  return plant;
-}
-
 data_format::Plant ToProtobuf(const environment::Plant& plant) {
   data_format::Plant plant_protobuf;
 
-  plant_protobuf.set_type_name(plant.type_name);
-  plant_protobuf.set_health(plant.health);
-  plant_protobuf.set_flowering(plant.flowering);
-  plant_protobuf.set_accumulated_gdd(plant.accumulated_gdd);
+  plant_protobuf.set_name(plant.name());
+  plant_protobuf.set_trunk_size(plant.trunk_size());
+  plant_protobuf.set_root_size(plant.root_size());
+  plant_protobuf.set_health(plant.health());
+  plant_protobuf.set_flowering(plant.flowering());
+  plant_protobuf.set_health(plant.health());
+  plant_protobuf.set_accumulated_gdd(plant.accumulated_gdd());
 
-  switch (plant.maturity) {
+  switch (plant.maturity()) {
     case environment::Plant::SEED:
       plant_protobuf.set_maturity(data_format::Plant_Maturity_SEED);
       break;
@@ -101,9 +79,29 @@ data_format::Plant ToProtobuf(const environment::Plant& plant) {
       break;
   }
 
-  plant_protobuf.set_base_temperature(plant.base_temperature);
-  *(plant_protobuf.mutable_gdd_thresholds()) = {plant.gdd_thresholds.begin(),
-                                                plant.gdd_thresholds.end()};
+  plant_protobuf.set_produce(plant.produce());
+
+  plant_protobuf.mutable_params()->set_gdd_base_temperature(
+      plant.params().at(environment::PlantProperty::GDD_BASE_TEMPERATURE));
+  plant_protobuf.mutable_params()->set_min_absolute_temperature(
+      plant.params().at(environment::PlantProperty::MIN_ABSOLUTE_TEMPERATURE));
+  plant_protobuf.mutable_params()->set_max_absolute_temperature(
+      plant.params().at(environment::PlantProperty::MAX_ABSOLUTE_TEMPERATURE));
+  plant_protobuf.mutable_params()->set_min_new_growth_temperature(
+      plant.params().at(
+          environment::PlantProperty::MIN_NEW_GROWTH_TEMPERATURE));
+  plant_protobuf.mutable_params()->set_max_new_growth_temperature(
+      plant.params().at(
+          environment::PlantProperty::MAX_NEW_GROWTH_TEMPERATURE));
+  plant_protobuf.mutable_params()->set_min_photo_period(
+      plant.params().at(environment::PlantProperty::MIN_PHOTO_PERIOD));
+  plant_protobuf.mutable_params()->set_max_photo_period(
+      plant.params().at(environment::PlantProperty::MAX_PHOTO_PERIOD));
+  plant_protobuf.mutable_params()->set_max_harvest_yield(
+      plant.params().at(environment::PlantProperty::MAX_HARVEST_YIELD));
+  plant_protobuf.mutable_params()->set_gdd_units_after_full_bloom(
+      plant.params().at(
+          environment::PlantProperty::GDD_UNITS_AFTER_FULL_BLOOM));
 
   return plant_protobuf;
 }
@@ -152,67 +150,43 @@ data_format::Soil ToProtobuf(const environment::Soil& soil) {
 }
 
 environment::Coordinate FromProtobuf(
-    const data_format::Terrain_Coordinate& protobuf_coordinate) {
+    const data_format::Coordinate& protobuf_coordinate) {
   return environment::Coordinate(protobuf_coordinate.x(),
-                                 protobuf_coordinate.y());
+                                 protobuf_coordinate.y(),
+                                 protobuf_coordinate.z());
 }
 
-data_format::Terrain_Coordinate ToProtobuf(
-    const environment::Coordinate& coordinate) {
-  data_format::Terrain_Coordinate coordinate_protobuf;
+data_format::Coordinate ToProtobuf(const environment::Coordinate& coordinate) {
+  data_format::Coordinate coordinate_protobuf;
   coordinate_protobuf.set_x(coordinate.x);
   coordinate_protobuf.set_y(coordinate.y);
+  coordinate_protobuf.set_z(coordinate.z);
 
   return coordinate_protobuf;
-}
-
-environment::Cell FromProtobuf(const data_format::Terrain_Cell& protobuf_cell) {
-  environment::Soil soil = FromProtobuf(protobuf_cell.soil());
-  environment::Cell cell(protobuf_cell.size(), soil);
-  if (protobuf_cell.has_plant()) {
-    cell.plant = FromProtobuf(protobuf_cell.plant());
-  } else {
-    cell.plant = std::nullopt;
-  }
-
-  return cell;
-}
-
-data_format::Terrain_Cell ToProtobuf(const environment::Cell& cell) {
-  data_format::Terrain_Cell cell_protobuf;
-
-  cell_protobuf.set_size(cell.size);
-  *(cell_protobuf.mutable_soil()) = ToProtobuf(cell.soil);
-  if (cell.plant.has_value()) {
-    *(cell_protobuf.mutable_plant()) = ToProtobuf(*(cell.plant));
-  }
-
-  return cell_protobuf;
-}
-
-environment::Terrain FromProtobuf(
-    const data_format::Terrain& protobuf_terrain) {
-  int size = protobuf_terrain.tiles_size();
-  environment::Terrain terrain(size);
-  for (size_t i = 0; i < size; ++i) {
-    for (size_t j = 0; j < size; ++j) {
-      terrain.tiles()[i][j] = FromProtobuf(protobuf_terrain.tiles(i).cells(j));
-    }
-  }
-
-  return terrain;
 }
 
 data_format::Terrain ToProtobuf(const environment::Terrain& terrain) {
   data_format::Terrain terrain_protobuf;
 
-  for (size_t i = 0; i < terrain.width(); ++i) {
-    auto row = terrain_protobuf.add_tiles();
-    for (size_t j = 0; j < terrain.length(); ++j) {
-      *(row->add_cells()) = ToProtobuf(terrain.tiles()[i][j]);
-    }
+  terrain_protobuf.set_yield(terrain.yield());
+  terrain_protobuf.set_size(terrain.size());
+
+  for (const auto& p : terrain.GetAllPlants()) {
+    auto* new_plant = terrain_protobuf.add_plants();
+    *(new_plant->mutable_position()) = ToProtobuf(p->position());
+    *(new_plant->mutable_plant()) = ToProtobuf(*p);
   }
 
+  for (size_t i = 0; i < terrain.length(); ++i) {
+    for (size_t j = 0; j < terrain.width(); ++j) {
+      environment::Coordinate pos(i, j);
+      auto* new_soil = terrain_protobuf.add_soil();
+      new_soil->mutable_position()->set_x(i);
+      new_soil->mutable_position()->set_y(j);
+
+      *(new_soil->mutable_soil()) = ToProtobuf(*(terrain.GetSoil(pos)));
+    }
+  }
   return terrain_protobuf;
 }
 
@@ -338,20 +312,16 @@ data_format::Climate ToProtobuf(const environment::Climate& climate) {
   return climate_protobuf;
 }
 
-environment::Weather FromProtobuf(
-    const data_format::Weather& weather_protobuf) {
-  double temp_min = weather_protobuf.temperature().min();
-  double temp_max = weather_protobuf.temperature().max();
-  double rainfall = weather_protobuf.rainfall();
-
-  return environment::Weather(temp_min, temp_max, rainfall);
-}
-
 data_format::Weather ToProtobuf(const environment::Weather& weather) {
   data_format::Weather weather_protobuf;
 
-  weather_protobuf.mutable_temperature()->set_min(weather.temperature.min);
-  weather_protobuf.mutable_temperature()->set_max(weather.temperature.max);
+  weather_protobuf.set_total_sunshine_hour(weather.total_sunshine_hour);
+  weather_protobuf.mutable_air_temperature()->set_min(
+      weather.air_temperature.min);
+  weather_protobuf.mutable_air_temperature()->set_max(
+      weather.air_temperature.max);
+  weather_protobuf.set_relative_humidity(weather.relative_humidity);
+  weather_protobuf.set_wind_speed(weather.wind_speed);
   weather_protobuf.set_rainfall(weather.rainfall);
 
   return weather_protobuf;
@@ -373,58 +343,52 @@ data_format::Environment ToProtobuf(
 void FromProtobuf(
     const agent_server::service::AgentActionConfig& config_protobuf,
     std::vector<environment::Coordinate>* applied_range,
-    std::chrono::system_clock::time_point* start_time,
-    std::chrono::duration<int>* duration,
-    std::vector<std::pair<simulator::ResourceType, size_t>>* cost) {
+    int64_t* start_time_step, int64_t* duration, agent::Resources* cost) {
   applied_range->clear();
   for (const auto& protobuf_coordinate : config_protobuf.applied_range()) {
     applied_range->push_back(FromProtobuf(protobuf_coordinate));
   }
 
-  *start_time = FromProtobuf(config_protobuf.start_time_epoch_count());
-  std::chrono::system_clock::time_point end_time =
-      FromProtobuf(config_protobuf.end_time_epoch_count());
-  *duration = std::chrono::duration_cast<std::chrono::duration<int>>(
-      end_time - *start_time);
+  *start_time_step = config_protobuf.start_time_step();
+  int64_t end_time = config_protobuf.end_time_step();
+  *duration = end_time - *start_time_step;
 
   for (const auto& protobuf_cost : config_protobuf.cost()) {
-    simulator::ResourceType type;
+    agent::ResourceType type;
     switch (protobuf_cost.resource_type()) {
       case (::agent_server::service::AgentActionConfig_Cost_ResourceType_MONEY):
-        type = simulator::ResourceType::MONEY;
+        type = agent::ResourceType::MONEY;
         break;
       case (::agent_server::service::AgentActionConfig_Cost_ResourceType_LABOR):
-        type = simulator::ResourceType::LABOR;
+        type = agent::ResourceType::LABOR;
         break;
     }
-    cost->push_back(std::make_pair(type, protobuf_cost.count()));
+    (*cost)[type] = protobuf_cost.count();
   }
 }
 
 agent_server::service::AgentActionConfig ToProtobuf(
     const std::vector<environment::Coordinate>& applied_range,
-    const std::chrono::system_clock::time_point& start_time,
-    const std::chrono::duration<int>& duration,
-    const std::vector<std::pair<simulator::ResourceType, size_t>>& cost) {
+    const int64_t& start_time_step, const int64_t& duration,
+    const agent::Resources& cost) {
   agent_server::service::AgentActionConfig agent_action_config;
 
   for (const auto& coordinate : applied_range) {
     *(agent_action_config.add_applied_range()) = ToProtobuf(coordinate);
   }
 
-  agent_action_config.set_start_time_epoch_count(ToProtobuf(start_time));
-  agent_action_config.set_end_time_epoch_count(
-      ToProtobuf(start_time + duration));
+  agent_action_config.set_start_time_step(start_time_step);
+  agent_action_config.set_end_time_step(start_time_step + duration);
 
   for (const auto& c : cost) {
     auto cost_ptr = agent_action_config.add_cost();
     ::agent_server::service::AgentActionConfig_Cost_ResourceType type;
     switch (c.first) {
-      case simulator::ResourceType::MONEY:
+      case agent::ResourceType::MONEY:
         type =
             ::agent_server::service::AgentActionConfig_Cost_ResourceType_MONEY;
         break;
-      case simulator::ResourceType::LABOR:
+      case agent::ResourceType::LABOR:
         type =
             ::agent_server::service::AgentActionConfig_Cost_ResourceType_LABOR;
         break;
@@ -437,52 +401,51 @@ agent_server::service::AgentActionConfig ToProtobuf(
   return agent_action_config;
 }
 
-simulator::action::crop::Add FromProtobuf(
+agent::action::crop::Add FromProtobuf(
     const agent_server::service::AgentAddCropRequest& add_crop_protobuf) {
   std::vector<environment::Coordinate> applied_range;
-  std::chrono::system_clock::time_point start_time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<simulator::ResourceType, size_t>> cost;
+  int64_t start_time_step;
+  int64_t duration;
+  agent::Resources cost;
 
-  FromProtobuf(add_crop_protobuf.action_config(), &applied_range, &start_time,
-               &duration, &cost);
+  FromProtobuf(add_crop_protobuf.action_config(), &applied_range,
+               &start_time_step, &duration, &cost);
 
-  return simulator::action::crop::Add(applied_range, start_time, duration,
-                                      add_crop_protobuf.crop_type_name(), cost);
+  return agent::action::crop::Add(applied_range, start_time_step, duration,
+                                  cost, add_crop_protobuf.crop_type_name());
 }
 
 agent_server::service::AgentAddCropRequest ToProtobuf(
-    const simulator::action::crop::Add& action) {
+    const agent::action::crop::Add& action) {
   agent_server::service::AgentAddCropRequest agent_add_crop_request;
 
   *(agent_add_crop_request.mutable_action_config()) = ToProtobuf(
-      action.applied_range, action.start_time, action.duration, action.cost);
+      action.applied_range(), action.start_time_step(), action.duration(), action.cost());
 
-  agent_add_crop_request.set_crop_type_name(action.crop_type_name);
+  agent_add_crop_request.set_crop_type_name(action.crop_type_name());
 
   return agent_add_crop_request;
 }
 
-simulator::action::crop::Remove FromProtobuf(
+agent::action::crop::Remove FromProtobuf(
     const agent_server::service::AgentRemoveCropRequest& remove_crop_protobuf) {
   std::vector<environment::Coordinate> applied_range;
-  std::chrono::system_clock::time_point start_time;
-  std::chrono::duration<int> duration;
-  std::vector<std::pair<simulator::ResourceType, size_t>> cost;
+  int64_t start_time_step;
+  int64_t duration;
+  agent::Resources cost;
 
   FromProtobuf(remove_crop_protobuf.action_config(), &applied_range,
-               &start_time, &duration, &cost);
+               &start_time_step, &duration, &cost);
 
-  return simulator::action::crop::Remove(applied_range, start_time, duration,
-                                         cost);
+  return agent::action::crop::Remove(applied_range, start_time_step, duration, cost);
 }
 
 agent_server::service::AgentRemoveCropRequest ToProtobuf(
-    const simulator::action::crop::Remove& action) {
+    const agent::action::crop::Remove& action) {
   agent_server::service::AgentRemoveCropRequest agent_remove_crop_request;
 
   *(agent_remove_crop_request.mutable_action_config()) = ToProtobuf(
-      action.applied_range, action.start_time, action.duration, action.cost);
+      action.applied_range(), action.start_time_step(), action.duration(), action.cost());
 
   return agent_remove_crop_request;
 }

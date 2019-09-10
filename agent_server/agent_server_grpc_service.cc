@@ -18,7 +18,6 @@
 namespace {
 
 std::string kDefaultHostAndPort = "0.0.0.0:50000";
-
 }
 
 namespace agent_server {
@@ -36,11 +35,13 @@ namespace service {
 
   environment::Config config = FromProtobuf(request->config());
   std::chrono::system_clock::time_point tp =
-      FromProtobuf(request->timestamp_epoch_count());
-  environment::Terrain terrain = FromProtobuf(request->terrain());
+      FromProtobufTimePoint(request->timestamp_epoch_count());
+  std::chrono::duration<int> time_step_length =
+      FromProtobufDuration(request->time_step_epoch_count());
+  environment::Terrain terrain(request->terrain_size());
 
-  auto ret =
-      agent_server_.CreateEnvironment(request->name(), config, tp, terrain);
+  auto ret = agent_server_.CreateEnvironment(request->name(), config, tp,
+                                             time_step_length, terrain);
 
   if (ret == ::agent_server::AgentServer::ALREADY_EXISTS) {
     return grpc::Status(grpc::ALREADY_EXISTS,
@@ -69,17 +70,18 @@ namespace service {
   return ::grpc::Status::OK;
 }
 
-::grpc::Status AgentServerGrpcService::CreateAgent(
-    ::grpc::ServerContext* context, const CreateAgentRequest* request,
-    CreateAgentResponse* response) {
+::grpc::Status AgentServerGrpcService::CreateQLearningAgent(
+    ::grpc::ServerContext* context, const CreateQLearningAgentRequest* request,
+    CreateQLearningAgentResponse* response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
         "`ServerContext` or `CreateAgentRequest` is nullptr.");
   }
 
-  auto ret = agent_server_.CreateAgent(request->agent_name(),
-                                       request->environment_name());
+  auto ret = agent_server_.CreateQLearningAgent(request->agent_name(),
+                                                request->environment_name(),
+                                                request->row(), request->col());
 
   if (ret == ::agent_server::AgentServer::ENV_NOT_FOUND) {
     return ::grpc::Status(::grpc::NOT_FOUND,
@@ -131,18 +133,17 @@ namespace service {
   return ::grpc::Status::OK;
 }
 
-::grpc::Status AgentServerGrpcService::SimulateToTime(
-    ::grpc::ServerContext* context, const SimulateToTimeRequest* request,
-    SimulateToTimeResponse* response) {
+::grpc::Status AgentServerGrpcService::SimulateToTimeStep(
+    ::grpc::ServerContext* context, const SimulateToTimeStepRequest* request,
+    SimulateToTimeStepResponse* response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
         "`ServerContext` or `SimulateToTimeRequest` is nullptr.");
   }
 
-  auto result = agent_server_.SimulateToTime(
-      request->environment_name(),
-      FromProtobuf(request->timestamp_epoch_count()));
+  auto result = agent_server_.SimulateToTimeStep(request->environment_name(),
+                                                 request->time_step());
 
   if (result == ::agent_server::AgentServer::ENV_NOT_FOUND) {
     return ::grpc::Status(::grpc::NOT_FOUND, std::string("Environment ") +
@@ -162,7 +163,7 @@ namespace service {
   }
 
   // Using default copy constructor
-  simulator::action::crop::Add action(FromProtobuf(*request));
+  agent::action::crop::Add action(FromProtobuf(*request));
 
   auto result = agent_server_.AgentTakeAction(request->agent_name(), &action);
 
@@ -190,7 +191,7 @@ namespace service {
   }
 
   // Using default move constructor
-  simulator::action::crop::Remove action(FromProtobuf(*request));
+  agent::action::crop::Remove action(FromProtobuf(*request));
 
   auto result = agent_server_.AgentTakeAction(request->agent_name(), &action);
 

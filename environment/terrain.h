@@ -21,13 +21,23 @@ class Terrain {
   Terrain(const size_t size);
 
   // Accessors
-  inline const int yield() const { return yield_; }
-  inline const size_t size() const { return size_; }
+  inline int yield() const { return yield_; }
+  inline size_t size() const { return size_; }
+  inline size_t width() const { return size_; }
+  inline size_t length() const { return size_; }
   inline Plant *GetPlant(const Coordinate &coord) {
     return plant_container_.FindPlant(coord);
   }
   inline Soil *GetSoil(const Coordinate &coord) {
     return soil_container_.FindSoilByCoord(coord);
+  }
+
+  inline const Soil *GetSoil(const Coordinate &coord) const {
+    return soil_container_.FindSoilByCoord(coord);
+  }
+
+  inline const std::vector<Plant *>GetAllPlants() const {
+    return plant_container_.plants();
   }
 
   // Modifiers
@@ -46,6 +56,7 @@ class Terrain {
   SoilContainer soil_container_;
 
   int yield_;
+  // TODO: Now we assume the terrain to be a square space.
   size_t size_;
 };
 

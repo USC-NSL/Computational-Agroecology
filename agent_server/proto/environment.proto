@@ -41,24 +41,6 @@ message Climate {
   MinMaxDoublePair yearly_rainfall = 3;
 }
 
-message Plant {
-  enum Maturity {
-    SEED = 0;
-    SEEDLING = 1;
-    JUVENILE = 2;
-    MATURE = 3;
-    OLD = 4;
-  }
-
-  string type_name = 1;
-  uint32 health = 2;
-  bool flowering = 3;
-  int64 accumulated_gdd = 4;
-  Maturity maturity = 5;
-  double base_temperature = 6;
-  repeated int64 gdd_thresholds = 7;
-}
-
 message Soil {
   enum Texture {
     CLAY = 0;
@@ -82,30 +64,69 @@ message Soil {
   double water_content = 5;
 }
 
+message Coordinate {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message Plant {
+  enum Maturity {
+    SEED = 0;
+    SEEDLING = 1;
+    JUVENILE = 2;
+    MATURE = 3;
+    OLD = 4;
+  }
+
+  message PlantParams {
+    int32 gdd_base_temperature = 1;
+    int32 min_absolute_temperature = 2;
+    int32 max_absolute_temperature = 3;
+    int32 min_new_growth_temperature = 4;
+    int32 max_new_growth_temperature = 5;
+    int32 min_photo_period = 6;
+    int32 max_photo_period = 7;
+    int32 max_harvest_yield = 8;
+    int32 gdd_units_after_full_bloom = 9;
+  }
+
+  string name = 1;
+  double trunk_size = 2;
+  double root_size = 3;
+  int32 health = 4;
+  bool flowering = 5;
+  double height = 6;
+  int32 accumulated_gdd = 7;
+  Maturity maturity = 8;
+  int32 produce = 9;
+  PlantParams params = 10;
+}
+
 message Terrain {
-  message Coordinate {
-    uint64 x = 1;
-    uint64 y = 2;
+  message PlantNode {
+    Coordinate position = 1;
+    Plant plant = 2;
   }
 
-  message Cell {
-    uint64 size = 1;
-    oneof oneof_plant {
-      Plant plant = 2;
-    }
-    Soil soil = 3;
+  message SoilNode {
+    Coordinate position = 1;
+    Soil soil = 2;
   }
 
-  message Row {
-    repeated Cell cells = 1;
-  }
+  int32 yield = 1;
+  uint32 size = 2;
 
-  repeated Row tiles = 1;
+  repeated PlantNode plants = 3;
+  repeated SoilNode soil = 4;
 }
 
 message Weather {
-  MinMaxDoublePair temperature = 1;
-  double rainfall = 2;
+  double total_sunshine_hour = 1;
+  MinMaxDoublePair air_temperature = 2;
+  double relative_humidity = 3;
+  double wind_speed = 4;
+  double rainfall = 5;
 }
 
 message Environment {
