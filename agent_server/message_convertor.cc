@@ -6,7 +6,7 @@ std::chrono::system_clock::time_point FromProtobufTimePoint(
   return std::chrono::system_clock::time_point(epoch_count);
 }
 
-int64_t ToProtobuf(const std::chrono::system_clock::time_point& timestamp) {
+int64_t ToProtobuf(const std::chrono::system_clock::time_point &timestamp) {
   return timestamp.time_since_epoch().count();
 }
 
@@ -14,18 +14,18 @@ std::chrono::duration<int> FromProtobufDuration(
     const int64_t time_step_epoch_count) {
   return std::chrono::seconds(time_step_epoch_count);
 }
-int64_t ToProtobuf(const std::chrono::duration<int>& time_step_length) {
+int64_t ToProtobuf(const std::chrono::duration<int> &time_step_length) {
   return time_step_length.count();
 }
 
 environment::Location FromProtobuf(
-    const data_format::Location& protobuf_location) {
+    const data_format::Location &protobuf_location) {
   return environment::Location(
       protobuf_location.longitude_left(), protobuf_location.longitude_right(),
       protobuf_location.latitude_top(), protobuf_location.latitude_bottom());
 }
 
-data_format::Location ToProtobuf(const environment::Location& location) {
+data_format::Location ToProtobuf(const environment::Location &location) {
   data_format::Location location_protobuf;
 
   location_protobuf.set_longitude_left(location.longitude_left);
@@ -36,12 +36,12 @@ data_format::Location ToProtobuf(const environment::Location& location) {
   return location_protobuf;
 }
 
-environment::Config FromProtobuf(const data_format::Config& protobuf_config) {
+environment::Config FromProtobuf(const data_format::Config &protobuf_config) {
   environment::Location location = FromProtobuf(protobuf_config.location());
   return environment::Config(protobuf_config.name(), location);
 }
 
-data_format::Config ToProtobuf(const environment::Config& config) {
+data_format::Config ToProtobuf(const environment::Config &config) {
   data_format::Config config_protobuf;
 
   config_protobuf.set_name(config.name);
@@ -50,7 +50,7 @@ data_format::Config ToProtobuf(const environment::Config& config) {
   return config_protobuf;
 }
 
-data_format::Plant ToProtobuf(const environment::Plant& plant) {
+data_format::Plant ToProtobuf(const environment::Plant &plant) {
   data_format::Plant plant_protobuf;
 
   plant_protobuf.set_name(plant.name());
@@ -106,7 +106,7 @@ data_format::Plant ToProtobuf(const environment::Plant& plant) {
   return plant_protobuf;
 }
 
-environment::Soil FromProtobuf(const data_format::Soil& protobuf_soil) {
+environment::Soil FromProtobuf(const data_format::Soil &protobuf_soil) {
   environment::Soil::Texture soil_texture;
   switch (protobuf_soil.texture()) {
     case data_format::Soil_Texture::Soil_Texture_CLAY:
@@ -125,7 +125,7 @@ environment::Soil FromProtobuf(const data_format::Soil& protobuf_soil) {
       protobuf_soil.organic_matter(), protobuf_soil.water_content());
 }
 
-data_format::Soil ToProtobuf(const environment::Soil& soil) {
+data_format::Soil ToProtobuf(const environment::Soil &soil) {
   data_format::Soil soil_protobuf;
   data_format::Soil_Texture soil_texture;
   switch (soil.texture) {
@@ -150,13 +150,13 @@ data_format::Soil ToProtobuf(const environment::Soil& soil) {
 }
 
 environment::Coordinate FromProtobuf(
-    const data_format::Coordinate& protobuf_coordinate) {
+    const data_format::Coordinate &protobuf_coordinate) {
   return environment::Coordinate(protobuf_coordinate.x(),
                                  protobuf_coordinate.y(),
                                  protobuf_coordinate.z());
 }
 
-data_format::Coordinate ToProtobuf(const environment::Coordinate& coordinate) {
+data_format::Coordinate ToProtobuf(const environment::Coordinate &coordinate) {
   data_format::Coordinate coordinate_protobuf;
   coordinate_protobuf.set_x(coordinate.x);
   coordinate_protobuf.set_y(coordinate.y);
@@ -165,14 +165,14 @@ data_format::Coordinate ToProtobuf(const environment::Coordinate& coordinate) {
   return coordinate_protobuf;
 }
 
-data_format::Terrain ToProtobuf(const environment::Terrain& terrain) {
+data_format::Terrain ToProtobuf(const environment::Terrain &terrain) {
   data_format::Terrain terrain_protobuf;
 
   terrain_protobuf.set_yield(terrain.yield());
   terrain_protobuf.set_size(terrain.size());
 
-  for (const auto& p : terrain.GetAllPlants()) {
-    auto* new_plant = terrain_protobuf.add_plants();
+  for (const auto &p : terrain.GetAllPlants()) {
+    auto *new_plant = terrain_protobuf.add_plants();
     *(new_plant->mutable_position()) = ToProtobuf(p->position());
     *(new_plant->mutable_plant()) = ToProtobuf(*p);
   }
@@ -180,7 +180,7 @@ data_format::Terrain ToProtobuf(const environment::Terrain& terrain) {
   for (size_t i = 0; i < terrain.length(); ++i) {
     for (size_t j = 0; j < terrain.width(); ++j) {
       environment::Coordinate pos(i, j);
-      auto* new_soil = terrain_protobuf.add_soil();
+      auto *new_soil = terrain_protobuf.add_soil();
       new_soil->mutable_position()->set_x(i);
       new_soil->mutable_position()->set_y(j);
 
@@ -191,7 +191,7 @@ data_format::Terrain ToProtobuf(const environment::Terrain& terrain) {
 }
 
 environment::Climate FromProtobuf(
-    const data_format::Climate& climate_protobuf) {
+    const data_format::Climate &climate_protobuf) {
   double temp_min = climate_protobuf.yearly_temperature().min();
   double temp_max = climate_protobuf.yearly_temperature().max();
   double rain_min = climate_protobuf.yearly_rainfall().min();
@@ -244,7 +244,7 @@ environment::Climate FromProtobuf(
                               zone_type);
 }
 
-data_format::Climate ToProtobuf(const environment::Climate& climate) {
+data_format::Climate ToProtobuf(const environment::Climate &climate) {
   data_format::Climate climate_protobuf;
 
   switch (climate.climate_zone) {
@@ -312,7 +312,7 @@ data_format::Climate ToProtobuf(const environment::Climate& climate) {
   return climate_protobuf;
 }
 
-data_format::Weather ToProtobuf(const environment::Weather& weather) {
+data_format::Weather ToProtobuf(const environment::Weather &weather) {
   data_format::Weather weather_protobuf;
 
   weather_protobuf.set_total_sunshine_hour(weather.total_sunshine_hour);
@@ -328,7 +328,7 @@ data_format::Weather ToProtobuf(const environment::Weather& weather) {
 }
 
 data_format::Environment ToProtobuf(
-    const environment::Environment& environment) {
+    const environment::Environment &environment) {
   data_format::Environment env_protobuf;
 
   *(env_protobuf.mutable_config()) = ToProtobuf(environment.config());
@@ -341,11 +341,11 @@ data_format::Environment ToProtobuf(
 }
 
 void FromProtobuf(
-    const agent_server::service::AgentActionConfig& config_protobuf,
-    std::vector<environment::Coordinate>* applied_range,
-    int64_t* start_time_step, int64_t* duration, agent::Resources* cost) {
+    const agent_server::service::AgentActionConfig &config_protobuf,
+    std::vector<environment::Coordinate> *applied_range,
+    int64_t *start_time_step, int64_t *duration, agent::Resources *cost) {
   applied_range->clear();
-  for (const auto& protobuf_coordinate : config_protobuf.applied_range()) {
+  for (const auto &protobuf_coordinate : config_protobuf.applied_range()) {
     applied_range->push_back(FromProtobuf(protobuf_coordinate));
   }
 
@@ -353,7 +353,7 @@ void FromProtobuf(
   int64_t end_time = config_protobuf.end_time_step();
   *duration = end_time - *start_time_step;
 
-  for (const auto& protobuf_cost : config_protobuf.cost()) {
+  for (const auto &protobuf_cost : config_protobuf.cost()) {
     agent::ResourceType type;
     switch (protobuf_cost.resource_type()) {
       case (::agent_server::service::AgentActionConfig_Cost_ResourceType_MONEY):
@@ -368,19 +368,19 @@ void FromProtobuf(
 }
 
 agent_server::service::AgentActionConfig ToProtobuf(
-    const std::vector<environment::Coordinate>& applied_range,
-    const int64_t& start_time_step, const int64_t& duration,
-    const agent::Resources& cost) {
+    const std::vector<environment::Coordinate> &applied_range,
+    const int64_t &start_time_step, const int64_t &duration,
+    const agent::Resources &cost) {
   agent_server::service::AgentActionConfig agent_action_config;
 
-  for (const auto& coordinate : applied_range) {
+  for (const auto &coordinate : applied_range) {
     *(agent_action_config.add_applied_range()) = ToProtobuf(coordinate);
   }
 
   agent_action_config.set_start_time_step(start_time_step);
   agent_action_config.set_end_time_step(start_time_step + duration);
 
-  for (const auto& c : cost) {
+  for (const auto &c : cost) {
     auto cost_ptr = agent_action_config.add_cost();
     ::agent_server::service::AgentActionConfig_Cost_ResourceType type;
     switch (c.first) {
@@ -402,7 +402,7 @@ agent_server::service::AgentActionConfig ToProtobuf(
 }
 
 agent::action::crop::Add FromProtobuf(
-    const agent_server::service::AgentAddCropRequest& add_crop_protobuf) {
+    const agent_server::service::AgentAddCropRequest &add_crop_protobuf) {
   std::vector<environment::Coordinate> applied_range;
   int64_t start_time_step;
   int64_t duration;
@@ -416,11 +416,12 @@ agent::action::crop::Add FromProtobuf(
 }
 
 agent_server::service::AgentAddCropRequest ToProtobuf(
-    const agent::action::crop::Add& action) {
+    const agent::action::crop::Add &action) {
   agent_server::service::AgentAddCropRequest agent_add_crop_request;
 
-  *(agent_add_crop_request.mutable_action_config()) = ToProtobuf(
-      action.applied_range(), action.start_time_step(), action.duration(), action.cost());
+  *(agent_add_crop_request.mutable_action_config()) =
+      ToProtobuf(action.applied_range(), action.start_time_step(),
+                 action.duration(), action.cost());
 
   agent_add_crop_request.set_crop_type_name(action.crop_type_name());
 
@@ -428,7 +429,7 @@ agent_server::service::AgentAddCropRequest ToProtobuf(
 }
 
 agent::action::crop::Remove FromProtobuf(
-    const agent_server::service::AgentRemoveCropRequest& remove_crop_protobuf) {
+    const agent_server::service::AgentRemoveCropRequest &remove_crop_protobuf) {
   std::vector<environment::Coordinate> applied_range;
   int64_t start_time_step;
   int64_t duration;
@@ -437,15 +438,17 @@ agent::action::crop::Remove FromProtobuf(
   FromProtobuf(remove_crop_protobuf.action_config(), &applied_range,
                &start_time_step, &duration, &cost);
 
-  return agent::action::crop::Remove(applied_range, start_time_step, duration, cost);
+  return agent::action::crop::Remove(applied_range, start_time_step, duration,
+                                     cost);
 }
 
 agent_server::service::AgentRemoveCropRequest ToProtobuf(
-    const agent::action::crop::Remove& action) {
+    const agent::action::crop::Remove &action) {
   agent_server::service::AgentRemoveCropRequest agent_remove_crop_request;
 
-  *(agent_remove_crop_request.mutable_action_config()) = ToProtobuf(
-      action.applied_range(), action.start_time_step(), action.duration(), action.cost());
+  *(agent_remove_crop_request.mutable_action_config()) =
+      ToProtobuf(action.applied_range(), action.start_time_step(),
+                 action.duration(), action.cost());
 
   return agent_remove_crop_request;
 }

@@ -27,24 +27,24 @@ class AgentServer {
   };
 
   ReturnCodes CreateEnvironment(
-      const std::string& name, const environment::Config& config,
-      const std::chrono::system_clock::time_point& time,
-      const std::chrono::duration<int>& time_step_length,
-      const environment::Terrain& terrain);
-  ReturnCodes DeleteEnvironment(const std::string& name);
+      const std::string &name, const environment::Config &config,
+      const std::chrono::system_clock::time_point &time,
+      const std::chrono::duration<int> &time_step_length,
+      const environment::Terrain &terrain);
+  ReturnCodes DeleteEnvironment(const std::string &name);
 
-  ReturnCodes CreateQLearningAgent(const std::string& agent_name,
-                                   const std::string& env_name, const int row,
+  ReturnCodes CreateQLearningAgent(const std::string &agent_name,
+                                   const std::string &env_name, const int row,
                                    const int col);
 
-  ReturnCodes DeleteAgent(const std::string& name);
+  ReturnCodes DeleteAgent(const std::string &name);
 
   std::pair<ReturnCodes, std::optional<environment::Environment>>
-  GetEnvironment(const std::string& name);
-  ReturnCodes SimulateToTimeStep(const std::string& env_name,
+  GetEnvironment(const std::string &name);
+  ReturnCodes SimulateToTimeStep(const std::string &env_name,
                                  const int64_t time_step);
-  ReturnCodes AgentTakeAction(const std::string& agent_name,
-                              const agent::action::Action* action);
+  ReturnCodes AgentTakeAction(const std::string &agent_name,
+                              const agent::action::Action *action);
 
  private:
   std::map<std::string, std::shared_ptr<agent::Agent>> name_to_agent_;

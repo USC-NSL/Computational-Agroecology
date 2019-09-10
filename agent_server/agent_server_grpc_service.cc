@@ -25,8 +25,8 @@ namespace agent_server {
 namespace service {
 
 ::grpc::Status AgentServerGrpcService::CreateEnvironment(
-    ::grpc::ServerContext* context, const CreateEnvironmentRequest* request,
-    CreateEnvironmentResponse* response) {
+    ::grpc::ServerContext *context, const CreateEnvironmentRequest *request,
+    CreateEnvironmentResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -52,8 +52,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::DeleteEnvironment(
-    ::grpc::ServerContext* context, const DeleteEnvironmentRequest* request,
-    DeleteEnvironmentResponse* response) {
+    ::grpc::ServerContext *context, const DeleteEnvironmentRequest *request,
+    DeleteEnvironmentResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -71,8 +71,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::CreateQLearningAgent(
-    ::grpc::ServerContext* context, const CreateQLearningAgentRequest* request,
-    CreateQLearningAgentResponse* response) {
+    ::grpc::ServerContext *context, const CreateQLearningAgentRequest *request,
+    CreateQLearningAgentResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -95,8 +95,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::DeleteAgent(
-    ::grpc::ServerContext* context, const DeleteAgentRequest* request,
-    DeleteAgentResponse* response) {
+    ::grpc::ServerContext *context, const DeleteAgentRequest *request,
+    DeleteAgentResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -114,8 +114,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::GetEnvironment(
-    ::grpc::ServerContext* context, const GetEnvironmentRequest* request,
-    GetEnvironmentResponse* response) {
+    ::grpc::ServerContext *context, const GetEnvironmentRequest *request,
+    GetEnvironmentResponse *response) {
   if (context == nullptr || request == nullptr || response == nullptr) {
     return ::grpc::Status(::grpc::FAILED_PRECONDITION,
                           "`ServerContext`, `GetEnvironmentRequest`, or "
@@ -134,8 +134,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::SimulateToTimeStep(
-    ::grpc::ServerContext* context, const SimulateToTimeStepRequest* request,
-    SimulateToTimeStepResponse* response) {
+    ::grpc::ServerContext *context, const SimulateToTimeStepRequest *request,
+    SimulateToTimeStepResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -154,8 +154,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::AgentAddCrop(
-    ::grpc::ServerContext* context, const AgentAddCropRequest* request,
-    AgentAddCropResponse* response) {
+    ::grpc::ServerContext *context, const AgentAddCropRequest *request,
+    AgentAddCropResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -182,8 +182,8 @@ namespace service {
 }
 
 ::grpc::Status AgentServerGrpcService::AgentRemoveCrop(
-    ::grpc::ServerContext* context, const AgentRemoveCropRequest* request,
-    AgentRemoveCropResponse* response) {
+    ::grpc::ServerContext *context, const AgentRemoveCropRequest *request,
+    AgentRemoveCropResponse *response) {
   if (context == nullptr || request == nullptr) {
     return ::grpc::Status(
         ::grpc::FAILED_PRECONDITION,
@@ -213,7 +213,7 @@ namespace service {
 
 }  // namespace agent_server
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   using namespace agent_server::service;
   AgentServerGrpcService service;
 

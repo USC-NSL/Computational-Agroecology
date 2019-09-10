@@ -5,23 +5,23 @@
 namespace agent_server {
 
 AgentServer::ReturnCodes AgentServer::CreateEnvironment(
-    const std::string& name, const environment::Config& config,
-    const std::chrono::system_clock::time_point& time,
-    const std::chrono::duration<int>& time_step_length,
-    const environment::Terrain& terrain) {
+    const std::string &name, const environment::Config &config,
+    const std::chrono::system_clock::time_point &time,
+    const std::chrono::duration<int> &time_step_length,
+    const environment::Terrain &terrain) {
   auto result = name_to_env_.find(name);
   if (result != name_to_env_.end()) {
     return ALREADY_EXISTS;
   }
 
-  name_to_env_.emplace(
-      std::make_pair(name, environment::Environment(config, time, time_step_length, terrain)));
+  name_to_env_.emplace(std::make_pair(
+      name, environment::Environment(config, time, time_step_length, terrain)));
 
   return OK;
 }
 
 AgentServer::ReturnCodes AgentServer::DeleteEnvironment(
-    const std::string& name) {
+    const std::string &name) {
   auto result = name_to_env_.find(name);
   if (result == name_to_env_.end()) {
     return ENV_NOT_FOUND;
@@ -31,9 +31,9 @@ AgentServer::ReturnCodes AgentServer::DeleteEnvironment(
   return OK;
 }
 
-AgentServer::ReturnCodes AgentServer::CreateQLearningAgent(const std::string& agent_name,
-                                   const std::string& env_name, const int row,
-                                   const int col) {
+AgentServer::ReturnCodes AgentServer::CreateQLearningAgent(
+    const std::string &agent_name, const std::string &env_name, const int row,
+    const int col) {
   auto agent_result = name_to_agent_.find(agent_name);
   if (agent_result != name_to_agent_.end()) {
     return ALREADY_EXISTS;
@@ -45,12 +45,13 @@ AgentServer::ReturnCodes AgentServer::CreateQLearningAgent(const std::string& ag
   }
 
   name_to_agent_.emplace(std::make_pair(
-      agent_name, new agent::Qlearning(agent_name, &(env_result->second), row, col)));
+      agent_name,
+      new agent::Qlearning(agent_name, &(env_result->second), row, col)));
 
   return OK;
 }
 
-AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string& name) {
+AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string &name) {
   auto result = name_to_agent_.find(name);
   if (result == name_to_agent_.end()) {
     return AGENT_NOT_FOUND;
@@ -61,7 +62,7 @@ AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string& name) {
 }
 
 std::pair<AgentServer::ReturnCodes, std::optional<environment::Environment>>
-AgentServer::GetEnvironment(const std::string& name) {
+AgentServer::GetEnvironment(const std::string &name) {
   auto result = name_to_env_.find(name);
   if (result == name_to_env_.end()) {
     return std::make_pair(ENV_NOT_FOUND, std::nullopt);
@@ -71,8 +72,7 @@ AgentServer::GetEnvironment(const std::string& name) {
 }
 
 AgentServer::ReturnCodes AgentServer::SimulateToTimeStep(
-    const std::string& env_name,
-    const int64_t time_step) {
+    const std::string &env_name, const int64_t time_step) {
   auto env_it = name_to_env_.find(env_name);
   if (env_it == name_to_env_.end()) {
     return ENV_NOT_FOUND;
@@ -84,7 +84,7 @@ AgentServer::ReturnCodes AgentServer::SimulateToTimeStep(
 }
 
 AgentServer::ReturnCodes AgentServer::AgentTakeAction(
-    const std::string& agent_name, const agent::action::Action* action) {
+    const std::string &agent_name, const agent::action::Action *action) {
   auto agent_it = name_to_agent_.find(agent_name);
   if (agent_it == name_to_agent_.end()) {
     return AGENT_NOT_FOUND;
