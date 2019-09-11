@@ -139,13 +139,14 @@ plants: $(PLANTS_OBJ)
 # agent server rules
 AGENT_SERVER_PATH := ./agent_server
 AGENT_SERVER_PROTO_PATH := $(AGENT_SERVER_PATH)/proto
+AGENT_SERVER_PROTO_DEF := $(AGENT_SERVER_PROTO_PATH)/environment.pb.cc \
+	$(AGENT_SERVER_PROTO_PATH)/agent_server.pb.cc
 AGENT_SERVER_PROTO_OBJ := $(AGENT_SERVER_PROTO_PATH)/environment.pb.o \
 	$(AGENT_SERVER_PROTO_PATH)/agent_server.pb.o
 AGENT_SERVER_GRPC_PROTO_OBJ := $(AGENT_SERVER_PROTO_PATH)/agent_server.grpc.pb.o
 AGENT_SERVER_OBJ := $(AGENT_SERVER_PROTO_OBJ) \
 	$(AGENT_SERVER_GRPC_PROTO_OBJ) \
 	$(AGENT_SERVER_PATH)/agent_server.o \
-	$(AGENT_SERVER_PATH)/agent_server_grpc_service.o \
 	$(AGENT_SERVER_PATH)/message_convertor.o
 
 # protobuf rules
@@ -163,11 +164,13 @@ AGENT_SERVER_TEST := $(AGENT_SERVER_TEST_PATH)/agent_server_test \
 	$(PROTOC) $(AGENT_SERVER_GRPC_FLAGS) $<
 
 agent_server: $(ALL_OBJ) $(AGENT_SERVER_OBJ)
-	$(CXX) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(LDFLAGS) -o $(AGENT_SERVER_PATH)/agent_server $(OPENGLLIBS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_PATH)/agent_server_grpc_service.cc $(LDFLAGS) -o $(AGENT_SERVER_PATH)/agent_server $(OPENGLLIBS)
 
-agent_server_test: $(AGENT_SERVER_TEST)
+agent_server_test: $(ALL_OBJ) $(AGENT_SERVER_OBJ)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -I $(AGENT_SERVER_PATH) $(TESTFLAGS) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_TEST_PATH)/message_convertor_test.cc -o $(AGENT_SERVER_TEST_PATH)/message_convertor_test $(TESTLD) $(LDFLAGS) $(OPENGLLIBS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -I $(AGENT_SERVER_PATH) $(TESTFLAGS) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_TEST_PATH)/agent_server_test.cc -o $(AGENT_SERVER_TEST_PATH)/agent_server_test $(TESTLD) $(LDFLAGS) $(OPENGLLIBS)
 
-agent_server_test_run: $(AGENT_SERVER_TEST)
+agent_server_test_run: agent_server_test
 	@for var in $(AGENT_SERVER_TEST); do \
 		echo $$var; \
 		$$var; \

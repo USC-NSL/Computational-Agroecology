@@ -58,7 +58,7 @@ data_format::Plant ToProtobuf(const environment::Plant &plant) {
   plant_protobuf.set_root_size(plant.root_size());
   plant_protobuf.set_health(plant.health());
   plant_protobuf.set_flowering(plant.flowering());
-  plant_protobuf.set_health(plant.health());
+  plant_protobuf.set_height(plant.height());
   plant_protobuf.set_accumulated_gdd(plant.accumulated_gdd());
 
   switch (plant.maturity()) {
@@ -310,6 +310,15 @@ data_format::Climate ToProtobuf(const environment::Climate &climate) {
       climate.yearly_rainfall.max);
 
   return climate_protobuf;
+}
+
+environment::Weather FromProtobuf(const data_format::Weather &weather_protobuf) {
+  return environment::Weather(weather_protobuf.total_sunshine_hour(),
+                              weather_protobuf.air_temperature().min(),
+                              weather_protobuf.air_temperature().max(),
+                              weather_protobuf.relative_humidity(),
+                              weather_protobuf.wind_speed(),
+                              weather_protobuf.rainfall());
 }
 
 data_format::Weather ToProtobuf(const environment::Weather &weather) {

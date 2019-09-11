@@ -54,6 +54,7 @@ environment::Climate FromProtobuf(const data_format::Climate &climate_protobuf);
 data_format::Climate ToProtobuf(const environment::Climate &climate);
 
 // weather convertor
+environment::Weather FromProtobuf(const data_format::Weather &weather_protobuf);
 data_format::Weather ToProtobuf(const environment::Weather &weather);
 
 // environment convertor
