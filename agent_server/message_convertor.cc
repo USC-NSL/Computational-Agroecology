@@ -312,7 +312,8 @@ data_format::Climate ToProtobuf(const environment::Climate &climate) {
   return climate_protobuf;
 }
 
-environment::Weather FromProtobuf(const data_format::Weather &weather_protobuf) {
+environment::Weather FromProtobuf(
+    const data_format::Weather &weather_protobuf) {
   return environment::Weather(weather_protobuf.total_sunshine_hour(),
                               weather_protobuf.air_temperature().min(),
                               weather_protobuf.air_temperature().max(),

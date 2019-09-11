@@ -101,7 +101,7 @@ TEST(MessageConvertorTest, ConfigConvertorTest) {
             (_PLANT_PROTOBUF).params().gdd_units_after_full_bloom())
 
 TEST(MessageConvertorTest, PlantConvertorTest) {
-  Plant* plant = environment::PlantBuilder::NewPlant("bean");
+  Plant *plant = environment::PlantBuilder::NewPlant("bean");
 
   ASSERT_NE(nullptr, plant);
 
@@ -142,7 +142,7 @@ TEST(MessageConvertorTest, TerrainConvertorTest) {
   for (size_t i = 0; i < terrain.length(); ++i) {
     for (size_t j = 0; j < terrain.width(); ++j) {
       size_t idx = i * terrain.length() + j;
-      const environment::Coordinate& pos =
+      const environment::Coordinate &pos =
           FromProtobuf(terrain_protobuf.soil()[idx].position());
       EXPECT_EQ(*(terrain.GetSoil(pos)),
                 FromProtobuf(terrain_protobuf.soil()[idx].soil()));
@@ -200,7 +200,7 @@ TEST_F(ActionConvertorTest, ActionRemoveCropTest) {
   EXPECT_EQ(action, FromProtobuf(action_protobuf));
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

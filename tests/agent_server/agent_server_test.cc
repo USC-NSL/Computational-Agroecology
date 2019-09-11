@@ -33,8 +33,8 @@ class AgentServerTest : public ::testing::Test {
   }
 
   AgentServer agent_server;
-  Config* dummy_config = nullptr;
-  Terrain* dummy_terrain = nullptr;
+  Config *dummy_config = nullptr;
+  Terrain *dummy_terrain = nullptr;
 };
 
 TEST_F(AgentServerTest, CreateAndGetEnvironmentTest) {
@@ -120,19 +120,19 @@ TEST_F(AgentServerTest, AgentTakeActionTest) {
   int64_t start_time_step = 1;
   int64_t duration = 1;
   agent::action::crop::Add action_without_cost(coordinate, start_time_step,
-                                                   duration, crop_type_name);
+                                               duration, crop_type_name);
   ret = agent_server.AgentTakeAction(kDummyAgentName, &action_without_cost);
   EXPECT_EQ(AgentServer::OK, ret);
 
   agent::Resources cost;
   cost[agent::ResourceType::LABOR] = 10;
   agent::action::crop::Add action_with_cost(coordinate, start_time_step,
-                                                duration, cost, crop_type_name);
+                                            duration, cost, crop_type_name);
   ret = agent_server.AgentTakeAction(kDummyAgentName, &action_with_cost);
   EXPECT_EQ(AgentServer::ACTION_NOT_ENOUGH_RESOURCES, ret);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
