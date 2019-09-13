@@ -20,6 +20,7 @@ ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
 	$(ENVIRONMENT_PATH)/config.o \
 	$(ENVIRONMENT_PATH)/coordinate.o \
 	$(ENVIRONMENT_PATH)/environment.o \
+	$(ENVIRONMENT_PATH)/energy_balance.o \
 	$(ENVIRONMENT_PATH)/location.o \
 	$(ENVIRONMENT_PATH)/meteorology.o \
 	$(ENVIRONMENT_PATH)/plant_builder.o \

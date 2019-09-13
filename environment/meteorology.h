@@ -33,10 +33,16 @@ constexpr double kPiDividedBy12 = kPI / kHoursHalfDay;
 namespace environment {
 
 // Forward declaration
+class EnergyBalanceInfo;
 class PlantRadiation;
 
 // Represents information about the meteorology, such as the Sun, vapor
 // pressure, wind speed, and air temperature.
+//
+// All member function names with prefix "Calculate" do not modify this class.
+// They only output values given paramters. On the other hand, member function
+// names with prefix "Update" use those functions with "Calculate" to update the
+// member variables in this class.
 class Meteorology {
  public:
   // Given sufficient information, present the state about meteorology at a
@@ -98,6 +104,32 @@ class Meteorology {
 
  private:
   friend class PlantRadiation;
+  friend class EnergyBalance;
+
+  struct SolarIrradiance {
+    // Total solar irradiance on a horizontal surface
+    double total;
+    // Direct solar irradiance on a horizontal surface
+    double direct;
+    // Diffuse solar irradiance on a horizontal surface
+    double diffuse;
+  };
+
+  struct VaporPressure {
+    // Saturated vapor pressure (mbar)
+    // This is denoted as e_s(T_a) in the book.
+    double saturated;
+
+    // Actual vapor pressure (mbar)
+    // This is denoted as e_a in the book.
+    double actual;
+  };
+
+  struct DayLengthAndTimesSunriseSunset {
+    double solar_hour_sunrise;
+    double solar_hour_sunset;
+    double day_length;
+  };
 
   // Information binded to the current geographic location
   const Location &geo_location_;
@@ -107,12 +139,27 @@ class Meteorology {
   double day_of_year_;
   double local_solar_hour_;
 
+  // Internal constants
+  //
+  // Formula [2.18] in book p.36
+  // This is denoted I_c in the book.
+  static constexpr double kSolarConstant = 1370.0f;
+
+  // This constant is mentioned in book p.41
+  static constexpr double kProportionShortwave = 0.15f;
+
+  // This is denoted as σ and is mentioned in book p.35.
+  static constexpr double kStefanBoltzmannConstant = 5.67e-8;
+
+  // This is mentioned in book p.48.
+  static constexpr double kOffsetAfterSunrise = 1.5f;
+
   ConstantCaches constant_caches_;
 
   // TODO: The following may need refactor. It may not need so many private
   // variables. Keeping them just in case some functions may use them. The
   // refactor should start when the first version of the whole plant growth
-  // model finishs.
+  // model finishes.
 
   // Solar azimuth (radians)
   // This is denoted as ϕ in the book.
@@ -131,15 +178,6 @@ class Meteorology {
   // Day length (hours)
   double day_length_;
 
-  struct SolarIrradiance {
-    // Total solar irradiance on a horizontal surface
-    double total;
-    // Direct solar irradiance on a horizontal surface
-    double direct;
-    // Diffuse solar irradiance on a horizontal surface
-    double diffuse;
-  };
-
   // Daily solar irradiance on a horizontal surface
   // They are denoted as I_t_d, I_dr_d, and I_df_d (J m^-2 day^-1) in the book.
   SolarIrradiance daily_solar_irradiance_;
@@ -148,15 +186,8 @@ class Meteorology {
   // They are denoted as I_t, I_dr, and I_df (W m^-2) in the book.
   SolarIrradiance hourly_solar_irradiance_;
 
-  struct VaporPressure {
-    // Saturated vapor pressure (mbar)
-    // This is denoted as e_s(T_a) in the book.
-    double saturated;
-
-    // Actual vapor pressure (mbar)
-    // This is denoted as e_a in the book.
-    double actual;
-  };
+  // This is denoted as R_n (W m^-2) in the book.
+  double hourly_net_radiation_;
 
   VaporPressure vapor_pressure_;
 
@@ -168,7 +199,7 @@ class Meteorology {
   // This is denoted as T_a in the book.
   double air_temperature_;
 
-  // Update variables related to geographic data. This should only be called
+  // Updates variables related to geographic data. This should only be called
   // once during construction because we assume the geographic location and
   // climate remain unchanged.
   void UpdateGeoData();
@@ -182,71 +213,76 @@ class Meteorology {
   void UpdateLocalTime(const int hour, const int minute, const int second);
   void UpdateLocalSolarHour(const double solar_hour);
   void UpdateWeather(const Weather &weather);
+  void UpdateHourlyNetRadiation(const Weather &weather);
 
   // These functions below are static, which means they are independent to
   // member variables. We use these functions to calculate member variables in
   // this class.
-  static double DegreeToRadians(const double degree);
-  static double RadiansToDegree(const double radians);
+  static constexpr double DegreeToRadians(const double degree);
+  static constexpr double RadiansToDegree(const double radians);
 
-  // Given the day of year, calculate solar declination δ (radians).
+  // Returns solar declination δ (radians) given the day of year.
   static double CalculateSolarDeclination(const int day_of_year);
 
-  // Given the day of year, local time (hours), and observer's longitude
-  // (radians), convert local time (hours) to local solar time (hours).
+  // Converts local time (hours) to local solar time (hours) given the day of
+  // year, local time (hours), and observer's longitude (radians).
   static double CalculateLocalSolarTime(const int day_of_year,
                                         const double local_hour,
                                         const double longitude);
 
-  // Given local solar time (hours), calculate the hour angle τ (radians).
+  // Returns the hour angle τ (radians) given local solar time (hours).
   static double CalculateHourAngle(const double solar_hour);
 
-  // Given solar declination δ (radians), hour angle τ (radians), and observer's
-  // latitude λ (radians), calculate solar angle from horizontal (radians).
+  // Returns solar angle from horizontal (radians) given solar declination δ
+  // (radians), hour angle τ (radians), and observer's latitude λ (radians).
   static double CalculateSolarElevation(const double solar_declination,
                                         const double hour_angle,
                                         const double observer_latitude);
 
-  // Given solar declination δ (radians), observer's latitude λ (radians), solar
-  // altitude β (radians), and local solar time (hours), calculate solar azimuth
-  // (radians).
+  // Returns solar azimuth (radians) given solar declination δ (radians),
+  // observer's latitude λ (radians), solar altitude β (radians), and local
+  // solar time (hours).
   static double CalculateSolarAzimuth(const double solar_declination,
                                       const double observer_latitude,
                                       const double solar_altitude,
                                       const double solar_hour);
 
-  struct DayLengthAndTimesSunriseSunset {
-    double solar_hour_sunrise;
-    double solar_hour_sunset;
-    double day_length;
-  };
-
-  // Given solar declination δ (radians) and observer's latitude λ (radians),
-  // calculate local solar time for sunrise (hours), local solar time for sunset
-  // (hours), and day length (hours).
+  // Returns local solar time for sunrise (hours), local solar time for sunset
+  // (hours), and day length (hours) given solar declination δ (radians) and
+  // observer's latitude λ (radians).
   static DayLengthAndTimesSunriseSunset CalculateDayLength(
       const double solar_declination, const double observer_latitude);
 
-  // The following two functions need other variables.
-  // Given some pre-calculated constants, climate zone, and day length (hours),
-  // calculate daily total solar irradiance (J m^-2 day^-1), daily diffuse
-  // irradiance (J m^-2 day^-1), and daily direct irradiance (J m^-2 day^-1).
+  // Returns daily total solar irradiance (J m^-2 day^-1), daily diffuse
+  // irradiance (J m^-2 day^-1), and daily direct irradiance (J m^-2 day^-1)
+  // given some pre-calculated constants, climate zone, and day length (hours).
   static SolarIrradiance CalculateDailySolarIrradiance(
       const double I_c_prime, const double a, const double b,
       const Climate::ZoneType climate_zone, const double day_length);
 
-  // Given some pre-calculated constants, solar altitude β (radians), daily
-  // total solar irradiance (J m^-2 day^-1), and local solar time (hours),
-  // calculate hourly solar irradiance (W m^-2), hourly diffuse irradiance (W
-  // m^-2), and hourly direct irradiance (W m^-2).
+  // Returns hourly solar irradiance (W m^-2), hourly diffuse irradiance (W
+  // m^-2), and hourly direct irradiance (W m^-2) given some pre-calculated
+  // constants, solar altitude β (radians), daily total solar irradiance (J m^-2
+  // day^-1), and local solar time (hours).
   static SolarIrradiance CalculateHourlySolarIrradiance(
       const double solar_altitude, const double I_c_prime, const double a,
       const double b, const double daily_total_solar_irradiance,
       const double solar_hour);
 
-  static VaporPressure CalculateVaporPressure(const double temperature,
+  // Returns hourly net radiation (W m^-2) given hourly total irradiance (W
+  // m^-2), air temperature (°C), sunshine hour (hours), and day length (hours).
+  static double CalculateHourlyNetRadiation(
+      const double hourly_total_irradiance, const double air_temp,
+      const double sunshine_hour, const double day_length);
+
+  // Returns saturated vapor pressure (mbar) and actual vapor pressure (mbar)
+  // given air temperature (°C) and relative humidity (unit-less).
+  static VaporPressure CalculateVaporPressure(const double air_temperature,
                                               const double relative_humidity);
 
+  // Returns air temperature (°C) given solar hour (hours), minimum air
+  // temperature (°C), maximum air temperature (°C), solar hour of sunrise
+  // (hours), and solar of sunset (hours).
   static double CalculateAirTemperature(double solar_hour,
                                         const double temp_min,
                                         const double temp_max,
