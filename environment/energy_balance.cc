@@ -168,11 +168,11 @@ EnergyBalance::InternalConstants EnergyBalance::CalculateInternalConstants(
 
   // Formula [4.67] in book p.94
   // u_star = k * u(z) / ln((z - d) / z_0)
-  double u_star =
+  double friction_velocity =
       kVKConstant * wind_speed /
       std::log((plant_height_ - zero_plane_displacement) / roughness_length);
 
-  return {zero_plane_displacement, roughness_length, u_star};
+  return {zero_plane_displacement, roughness_length, friction_velocity};
 }
 
 double EnergyBalance::CalculateSlopeOfSaturatedVaporPressure(
@@ -193,18 +193,19 @@ EnergyBalance::AeroResistances EnergyBalance::CalculateAeroResistances(
 
   // The roughness length of the soil
   // TODO: Should be depend on the texture of soil. Table is in p.92.
-  double z_s0;
+  double roughness_lengths_soil;
 
   // Formula [4.65] in book p.94
   // K(h) = k * u_* * h
-  double Kh = kVKConstant * internal_constants_.u_star * plant_height_;
+  double eddy_diffusivity_canopy_top =
+      kVKConstant * internal_constants_.friction_velocity * plant_height_;
 
   // Formula [4.68] in book p.94
   // r_a_s = h * exp(n) / (n * K(h)) * (exp(-n * z_s0 / h) -
   // exp(-n * (z_0 + d) / h))
   double aero_resistance_soil_canopy =
-      plant_height_ * std::exp(n) / (n * Kh) *
-      (exp(-n * z_s0 / plant_height_) -
+      plant_height_ * std::exp(n) / (n * eddy_diffusivity_canopy_top) *
+      (exp(-n * roughness_lengths_soil / plant_height_) -
        exp(-n *
            (internal_constants_.roughness_length +
             internal_constants_.zero_plane_displacement) /
@@ -214,11 +215,11 @@ EnergyBalance::AeroResistances EnergyBalance::CalculateAeroResistances(
   // r_a_a = (1 / (k * u_star)) * ln((z_r - d) / (h - d)) + (h / (n * K(h))) *
   // (exp(n * (1 - ((z_0 + d) / h))) - 1)
   double aero_resistance_canopy_reference_height =
-      (1.0f / (kVKConstant * internal_constants_.u_star)) *
+      (1.0f / (kVKConstant * internal_constants_.friction_velocity)) *
           std::log(
               (kReferenceHeight - internal_constants_.zero_plane_displacement) /
               (plant_height_ - internal_constants_.zero_plane_displacement)) +
-      ((plant_height_ / (n * Kh)) *
+      ((plant_height_ / (n * eddy_diffusivity_canopy_top)) *
        (std::exp(n * (1.0f - (internal_constants_.roughness_length +
                               internal_constants_.zero_plane_displacement) /
                                  plant_height_)) -
@@ -230,19 +231,21 @@ EnergyBalance::AeroResistances EnergyBalance::CalculateAeroResistances(
 double EnergyBalance::CalculateBoundaryLayerResistance() const {
   // TODO: fill in this variable
   // This variable depends on the type of plant. Check out the table in p.93.
-  double alpha;
+  double wind_attenuation_coefficient;
 
   // Formula [4.63] in book p.93
   // u(h) = u_star / k * ln((h - d) / z_0)
-  double uh =
-      internal_constants_.u_star / kVKConstant *
+  double wind_speed_canopy_top =
+      internal_constants_.friction_velocity / kVKConstant *
       std::log((plant_height_ - internal_constants_.zero_plane_displacement) /
                internal_constants_.zero_plane_displacement);
 
   // Formula [4.78] in book p.97
   // r_a_c = α / (0.012 * L * (1 - exp(-α / 2)) * sqrt(u(h) / w))
-  return (alpha / (0.012f * leaf_area_index_ * (1 - std::exp(-alpha / 2.0f)) *
-                   std::sqrt(uh / leaf_width_)));
+  return (wind_attenuation_coefficient /
+          (0.012f * leaf_area_index_ *
+           (1 - std::exp(-wind_attenuation_coefficient / 2.0f)) *
+           std::sqrt(wind_speed_canopy_top / leaf_width_)));
 }
 
 double EnergyBalance::CalculateCanopyResistance(double total_radiance) const {
@@ -256,21 +259,20 @@ double EnergyBalance::CalculateCanopyResistance(double total_radiance) const {
     total_radiance = 0.01;
   }
 
-  double I_PAR = total_radiance / 2;
+  double irradiance_PAR = total_radiance / 2;
 
   // Formula [4.79] in book p.97
   // r_st = (a_1 + I_PAR) / (a_2 * I_PAR)
-  double r_st = (a_1 + I_PAR) / (a_2 * I_PAR);
+  double stomatal_resistance = (a_1 + irradiance_PAR) / (a_2 * irradiance_PAR);
 
-  constexpr double L_cr = 4.0f;
-  if (leaf_area_index_ > 0.5f * L_cr) {
+  if (leaf_area_index_ > 0.5f * kTypicalMaxLeafIndexArea) {
     // Formula [4.80] in book p.98
     // r_s_c = r_st / (0.5 * L_cr) for L > 0.5L_cr
-    return r_st / (0.5f * L_cr);
+    return stomatal_resistance / (0.5f * kTypicalMaxLeafIndexArea);
   } else {
     // Formula [4.80] in book p.98
     // r_s_c = r_st / L for L <= 0.5L_cr
-    return r_st / leaf_area_index_;
+    return stomatal_resistance / leaf_area_index_;
   }
 }
 
@@ -285,33 +287,31 @@ double EnergyBalance::CalculateSoilResistance(const Soil &soil) {
   // This is denoted as Θ_v,sat in the book.
   double volumetric_water_content_at_soil_saturation;
 
-  // Tortuosity of soils
-  // According to the explanation in the book, for lack of data, this may be
-  // taken as 2.
-  constexpr double kTau = 2.0;
-
-  // Thickness of the dry soil
+  // Thickness of the dry soil which is denoted as l in book
   // TODO: The book just takes this as 0.02. Maybe we could make some changes on
   // this.
-  constexpr double kL = 0.02;
+  double thickness_dry_soil = 0.02;
 
-  // Soil's total porosity
+  // Soil's total porosity which is denoted as Φ_p in book
   // TODO: fill this
-  double phi_p;
-
-  constexpr double kD_m_v = 24.7e-6;
+  double soil_total_porosity;
 
   // Formula [4.85] in book p.100
   // r_s,dry_s = (τl) / (Φ_p * D_m,v)
-  double r_s_dry_s = (kTau * kL) / (phi_p * kD_m_v);
+  double resistance_transfer_dry_soil =
+      (kTortuositySoils * thickness_dry_soil) /
+      (soil_total_porosity * kDiffusionCoefficientVaporInAir);
 
+  // Empirical coefficient denoting how quickly soil resistance decreases with
+  // increasing soil water content
+  //
   // Formula [4.89] in book p.101
   // β = 1 / λ
   double beta = 1.0f / pore_size_distribution_index;
 
   // Formula [4.86] in book p.100
   // r_s_s(Θ_v) = r_s,dry_s * exp(-β * (Θ_v / Θ_v,sat))
-  return r_s_dry_s *
+  return resistance_transfer_dry_soil *
          std::exp(-beta * (soil_water_volumetric_content /
                            volumetric_water_content_at_soil_saturation));
 }
@@ -329,6 +329,8 @@ EnergyBalance::EnergySupply EnergyBalance::CalculateEnergySupply(
     double penetration_function_direct = std::exp(
         -std::sqrt(alpha) * extinction_coefficient_direct * leaf_area_index_);
 
+    // Formula [4.30] in book p.82
+    // A_c = (1 - τ_dr_α) * R_n
     radiance_canopy = hour_net_radiance * (1.0 - penetration_function_direct);
 
     // Formula [4.32] in book p.83
@@ -337,6 +339,8 @@ EnergyBalance::EnergySupply EnergyBalance::CalculateEnergySupply(
                                       hour_net_radiance *
                                       std::cos(solar_inclination);
 
+    // Formula mentioned in book p.82
+    // A_s = R_n - G - A_c
     radiance_soil =
         hour_net_radiance - radiance_canopy - ground_heat_flex_density;
   }
@@ -351,28 +355,25 @@ double EnergyBalance::CalculateTotalLatentHeatFlux(
     const double soil_resistance,
     const EnergyBalance::EnergySupply &energy_supply,
     const double total_available_energy, const double vapor_pressure_deficit) {
-  // This is mentioned in the book p.77.
-  constexpr double gamma = 0.658;
-
-  // This is denoted as ρ * c_p in the book. It is mentioned in book p.77.
-  constexpr double heat_to_raise_one_Kelvin_unit_volume = 1221.09;
+  // The following variables R_a, R_c, R_s, C_c, C_s, PM_c, and PM_s have no
+  // meanings. They just represent sub-equations of a huge complicated equation.
 
   // Formula [4.38] in book p.83
   // R_a = (Δ + γ) * r_a_a
-  double R_a = (slope_of_saturated_vapor_pressure + gamma) *
+  double R_a = (slope_of_saturated_vapor_pressure + kPsychometricConstant) *
                aero_resistances.between_soil_canopy;
 
   // Formula [4.39] in book p.83
   // R_c = (Δ + γ) * r_a_c + γ * r_s_c
-  double R_c =
-      (slope_of_saturated_vapor_pressure + gamma) * boundary_layer_resistance +
-      gamma * canopy_resistance;
+  double R_c = (slope_of_saturated_vapor_pressure + kPsychometricConstant) *
+                   boundary_layer_resistance +
+               kPsychometricConstant * canopy_resistance;
 
   // Formula [4.40] in book p.83
   // R_s = (Δ + γ) * r_a_s + γ * r_s_s
-  double R_s = (slope_of_saturated_vapor_pressure + gamma) *
+  double R_s = (slope_of_saturated_vapor_pressure + kPsychometricConstant) *
                    aero_resistances.between_soil_canopy +
-               gamma * soil_resistance;
+               kPsychometricConstant * soil_resistance;
 
   // Formula [4.36] in book p.83
   // C_c = (1 + R_c * R_a / (R_s * (R_c + R_a)))^-1
@@ -387,16 +388,16 @@ double EnergyBalance::CalculateTotalLatentHeatFlux(
   // γ * ((1 + r_s_c) / (r_a_a + r_a_c)))
   double numerator, denominator;
   numerator = (slope_of_saturated_vapor_pressure * total_available_energy) +
-              ((heat_to_raise_one_Kelvin_unit_volume * vapor_pressure_deficit -
+              ((KHeatToRaiseOneKelvinUnitVolume * vapor_pressure_deficit -
                 slope_of_saturated_vapor_pressure * boundary_layer_resistance *
                     energy_supply.soil) /
                (aero_resistances.between_canopy_reference_height +
                 boundary_layer_resistance));
-  denominator =
-      slope_of_saturated_vapor_pressure +
-      gamma * (1.0 + (canopy_resistance /
-                      (aero_resistances.between_canopy_reference_height +
-                       boundary_layer_resistance)));
+  denominator = slope_of_saturated_vapor_pressure +
+                kPsychometricConstant *
+                    (1.0 + (canopy_resistance /
+                            (aero_resistances.between_canopy_reference_height +
+                             boundary_layer_resistance)));
   double PM_c = numerator / denominator;
 
   // Formula [4.35] in book p.83
@@ -404,17 +405,17 @@ double EnergyBalance::CalculateTotalLatentHeatFlux(
   // γ * (1 + (r_s_s / (r_a_s + r_a_s))))
   numerator =
       (slope_of_saturated_vapor_pressure * total_available_energy) +
-      ((heat_to_raise_one_Kelvin_unit_volume * vapor_pressure_deficit -
+      ((KHeatToRaiseOneKelvinUnitVolume * vapor_pressure_deficit -
         slope_of_saturated_vapor_pressure *
             aero_resistances.between_soil_canopy * energy_supply.canopy) /
        (aero_resistances.between_canopy_reference_height +
         aero_resistances.between_soil_canopy));
 
-  denominator =
-      slope_of_saturated_vapor_pressure +
-      gamma * (1.0f + (soil_resistance /
-                       (aero_resistances.between_canopy_reference_height +
-                        aero_resistances.between_soil_canopy)));
+  denominator = slope_of_saturated_vapor_pressure +
+                kPsychometricConstant *
+                    (1.0f + (soil_resistance /
+                             (aero_resistances.between_canopy_reference_height +
+                              aero_resistances.between_soil_canopy)));
   double PM_s = numerator / denominator;
 
   // Formula [4.33] in book p.83

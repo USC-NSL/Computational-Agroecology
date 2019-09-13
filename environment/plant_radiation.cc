@@ -83,23 +83,27 @@ PlantRadiation::CalculateInterceptHourlyRadiance(
     const double diffuse_radiation,
     const double extinction_coefficient_diffuse) const {
   // reflection coefficient
-  constexpr double p = 0.11f;
+  constexpr double kReflectionCoefficient = 0.11f;
+  // scatter coefficient
+  constexpr double kScatterCoefficient = 0.5;
   // scatter correction
-  constexpr double sqrt_alpha = std::sqrt(0.5);
+  constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
 
   // Formula [3.8] in book p.58
   // I_i_dr = (1 - p) * I_dr * (1 - exp(-sqrt(α) * k_dr * L))
-  double I_i_dr = (1.0f - p) * direct_radiation *
-                  (1 - std::exp(-sqrt_alpha * extinction_coefficient_direct *
-                                total_leaf_area_index_));
+  double direct_radiance =
+      (1.0f - kReflectionCoefficient) * direct_radiation *
+      (1 - std::exp(-kScatterCorrection * extinction_coefficient_direct *
+                    total_leaf_area_index_));
 
   // Formula [3.32] in book p.66
   // I_i_df = (1 - p) * I_df * (1 - exp(-sqrt(α) * k_df * L))
-  double I_i_df = (1.0f - p) * diffuse_radiation *
-                  (1 - std::exp(-sqrt_alpha * extinction_coefficient_diffuse *
-                                total_leaf_area_index_));
+  double diffuse_radiance =
+      (1.0f - kReflectionCoefficient) * diffuse_radiation *
+      (1 - std::exp(-kScatterCorrection * extinction_coefficient_diffuse *
+                    total_leaf_area_index_));
 
-  return {I_i_dr, I_i_df};
+  return {direct_radiance, diffuse_radiance};
 }
 
 PlantRadiation::InterceptRadiance
@@ -119,31 +123,36 @@ PlantRadiation::CalculateAbsorbedHourPAR(
     const double direct_radiation, const double diffuse_radiation,
     const double extinction_coefficient_direct) const {
   // reflection coefficient
-  constexpr double P = 0.04;
+  constexpr double kReflectionCoefficient = 0.04;
   // scatter coefficient
-  constexpr double alpha = 0.8;
+  constexpr double kScatterCoefficient = 0.8;
   // scatter correction
-  constexpr double sqrt_alpha = std::sqrt(alpha);
+  constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
 
   // Formula [3.1] in book p.52
   // τ_dr = exp(-k_dr * L)
   // L: leaf area index
-  double tau_dr =
+  double canopy_extinction_coefficient =
       std::exp(-extinction_coefficient_direct * total_leaf_area_index_);
 
   // Formula [3.6] in book p.57
   // τ_dr_α = exp(-sqrt(α) * k_dr * L)
   // L: leaf area index
-  double tau_dr_alpha = std::exp(-sqrt_alpha * extinction_coefficient_direct *
-                                 total_leaf_area_index_);
+  double penetration_function_direct_solar_beams =
+      std::exp(-kScatterCorrection * extinction_coefficient_direct *
+               total_leaf_area_index_);
 
   // Formula [3.33] in book p.67
   // Q_p_dr = (1 - p) * tau_dr_alpha * Q_dr
-  double total_direct_par = (1.0 - P) * tau_dr_alpha * direct_radiation;
+  double total_direct_par = (1.0 - kReflectionCoefficient) *
+                            penetration_function_direct_solar_beams *
+                            direct_radiation;
 
   // Formula [3.34] in book p.67
   // Q_p_dr_dr = (1 - p) * tau_dr * Q_dr
-  double direct_total_direct_par = (1.0 - P) * tau_dr * direct_radiation;
+  double direct_total_direct_par = (1.0 - kReflectionCoefficient) *
+                                   canopy_extinction_coefficient *
+                                   direct_radiation;
 
   // Formula [3.36] in book p.68
   // Q_p_dr_α = (Q_p_dr - Q_p_dr_dr) / 2
@@ -154,39 +163,42 @@ PlantRadiation::CalculateAbsorbedHourPAR(
   // Q_p_df_bar = (1 - p) * Q_df * (1 - exp(-sqrt(α) * k_df * L)) /
   //              (sqrt(α) * k_df * L)
   double avg_diffuse_solar_irradiance =
-      (1.0 - P) * diffuse_radiation *
-      (1.0 - std::exp(-sqrt_alpha * kExtinctionCoefficientForDiffuse *
+      (1.0 - kReflectionCoefficient) * diffuse_radiation *
+      (1.0 - std::exp(-kScatterCorrection * kExtinctionCoefficientForDiffuse *
                       total_leaf_area_index_)) /
-      (sqrt_alpha * kExtinctionCoefficientForDiffuse * total_leaf_area_index_);
+      (kScatterCorrection * kExtinctionCoefficientForDiffuse *
+       total_leaf_area_index_);
 
   // Formula [3.38] in book p.68
   // Q_sl = α * (k_dr * Q_dr + Q_p_df_bar + Q_p_dr_α)
-  double I_sunlit =
-      alpha * (kExtinctionCoefficientForDiffuse * direct_radiation +
-               avg_diffuse_solar_irradiance + half_irradiance_scattered);
+  double I_sunlit = kScatterCoefficient *
+                    (kExtinctionCoefficientForDiffuse * direct_radiation +
+                     avg_diffuse_solar_irradiance + half_irradiance_scattered);
 
   // Formula [3.39] in book p.69
   // Q_sh = α * (Q_p_df_bar + Q_p_dr_α)
-  double I_shaded =
-      alpha * (avg_diffuse_solar_irradiance + half_irradiance_scattered);
+  double I_shaded = kScatterCoefficient *
+                    (avg_diffuse_solar_irradiance + half_irradiance_scattered);
 
   return {I_sunlit, I_shaded};
 }
 
 PlantRadiation::LeafIndexArea PlantRadiation::CalculateLai(
-    const double k_dr) const {
+    const double extinction_coefficient_direct) const {
   // Formula [3.41] in book p.69
   // L_sl = (1 - exp(-k_dr * L)) / k_dr
-  double lai_sl = 0.0;
-  if (k_dr > 0.0) {
-    lai_sl = (1 - std::exp(-k_dr * total_leaf_area_index_)) / k_dr;
+  double lai_sunlit = 0.0;
+  if (extinction_coefficient_direct > 0.0) {
+    lai_sunlit = (1 - std::exp(-extinction_coefficient_direct *
+                               total_leaf_area_index_)) /
+                 extinction_coefficient_direct;
   }
 
   // Formula [3.42] in book p.69
   // L_sh = L - L_sl
-  double lai_sh = total_leaf_area_index_ - lai_sl;
+  double lai_shaded = total_leaf_area_index_ - lai_sunlit;
 
-  return {lai_sl, lai_sh};
+  return {lai_sunlit, lai_shaded};
 }
 
 }  // namespace environment

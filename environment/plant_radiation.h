@@ -11,15 +11,20 @@ namespace environment {
 // Represents the amount radiance that a plant can absorb. It requires the
 // leaf index area of a plant and current information about sun in the
 // environment to make this class work. This class focuses on a single plant.
+//
+// All member function names with prefix "Calculate" do not modify this class.
+// They only output values given paramters. On the other hand, member function
+// names with prefix "Update" use those functions with "Calculate" to update the
+// member variables in this class.
 class PlantRadiation {
  public:
   PlantRadiation(const double leaf_index_area, const Meteorology &meteorology);
 
-  // Update all information according to the provided `Meteorology`.
+  // Updates all information according to the provided `Meteorology`.
   void Update(const Meteorology &meteorology);
 
-  // Update all information by specifying the sunrise solar hour, the day of the
-  // year. Calling this function utilizes the private `meteorology_`.
+  // Updates all information by specifying the sunrise solar hour, the day of
+  // the year. Calling this function utilizes the private `meteorology_`.
   void Update(const int day_of_year, const double solar_hour);
 
   // TODO: add accessors for other classes to use
@@ -27,7 +32,32 @@ class PlantRadiation {
  private:
   friend class EnergyBalance;
 
-  // Have a private `meteorology_` so that this class can work independently.
+  // Solar radiation intercepted by the canopies
+  struct InterceptRadiance {
+    // Direct solar radiation intercepted by the canopies (W m^-2)
+    double direct;
+    // Diffuse solar radiation intercepted by the canopies (W m^-2)
+    double diffuse;
+  };
+
+  // Photosynthetically Active Radiation is usually abbreviated as PAR.
+  struct AbsorbedPhotosyntheticallyActiveRadiation {
+    // Photosynthetically active radiation absorbed by sunlit leaves
+    double sunlit;
+    // Photosynthetically active radiation absorbed by shaded leaves
+    double shaded;
+  };
+
+  struct LeafIndexArea {
+    // Sunlit leaf area index (the total area of sunlit leaves in a unit ground
+    // area)
+    double sunlit;
+    // Shaded leaf area index (the total area of shaded leaves in a unit ground
+    // area)
+    double shaded;
+  };
+
+  // Has a private `meteorology_` so that this class can work independently.
   // Though it may seem to weird to have another `class Meteorology` here, this
   // class needs this in some cases, such as calling
   // `CalculateInterceptDailyRadiance()`.
@@ -48,13 +78,6 @@ class PlantRadiation {
   // This is denoted as k_df in the book.
   const double kExtinctionCoefficientForDiffuse;
 
-  // Solar radiation intercepted by the canopies
-  struct InterceptRadiance {
-    // Direct solar radiation intercepted by the canopies (W m^-2)
-    double direct;
-    // Diffuse solar radiation intercepted by the canopies (W m^-2)
-    double diffuse;
-  };
   // Hourly direct and diffuse solar radiation intercepted by the canopies
   // They are denoted as I_i_dr and I_i_df in the book.
   InterceptRadiance hourly_solar_radiation_;
@@ -72,60 +95,45 @@ class PlantRadiation {
   // This is denoted as I_sh or Q_sh in the book.
   double total_flux_density_shaded_;
 
-  // Only update information about the current solar hour according to the
-  // provided `meteorology`.
+  // Only updates information about the current solar hour in this class
+  // according to the provided `meteorology`.
   void UpdateSolarHour(const Meteorology &meteorology);
-  // Only update information about the current solar hour (in hours). Calling
-  // this utilizes the private `meteorology_`.
+  // Only updates information about the current solar hour (in hours) in this
+  // class. Calling this utilizes the private `meteorology_`.
   void UpdateSolarHour(const double solar_hour);
 
-  // Given solar elevation (in radians), calculate the extinction coefficient
-  // for direct fluexes (k_dr).
+  // Returns the extinction coefficient for direct fluexes (k_dr) given solar
+  // elevation (in radians).
   static double CalculateExtinctionCoefficientForDirect(
       const double solar_elevation);
 
-  // Calculate canopy extinction coefficient for diffuse solar irradiance (k_df)
+  // Returns canopy extinction coefficient for diffuse solar irradiance (k_df).
   double CalculateExtinctionCoefficientForDiffuse() const;
 
-  // Given direct and diffuse radiation, extinction coefficient for direct
-  // fluexes (k_dr), and extinction coefficient for diffuse fluexes (k_df),
-  // calculate the interception of direct and diffuse solar radiation (W m^-2).
+  // Returns interception of direct and diffuse solar radiation (W m^-2) given
+  // direct and diffuse radiation, extinction coefficient for direct fluexes
+  // (k_dr), and extinction coefficient for diffuse fluexes (k_df).
   InterceptRadiance CalculateInterceptHourlyRadiance(
       const double direct_radiation, const double extinction_coefficient_direct,
       const double diffuse_radiation,
       const double extinction_coefficient_diffuse) const;
 
-  // Given the solar time of sunrise and sunset (in solar hour), calculate the
-  // daily direct and diffuse solar radiation (W m^-2).
+  // Returns daily direct and diffuse solar radiation (W m^-2) given the solar
+  // time of sunrise and sunset (hours).
   InterceptRadiance CalculateInterceptDailyRadiance(
       const double solar_hour_sunrise, const double solar_hour_sunset);
 
-  // Photosynthetically Active Radiation is usually abbreviated as PAR.
-  struct AbsorbedPhotosyntheticallyActiveRadiation {
-    // Photosynthetically active radiation absored by sunlit leaves
-    double sunlit;
-    // Photosynthetically active radiation absored by shaded leaves
-    double shaded;
-  };
-  // Given direct, diffuse radiation (W m^-2), and extinction coefficient for
-  // direct fluexes (k_dr), calculate the total flux density absorbed by sunlit
-  // leaves and shaded leaves (W m^-2).
+  // Returns the total flux density absorbed by sunlit leaves and shaded leaves
+  // (W m^-2) given direct, diffuse radiation (W m^-2), and extinction
+  // coefficient for direct fluexes (k_dr).
   AbsorbedPhotosyntheticallyActiveRadiation CalculateAbsorbedHourPAR(
       const double direct_radiation, const double diffuse_radiation,
       const double extinction_coefficient_direct) const;
 
-  struct LeafIndexArea {
-    // Sunlit leaf area index (the total area of sunlit leaves in a unit ground
-    // area)
-    double sunlit;
-    // Shaded leaf area index (the total area of shaded leaves in a unit ground
-    // area)
-    double shaded;
-  };
-  // Given k_dr (a calculated constant), calculate the sunlit leaf area index
-  // (sunlit leaf area per unit ground area) and shaded leaf area index (shaded
-  // leaf area per unit ground area).
-  LeafIndexArea CalculateLai(const double k_dr) const;
+  // Returns the sunlit leaf area index (sunlit leaf area per unit ground area)
+  // and shaded leaf area index (shaded leaf area per unit ground area) given
+  // k_dr (a calculated constant).
+  LeafIndexArea CalculateLai(const double extinction_coefficient_direct) const;
 };
 
 }  // namespace environment

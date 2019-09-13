@@ -49,19 +49,15 @@ void Meteorology::UpdateDayOfYear(const int day_of_year) {
   solar_hour_sunset_ = times.solar_hour_sunset;
   day_length_ = times.day_length;
 
-  // Formula [2.18] in book p.36
-  // Solar constant
-  constexpr double I_c = 1370.0f;
-
   // Formula [2.21] in book p.37
   // ε_0 is approximated by the following equation
   // ε_0 ≈ 1 + 0.033 * cos(2 * π * (t_d - 10) / 365)
-  double epsilon_0 =
+  double eccentricity_correction_factor =
       1 + 0.033 * cos(k2PI * (day_of_year - kDaysLeftPerYear) / kDaysPerYear);
 
   // Formula [2.19] in book p.37
   // I_c_prime = ε_0 * I_c a = sin(λ) * sin(δ) b = cos(λ) * cos(δ)
-  constant_caches_.I_c_prime = epsilon_0 * I_c;
+  constant_caches_.I_c_prime = eccentricity_correction_factor * kSolarConstant;
 
   // to solve integral sin(β), we need the following a and b
   constant_caches_.a = sin(constant_caches_.observer_latitude) *
@@ -138,11 +134,11 @@ void Meteorology::UpdateHourlyNetRadiation(const Weather &weather) {
                                   air_temperature_, sunshine_hour, day_length_);
 }
 
-double Meteorology::DegreeToRadians(const double degree) {
+constexpr double Meteorology::DegreeToRadians(const double degree) {
   return degree * kPI / kPIforDegree;
 }
 
-double Meteorology::RadiansToDegree(const double radians) {
+constexpr double Meteorology::RadiansToDegree(const double radians) {
   return radians / kPI * kPIforDegree;
 }
 
@@ -161,8 +157,9 @@ double Meteorology::CalculateSolarDeclination(const int day_of_year) {
   // t_d: the day of the year
   // +10: to shift Dec 21 to Dec 31 (On Dec 21, we would get the minimum)
 
-  const double A = DegreeToRadians(-kTropic);
-  return A * cos(k2PI * (day_of_year + kDaysLeftPerYear) / kDaysPerYear);
+  constexpr double amplitude = DegreeToRadians(-kTropic);
+  return amplitude *
+         cos(k2PI * (day_of_year + kDaysLeftPerYear) / kDaysPerYear);
 }
 
 double Meteorology::CalculateLocalSolarTime(const int day_of_year,
@@ -171,19 +168,21 @@ double Meteorology::CalculateLocalSolarTime(const int day_of_year,
   // Formula [2.4], [2,5], [2.6] in book p.27
   // t_h = t + ((γ_sm - γ) / (π / 12)) + (EoT / 60)
   // t: local time (hours)
-  // γ_sm (Standard Meridian logitude)
+  // γ_sm (Standard Meridian longitude)
   //   = int(γ / (π / 12)) * (π / 12)
   // γ: observer's longitude
   // EoT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B)
   // B = 2 * π * (t_d -81) / 364
 
-  // Standard Meridian logitude
-  double gamma_sm = std::floor(longitude / kPiDividedBy12) * kPiDividedBy12;
+  // Standard Meridian longitude
+  double standard_meridian_longitude =
+      std::floor(longitude / kPiDividedBy12) * kPiDividedBy12;
   double B = k2PI * (day_of_year - 81) / (kDaysPerYear - 1);
-  double EoT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
+  double equation_of_time = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
   return local_hour +
-         ((gamma_sm - DegreeToRadians(longitude)) / kPiDividedBy12) +
-         (EoT / kMinsPerHour);
+         ((standard_meridian_longitude - DegreeToRadians(longitude)) /
+          kPiDividedBy12) +
+         (equation_of_time / kMinsPerHour);
 }
 
 double Meteorology::CalculateHourAngle(const double solar_hour) {
@@ -236,18 +235,18 @@ Meteorology::DayLengthAndTimesSunriseSunset Meteorology::CalculateDayLength(
   // tmp = -((sin(δ) * sin(λ)) / (cos(δ) * cos(λ)))
   double tmp = -((sin(solar_declination) * sin(observer_latitude)) /
                  (cos(solar_declination) * cos(observer_latitude)));
-  double t_ss = kHoursHalfDay + kPiDividedBy12 * acos(tmp);
+  double t_sunset = kHoursHalfDay + kPiDividedBy12 * acos(tmp);
 
   // Formula [2.12] in book p.31
   // 12 - t_sr = t_ss - 12
   // t_sr = 24 - t_ss
-  double t_sr = 24 - t_ss;
+  double t_sunrise = 24 - t_sunset;
 
   // Formula [2.13] in book p.31
   // day_length = 2 * (t_ss - 12)
-  double day_length = 2 * (t_ss - kHoursHalfDay);
+  double day_length = 2 * (t_sunset - kHoursHalfDay);
 
-  return {t_sr, t_ss, day_length};
+  return {t_sunrise, t_sunset, day_length};
 }
 
 Meteorology::SolarIrradiance Meteorology::CalculateDailySolarIrradiance(
@@ -381,11 +380,46 @@ Meteorology::SolarIrradiance Meteorology::CalculateHourlySolarIrradiance(
   return {I_t, I_dr, I_df};
 }
 
+double Meteorology::CalculateHourlyNetRadiation(
+    const double hourly_total_irradiance, const double air_temp,
+    const double sunshine_hour, const double day_length) {
+  double net_total_radiance =
+      (1.0 - kProportionShortwave) * hourly_total_irradiance;
+
+  // This is denoted as T_a,K in the book.
+  // The book says "237.3" but it seems "273.15" is the correct value. It is
+  // probable I understood this book wrongly.
+  double temp_in_Kelvin = air_temp + 237.3;
+
+  // Formula [2.35] in book p.41
+  // R_Lu = σ * T_a,K^4
+  double R_Lu = kStefanBoltzmannConstant * std::pow(temp_in_Kelvin, 4);
+
+  // Formula [2.37] in book p.42
+  // R_Ld = 9.35 * 10^-6 * σ * T_a,K^6
+  double R_Ld =
+      9.35e-6 * kStefanBoltzmannConstant * std::pow(temp_in_Kelvin, 6);
+
+  // Formula [2.34] in book p.41
+  // R_nL_prime = R_Ld - R_Lu
+  double R_nL_prime = R_Ld - R_Lu;
+
+  // An empirical coefficient. This is mentioned in book p.42.
+  constexpr double b = 0.2;
+
+  // Formula [2.38] in book p.42
+  // R_nL = R_nL_prime * (b + (1 - b) * s / DL)
+  double R_nL = R_nL_prime * (b + (1.0 - b) * sunshine_hour / day_length);
+
+  return net_total_radiance - R_nL;
+}
+
 Meteorology::VaporPressure Meteorology::CalculateVaporPressure(
-    const double temperature, const double relative_humidity) {
+    const double air_temperature, const double relative_humidity) {
   // Formula [2.40] in book p.43
   // e_s(T_a) = 6.1078 * exp(17.269 * (T_a / (T_a + 237.3)))
-  double saturated = 6.1078 * exp(17.269 * temperature / (temperature + 237.3));
+  double saturated =
+      6.1078 * exp(17.269 * air_temperature / (air_temperature + 237.3));
 
   // Formula [2.39] in book p.42
   // RH = 100 * (e_a / e_s(T_a))
@@ -400,11 +434,8 @@ double Meteorology::CalculateAirTemperature(double solar_hour,
                                             const double temp_max,
                                             const double solar_hour_sunrise,
                                             const double solar_hour_sunset) {
-  // offset 1.5 hour after sunrise
-  const double kOffset = 1.5;
-
   // add a day if t_h is before sunrise
-  if (solar_hour < (solar_hour_sunrise + kOffset)) {
+  if (solar_hour < (solar_hour_sunrise + kOffsetAfterSunrise)) {
     solar_hour += 24.0;
   }
 
@@ -416,7 +447,8 @@ double Meteorology::CalculateAirTemperature(double solar_hour,
     double temp_sunset =
         temp_min +
         (temp_max - temp_min) *
-            sin(kPI * (solar_hour_sunset - solar_hour_sunrise - kOffset) /
+            sin(kPI *
+                (solar_hour_sunset - solar_hour_sunrise - kOffsetAfterSunrise) /
                 (solar_hour_sunset - solar_hour_sunrise));
 
     // Formula [2.47] when t_h > t_ss in book p.50
@@ -424,7 +456,7 @@ double Meteorology::CalculateAirTemperature(double solar_hour,
     // t_ss)))
     return temp_sunset +
            ((temp_min - temp_sunset) * (solar_hour - solar_hour_sunset) /
-            ((solar_hour_sunrise + kOffset) +
+            ((solar_hour_sunrise + kOffsetAfterSunrise) +
              (kHoursPerDay - solar_hour_sunset)));
   } else {
     // Formula [2.47] when t_h <= t_ss in book p.50
@@ -432,45 +464,10 @@ double Meteorology::CalculateAirTemperature(double solar_hour,
     // t_sr))
     return temp_min +
            (temp_max - temp_min) *
-               sin(kPI * (solar_hour - solar_hour_sunrise - kOffset) /
+               sin(kPI *
+                   (solar_hour - solar_hour_sunrise - kOffsetAfterSunrise) /
                    (solar_hour_sunset - solar_hour_sunrise));
   }
-}
-
-double Meteorology::CalculateHourlyNetRadiation(
-    const double hourly_total_irradiance, const double air_temp,
-    const double sunshine_hour, const double day_length) {
-  constexpr double proportion_shortwave = 0.15f;
-  double net_total_radiance =
-      (1.0 - proportion_shortwave) * hourly_total_irradiance;
-
-  // Stefan-Boltzmann constant
-  // This is denoted as σ and is mentioned in book p.35.
-  constexpr double S_B_constant = 5.67e-8;
-
-  // This is denoted as T_a,K in the book.
-  double temp_in_Kelvin = air_temp + 237.3;
-
-  // Formula [2.35] in book p.41
-  // R_Lu = σ * T_a,K^4
-  double R_Lu = S_B_constant * std::pow(temp_in_Kelvin, 4);
-
-  // Formula [2.37] in book p.42
-  // R_Ld = 9.35 * 10^-6 * σ * T_a,K^6
-  double R_Ld = 9.35e-6 * S_B_constant * std::pow(temp_in_Kelvin, 6);
-
-  // Formula [2.34] in book p.41
-  // R_nL_prime = R_Ld - R_Lu
-  double R_nL_prime = R_Ld - R_Lu;
-
-  // An empirical coefficient. This is mentioned in book p.42.
-  constexpr double b = 0.2;
-
-  // Formula [2.38] in book p.42
-  // R_nL = R_nL_prime * (b + (1 - b) * s / DL)
-  double R_nL = R_nL_prime * (b + (1.0 - b) * sunshine_hour / day_length);
-
-  return net_total_radiance - R_nL;
 }
 
 }  // namespace environment
