@@ -28,7 +28,7 @@ void Agent::ApplyRandomAction(int action_tyoe, int timestep) {
   // TODO: timestep maybe change to  explicit time units / types
   for (int i = 0; i < timestep; i++) {
     // TODO : Set starttime = 1 duration  = 0 and  crop_type_name =
-    // usr kBeanTypeName and choose actionTypoe(0) for now
+    // kBeanTypeName and choose actionTypoe(0) for now
     agent::ActionID action = {RandomInt(0, env_->terrain().size() - 1),
                               RandomInt(0, (0, env_->terrain().size() - 1)),
                               ::agent::action::ActionType(0),
