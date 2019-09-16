@@ -30,7 +30,9 @@ int main() {
       agent_test.RandomInt(0, terrain.size() - 1),
       ::agent::action::ActionType(agent_test.RandomInt(
           0, ::agent::action::ActionType::NUM_ACTIONS - 1)),
-       1, 0, kBeanTypeName};
+      1,
+      0,
+      kBeanTypeName};
   auto action_obj = agent_test.CreateAction(action);
 
   // ApplyRandomAction function on envionment

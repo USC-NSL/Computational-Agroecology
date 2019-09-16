@@ -20,8 +20,8 @@ struct ActionID {
   int row;
   int col;
   ::agent::action::ActionType action_taken;
-  //TODO : Set starttime = 1 duration  = 0 for now
-  int starttime = 1;
+  // TODO : Set starttime = 1 duration  = 0 for now
+  int start_time_step = 1;
   int duration = 0;
   const std::string crop_type_name;
 };
