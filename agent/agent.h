@@ -20,8 +20,10 @@ struct ActionID {
   int row;
   int col;
   ::agent::action::ActionType action_taken;
-  int crop_ID;
-  int time;
+  //TODO : Set starttime = 1 duration  = 0 for now
+  int starttime = 1;
+  int duration = 0;
+  const std::string crop_type_name;
 };
 
 class Agent {
@@ -39,7 +41,7 @@ class Agent {
   int RandomInt(int min, int max);
 
   // Applied random action to the encironment
-  // TODO: Appliedrandom plant
+  // TODO: creeate random plant
   void ApplyRandomAction(int action_tyoe, int timestep);
 
   std::vector<std::string> GetQualifiedPlants();

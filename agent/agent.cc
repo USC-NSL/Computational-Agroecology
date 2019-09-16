@@ -27,31 +27,34 @@ int Agent::RandomInt(int min, int max) {
 void Agent::ApplyRandomAction(int action_tyoe, int timestep) {
   //TODO: timestep maybe change to  explicit time units / types 
   for(int i = 0; i < timestep; i++){
+    //TODO : Set starttime = 1 duration  = 0 and  crop_type_name = kBeanTypeName for now
     agent::ActionID action = {
         RandomInt(0, env_->terrain().size() - 1),
         RandomInt(0, (0, env_->terrain().size() - 1)),
-        ::agent::action::ActionType(0), 2};
-        TakeAction(CreateAction(action));
+        ::agent::action::ActionType(0), 1, 0, kBeanTypeName};
+
+    TakeAction(CreateAction(action));
   }
 }
 
 agent::action::Action *Agent::CreateAction(const ActionID &action) {
   // Create a action
   using ::agent::action::ActionType;
-  //TODO: Add start time and duration in explicit time units / types for actions
+
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
       return new agent::action::crop::Add(
-          environment::Coordinate(action.row, action.col), action.time, 0, kBeanTypeName);
+          environment::Coordinate(action.row, action.col), action.starttime, action.duration, action.crop_type_name);
     case ActionType::CROP_REMOVE:
       return new agent::action::crop::Remove(
-          environment::Coordinate(action.row, action.col), action.time, 0);
+          environment::Coordinate(action.row, action.col), action.starttime, action.duration);
     case ActionType::CROP_HARVEST:
       return new agent::action::crop::Harvest(
-          environment::Coordinate(action.row, action.col), action.time, 0);
+          environment::Coordinate(action.row, action.col), action.starttime, action.duration);
     case ActionType::WATER_CROP:
+    //TODO: Change the water amont int the future, set it to 1 for now
       return new agent::action::crop::Water(
-          environment::Coordinate(action.row, action.col), action.time, 0, 1);
+          environment::Coordinate(action.row, action.col), action.starttime, action.duration, 1);
   }
   return nullptr;
 }
