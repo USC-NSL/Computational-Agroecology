@@ -26,17 +26,15 @@ int main() {
   agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
   // Create Action
   agent::ActionID action = {
-      (size_t)agent_test.RandomInt(0, terrain.size() - 1),
-      (size_t)agent_test.RandomInt(0, (0, terrain.size() - 1)),
+      agent_test.RandomInt(0, terrain.size() - 1),
+      agent_test.RandomInt(0, terrain.size() - 1),
       ::agent::action::ActionType(agent_test.RandomInt(
           0, ::agent::action::ActionType::NUM_ACTIONS - 1)),
-      2};
+      2, 1};
   auto action_obj = agent_test.CreateAction(action);
 
-  // Appied RandomAction function on envionment
-  agent_test.RandomAction(0, 1);
-
-  agent::action::crop::Remove remove_crop(environment::Coordinate(0, 0), 1, 0);
+  // ApplyRandomAction function on envionment
+  agent_test.ApplyRandomAction(0, 1);
 
   agent::action::crop::Add add_crop(environment::Coordinate(0, 0), 1, 0,
                                     kBeanTypeName);

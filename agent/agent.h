@@ -17,10 +17,11 @@ namespace agent {
 const std::string kBeanTypeName = "bean";
 
 struct ActionID {
-  size_t row;
-  size_t col;
+  int row;
+  int col;
   ::agent::action::ActionType action_taken;
   int crop_ID;
+  int time;
 };
 
 class Agent {
@@ -39,7 +40,7 @@ class Agent {
 
   // Applied random action to the encironment
   // TODO: Appliedrandom plant
-  void RandomAction(int action_tyoe, int timestep);
+  void ApplyRandomAction(int action_tyoe, int timestep);
 
   std::vector<std::string> GetQualifiedPlants();
 

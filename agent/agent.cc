@@ -24,32 +24,34 @@ int Agent::RandomInt(int min, int max) {
   return integer_distributor(seed);
 }
 
-void Agent::RandomAction(int action_tyoe, int timestep) {
-  while (timestep-- > 0) {
+void Agent::ApplyRandomAction(int action_tyoe, int timestep) {
+  //TODO: timestep maybe change to  explicit time units / types 
+  for(int i = 0; i < timestep; i++){
     agent::ActionID action = {
-        (size_t)RandomInt(0, env_->terrain().size() - 1),
-        (size_t)RandomInt(0, (0, env_->terrain().size() - 1)),
+        RandomInt(0, env_->terrain().size() - 1),
+        RandomInt(0, (0, env_->terrain().size() - 1)),
         ::agent::action::ActionType(0), 2};
-    TakeAction(CreateAction(action));
+        TakeAction(CreateAction(action));
   }
 }
 
 agent::action::Action *Agent::CreateAction(const ActionID &action) {
   // Create a action
   using ::agent::action::ActionType;
+  //TODO: Add start time and duration in explicit time units / types for actions
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
       return new agent::action::crop::Add(
-          environment::Coordinate(action.row, action.col), 1, 0, kBeanTypeName);
+          environment::Coordinate(action.row, action.col), action.time, 0, kBeanTypeName);
     case ActionType::CROP_REMOVE:
       return new agent::action::crop::Remove(
-          environment::Coordinate(action.row, action.col), 1, 0);
+          environment::Coordinate(action.row, action.col), action.time, 0);
     case ActionType::CROP_HARVEST:
       return new agent::action::crop::Harvest(
-          environment::Coordinate(action.row, action.col), 1, 0);
+          environment::Coordinate(action.row, action.col), action.time, 0);
     case ActionType::WATER_CROP:
       return new agent::action::crop::Water(
-          environment::Coordinate(action.row, action.col), 1, 0, 1);
+          environment::Coordinate(action.row, action.col), action.time, 0, 1);
   }
   return nullptr;
 }
