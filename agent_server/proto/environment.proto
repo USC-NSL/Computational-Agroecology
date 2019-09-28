@@ -79,16 +79,17 @@ message Plant {
     OLD = 4;
   }
 
+  // These comments are copied from the header file environment/plant.h
   message PlantParams {
-    int32 gdd_base_temperature = 1;
-    int32 min_absolute_temperature = 2;
-    int32 max_absolute_temperature = 3;
-    int32 min_new_growth_temperature = 4;
-    int32 max_new_growth_temperature = 5;
-    int32 min_photo_period = 6;
-    int32 max_photo_period = 7;
-    int32 max_harvest_yield = 8;
-    int32 gdd_units_after_full_bloom = 9;
+    int32 gdd_base_temperature = 1;       // Temperature above which to accumulate GDD.
+    int32 min_absolute_temperature = 2;   // Lower killing temperature for mature growth.
+    int32 max_absolute_temperature = 3;   // Upper killing temperature for mature growth.
+    int32 min_new_growth_temperature = 4; // Lower killing temperature for new growth.
+    int32 max_new_growth_temperature = 5; // Upper killing temperature for new growth.
+    int32 min_photo_period = 6;           // Minimum photo period for growth.
+    int32 max_photo_period = 7;           // Maximum photo period for growth.
+    int32 max_harvest_yield = 8;          // Maximum yield per cropping period.
+    int32 gdd_units_after_full_bloom = 9; // GDD units needed from full bloom to harvest.
   }
 
   string name = 1;

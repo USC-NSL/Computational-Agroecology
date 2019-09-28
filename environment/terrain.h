@@ -21,23 +21,30 @@ class Terrain {
   Terrain(const size_t size);
 
   // Accessors
-  inline int yield() const { return yield_; }
-  inline size_t size() const { return size_; }
-  inline size_t width() const { return size_; }
-  inline size_t length() const { return size_; }
-  inline Plant *GetPlant(const Coordinate &coord) {
-    return plant_container_.FindPlant(coord);
-  }
-  inline Soil *GetSoil(const Coordinate &coord) {
-    return soil_container_.FindSoilByCoord(coord);
+  int yield() const { return yield_; }
+  size_t size() const { return size_; }
+  size_t width() const { return size_; }
+  size_t length() const { return size_; }
+
+  Plant *GetPlant(const Coordinate &coord) {
+    return plant_container_.GetPlant(coord);
   }
 
-  inline const Soil *GetSoil(const Coordinate &coord) const {
-    return soil_container_.FindSoilByCoord(coord);
+  const Plant *GetPlant(const Coordinate &coord) const {
+    return plant_container_.GetPlant(coord);
   }
 
-  inline const std::vector<Plant *>GetAllPlants() const {
-    return plant_container_.plants();
+  Soil *GetSoil(const Coordinate &coord) {
+    return soil_container_.GetSoil(coord);
+  }
+
+  const Soil *GetSoil(const Coordinate &coord) const {
+    return soil_container_.GetSoil(coord);
+  }
+
+  std::vector<const Plant *> GetAllPlants() const {
+    return std::vector<const Plant *>(plant_container_.plants().begin(),
+                                      plant_container_.plants().end());
   }
 
   // Modifiers
