@@ -13,6 +13,70 @@
 
 using namespace environment;
 
+// All unit tests below are testing on converting selected data structures (in
+// C++) in our system into the format in protobuf.
+//
+// For the full list of protobuf definitions, you may refer to
+// /agent_server/proto/environment.proto
+
+// A helper function to test if a plant object in C++ is equal to the one in
+// protobuf.
+void TestPlantConvertor(const Plant &plant,
+                        const data_format::Plant &plant_protobuf) {
+  EXPECT_EQ(plant.name(), plant_protobuf.name());
+  EXPECT_EQ(plant.trunk_size(), plant_protobuf.trunk_size());
+  EXPECT_EQ(plant.root_size(), plant_protobuf.root_size());
+  EXPECT_EQ(plant.health(), plant_protobuf.health());
+  EXPECT_EQ(plant.flowering(), plant_protobuf.flowering());
+  EXPECT_EQ(plant.height(), plant_protobuf.height());
+  EXPECT_EQ(plant.accumulated_gdd(), plant_protobuf.accumulated_gdd());
+  switch (plant.maturity()) {
+    case environment::Plant::SEED:
+      EXPECT_EQ(data_format::Plant_Maturity_SEED, plant_protobuf.maturity());
+      break;
+    case environment::Plant::SEEDLING:
+      EXPECT_EQ(data_format::Plant_Maturity_SEEDLING,
+                plant_protobuf.maturity());
+      break;
+    case environment::Plant::JUVENILE:
+      EXPECT_EQ(data_format::Plant_Maturity_JUVENILE,
+                plant_protobuf.maturity());
+      break;
+    case environment::Plant::MATURE:
+      EXPECT_EQ(data_format::Plant_Maturity_MATURE, plant_protobuf.maturity());
+      break;
+    case environment::Plant::OLD:
+      EXPECT_EQ(data_format::Plant_Maturity_OLD, plant_protobuf.maturity());
+      break;
+  }
+  EXPECT_EQ(plant.produce(), plant_protobuf.produce());
+  EXPECT_EQ(plant.params().at(environment::PlantProperty::GDD_BASE_TEMPERATURE),
+            plant_protobuf.params().gdd_base_temperature());
+  EXPECT_EQ(
+      plant.params().at(environment::PlantProperty::MIN_ABSOLUTE_TEMPERATURE),
+      plant_protobuf.params().min_absolute_temperature());
+  EXPECT_EQ(
+      plant.params().at(environment::PlantProperty::MAX_ABSOLUTE_TEMPERATURE),
+      plant_protobuf.params().max_absolute_temperature());
+  EXPECT_EQ(
+      plant.params().at(environment::PlantProperty::MIN_NEW_GROWTH_TEMPERATURE),
+      plant_protobuf.params().min_new_growth_temperature());
+  EXPECT_EQ(
+      plant.params().at(environment::PlantProperty::MAX_NEW_GROWTH_TEMPERATURE),
+      plant_protobuf.params().max_new_growth_temperature());
+  EXPECT_EQ(plant.params().at(environment::PlantProperty::MIN_PHOTO_PERIOD),
+            plant_protobuf.params().min_photo_period());
+  EXPECT_EQ(plant.params().at(environment::PlantProperty::MAX_PHOTO_PERIOD),
+            plant_protobuf.params().max_photo_period());
+  EXPECT_EQ(plant.params().at(environment::PlantProperty::MAX_HARVEST_YIELD),
+            plant_protobuf.params().max_harvest_yield());
+  EXPECT_EQ(
+      plant.params().at(environment::PlantProperty::GDD_UNITS_AFTER_FULL_BLOOM),
+      plant_protobuf.params().gdd_units_after_full_bloom());
+}
+
+// This tests on converting a `std::chrono::system_clock::time_point` to and
+// from protobuf.
 TEST(MessageConvertorTest, TimePointConvertorTest) {
   auto tp = std::chrono::system_clock::now();
 
@@ -20,6 +84,7 @@ TEST(MessageConvertorTest, TimePointConvertorTest) {
   EXPECT_EQ(tp, FromProtobufTimePoint(tp_protobuf));
 }
 
+// This tests on converting a `std::chrono::duration<int>` to and from protobuf.
 TEST(MessageConvertorTest, DurationConvertorTest) {
   auto dur = std::chrono::hours(1);
 
@@ -27,6 +92,7 @@ TEST(MessageConvertorTest, DurationConvertorTest) {
   EXPECT_EQ(dur, FromProtobufDuration(dur_protobuf));
 }
 
+// This tests on converting a `struct environment::Location` to and from protobuf.
 TEST(MessageConvertorTest, LocationConvertorTest) {
   Location location(100.0, 200.0, 300.0, 400.0);
 
@@ -34,6 +100,7 @@ TEST(MessageConvertorTest, LocationConvertorTest) {
   EXPECT_EQ(location, FromProtobuf(location_protobuf));
 }
 
+// This tests on converting a `struct environment::Config` to and from protobuf.
 TEST(MessageConvertorTest, ConfigConvertorTest) {
   Config config("place name", Location(100.0, 200.0, 300.0, 400.0));
 
@@ -41,65 +108,7 @@ TEST(MessageConvertorTest, ConfigConvertorTest) {
   EXPECT_EQ(config, FromProtobuf(config_protobuf));
 }
 
-#define TEST_PLANT_CONVERTOR(_PLANT, _PLANT_PROTOBUF)                         \
-  EXPECT_EQ((_PLANT).name(), (_PLANT_PROTOBUF).name());                       \
-  EXPECT_EQ((_PLANT).trunk_size(), (_PLANT_PROTOBUF).trunk_size());           \
-  EXPECT_EQ((_PLANT).root_size(), (_PLANT_PROTOBUF).root_size());             \
-  EXPECT_EQ((_PLANT).health(), (_PLANT_PROTOBUF).health());                   \
-  EXPECT_EQ((_PLANT).flowering(), (_PLANT_PROTOBUF).flowering());             \
-  EXPECT_EQ((_PLANT).height(), (_PLANT_PROTOBUF).height());                   \
-  EXPECT_EQ((_PLANT).accumulated_gdd(), (_PLANT_PROTOBUF).accumulated_gdd()); \
-  switch ((_PLANT).maturity()) {                                              \
-    case environment::Plant::SEED:                                            \
-      EXPECT_EQ(data_format::Plant_Maturity_SEED,                             \
-                (_PLANT_PROTOBUF).maturity());                                \
-      break;                                                                  \
-    case environment::Plant::SEEDLING:                                        \
-      EXPECT_EQ(data_format::Plant_Maturity_SEEDLING,                         \
-                (_PLANT_PROTOBUF).maturity());                                \
-      break;                                                                  \
-    case environment::Plant::JUVENILE:                                        \
-      EXPECT_EQ(data_format::Plant_Maturity_JUVENILE,                         \
-                (_PLANT_PROTOBUF).maturity());                                \
-      break;                                                                  \
-    case environment::Plant::MATURE:                                          \
-      EXPECT_EQ(data_format::Plant_Maturity_MATURE,                           \
-                (_PLANT_PROTOBUF).maturity());                                \
-      break;                                                                  \
-    case environment::Plant::OLD:                                             \
-      EXPECT_EQ(data_format::Plant_Maturity_OLD,                              \
-                (_PLANT_PROTOBUF).maturity());                                \
-      break;                                                                  \
-  }                                                                           \
-  EXPECT_EQ((_PLANT).produce(), (_PLANT_PROTOBUF).produce());                 \
-  EXPECT_EQ(                                                                  \
-      (_PLANT).params().at(environment::PlantProperty::GDD_BASE_TEMPERATURE), \
-      (_PLANT_PROTOBUF).params().gdd_base_temperature());                     \
-  EXPECT_EQ((_PLANT).params().at(                                             \
-                environment::PlantProperty::MIN_ABSOLUTE_TEMPERATURE),        \
-            (_PLANT_PROTOBUF).params().min_absolute_temperature());           \
-  EXPECT_EQ((_PLANT).params().at(                                             \
-                environment::PlantProperty::MAX_ABSOLUTE_TEMPERATURE),        \
-            (_PLANT_PROTOBUF).params().max_absolute_temperature());           \
-  EXPECT_EQ((_PLANT).params().at(                                             \
-                environment::PlantProperty::MIN_NEW_GROWTH_TEMPERATURE),      \
-            (_PLANT_PROTOBUF).params().min_new_growth_temperature());         \
-  EXPECT_EQ((_PLANT).params().at(                                             \
-                environment::PlantProperty::MAX_NEW_GROWTH_TEMPERATURE),      \
-            (_PLANT_PROTOBUF).params().max_new_growth_temperature());         \
-  EXPECT_EQ(                                                                  \
-      (_PLANT).params().at(environment::PlantProperty::MIN_PHOTO_PERIOD),     \
-      (_PLANT_PROTOBUF).params().min_photo_period());                         \
-  EXPECT_EQ(                                                                  \
-      (_PLANT).params().at(environment::PlantProperty::MAX_PHOTO_PERIOD),     \
-      (_PLANT_PROTOBUF).params().max_photo_period());                         \
-  EXPECT_EQ(                                                                  \
-      (_PLANT).params().at(environment::PlantProperty::MAX_HARVEST_YIELD),    \
-      (_PLANT_PROTOBUF).params().max_harvest_yield());                        \
-  EXPECT_EQ((_PLANT).params().at(                                             \
-                environment::PlantProperty::GDD_UNITS_AFTER_FULL_BLOOM),      \
-            (_PLANT_PROTOBUF).params().gdd_units_after_full_bloom())
-
+// This tests on converting a `class environment::Plant` to protobuf.
 TEST(MessageConvertorTest, PlantConvertorTest) {
   Plant *plant = environment::PlantBuilder::NewPlant("bean");
 
@@ -107,9 +116,10 @@ TEST(MessageConvertorTest, PlantConvertorTest) {
 
   auto plant_protobuf = ToProtobuf(*plant);
 
-  TEST_PLANT_CONVERTOR(*plant, plant_protobuf);
+  TestPlantConvertor(*plant, plant_protobuf);
 }
 
+// This tests on converting a `struct environment::Soil` to and from protobuf.
 TEST(MessageConvertorTest, SoilConvertorTest) {
   Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
 
@@ -117,6 +127,8 @@ TEST(MessageConvertorTest, SoilConvertorTest) {
   EXPECT_EQ(soil, FromProtobuf(soil_protobuf));
 }
 
+// This tests on converting a `struct environment::Coordinate` to and from
+// protobuf.
 TEST(MessageConvertorTest, CoordinateConvertorTest) {
   Coordinate coordinate(5, 10, 15);
 
@@ -124,6 +136,7 @@ TEST(MessageConvertorTest, CoordinateConvertorTest) {
   EXPECT_EQ(coordinate, FromProtobuf(coordinate_protobuf));
 }
 
+// This tests on converting a `class environment::Terrain` to protobuf.
 TEST(MessageConvertorTest, TerrainConvertorTest) {
   Terrain terrain(5);
 
@@ -135,8 +148,8 @@ TEST(MessageConvertorTest, TerrainConvertorTest) {
   for (size_t i = 0; i < terrain.GetAllPlants().size(); ++i) {
     EXPECT_EQ(terrain.GetAllPlants()[i]->position(),
               FromProtobuf(terrain_protobuf.plants()[i].position()));
-    TEST_PLANT_CONVERTOR(*(terrain.GetAllPlants()[i]),
-                         terrain_protobuf.plants()[i].plant());
+    TestPlantConvertor(*(terrain.GetAllPlants()[i]),
+                       terrain_protobuf.plants()[i].plant());
   }
 
   for (size_t i = 0; i < terrain.length(); ++i) {
@@ -150,6 +163,8 @@ TEST(MessageConvertorTest, TerrainConvertorTest) {
   }
 }
 
+// This tests on converting a `struct environment::Climate` to and from
+// protobuf.
 TEST(MessageConvertorTest, ClimateConvertorTest) {
   Climate climate(1.0, 2.0, 3.0, 4.0, Climate::Polar);
 
@@ -157,6 +172,7 @@ TEST(MessageConvertorTest, ClimateConvertorTest) {
   EXPECT_EQ(climate, FromProtobuf(climate_protobuf));
 }
 
+// This tests on converting a `struct environment::Config` to and from protobuf.
 TEST(MessageConvertorTest, WeatherConvertorTest) {
   Weather weather(1, 2, 3, 4, 5, 6);
 
@@ -164,6 +180,7 @@ TEST(MessageConvertorTest, WeatherConvertorTest) {
   EXPECT_EQ(weather, FromProtobuf(weather_protobuf));
 }
 
+// This prepares some parameters which will be used by action constructors.
 class ActionConvertorTest : public ::testing::Test {
  protected:
   void SetUp() override {
@@ -184,6 +201,7 @@ class ActionConvertorTest : public ::testing::Test {
   agent::Resources cost;
 };
 
+// This tests on converting a `class agent::action::crop::Add` to and from protobuf.
 TEST_F(ActionConvertorTest, ActionAddCropTest) {
   agent::action::crop::Add action(applied_range, start_time_step, duration,
                                   cost, "Corn");
@@ -192,6 +210,7 @@ TEST_F(ActionConvertorTest, ActionAddCropTest) {
   EXPECT_EQ(action, FromProtobuf(action_protobuf));
 }
 
+// This tests on converting a `class agent::action::crop::Remove` to and from protobuf.
 TEST_F(ActionConvertorTest, ActionRemoveCropTest) {
   agent::action::crop::Remove action(applied_range, start_time_step, duration,
                                      cost);
