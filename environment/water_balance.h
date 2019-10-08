@@ -17,16 +17,19 @@ class WaterBalance {
 
   // Final volumetric water content (m3 m-3) for the two soil layers. (mm
   // day-1).
-  DailyWaterContentReturn DailyWaterContent(double rainfall,
-                                            double water_amount_1,
-                                            double water_amount_2, double dETs,
-                                            double dETc);
+  static DailyWaterContentReturn DailyWaterContent(double rainfall,
+                                                   double water_amount_1,
+                                                   double water_amount_2,
+                                                   double dETs, double dETc);
 
   // Fraction of growth reduced due to limited water. potT is potential
   //   transpiration (mm day-1).
-  double GrowthReduction(double potential_transpiration, double water_amount_2);
+  static double GrowthReduction(double potential_transpiration,
+                                double water_amount_2);
 
  private:
+  WaterBalance() {}
+
   // This struct describes the amount of water that is evaporated from each
   //   layer of the soil, since depths affects how much surface area is exposed.
   //   Actual evaporation is calculated by multiplying the potential evaporation
@@ -54,26 +57,26 @@ class WaterBalance {
   //   water_content = current water content (m3 m-3)
   //   percolation_from_above = water percolating from the above soil layer (mm
   //   day-1)
-  double WaterContentBeforeRedistribution(double soil_layer_thickness,
-                                          double water_content,
-                                          double percolation_from_above);
+  static double WaterContentBeforeRedistribution(double soil_layer_thickness,
+                                                 double water_content,
+                                                 double percolation_from_above);
 
   // Water content after redistribution (mm)
   //   soil_thickness = soil layer thickness (m)
   //   water_content = current water content (m3 m-3)
-  double WaterContentAfterRedistribution(double soil_thickness,
-                                         double water_content);
+  static double WaterContentAfterRedistribution(double soil_thickness,
+                                                double water_content);
 
   // Actual soil evaporation (mm day-1)
   //   potential_evaporation = potential soil evaporation (mm day-1)
-  ActualEvaporationReturn ActualEvaporation(double potential_evaporation,
-                                            double water_amount_1);
+  static ActualEvaporationReturn ActualEvaporation(double potential_evaporation,
+                                                   double water_amount_1);
 
   // Actual plant transpiration (mm day-1)
   //   photosynthesis_efficiency = 0.5 or 0.3 for C3 and C4 plants,
   //   respectively, represents photosynthesis efficiency
   //   potential_transpiration = potential soil transpiration (mm day-1)
-  ActualTranspirationReturn ActualTranspiration(
+  static ActualTranspirationReturn ActualTranspiration(
       double photosynthesis_efficiency, double potential_transpiration,
       double water_amount_2);
 
@@ -83,7 +86,7 @@ class WaterBalance {
   //   actual_evaporation and actual_transpiration = actual evaporation and
   //   transpiration (mm day-1) percolation_from_above = percolation from above
   //   (mm day-1)
-  VolumetricWaterContentReturn VolumetricWaterContent(
+  static VolumetricWaterContentReturn VolumetricWaterContent(
       double soil_thickness, double volumetric_water_content,
       double actual_evaporation, double actual_transpiration,
       double percolation_from_above);
