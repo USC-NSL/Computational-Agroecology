@@ -28,6 +28,8 @@ class WaterBalance {
                                 double water_amount_2);
 
  private:
+  // The purpose of making the constructor private is to prevent initialization
+  // of the class, because all functions in this class are static
   WaterBalance() {}
 
   // This struct describes the amount of water that is evaporated from each

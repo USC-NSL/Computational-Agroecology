@@ -1,6 +1,6 @@
-#include <cmath>
-
 #include "water_balance.h"
+
+#include <cmath>
 
 namespace environment {
 
@@ -72,9 +72,7 @@ WaterBalance::ActualTranspirationReturn WaterBalance::ActualTranspiration(
   if (reduction_factor > 1.0) {
     reduction_factor = 1.0;
   }
-  ActualTranspirationReturn acutal_transpiration_return = {
-      0.0, potential_transpiration * reduction_factor};
-  return acutal_transpiration_return;
+  return {0.0, potential_transpiration * reduction_factor};
 }
 
 WaterBalance::VolumetricWaterContentReturn WaterBalance::VolumetricWaterContent(
