@@ -22,22 +22,6 @@ class SoilContainer {
   Soil *GetSoil(const Coordinate &coordinate);
   const Soil *GetSoil(const Coordinate &coordinate) const;
 
-  // Retrieves a soil instance by giving its position (x and y)
-  Soil *GetSoil(const double x, const double y);
-  const Soil *GetSoil(const double x, const double y) const;
-
-  // Retrieves soil instances within an area by giving its position (`struct
-  // Coordinate`) and how far the caller wants to fetch.
-  std::vector<Soil *> GetMultipleSoil(const Coordinate &coordinate,
-                                      const double x_length,
-                                      const double y_length);
-
-  // Retrieves soil instances within an area by giving its position (x and y)
-  // and how far the caller wants to fetch.
-  std::vector<Soil *> GetMultipleSoil(const double x, const double y,
-                                      const double x_length,
-                                      const double y_length);
-
  private:
   std::vector<std::vector<Soil>> soils_;
 };
