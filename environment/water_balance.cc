@@ -43,13 +43,15 @@ double WaterBalance::WaterContentAfterRedistribution(double soil_thickness,
   return (new_water_content * soil_thickness_mm);  // convert back to mm
 }
 
+// Only the water amount in layer 1 is relevant for evaporation, so water amount
+// in layer 2 is ignored here
 WaterBalance::ActualEvaporationReturn WaterBalance::ActualEvaporation(
-    double potential_evaporation, double water_amount_1) {
+    double potential_evaporation, double water_amount_layer_1) {
   // Formula 5.24 on page 115
   // Calculates reduction of evaporation based on water content, constants from
   // experiments
   double pow_expression =
-      pow((3.6073 * water_amount_1 / saturated_hydraulic), -9.3172);
+      pow((3.6073 * water_amount_layer_1 / saturated_hydraulic), -9.3172);
   double reduction_factor = 1.0 / (1.0 + pow_expression);
   // Formula 5.25 on page on page 115
   return {
