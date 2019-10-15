@@ -25,9 +25,18 @@ int main() {
   // Declare Qlearning
   agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
   // Create Action
-  agent::ActionID action = {terrain.size(), terrain.size(),
-                            ::agent::action::ActionType::CROP_HARVEST, 2};
+  agent::ActionID action = {
+      agent_test.RandomInt(0, terrain.size() - 1),
+      agent_test.RandomInt(0, terrain.size() - 1),
+      ::agent::action::ActionType(agent_test.RandomInt(
+          0, ::agent::action::ActionType::NUM_ACTIONS - 1)),
+      1,
+      0,
+      kBeanTypeName};
   auto action_obj = agent_test.CreateAction(action);
+
+  // ApplyRandomAction function on envionment
+  agent_test.ApplyRandomAction(0, 3);
 
   agent::action::crop::Add add_crop(environment::Coordinate(0, 0), 1, 0,
                                     kBeanTypeName);

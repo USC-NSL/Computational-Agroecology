@@ -24,30 +24,48 @@ int Agent::RandomInt(int min, int max) {
   return integer_distributor(seed);
 }
 
+void Agent::ApplyRandomAction(int action_tyoe, int timestep) {
+  // TODO: timestep maybe change to  explicit time units / types
+  for (int i = 0; i < timestep; i++) {
+    // TODO : Set starttime = 1 duration  = 0 and  crop_type_name =
+    // kBeanTypeName and choose actionTypoe(0) for now
+    agent::ActionID action = {RandomInt(0, env_->terrain().size() - 1),
+                              RandomInt(0, (0, env_->terrain().size() - 1)),
+                              ::agent::action::ActionType(0),
+                              1,
+                              0,
+                              kBeanTypeName};
+
+    TakeAction(CreateAction(action));
+  }
+}
+
 agent::action::Action *Agent::CreateAction(const ActionID &action) {
-  agent::action::Action *new_action;
-  // Create a action at time env_->timestamp()
+  // Create a action
   using ::agent::action::ActionType;
+
   switch (action.action_taken) {
     case ActionType::CROP_ADD:
-      new_action = new agent::action::crop::Add(
-          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
-          kCornTypeName);
-      break;
-    case ActionType::WATER_CROP:
-      new_action = new agent::action::crop::Water(
-          environment::Coordinate(action.row, action.col), env_->time_step(), 1,
-          1);
-      break;
+      return new agent::action::crop::Add(
+          environment::Coordinate(action.row, action.col),
+          action.start_time_step, action.duration, action.crop_type_name);
+    case ActionType::CROP_REMOVE:
+      return new agent::action::crop::Remove(
+          environment::Coordinate(action.row, action.col),
+          action.start_time_step, action.duration);
     case ActionType::CROP_HARVEST:
-      new_action = new agent::action::crop::Harvest(
-          environment::Coordinate(action.row, action.col), env_->time_step(),
-          1);
-      break;
+      return new agent::action::crop::Harvest(
+          environment::Coordinate(action.row, action.col),
+          action.start_time_step, action.duration);
+    case ActionType::WATER_CROP:
+      // TODO: Change the water amont in the future, set it to 1 for now
+      return new agent::action::crop::Water(
+          environment::Coordinate(action.row, action.col),
+          action.start_time_step, action.duration, 1);
   }
-  // Remember to delete action
-  return new_action;
+  return nullptr;
 }
+
 Agent::ReturnCodes Agent::TakeAction(const agent::action::Action *action) {
   if (action == nullptr) {
     return INVALID_ARGUMENT;
@@ -59,7 +77,6 @@ Agent::ReturnCodes Agent::TakeAction(const agent::action::Action *action) {
 
   env_->ReceiveAction(action);
   DeductResources(action->cost());
-
   return SUCCESS;
 }
 
