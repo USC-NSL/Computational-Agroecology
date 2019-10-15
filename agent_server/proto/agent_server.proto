@@ -8,7 +8,8 @@ message CreateEnvironmentRequest {
   string name = 1;
   data_format.Config config = 2;
   fixed64 timestamp_epoch_count = 3;
-  data_format.Terrain terrain = 4;
+  fixed64 time_step_epoch_count = 4;
+  fixed64 terrain_size = 5;
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
@@ -21,13 +22,15 @@ message DeleteEnvironmentRequest {
 // Empty since sucess/failure is signaled via gRPC status.
 message DeleteEnvironmentResponse {}
 
-message CreateAgentRequest {
+message CreateQLearningAgentRequest {
   string agent_name = 1;
   string environment_name = 2;
+  int64 row = 3;
+  int64 col = 4;
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message CreateAgentResponse {}
+message CreateQLearningAgentResponse {}
 
 message DeleteAgentRequest {
   string name = 1;
@@ -44,13 +47,13 @@ message GetEnvironmentResponse {
   data_format.Environment environment = 1;
 }
 
-message SimulateToTimeRequest {
+message SimulateToTimeStepRequest {
   string environment_name = 1;
-  sint64 timestamp_epoch_count = 2;
+  sint64 time_step = 2;
 }
 
 // Empty since sucess/failure is signaled via gRPC status.
-message SimulateToTimeResponse {}
+message SimulateToTimeStepResponse {}
 
 message AgentActionConfig {
   message Cost {
@@ -63,9 +66,9 @@ message AgentActionConfig {
     uint64 count = 2;
   }
 
-  repeated data_format.Terrain.Coordinate applied_range = 1;
-  sint64 start_time_epoch_count = 2;
-  sint64 end_time_epoch_count = 3;
+  repeated data_format.Coordinate applied_range = 1;
+  sint64 start_time_step = 2;
+  sint64 end_time_step = 3;
   repeated Cost cost = 4;
 }
 
@@ -89,10 +92,10 @@ message AgentRemoveCropResponse {}
 service AgentServer {
   rpc CreateEnvironment (CreateEnvironmentRequest) returns (CreateEnvironmentResponse);
   rpc DeleteEnvironment (DeleteEnvironmentRequest) returns (DeleteEnvironmentResponse);
-  rpc CreateAgent (CreateAgentRequest) returns (CreateAgentResponse);
+  rpc CreateQLearningAgent (CreateQLearningAgentRequest) returns (CreateQLearningAgentResponse);
   rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentResponse);
   rpc GetEnvironment (GetEnvironmentRequest) returns (GetEnvironmentResponse);
-  rpc SimulateToTime (SimulateToTimeRequest) returns (SimulateToTimeResponse);
+  rpc SimulateToTimeStep (SimulateToTimeStepRequest) returns (SimulateToTimeStepResponse);
   rpc AgentAddCrop (AgentAddCropRequest) returns (AgentAddCropResponse);
   rpc AgentRemoveCrop (AgentRemoveCropRequest) returns (AgentRemoveCropResponse);
 }

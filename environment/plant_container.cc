@@ -44,7 +44,7 @@ bool PlantContainer::DelPlant(const Coordinate &coordinate) {
   return false;
 }
 
-Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
+Plant *PlantContainer::GetPlant(const Coordinate &coordinate) {
   point_t position = coordinate.To2DVector();
   size_t index = kdtree_->nearest_index(position);
   if (index < plants_.size() &&
@@ -52,6 +52,10 @@ Plant *PlantContainer::FindPlant(const Coordinate &coordinate) {
     return plants_[index];
   }
   return nullptr;
+}
+
+const Plant *PlantContainer::GetPlant(const Coordinate &coordinate) const {
+  return GetPlant(coordinate);
 }
 
 bool PlantContainer::CheckPosition(const Coordinate &position,

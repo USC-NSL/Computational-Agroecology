@@ -11,17 +11,16 @@ namespace environment {
 class SoilContainer {
  public:
   // TODO: implement the constructor by physical unit
+  // Temporary constructor
+  // Currently constructs a square grid with size of `size`. In each grid the
+  // soil instances are dumb instances.
   SoilContainer(const size_t size)
       : soils_(size,
                std::vector<Soil>(size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0))) {}
-  Soil *FindSoilByCoord(const Coordinate &coordinate);
-  Soil *FindSoilByCoord(const double x, const double y);
-  std::vector<Soil *> FindSoilByCoords(const Coordinate &coordinate,
-                                       const double x_length,
-                                       const double y_length);
-  std::vector<Soil *> FindSoilByCoords(const double x, const double y,
-                                       const double x_length,
-                                       const double y_length);
+
+  // Retrieves a soil instance by giving its position (`struct Coordinate`)
+  Soil *GetSoil(const Coordinate &coordinate);
+  const Soil *GetSoil(const Coordinate &coordinate) const;
 
  private:
   std::vector<std::vector<Soil>> soils_;

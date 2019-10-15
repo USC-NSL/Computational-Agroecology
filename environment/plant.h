@@ -61,19 +61,7 @@ class Plant {
 
   virtual ~Plant() {}
 
-  const std::string &name() const { return name_; }
-
-  const double root_size() const { return root_size_; }
-  void set_root_size(const double root_size) { root_size_ = root_size; }
-
-  const Coordinate &position() const { return position_; }
-
-  const double trunk_size() const { return trunk_size_; }
-  // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
-  // modify the test as well.
-  void set_trunk_size(const double trunk_size) { trunk_size_ = trunk_size; }
-
-  // Harvest this plant. This should return the value of yeild.
+  // Harvest this plant. This should return the value of yield.
   int Harvest();
 
   // TODO: Specify this function more completely and implement in subclasses.
@@ -86,6 +74,26 @@ class Plant {
   // TODO: Figure out a way to trigger this function every timestep.
   virtual Resources GrowStep(const int64_t num_time_step,
                              const Resources &available) = 0;
+
+  const std::string &name() const { return name_; }
+
+  const Coordinate &position() const { return position_; }
+
+  double trunk_size() const { return trunk_size_; }
+  // TODO: deprecate SetTrunkSize() later. It should not be public. Remember to
+  // modify the test as well.
+  void set_trunk_size(const double trunk_size) { trunk_size_ = trunk_size; }
+
+  double root_size() const { return root_size_; }
+  void set_root_size(const double root_size) { root_size_ = root_size; }
+
+  int health() const { return health_; }
+  bool flowering() const { return flowering_; }
+  double height() const { return height_; }
+  int accumulated_gdd() const { return accumulated_gdd_; }
+  Maturity maturity() const { return maturity_; }
+  int produce() const { return produce_; }
+  const PlantParams &params() const { return params_; }
 
  protected:
   // Constructs a generic plant with default values, only for child class use.

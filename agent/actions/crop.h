@@ -35,6 +35,8 @@ class Add : public Action {
 
   void Execute(environment::Terrain *terrain) const override;
 
+  const std::string &crop_type_name() const { return crop_type_name_; }
+
   bool operator==(const Add &rhs) const;
 
  private:

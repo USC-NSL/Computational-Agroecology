@@ -17,8 +17,13 @@ class PlantContainer {
   Plant *AddPlant(const std::string &plant_name, const Coordinate &coordinate);
   bool DelPlant(const Plant &plant);
   bool DelPlant(const Coordinate &coordinate);
-  Plant *FindPlant(const Coordinate &coordinate);
+
+  Plant *GetPlant(const Coordinate &coordinate);
+  const Plant *GetPlant(const Coordinate &coordinate) const;
+
   PlantContainer() : kdtree_(nullptr){};
+
+  const std::vector<Plant *> &plants() const { return plants_; }
 
  private:
   bool CheckPosition(const Coordinate &position, const double size);

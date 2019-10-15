@@ -116,7 +116,7 @@ void Harvest::Execute(environment::Terrain *terrain) const {
 
   for (const auto &c : applied_range_) {
     // TODO: generalize the harvest / yield handling
-    environment::Plant *plant = terrain->plant_container_.FindPlant(c);
+    environment::Plant *plant = terrain->plant_container_.GetPlant(c);
     if (plant != nullptr) {
       int yield = plant->Harvest();
       terrain->yield_ += yield;
@@ -157,7 +157,7 @@ void Water::Execute(environment::Terrain *terrain) const {
   }
 
   for (const auto &c : applied_range_) {
-    terrain->soil_container_.FindSoilByCoord(c)->water_content += water_amount_;
+    terrain->soil_container_.GetSoil(c)->water_content += water_amount_;
   }
 }
 

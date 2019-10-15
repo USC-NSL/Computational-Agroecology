@@ -37,6 +37,29 @@ $ [sudo] cp *.a /usr/lib
 $ [sudo] apt-get install freeglut3 freeglut3-dev cmake libglew-dev mesa-common-dev build-essential libglew-dev libglm-dev
 ```
 
+### gRPC (This is only required for agent server)
+
+**Dependency**
+```shell
+$ [sudo] apt install build-essential autoconf libtool pkg-config
+```
+**Clone the gRPC repository (including submodules)**
+```shell
+$ git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc ~/grpc
+$ cd ~/grpc
+$ git submodule update --init
+```
+**Make and install gRPC**
+```shell
+$ make
+$ [sudo] make install
+```
+**Protoc**
+```shell
+$ cd ~/grpc/third_party/protobuf
+$ [sudo] make install
+```
+
 ## Load submodule
 
 ```shell
@@ -44,22 +67,41 @@ $ git submodule update --init --recursive
 ```
 
 ## Build
+
+### simulator
 ```shell
 $ make
 ```
 The binary executable file will be named `main` under the directory `environment`.
 
+### agent grpc server
+```shell
+$ make agent_server
+```
+The binary executable will be named `agent_server` under the directory `agent_server`.
+
 # Unit tests
 
 ## Build
 
+### simulator
 ```shell
 $ make all_test
 ```
 
+### agent grpc server
+```shell
+$ make agent_server_test
+```
+
 All test binary will be built under the ```tests``` directory.
 
-## Run all tests
+## Run all tests for simulator
 ```shell
 $ make all_test_run
+```
+
+## Run all tests for agent grpc server
+```shell
+$ make agent_server_test_run
 ```
