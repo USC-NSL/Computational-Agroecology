@@ -118,8 +118,7 @@ PlantRadiation::CalculateInterceptDailyRadiance(
   return {0.0, 0.0};
 }
 
-
-// TODO: Should this be a static function ??? 
+// TODO: Should this be a static function ???
 
 PlantRadiation::AbsorbedPhotosyntheticallyActiveRadiation
 PlantRadiation::CalculateAbsorbedHourPAR(
@@ -186,7 +185,7 @@ PlantRadiation::CalculateAbsorbedHourPAR(
   return {I_sunlit, I_shaded};
 }
 
-// TODO: Should this be a static function ??? 
+// TODO: Should this be a static function ???
 
 PlantRadiation::LeafIndexArea PlantRadiation::CalculateLai(
     const double extinction_coefficient_direct) {
