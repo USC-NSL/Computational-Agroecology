@@ -18,22 +18,35 @@ namespace environment {
 // member variables in this class.
 class PlantRadiation {
  public:
-
-   // Photosynthetically Active Radiation is usually abbreviated as PAR.
+  // Photosynthetically Active Radiation is usually abbreviated as PAR.
   struct AbsorbedPhotosyntheticallyActiveRadiation {
     // Photosynthetically active radiation absorbed by sunlit leaves
     double sunlit;
     // Photosynthetically active radiation absorbed by shaded leaves
     double shaded;
   };
-  
+
+  struct LeafIndexArea {
+    // Sunlit leaf area index (the total area of sunlit leaves in a unit ground
+    // area)
+    double sunlit;
+    // Shaded leaf area index (the total area of shaded leaves in a unit ground
+    // area)
+    double shaded;
+  };
+
+  // Returns the sunlit leaf area index (sunlit leaf area per unit ground area)
+  // and shaded leaf area index (shaded leaf area per unit ground area) given
+  // k_dr (a calculated constant).
+  static LeafIndexArea CalculateLai(const double extinction_coefficient_direct);
+
   // Returns the total flux density absorbed by sunlit leaves and shaded leaves
   // (W m^-2) given direct, diffuse radiation (W m^-2), and extinction
   // coefficient for direct fluexes (k_dr).
   static AbsorbedPhotosyntheticallyActiveRadiation CalculateAbsorbedHourPAR(
       const double direct_radiation, const double diffuse_radiation,
       const double extinction_coefficient_direct);
-  
+
   PlantRadiation(const double leaf_index_area, const Meteorology &meteorology);
 
   // Updates all information according to the provided `Meteorology`.
@@ -54,15 +67,6 @@ class PlantRadiation {
     double direct;
     // Diffuse solar radiation intercepted by the canopies (W m^-2)
     double diffuse;
-  };
-
-  struct LeafIndexArea {
-    // Sunlit leaf area index (the total area of sunlit leaves in a unit ground
-    // area)
-    double sunlit;
-    // Shaded leaf area index (the total area of shaded leaves in a unit ground
-    // area)
-    double shaded;
   };
 
   // Has a private `meteorology_` so that this class can work independently.
@@ -130,11 +134,6 @@ class PlantRadiation {
   // time of sunrise and sunset (hours).
   InterceptRadiance CalculateInterceptDailyRadiance(
       const double solar_hour_sunrise, const double solar_hour_sunset);
-
-  // Returns the sunlit leaf area index (sunlit leaf area per unit ground area)
-  // and shaded leaf area index (shaded leaf area per unit ground area) given
-  // k_dr (a calculated constant).
-  LeafIndexArea CalculateLai(const double extinction_coefficient_direct) const;
 };
 
 }  // namespace environment
