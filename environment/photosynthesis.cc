@@ -102,6 +102,7 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
   double const ABS[5] = {0.0469101, 0.2307534, 0.5000000, 0.7692465, 0.9530899};
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
 
+  // From formula 6.37 on page 140
   double dTsr = Sunrise();
   double dIval = Sunset() - dTsr;
   double dAssim = 0.0;
