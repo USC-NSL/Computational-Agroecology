@@ -121,7 +121,7 @@ PlantRadiation::CalculateInterceptDailyRadiance(
 PlantRadiation::AbsorbedPhotosyntheticallyActiveRadiation
 PlantRadiation::CalculateAbsorbedHourPAR(
     const double direct_radiation, const double diffuse_radiation,
-    const double extinction_coefficient_direct) const {
+    const double extinction_coefficient_direct) {
   // reflection coefficient
   constexpr double kReflectionCoefficient = 0.04;
   // scatter coefficient
@@ -184,7 +184,7 @@ PlantRadiation::CalculateAbsorbedHourPAR(
 }
 
 PlantRadiation::LeafIndexArea PlantRadiation::CalculateLai(
-    const double extinction_coefficient_direct) const {
+    const double extinction_coefficient_direct) {
   // Formula [3.41] in book p.69
   // L_sl = (1 - exp(-k_dr * L)) / k_dr
   double lai_sunlit = 0.0;
