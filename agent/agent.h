@@ -31,6 +31,7 @@ class Agent {
   Agent(const std::string &name, environment::Environment *env);
   Agent(const std::string &name, environment::Environment *env,
         const Resources &owned_resources);
+        
   enum ReturnCodes { SUCCESS = 0, INVALID_ARGUMENT, NOT_ENOUGH_RESOURCES };
 
   // modifiers
