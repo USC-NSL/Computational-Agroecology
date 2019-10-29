@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "agent/actions/action.h"
+#include "config/terrain_raw_data.h"
 #include "environment/coordinate.h"
 #include "environment/plant_container.h"
 #include "environment/soil_container.h"
@@ -18,7 +19,7 @@ class Terrain {
   // Constructor
   // TODO: add more constructors to import different kinds of terrain
   // currently, this is just a dumb constructor which ignores lots of details
-  Terrain(const size_t size);
+  Terrain(const config::TerrainRawData &terrain_raw_data);
 
   // Accessors
   int yield() const { return yield_; }

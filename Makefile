@@ -20,6 +20,7 @@ MAIN_NAME := ./environment/main
 CONFIG_PATH := ./config
 CONFIG_OBJ := $(CONFIG_PATH)/config.o \
 	$(CONFIG_PATH)/location.o \
+	$(CONFIG_PATH)/terrain_raw_data.o \
 
 # components in environment
 ENVIRONMENT_PATH := ./environment

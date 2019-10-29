@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "config/config.h"
+#include "config/terrain_raw_data.h"
 #include "environment/climate.h"
 #include "environment/meteorology.h"
 #include "environment/terrain.h"
@@ -19,6 +20,7 @@ namespace environment {
 class Environment {
  public:
   Environment(const config::Config &config,
+              const config::TerrainRawData &terrain_raw_data,
               const std::chrono::system_clock::time_point &time,
               const std::chrono::duration<int> &time_step_length);
 

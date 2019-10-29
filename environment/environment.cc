@@ -5,6 +5,7 @@
 namespace environment {
 
 Environment::Environment(const config::Config &config,
+                         const config::TerrainRawData &terrain_raw_data,
                          const std::chrono::system_clock::time_point &time,
                          const std::chrono::duration<int> &time_step_length)
     : config_(config),
@@ -15,7 +16,7 @@ Environment::Environment(const config::Config &config,
       weather_(0.0, 0.0, 0.0, 0.0, 0.0,
                0.0),  // TODO: Get weather data and put them into this struct.
       meteorology_(time, config.location, climate_.climate_zone, weather_),
-      terrain_(Terrain(3)) {  // TODO: Create some data structure here
+      terrain_(terrain_raw_data) {  // TODO: Create some data structure here
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
