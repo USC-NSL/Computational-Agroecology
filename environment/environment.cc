@@ -101,6 +101,15 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   {
     time_step_++;
 
+    // Iterate through all plants
+    // std::vector<const Plant *> all_plants = terrain_.GetAllPlants();
+    // for (std::vector<const Plant *>::iterator it = terrain_.GetAllPlants().begin(); it != all_plants.end(); ++it) 
+    // {
+      // const Plant* plant = (*it);
+
+
+    // }
+
     // daily soil water content (in mm day-1):
     // double dPotE = dETs * 1000.0 / (2454000.0 * 998.0);
     // double dPotT = dETc * 1000.0 / (2454000.0 * 998.0);
