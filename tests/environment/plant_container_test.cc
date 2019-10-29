@@ -20,7 +20,7 @@ TEST(PlantContainerTest, AddPlantTest) {
   Plant *plant2 = plant_container.AddPlant(kBeanTypeName, pos);
   ASSERT_EQ(nullptr, plant2);
 
-  Plant *find = plant_container.FindPlant(pos);
+  Plant *find = plant_container.GetPlant(pos);
   EXPECT_EQ(plant1, find);
 }
 
@@ -37,12 +37,12 @@ TEST(PlantContainerTest, DeletePlantTest) {
   auto position = plant1->position();
   EXPECT_FALSE(plant_container.DelPlant({1.0, 1.0}));
   EXPECT_TRUE(plant_container.DelPlant(position));
-  EXPECT_EQ(nullptr, plant_container.FindPlant(position));
+  EXPECT_EQ(nullptr, plant_container.GetPlant(position));
   EXPECT_FALSE(plant_container.DelPlant(position));
 
   position = plant2->position();
   EXPECT_TRUE(plant_container.DelPlant(*plant2));
-  EXPECT_EQ(nullptr, plant_container.FindPlant(position));
+  EXPECT_EQ(nullptr, plant_container.GetPlant(position));
 }
 
 int main(int argc, char **argv) {
