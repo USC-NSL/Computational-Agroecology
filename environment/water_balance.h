@@ -7,7 +7,7 @@ namespace environment {
 
 class WaterBalance {
  public:
-  // This struct returns the amount of water in both layers of soil.
+    // This struct returns the amount of water in both layers of soil.
   //   For modelling purposes, the soil is treated as having only two layers
   //   which interact with each other, and hold separate contents.
   struct DailyWaterContentReturn {

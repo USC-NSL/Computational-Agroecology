@@ -11,6 +11,7 @@
 #include "environment/climate.h"
 #include "environment/meteorology.h"
 #include "environment/terrain.h"
+#include "environment/water_balance.h"
 #include "environment/weather.h"
 
 namespace environment {
