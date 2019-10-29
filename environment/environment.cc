@@ -1,4 +1,6 @@
 #include "environment.h"
+
+#include "environment/grow.h"
 #include "environment/water_balance.h"
 
 #include <ctime>
@@ -133,7 +135,9 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
                                           total_flux_density_shaded_potential);
       plant->set_water_content(new_water_content);
 
-      
+      // TODO: This is just a dummy function for now; input other factors like
+      // sunlight and water
+      Grow::GrowPlant(*plant);
     }
   }
 

@@ -24,7 +24,8 @@ CONFIG_OBJ := $(CONFIG_PATH)/config.o \
 
 # components in environment
 ENVIRONMENT_PATH := ./environment
-ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/water_balance.o \
+ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/grow.o \
+	$(ENVIRONMENT_PATH)/water_balance.o \
 	$(ENVIRONMENT_PATH)/climate.o \
     $(ENVIRONMENT_PATH)/coordinate.o \
 	$(ENVIRONMENT_PATH)/environment.o \

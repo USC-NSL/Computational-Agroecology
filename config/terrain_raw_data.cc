@@ -2,13 +2,11 @@
 
 namespace config {
 
-TerrainRawData::TerrainRawData(const size_t size, const int yield) 
-  : size(size),
-  yield(yield) {}
+TerrainRawData::TerrainRawData(const size_t size, const int yield)
+    : size(size), yield(yield) {}
 
 bool operator==(const TerrainRawData &lhs, const TerrainRawData &rhs) {
-  return (lhs.size == rhs.size) &&
-    (lhs.yield == rhs.yield);
+  return (lhs.size == rhs.size) && (lhs.yield == rhs.yield);
 }
 
 }  // namespace config
