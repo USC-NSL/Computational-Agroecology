@@ -5,7 +5,6 @@
 
 #include "agent/actions/crop.h"
 #include "agent/agent.h"
-#include "agent/q_learning.h"
 #include "environment/environment.h"
 
 // This is an experimental main
@@ -23,7 +22,7 @@ int main() {
   std::string agent_name = "q_learning";
   environment::Environment *env_pointer = &env;
   // Declare Qlearning
-  agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
+  agent::Agent agent_test(agent_name, env_pointer);
   // Create Action
   agent::ActionID action = {
       agent_test.RandomInt(0, terrain.size() - 1),

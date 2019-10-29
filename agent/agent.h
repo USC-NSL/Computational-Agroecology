@@ -53,13 +53,13 @@ class Agent {
   inline const environment::Environment *environment() const { return env_; }
 
   inline const Resources owned_resource() const { return owned_resources_; }
-
- protected:
-  // constructors which can only be used in heritance
-  // only children can call these
+  
   Agent(const std::string &name, environment::Environment *env);
   Agent(const std::string &name, environment::Environment *env,
         const Resources &owned_resources);
+ protected:
+  // constructors which can only be used in heritance
+  // only children can call these
 
   // Name of this agent
   std::string name_;

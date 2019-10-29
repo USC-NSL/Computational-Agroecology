@@ -36,7 +36,7 @@ ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
 
 # components in agent
 AGENT_PATH := ./agent
-AGENT_OBJ := $(AGENT_PATH)/agent.o $(AGENT_PATH)/q_learning.o
+AGENT_OBJ := $(AGENT_PATH)/agent.o 
 ACTION_PATH := $(AGENT_PATH)/actions
 ACTION_OBJ := $(ACTION_PATH)/action.o $(ACTION_PATH)/crop.o
 
@@ -77,8 +77,7 @@ ALL_OBJ :=	$(ENVIRONMENT_OBJ) \
 TEST_PATH := ./tests
 
 TEST_AGENT_PATH := $(TEST_PATH)/agent
-TEST_AGENT := $(TEST_AGENT_PATH)/agent_test \
-	$(TEST_AGENT_PATH)/qlearning_test
+TEST_AGENT := $(TEST_AGENT_PATH)/agent_test 
 
 TEST_AGENT_ACTIONS_PATH := $(TEST_AGENT_PATH)/actions
 TEST_AGENT_ACTIONS := $(TEST_AGENT_ACTIONS_PATH)/crop_test
