@@ -14,7 +14,8 @@ class PlantContainer {
  public:
   ~PlantContainer();
 
-  Plant *AddPlant(const std::string &plant_name, const Coordinate &coordinate, const Meteorology &meteorology);
+  Plant *AddPlant(const std::string &plant_name, const Coordinate &coordinate,
+                  const Meteorology &meteorology);
   bool DelPlant(const Plant &plant);
   bool DelPlant(const Coordinate &coordinate);
 

@@ -18,7 +18,7 @@ Environment::Environment(const config::Config &config,
                0.0),  // TODO: Get weather data and put them into this struct.
       meteorology_(time, config.location, climate_.climate_zone, weather_),
       terrain_(terrain_raw_data, meteorology_) {
-        // TODO: Create some data structure here
+  // TODO: Create some data structure here
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -99,32 +99,41 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   auto new_timestamp = timestamp_ + (time_step_diff * time_step_length_);
   // TODO: GLOG
 
-  while (time_step_ < time_step) 
-  {
+  while (time_step_ < time_step) {
     time_step_++;
 
-    // Iterate through all plants, need to be able to modify plants, so not const
+    // Iterate through all plants, need to be able to modify plants, so not
+    // const
     std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
-    for (std::vector<Plant *>::iterator it = all_plants.begin(); it != all_plants.end(); ++it) 
-    {
-      Plant* plant = (*it);
+    for (std::vector<Plant *>::iterator it = all_plants.begin();
+         it != all_plants.end(); ++it) {
+      Plant *plant = (*it);
 
-      PlantRadiation* plant_radiation = plant->GetPlantRadiation();
+      PlantRadiation *plant_radiation = plant->GetPlantRadiation();
       plant_radiation->Update(meteorology_);
 
-      // TODO: Do you need to actually get the soil flux instead? Where is it? Because we need that for water content in SOIL.
+      // TODO: Do you need to actually get the soil flux instead? Where is it?
+      // Because we need that for water content in SOIL.
       // TODO: The book uses these scalars? Why?
-      double total_flux_density_shaded_potential = plant_radiation->total_flux_density_shaded() * 1000.0 / (2454000.0 * 998.0);
-      double total_flux_density_sunlit_potential = plant_radiation->total_flux_density_sunlit() * 1000.0 / (2454000.0 * 998.0);
+      double total_flux_density_shaded_potential =
+          plant_radiation->total_flux_density_shaded() * 1000.0 /
+          (2454000.0 * 998.0);
+      double total_flux_density_sunlit_potential =
+          plant_radiation->total_flux_density_sunlit() * 1000.0 /
+          (2454000.0 * 998.0);
 
-      WaterBalance::DailyWaterContentReturn current_water_content = plant->water_content();
+      WaterBalance::DailyWaterContentReturn current_water_content =
+          plant->water_content();
       // TODO: How to determine rainfall here?
-      WaterBalance::DailyWaterContentReturn new_water_content = WaterBalance::DailyWaterContent(
-        0 /* rainfall */, current_water_content.water_amount_1, current_water_content.water_amount_2, 
-        total_flux_density_sunlit_potential, total_flux_density_shaded_potential);
+      WaterBalance::DailyWaterContentReturn new_water_content =
+          WaterBalance::DailyWaterContent(0 /* rainfall */,
+                                          current_water_content.water_amount_1,
+                                          current_water_content.water_amount_2,
+                                          total_flux_density_sunlit_potential,
+                                          total_flux_density_shaded_potential);
       plant->set_water_content(new_water_content);
 
-
+      
     }
   }
 

@@ -14,7 +14,8 @@ int main() {
   config::Config config("place name", location);
   config::TerrainRawData terrain_raw_data(3, 0);
 
-  environment::Environment env(config, terrain_raw_data, std::chrono::system_clock::now(),
+  environment::Environment env(config, terrain_raw_data,
+                               std::chrono::system_clock::now(),
                                std::chrono::hours(1));
 
   const std::string kBeanTypeName = "bean";

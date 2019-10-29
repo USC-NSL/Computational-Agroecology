@@ -18,7 +18,8 @@ void PlantBuilder::UnregisterPlant(const std::string &model_name) {
   models_.erase(model_name);
 }
 
-Plant *PlantBuilder::NewPlant(const std::string &model_name, const Meteorology &meteorology) {
+Plant *PlantBuilder::NewPlant(const std::string &model_name,
+                              const Meteorology &meteorology) {
   return NewPlant(model_name, meteorology, PlantParams());
 }
 

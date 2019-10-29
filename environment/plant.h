@@ -7,8 +7,8 @@
 
 #include "environment/coordinate.h"
 #include "environment/meteorology.h"
-#include "environment/soil.h"
 #include "environment/plant_radiation.h"
+#include "environment/soil.h"
 #include "environment/water_balance.h"
 
 namespace environment {
@@ -106,9 +106,7 @@ class Plant {
     return water_content_;
   }
 
-  PlantRadiation* GetPlantRadiation() const {
-    return plant_radiation_;
-  }
+  PlantRadiation *GetPlantRadiation() const { return plant_radiation_; }
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
@@ -124,7 +122,8 @@ class Plant {
         maturity_(SEED),
         produce_(0),
         params_(kDefaultParams),
-        leaf_index_area_(1) { }  // TODO: Set this value for leaf_index_area cleanly
+        leaf_index_area_(1) {
+  }  // TODO: Set this value for leaf_index_area cleanly
 
   void SetMeteorology(const Meteorology &meteorology) {
     meteorology_ = &meteorology;
@@ -175,9 +174,9 @@ class Plant {
   // A collection of static parameters of this plant.
   PlantParams params_;
 
-  PlantRadiation* plant_radiation_;
+  PlantRadiation *plant_radiation_;
 
-  const Meteorology* meteorology_;
+  const Meteorology *meteorology_;
 
   const double leaf_index_area_;
 
