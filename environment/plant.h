@@ -102,8 +102,12 @@ class Plant {
     water_content_ = water_content;
   }
 
-  WaterBalance::DailyWaterContentReturn get_water_content() {
+  WaterBalance::DailyWaterContentReturn water_content() const {
     return water_content_;
+  }
+
+  PlantRadiation* GetPlantRadiation() const {
+    return plant_radiation_;
   }
 
  protected:
@@ -132,10 +136,6 @@ class Plant {
     for (const auto &kv : params) {
       params_[kv.first] = kv.second;
     }
-  }
-
-  PlantRadiation* GetPlantRadiation() const {
-    return plant_radiation_;
   }
 
  private:

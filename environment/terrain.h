@@ -67,6 +67,11 @@ class Terrain {
                                       plant_container_.plants().end());
   }
 
+  // Returns the full list of mutable plants in this terrain
+  std::vector<Plant *> GetAllPlantsMutable() const {
+    return plant_container_.plants();
+  }
+
   // Modifiers
   void ExecuteAction(const agent::action::Action &action);
 

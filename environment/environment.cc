@@ -1,4 +1,5 @@
 #include "environment.h"
+#include "water_balance.h"
 
 #include <ctime>
 
@@ -101,34 +102,30 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   {
     time_step_++;
 
-    // Iterate through all plants
-    // std::vector<const Plant *> all_plants = terrain_.GetAllPlants();
-    // for (std::vector<const Plant *>::iterator it = terrain_.GetAllPlants().begin(); it != all_plants.end(); ++it) 
-    // {
-      // const Plant* plant = (*it);
+    // Iterate through all plants, need to be able to modify plants, so not const
+    std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
+    for (std::vector<Plant *>::iterator it = all_plants.begin(); it != all_plants.end(); ++it) 
+    {
+      Plant* plant = (*it);
+
+      PlantRadiation* plant_radiation = plant->GetPlantRadiation();
+      plant_radiation->Update(meteorology_);
+
+      // TODO: Do you need to actually get the soil flux instead? Where is it? Because we need that for water content in SOIL.
+      // TODO: The book uses these scalars? Why?
+      double total_flux_density_shaded_potential = plant_radiation->total_flux_density_shaded() * 1000.0 / (2454000.0 * 998.0);
+      double total_flux_density_sunlit_potential = plant_radiation->total_flux_density_sunlit() * 1000.0 / (2454000.0 * 998.0);
+
+      WaterBalance::DailyWaterContentReturn current_water_content = plant->water_content();
+      // TODO: How to determine rainfall here?
+      // WaterBalance::DailyWaterContentReturn new_water_content = WaterBalance::DailyWaterContent(
+      //   0, current_water_content.water_amount_1, current_water_content.water_amount_2, 
+      //   total_flux_density_sunlit_potential, total_flux_density_shaded_potential);
+      // plant->set_water_content(new_water_content);
 
 
-    // }
-
-    // daily soil water content (in mm day-1):
-    // double dPotE = dETs * 1000.0 / (2454000.0 * 998.0);
-    // double dPotT = dETc * 1000.0 / (2454000.0 * 998.0);
-    // DailyWaterContent(dPotE, dPotT);
+    }
   }
-
-  // TODO: call all other simulators
-
-  // Meteorology simulator
-
-  // Water simulator
-  // Photosynthesis simulator
-  // Energy balance simulator
-  // plant radiation simulator
-
-  // TODO: plant growth model
-  
-
-  // Update the information of environment
 
   time_step_ = time_step;
   timestamp_ = new_timestamp;
