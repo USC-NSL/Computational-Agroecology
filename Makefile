@@ -16,14 +16,17 @@ INCLUDES += -I $(THIRD_PARTY_PATH)/Optimized-Photon-Mapping/src
 
 MAIN_NAME := ./environment/main
 
+# components in config
+CONFIG_PATH := ./config
+CONFIG_OBJ := $(CONFIG_PATH)/config.o \
+	$(CONFIG_PATH)/location.o \
+
 # components in environment
 ENVIRONMENT_PATH := ./environment
 ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
-	$(ENVIRONMENT_PATH)/config.o \
-	$(ENVIRONMENT_PATH)/coordinate.o \
+    $(ENVIRONMENT_PATH)/coordinate.o \
 	$(ENVIRONMENT_PATH)/environment.o \
 	$(ENVIRONMENT_PATH)/energy_balance.o \
-	$(ENVIRONMENT_PATH)/location.o \
 	$(ENVIRONMENT_PATH)/meteorology.o \
 	$(ENVIRONMENT_PATH)/plant_builder.o \
 	$(ENVIRONMENT_PATH)/plant_container.o \
@@ -67,7 +70,8 @@ PHOTON_SIMULATOR_OBJ := $(THIRDPARTY_MATH_VECTOR_OBJ) \
 SIMULATOR_OBJ := $(SIMULATOR_PATH)/photon_simulator.o \
   $(PHOTON_SIMULATOR_OBJ)
 
-ALL_OBJ :=	$(ENVIRONMENT_OBJ) \
+ALL_OBJ :=	$(CONFIG_OBJ) \
+	$(ENVIRONMENT_OBJ) \
 	$(AGENT_OBJ) \
 	$(ACTION_OBJ) \
 	$(PLANTS_OBJ) \
@@ -131,6 +135,7 @@ $(PHOTON_SIMULATOR_PATH)/KDTree.o: $(THIRDPARTY_KDTREE_PATH)/KDTree.cpp $(THIRDP
 all: $(ALL_OBJ)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(ALL_OBJ) $(MAIN_NAME).cc -o $(MAIN_NAME) $(OPENGLLIBS)
 
+config: $(CONFIG_OBJ)
 environment: $(ENVIRONMENT_OBJ)
 agent: $(AGENT_OBJ)
 action: $(ACTION_OBJ)

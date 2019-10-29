@@ -4,7 +4,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "environment/location.h"
+#include "config/location.h"
 #include "environment/utility.h"
 
 namespace environment {

@@ -21,6 +21,14 @@ class SoilContainer {
   // Retrieves a soil instance by giving its position (`struct Coordinate`)
   Soil *GetSoil(const Coordinate &coordinate);
   const Soil *GetSoil(const Coordinate &coordinate) const;
+  Soil *GetSoil(const double x, const double y);
+  const Soil *GetSoil(const double x, const double y) const;
+  std::vector<Soil *> GetMultipleSoil(const Coordinate &coordinate,
+                                      const double x_length,
+                                      const double y_length);
+  std::vector<Soil *> GetMultipleSoil(const double x, const double y,
+                                      const double x_length,
+                                      const double y_length);
 
  private:
   std::vector<std::vector<Soil>> soils_;

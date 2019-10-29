@@ -5,7 +5,7 @@
 #include <tuple>
 
 #include "environment/climate.h"
-#include "environment/location.h"
+#include "config/location.h"
 #include "environment/weather.h"
 
 constexpr double kPI = 3.14159265358979323846;
@@ -48,7 +48,7 @@ class Meteorology {
   // Given sufficient information, present the state about meteorology at a
   // single specific moment.
   Meteorology(const std::chrono::system_clock::time_point &local_time,
-              const Location &location, const Climate::ZoneType climate_zone,
+              const config::Location &location, const Climate::ZoneType climate_zone,
               const Weather &weather);
 
   // Modifiers
@@ -132,7 +132,7 @@ class Meteorology {
   };
 
   // Information binded to the current geographic location
-  const Location &geo_location_;
+  const config::Location &geo_location_;
   const Climate::ZoneType &climate_zone_;
 
   // Information about the current date and time

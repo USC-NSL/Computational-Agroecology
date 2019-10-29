@@ -7,7 +7,7 @@ namespace environment {
 
 Meteorology::Meteorology(
     const std::chrono::system_clock::time_point &local_time,
-    const Location &location, const Climate::ZoneType climate_zone,
+    const config::Location &location, const Climate::ZoneType climate_zone,
     const Weather &weather)
     : geo_location_(location), climate_zone_(climate_zone) {
   UpdateGeoData();

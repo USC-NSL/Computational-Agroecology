@@ -1,6 +1,6 @@
 #include "location.h"
 
-namespace environment {
+namespace config {
 
 Location::Location(const double longitude_left, const double longitude_right,
                    const double latitude_top, const double latitude_bottom)
@@ -16,4 +16,4 @@ bool operator==(const Location &lhs, const Location &rhs) {
          (lhs.latitude_bottom == rhs.latitude_bottom);
 }
 
-}  // namespace environment
+}  // namespace config

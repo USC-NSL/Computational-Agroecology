@@ -4,19 +4,18 @@
 
 namespace environment {
 
-Environment::Environment(const Config &config,
+Environment::Environment(const config::Config &config,
                          const std::chrono::system_clock::time_point &time,
-                         const std::chrono::duration<int> &time_step_length,
-                         const Terrain &terrain)
+                         const std::chrono::duration<int> &time_step_length)
     : config_(config),
       climate_(config),
       timestamp_(time),
       time_step_length_(time_step_length),
       time_step_(0),
-      terrain_(terrain),
       weather_(0.0, 0.0, 0.0, 0.0, 0.0,
                0.0),  // TODO: Get weather data and put them into this struct.
-      meteorology_(time, config.location, climate_.climate_zone, weather_) {
+      meteorology_(time, config.location, climate_.climate_zone, weather_),
+      terrain_(Terrain(3)) {  // TODO: Create some data structure here
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -97,8 +96,27 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   auto new_timestamp = timestamp_ + (time_step_diff * time_step_length_);
   // TODO: GLOG
 
+  while (time_step_ < time_step) 
+  {
+    time_step_++;
+
+    // daily soil water content (in mm day-1):
+    // double dPotE = dETs * 1000.0 / (2454000.0 * 998.0);
+    // double dPotT = dETc * 1000.0 / (2454000.0 * 998.0);
+    // DailyWaterContent(dPotE, dPotT);
+  }
+
   // TODO: call all other simulators
+
+  // Meteorology simulator
+
+  // Water simulator
+  // Photosynthesis simulator
+  // Energy balance simulator
+  // plant radiation simulator
+
   // TODO: plant growth model
+  
 
   // Update the information of environment
 

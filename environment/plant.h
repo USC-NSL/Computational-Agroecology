@@ -7,6 +7,7 @@
 
 #include "environment/coordinate.h"
 #include "environment/soil.h"
+#include "environment/plant_radiation.h"
 
 namespace environment {
 
@@ -108,7 +109,9 @@ class Plant {
         accumulated_gdd_(0),
         maturity_(SEED),
         produce_(0),
-        params_(kDefaultParams) {}
+        params_(kDefaultParams) {
+          // TODO: Make leaf index a property of the plant, instead of being in PlantRadiation
+        }
 
   // Overrides internal parameters with the given `params`.
   void SetParams(const PlantParams &params) {
@@ -153,6 +156,8 @@ class Plant {
 
   // A collection of static parameters of this plant.
   PlantParams params_;
+
+  PlantRadiation* plant_radiation_;
 };
 
 }  // namespace environment

@@ -1,11 +1,11 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CONFIG_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CONFIG_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_CONFIG_CONFIG_H_
+#define COMPUTATIONAL_AGROECOLOGY_CONFIG_CONFIG_H_
 
 #include <string>
 
-#include "environment/location.h"
+#include "config/location.h"
 
-namespace environment {
+namespace config {
 
 // The configuration of this place
 struct Config {
@@ -19,6 +19,6 @@ struct Config {
 
 bool operator==(const Config &lhs, const Config &rhs);
 
-}  // namespace environment
+}  // namespace config
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CONFIG_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_CONFIG_CONFIG_H_
