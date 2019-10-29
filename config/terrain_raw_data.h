@@ -7,9 +7,10 @@ namespace config {
 
 // Geographical location
 struct TerrainRawData {
-  TerrainRawData(const size_t size);
+  TerrainRawData(const size_t size, const int yield);
 
   const size_t size;
+  const int yield;
 };
 
 bool operator==(const TerrainRawData &lhs, const TerrainRawData &rhs);

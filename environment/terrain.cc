@@ -9,7 +9,7 @@ namespace environment {
 
 // `class Terrain`
 Terrain::Terrain(const config::TerrainRawData &terrain_raw_data)
-    : size_(terrain_raw_data.size), yield_(0), soil_container_(terrain_raw_data.size) {}
+    : size_(terrain_raw_data.size), yield_(terrain_raw_data.yield), soil_container_(terrain_raw_data.size) {}
 
 void Terrain::ExecuteAction(const agent::action::Action &action) {
   action.Execute(this);
