@@ -9,6 +9,7 @@
 #include "environment/meteorology.h"
 #include "environment/soil.h"
 #include "environment/plant_radiation.h"
+#include "environment/water_balance.h"
 
 namespace environment {
 
@@ -97,6 +98,14 @@ class Plant {
   int produce() const { return produce_; }
   const PlantParams &params() const { return params_; }
 
+  void set_water_content(WaterBalance::DailyWaterContentReturn water_content) {
+    water_content_ = water_content;
+  }
+
+  WaterBalance::DailyWaterContentReturn get_water_content() {
+    return water_content_;
+  }
+
  protected:
   // Constructs a generic plant with default values, only for child class use.
   Plant(const std::string &name, const double trunk_size = 0.0,
@@ -123,6 +132,10 @@ class Plant {
     for (const auto &kv : params) {
       params_[kv.first] = kv.second;
     }
+  }
+
+  PlantRadiation* GetPlantRadiation() const {
+    return plant_radiation_;
   }
 
  private:
@@ -167,6 +180,8 @@ class Plant {
   const Meteorology* meteorology_;
 
   const double leaf_index_area_;
+
+  WaterBalance::DailyWaterContentReturn water_content_;
 };
 
 }  // namespace environment
