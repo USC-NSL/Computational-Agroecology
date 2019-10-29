@@ -19,7 +19,7 @@ class Terrain {
   // Constructor
   // TODO: add more constructors to import different kinds of terrain
   // currently, this is just a dumb constructor which ignores lots of details
-  Terrain(const config::TerrainRawData &terrain_raw_data);
+  Terrain(const config::TerrainRawData &terrain_raw_data, const Meteorology& meteorology);
 
   // Accessors
   int yield() const { return yield_; }
@@ -53,6 +53,10 @@ class Terrain {
     return soil_container_.GetSoil(coord);
   }
 
+  const Meteorology* GetMeteorology() const {
+    return &meteorology_;
+  }
+
   // Returns the full list of plants in this terrain
   std::vector<const Plant *> GetAllPlants() const {
     // Here we need to construct a new vector because the internal vector is
@@ -77,6 +81,7 @@ class Terrain {
 
   PlantContainer plant_container_;
   SoilContainer soil_container_;
+  Meteorology meteorology_;
 
   int yield_;
   // TODO: Now we assume the terrain to be a square space.

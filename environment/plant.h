@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "environment/coordinate.h"
+#include "environment/meteorology.h"
 #include "environment/soil.h"
 #include "environment/plant_radiation.h"
 
@@ -109,9 +110,13 @@ class Plant {
         accumulated_gdd_(0),
         maturity_(SEED),
         produce_(0),
-        params_(kDefaultParams) {
-          // TODO: Make leaf index a property of the plant, instead of being in PlantRadiation
-        }
+        params_(kDefaultParams),
+        leaf_index_area_(1) { }  // TODO: Set this value for leaf_index_area cleanly
+
+  void SetMeteorology(const Meteorology &meteorology) {
+    meteorology_ = &meteorology;
+    plant_radiation_ = new PlantRadiation(leaf_index_area_, *meteorology_);
+  }
 
   // Overrides internal parameters with the given `params`.
   void SetParams(const PlantParams &params) {
@@ -158,6 +163,10 @@ class Plant {
   PlantParams params_;
 
   PlantRadiation* plant_radiation_;
+
+  const Meteorology* meteorology_;
+
+  const double leaf_index_area_;
 };
 
 }  // namespace environment

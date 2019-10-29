@@ -11,8 +11,9 @@ PlantContainer::~PlantContainer() {
 }
 
 Plant *PlantContainer::AddPlant(const std::string &plant_name,
-                                const Coordinate &coordinate) {
-  Plant *new_plant = PlantBuilder::NewPlant(plant_name);
+                                const Coordinate &coordinate,
+                                const Meteorology &meteorology) {
+  Plant *new_plant = PlantBuilder::NewPlant(plant_name, meteorology);
   if (new_plant == nullptr) {
     return nullptr;
   }
