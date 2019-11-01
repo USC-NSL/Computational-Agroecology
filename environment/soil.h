@@ -13,7 +13,8 @@ namespace environment {
 // utility.h, and add to utility.h as needed.
 // TODO: Merge Soil and SoilCondition.
 // Ralph: The todos above are done.
-struct Soil {
+class Soil {
+ public:
   enum Texture { CLAY = 0, SILT, SAND };
 
   Soil(const Texture texture, const double pH, const double salinity,
@@ -26,6 +27,15 @@ struct Soil {
 
   void AddWaterToSoil(double water_amount);
 
+  const double pH() const { return pH_; }
+  const double salinity() const { return salinity_; }
+  const double organic_matter() const { return organic_matter_; }
+  const Texture texture() const { return texture_; }
+  const WaterBalance::DailyWaterContentReturn water_content() const {
+    return water_content_;
+  }
+
+ private:
   Texture texture_;
   double pH_;
   double salinity_;

@@ -108,7 +108,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
     // const
     std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
     for (auto &plant : all_plants) {
-      PlantRadiation plant_radiation = plant->GetPlantRadiation();
+      const PlantRadiation &plant_radiation = plant->plant_radiation();
       plant->UpdatePlantRadiation(meteorology_);
 
       // TODO: Do you need to actually get the soil flux instead? Where is it?
@@ -120,7 +120,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
           plant_radiation.total_flux_density_sunlit() * flux_density_factor;
 
       // TODO: Add rainfall amount to UpdateWaterContent
-      Coordinate plant_coordinate = plant->position();
+      const Coordinate &plant_coordinate = plant->position();
       Soil *soil = terrain_.GetSoil(plant_coordinate);
       soil->UpdateWaterContent(0 /* rainfall */,
                                total_flux_density_sunlit_potential,

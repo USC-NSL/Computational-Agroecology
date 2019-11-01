@@ -98,7 +98,7 @@ class Plant {
   int produce() const { return produce_; }
   const PlantParams &params() const { return params_; }
 
-  const PlantRadiation &GetPlantRadiation() const { return plant_radiation_; }
+  const PlantRadiation &plant_radiation() const { return plant_radiation_; }
 
   void UpdatePlantRadiation(const Meteorology &meteorology) {
     plant_radiation_.Update(meteorology);

@@ -28,6 +28,12 @@ class Terrain {
   size_t width() const { return size_; }
   size_t length() const { return size_; }
 
+  // When a crop / plant is added, it acts on and has access only to the
+  // "Terrain" object, and the newly created plant instance must have access to
+  // meteorology. But meteorology is normally only held within the envrionment.
+  // So we need to store a pointer to meteorology within the terrain
+  const Meteorology *meteorology() const { return meteorology_; }
+
   // Returns the pointer to a plant on the specified coordinate.
   // This pointer is owned by this class. Thus, the caller should not take care
   // of the returning pointer.
@@ -53,8 +59,6 @@ class Terrain {
   const Soil *GetSoil(const Coordinate &coord) const {
     return soil_container_.GetSoil(coord);
   }
-
-  const Meteorology *GetMeteorology() const { return meteorology_; }
 
   // Returns the full list of plants in this terrain
   std::vector<const Plant *> GetAllPlants() const {
