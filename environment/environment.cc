@@ -115,11 +115,9 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
       // Because we need that for water content in SOIL.
       // TODO: The book uses these scalars? Why?
       double total_flux_density_shaded_potential =
-          plant_radiation->total_flux_density_shaded() * 1000.0 /
-          (2454000.0 * 998.0);
+          plant_radiation->total_flux_density_shaded() * flux_density_factor;
       double total_flux_density_sunlit_potential =
-          plant_radiation->total_flux_density_sunlit() * 1000.0 /
-          (2454000.0 * 998.0);
+          plant_radiation->total_flux_density_sunlit() * flux_density_factor;
 
       // TODO: Add rainfall amount to UpdateWaterContent
       Coordinate plant_coordinate = plant->position();

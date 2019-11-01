@@ -120,6 +120,14 @@ class Environment {
                       std::vector<const agent::action::Action *>,
                       agent::action::ActionEndTimeComparator>
       starting_action_pq_;
+
+  // Explained on page 71, it's the amount of energy required to convert 1 kg of
+  // liquid water to vapor, without any change in temperature
+  static constexpr double latent_heat_of_vaporization_of_water = 2454000.0;
+  static constexpr double liquid_density_for_water_20c = 998.0;
+  static constexpr double flux_density_factor =
+      1000.0 /
+      (latent_heat_of_vaporization_of_water * liquid_density_for_water_20c);
 };
 
 std::ostream &operator<<(std::ostream &os, const Environment &env);
