@@ -1,6 +1,6 @@
 #include "environment.h"
 
-#include "environment/grow.h"
+#include "environment/resource.h"
 #include "environment/water_balance.h"
 
 #include <ctime>
@@ -107,10 +107,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
     // Iterate through all plants, need to be able to modify plants, so not
     // const
     std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
-    for (std::vector<Plant *>::iterator it = all_plants.begin();
-         it != all_plants.end(); ++it) {
-      Plant *plant = (*it);
-
+    for (auto &plant : all_plants) {
       PlantRadiation *plant_radiation = plant->GetPlantRadiation();
       plant_radiation->Update(meteorology_);
 
@@ -124,20 +121,14 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
           plant_radiation->total_flux_density_sunlit() * 1000.0 /
           (2454000.0 * 998.0);
 
-      WaterBalance::DailyWaterContentReturn current_water_content =
-          plant->water_content();
-      // TODO: How to determine rainfall here?
-      WaterBalance::DailyWaterContentReturn new_water_content =
-          WaterBalance::DailyWaterContent(0 /* rainfall */,
-                                          current_water_content.water_amount_1,
-                                          current_water_content.water_amount_2,
-                                          total_flux_density_sunlit_potential,
-                                          total_flux_density_shaded_potential);
-      plant->set_water_content(new_water_content);
+      plant->UpdateWaterContent(0 /* rainfall */,
+                                total_flux_density_sunlit_potential,
+                                total_flux_density_shaded_potential);
 
-      // TODO: This is just a dummy function for now; input other factors like
-      // sunlight and water
-      Grow::GrowPlant(*plant);
+      // TODO: Add in other factors like sunlight and water
+      // TODO: Figure out how to use this resource parameter
+      std::unordered_map<ResourceType, int64_t> resources = {};
+      plant->GrowStep(1, resources);
     }
   }
 

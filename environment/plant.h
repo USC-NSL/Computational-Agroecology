@@ -67,6 +67,10 @@ class Plant {
   // Harvest this plant. This should return the value of yield.
   int Harvest();
 
+  void UpdateWaterContent(double rainfall,
+                          double total_flux_density_sunlit_potential,
+                          double total_flux_density_shaded_potential);
+
   // TODO: Specify this function more completely and implement in subclasses.
   // Given the `available` resources, which should include all soil and non-soil
   // (e.g., light) resources, attempts to perform growing in the specified
@@ -126,8 +130,7 @@ class Plant {
   }  // TODO: Set this value for leaf_index_area cleanly
 
   void SetMeteorology(const Meteorology &meteorology) {
-    meteorology_ = &meteorology;
-    plant_radiation_ = new PlantRadiation(leaf_index_area_, *meteorology_);
+    plant_radiation_ = new PlantRadiation(leaf_index_area_, meteorology);
   }
 
   // Overrides internal parameters with the given `params`.
@@ -176,9 +179,7 @@ class Plant {
 
   PlantRadiation *plant_radiation_;
 
-  const Meteorology *meteorology_;
-
-  const double leaf_index_area_;
+  double leaf_index_area_;
 
   WaterBalance::DailyWaterContentReturn water_content_;
 };
