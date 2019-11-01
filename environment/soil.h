@@ -5,6 +5,7 @@
 
 #include "environment/resource.h"
 #include "environment/utility.h"
+#include "environment/water_balance.h"
 
 namespace environment {
 
@@ -16,16 +17,23 @@ struct Soil {
   enum Texture { CLAY = 0, SILT, SAND };
 
   Soil(const Texture texture, const double pH, const double salinity,
-       const double organic_matter, const double water_content);
+       const double organic_matter, const double water_content_layer_1,
+       const double water_content_layer_2);
 
-  Texture texture;
-  double pH;
-  double salinity;
-  double organic_matter;
+  void UpdateWaterContent(double rainfall,
+                          double total_flux_density_sunlit_potential,
+                          double total_flux_density_shaded_potential);
+
+  void AddWaterToSoil(double water_amount);
+
+  Texture texture_;
+  double pH_;
+  double salinity_;
+  double organic_matter_;
 
   Resources resources;
 
-  double water_content;
+  WaterBalance::DailyWaterContentReturn water_content_;
 };
 
 bool operator==(const Soil &lhs, const Soil &rhs);

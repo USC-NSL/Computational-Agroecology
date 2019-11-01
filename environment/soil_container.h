@@ -15,8 +15,8 @@ class SoilContainer {
   // Currently constructs a square grid with size of `size`. In each grid the
   // soil instances are dumb instances.
   SoilContainer(const size_t size)
-      : soils_(size,
-               std::vector<Soil>(size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0))) {}
+      : soils_(size, std::vector<Soil>(
+                         size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0, 0.0))) {}
 
   // Retrieves a soil instance by giving its position (`struct Coordinate`)
   Soil *GetSoil(const Coordinate &coordinate);
