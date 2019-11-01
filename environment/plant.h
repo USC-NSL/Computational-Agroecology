@@ -98,12 +98,16 @@ class Plant {
   int produce() const { return produce_; }
   const PlantParams &params() const { return params_; }
 
-  PlantRadiation *GetPlantRadiation() const { return plant_radiation_; }
+  const PlantRadiation &GetPlantRadiation() const { return plant_radiation_; }
+
+  void UpdatePlantRadiation(const Meteorology &meteorology) {
+    plant_radiation_.Update(meteorology);
+  }
 
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name, const double trunk_size = 0.0,
-        const double root_size_ = 0.0)
+  Plant(const std::string &name, const Meteorology &meteorology,
+        const double trunk_size = 0.0, const double root_size_ = 0.0)
       : name_(name),
         position_(),
         trunk_size_(trunk_size),
@@ -114,12 +118,9 @@ class Plant {
         maturity_(SEED),
         produce_(0),
         params_(kDefaultParams),
-        leaf_index_area_(1) {
+        leaf_index_area_(1),
+        plant_radiation_(leaf_index_area_, meteorology) {
   }  // TODO: Set this value for leaf_index_area cleanly
-
-  void SetMeteorology(const Meteorology &meteorology) {
-    plant_radiation_ = new PlantRadiation(leaf_index_area_, meteorology);
-  }
 
   // Overrides internal parameters with the given `params`.
   void SetParams(const PlantParams &params) {
@@ -165,7 +166,7 @@ class Plant {
   // A collection of static parameters of this plant.
   PlantParams params_;
 
-  PlantRadiation *plant_radiation_;
+  PlantRadiation plant_radiation_;
 
   double leaf_index_area_;
 };

@@ -108,16 +108,16 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
     // const
     std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
     for (auto &plant : all_plants) {
-      PlantRadiation *plant_radiation = plant->GetPlantRadiation();
-      plant_radiation->Update(meteorology_);
+      PlantRadiation plant_radiation = plant->GetPlantRadiation();
+      plant->UpdatePlantRadiation(meteorology_);
 
       // TODO: Do you need to actually get the soil flux instead? Where is it?
       // Because we need that for water content in SOIL.
       // TODO: The book uses these scalars? Why?
       double total_flux_density_shaded_potential =
-          plant_radiation->total_flux_density_shaded() * flux_density_factor;
+          plant_radiation.total_flux_density_shaded() * flux_density_factor;
       double total_flux_density_sunlit_potential =
-          plant_radiation->total_flux_density_sunlit() * flux_density_factor;
+          plant_radiation.total_flux_density_sunlit() * flux_density_factor;
 
       // TODO: Add rainfall amount to UpdateWaterContent
       Coordinate plant_coordinate = plant->position();

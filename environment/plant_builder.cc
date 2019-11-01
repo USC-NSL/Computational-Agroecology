@@ -27,9 +27,8 @@ Plant *PlantBuilder::NewPlant(const std::string &model_name,
                               const Meteorology &meteorology,
                               const PlantParams &overrides) {
   if (models_.count(model_name)) {
-    Plant *p = models_[model_name]();
+    Plant *p = models_[model_name](meteorology);
     p->SetParams(overrides);
-    p->SetMeteorology(meteorology);
     return p;
   }
   return nullptr;

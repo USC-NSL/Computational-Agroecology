@@ -54,7 +54,7 @@ class Terrain {
     return soil_container_.GetSoil(coord);
   }
 
-  const Meteorology *GetMeteorology() const { return &meteorology_; }
+  const Meteorology *GetMeteorology() const { return meteorology_; }
 
   // Returns the full list of plants in this terrain
   std::vector<const Plant *> GetAllPlants() const {
@@ -85,7 +85,7 @@ class Terrain {
 
   PlantContainer plant_container_;
   SoilContainer soil_container_;
-  Meteorology meteorology_;
+  const Meteorology *meteorology_;
 
   int yield_;
   // TODO: Now we assume the terrain to be a square space.
