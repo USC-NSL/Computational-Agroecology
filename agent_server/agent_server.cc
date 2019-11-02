@@ -62,14 +62,14 @@ AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string &name) {
   return OK;
 }
 
-std::pair<AgentServer::ReturnCodes, std::optional<environment::Environment>>
+std::pair<AgentServer::ReturnCodes, std::optional<const environment::Environment *>>
 AgentServer::GetEnvironment(const std::string &name) {
   auto result = name_to_env_.find(name);
   if (result == name_to_env_.end()) {
     return std::make_pair(ENV_NOT_FOUND, std::nullopt);
   }
 
-  return std::make_pair(OK, result->second);
+  return std::make_pair(OK, &(result->second));
 }
 
 AgentServer::ReturnCodes AgentServer::SimulateToTimeStep(

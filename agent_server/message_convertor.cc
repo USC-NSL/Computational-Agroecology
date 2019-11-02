@@ -175,7 +175,7 @@ data_format::Terrain ToProtobuf(const environment::Terrain &terrain) {
   terrain_protobuf.set_yield(terrain.yield());
   terrain_protobuf.set_size(terrain.size());
 
-  for (const auto &p : terrain.GetAllPlants()) {
+  for (const auto &p : terrain.plant_container()) {
     auto *new_plant = terrain_protobuf.add_plants();
     *(new_plant->mutable_position()) = ToProtobuf(p->position());
     *(new_plant->mutable_plant()) = ToProtobuf(*p);

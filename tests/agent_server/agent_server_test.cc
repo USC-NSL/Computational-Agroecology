@@ -111,7 +111,7 @@ TEST_F(AgentServerTest, SimulateToTimeStepTest) {
 
   ASSERT_EQ(AgentServer::OK, env_ret.first);
   ASSERT_TRUE(env_ret.second.has_value());
-  EXPECT_EQ(target_time_step, env_ret.second->time_step());
+  EXPECT_EQ(target_time_step, (*env_ret.second)->time_step());
 }
 
 TEST_F(AgentServerTest, AgentTakeActionTest) {

@@ -129,7 +129,7 @@ namespace service {
                           request->name() + " is not found.");
   }
 
-  *(response->mutable_environment()) = ToProtobuf(*(result.second));
+  *(response->mutable_environment()) = ToProtobuf(*(*(result.second)));
   return ::grpc::Status::OK;
 }
 

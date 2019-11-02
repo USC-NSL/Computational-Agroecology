@@ -55,9 +55,6 @@ class Environment {
   inline const Meteorology &meteorology() const { return meteorology_; }
   inline const Terrain &terrain() const { return terrain_; }
   inline const Weather &weather() const { return weather_; }
-  inline const Plant *GetPlant(const Coordinate &coord) {
-    return terrain_.GetPlant(coord);
-  }
   inline const std::priority_queue<const agent::action::Action *,
                                    std::vector<const agent::action::Action *>,
                                    agent::action::ActionStartTimeComparator>

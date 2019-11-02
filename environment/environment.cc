@@ -106,8 +106,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
 
     // Iterate through all plants, need to be able to modify plants, so not
     // const
-    std::vector<Plant *> all_plants = terrain_.GetAllPlantsMutable();
-    for (auto &plant : all_plants) {
+    for (auto &plant : terrain_.plant_container()) {
       const PlantRadiation &plant_radiation = plant->plant_radiation();
       plant->UpdatePlantRadiation(meteorology_);
 

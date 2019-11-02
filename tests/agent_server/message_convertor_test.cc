@@ -160,11 +160,14 @@ TEST(MessageConvertorTest, TerrainConvertorTest) {
   EXPECT_EQ(terrain.yield(), terrain_protobuf.yield());
   EXPECT_EQ(terrain.size(), terrain_protobuf.size());
 
-  for (size_t i = 0; i < terrain.GetAllPlants().size(); ++i) {
-    EXPECT_EQ(terrain.GetAllPlants()[i]->position(),
-              FromProtobuf(terrain_protobuf.plants()[i].position()));
-    TestPlantConvertor(*(terrain.GetAllPlants()[i]),
-                       terrain_protobuf.plants()[i].plant());
+  {
+    size_t i = 0;
+    for (const auto &plant : terrain.plant_container()) {
+      EXPECT_EQ(plant->position(),
+                FromProtobuf(terrain_protobuf.plants()[i].position()));
+      TestPlantConvertor(*plant, terrain_protobuf.plants()[i].plant());
+      ++i;
+    }
   }
 
   for (size_t i = 0; i < terrain.length(); ++i) {

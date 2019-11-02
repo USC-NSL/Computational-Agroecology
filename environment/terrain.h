@@ -29,40 +29,14 @@ class Terrain {
   size_t length() const { return size_; }
   SoilContainer &soil_container() { return soil_container_; }
   const SoilContainer &soil_container() const { return soil_container_; }
+  PlantContainer &plant_container() { return plant_container_; }
+  const PlantContainer &plant_container() const { return plant_container_; }
 
   // When a crop / plant is added, it acts on and has access only to the
   // "Terrain" object, and the newly created plant instance must have access to
   // meteorology. But meteorology is normally only held within the envrionment.
   // So we need to store a pointer to meteorology within the terrain
   const Meteorology *meteorology() const { return meteorology_; }
-
-  // Returns the pointer to a plant on the specified coordinate.
-  // This pointer is owned by this class. Thus, the caller should not take care
-  // of the returning pointer.
-  Plant *GetPlant(const Coordinate &coord) {
-    return plant_container_.GetPlant(coord);
-  }
-
-  // Almost identical to the above accessor. Here returns a constant pointer
-  // instead.
-  const Plant *GetPlant(const Coordinate &coord) const {
-    return plant_container_.GetPlant(coord);
-  }
-
-  // Returns the full list of plants in this terrain
-  std::vector<const Plant *> GetAllPlants() const {
-    // Here we need to construct a new vector because the internal vector is
-    // with type `std::vector<Plant *>` (the element is without the constant
-    // specifier). Though the type conversion is safe, it is hard to be achieved
-    // in C++.
-    return std::vector<const Plant *>(plant_container_.plants().begin(),
-                                      plant_container_.plants().end());
-  }
-
-  // Returns the full list of mutable plants in this terrain
-  std::vector<Plant *> GetAllPlantsMutable() const {
-    return plant_container_.plants();
-  }
 
   // Modifiers
   void ExecuteAction(const agent::action::Action &action);

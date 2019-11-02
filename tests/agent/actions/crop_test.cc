@@ -172,7 +172,7 @@ TEST_F(AddTest, ExecuteTest_1) {
 
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(kBeanTypeName, plant->name());
@@ -192,7 +192,7 @@ TEST_F(AddTest, ExecuteTest_2) {
     for (size_t j = 0; j < terrain->size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
         ASSERT_NE(nullptr, plant);
@@ -257,7 +257,7 @@ TEST_F(RemoveTest, ExecuteTest_1) {
 
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(kBeanTypeName, plant->name());
@@ -273,7 +273,7 @@ TEST_F(RemoveTest, ExecuteTest_1) {
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_EQ(nullptr, terrain->GetPlant(Coordinate(i, j)));
+        EXPECT_EQ(nullptr, terrain->plant_container()[Coordinate(i, j)]);
       }
     }
   }
@@ -288,7 +288,7 @@ TEST_F(RemoveTest, ExecuteTest_2) {
     for (size_t j = 0; j < terrain->size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
         ASSERT_NE(nullptr, plant);
@@ -308,7 +308,7 @@ TEST_F(RemoveTest, ExecuteTest_2) {
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_EQ(nullptr, terrain->GetPlant(Coordinate(i, j)));
+        EXPECT_EQ(nullptr, terrain->plant_container()[Coordinate(i, j)]);
       }
     }
   }
@@ -422,7 +422,7 @@ TEST_F(AddWaterTest, AddToRange1) {
 
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
@@ -446,7 +446,7 @@ TEST_F(AddWaterTest, AddToRange2) {
 
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
@@ -462,7 +462,7 @@ TEST_F(AddWaterTest, AddToRange2) {
 
   for (size_t i = 0; i < terrain->size(); ++i) {
     for (size_t j = 0; j < terrain->size(); ++j) {
-      const Plant *plant = terrain->GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(30.0, terrain->soil_container()[Coordinate(i, j)]

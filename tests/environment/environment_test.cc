@@ -73,7 +73,7 @@ TEST_F(EnvironmentTest, JumpToTimeStepTest) {
 
     // since the action has completed
     // we should see its effect in the `terrain`
-    EXPECT_NE(nullptr, env->GetPlant(Coordinate(i, i)));
+    EXPECT_NE(nullptr, env->terrain().plant_container()[Coordinate(i, i)]);
   }
 }
 

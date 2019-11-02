@@ -39,7 +39,8 @@ class AgentServer {
 
   ReturnCodes DeleteAgent(const std::string &name);
 
-  std::pair<ReturnCodes, std::optional<environment::Environment>>
+  // This returned pointer belongs to the `name_to_env_`. The caller should not free it.
+  std::pair<ReturnCodes, std::optional<const environment::Environment *>>
   GetEnvironment(const std::string &name);
   ReturnCodes SimulateToTimeStep(const std::string &env_name,
                                  const int64_t time_step);
