@@ -41,7 +41,7 @@ class Soil {
   double salinity_;
   double organic_matter_;
 
-  Resources resources;
+  Resources resources_;
 
   WaterBalance::DailyWaterContentReturn water_content_;
 };
