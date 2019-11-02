@@ -27,11 +27,11 @@ class Soil {
 
   void AddWaterToSoil(double water_amount);
 
-  const double pH() const { return pH_; }
-  const double salinity() const { return salinity_; }
-  const double organic_matter() const { return organic_matter_; }
-  const Texture texture() const { return texture_; }
-  const WaterBalance::DailyWaterContentReturn water_content() const {
+  double pH() const { return pH_; }
+  double salinity() const { return salinity_; }
+  double organic_matter() const { return organic_matter_; }
+  Texture texture() const { return texture_; }
+  const WaterBalance::DailyWaterContentReturn &water_content() const {
     return water_content_;
   }
 
