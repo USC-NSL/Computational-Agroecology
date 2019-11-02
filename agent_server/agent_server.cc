@@ -5,17 +5,18 @@
 namespace agent_server {
 
 AgentServer::ReturnCodes AgentServer::CreateEnvironment(
-    const std::string &name, const environment::Config &config,
+    const std::string &name, const config::Config &config,
+    const config::TerrainRawData &terrain_raw_data,
     const std::chrono::system_clock::time_point &time,
-    const std::chrono::duration<int> &time_step_length,
-    const environment::Terrain &terrain) {
+    const std::chrono::duration<int> &time_step_length) {
   auto result = name_to_env_.find(name);
   if (result != name_to_env_.end()) {
     return ALREADY_EXISTS;
   }
 
-  name_to_env_.emplace(std::make_pair(
-      name, environment::Environment(config, time, time_step_length, terrain)));
+  name_to_env_.emplace(
+      std::make_pair(name, environment::Environment(config, terrain_raw_data,
+                                                    time, time_step_length)));
 
   return OK;
 }

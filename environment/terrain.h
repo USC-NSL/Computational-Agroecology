@@ -27,6 +27,8 @@ class Terrain {
   size_t size() const { return size_; }
   size_t width() const { return size_; }
   size_t length() const { return size_; }
+  SoilContainer &soil_container() { return soil_container_; }
+  const SoilContainer &soil_container() const { return soil_container_; }
 
   // When a crop / plant is added, it acts on and has access only to the
   // "Terrain" object, and the newly created plant instance must have access to
@@ -45,19 +47,6 @@ class Terrain {
   // instead.
   const Plant *GetPlant(const Coordinate &coord) const {
     return plant_container_.GetPlant(coord);
-  }
-
-  // Returns the pointer to a cell of soil on the specified coordinate.
-  // This pointer is owned by this class. Thus, the caller should not take care
-  // of the returning pointer.
-  Soil *GetSoil(const Coordinate &coord) {
-    return soil_container_.GetSoil(coord);
-  }
-
-  // Almost identical to the above accessor. Here returns a constant pointer
-  // instead.
-  const Soil *GetSoil(const Coordinate &coord) const {
-    return soil_container_.GetSoil(coord);
   }
 
   // Returns the full list of plants in this terrain

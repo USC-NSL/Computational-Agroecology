@@ -5,11 +5,11 @@
 
 #include "agent/q_learning.h"
 #include "agent/resource.h"
+#include "config/config.h"
+#include "config/location.h"
 #include "environment/climate.h"
-#include "environment/config.h"
 #include "environment/coordinate.h"
 #include "environment/environment.h"
-#include "environment/location.h"
 #include "environment/plant.h"
 #include "environment/soil.h"
 #include "environment/terrain.h"
@@ -26,13 +26,12 @@ std::chrono::duration<int> FromProtobufDuration(
 int64_t ToProtobuf(const std::chrono::duration<int> &time_step_length);
 
 // location convertor
-environment::Location FromProtobuf(
-    const data_format::Location &protobuf_location);
-data_format::Location ToProtobuf(const environment::Location &location);
+config::Location FromProtobuf(const data_format::Location &protobuf_location);
+data_format::Location ToProtobuf(const config::Location &location);
 
 // config convertor
-environment::Config FromProtobuf(const data_format::Config &protobuf_config);
-data_format::Config ToProtobuf(const environment::Config &config);
+config::Config FromProtobuf(const data_format::Config &protobuf_config);
+data_format::Config ToProtobuf(const config::Config &config);
 
 // plant convertor
 data_format::Plant ToProtobuf(const environment::Plant &plant);

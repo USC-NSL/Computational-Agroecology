@@ -121,10 +121,10 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
 
       // TODO: Add rainfall amount to UpdateWaterContent
       const Coordinate &plant_coordinate = plant->position();
-      Soil *soil = terrain_.GetSoil(plant_coordinate);
-      soil->UpdateWaterContent(0 /* rainfall */,
-                               total_flux_density_sunlit_potential,
-                               total_flux_density_shaded_potential);
+      Soil &soil = terrain_.soil_container()[plant_coordinate];
+      soil.UpdateWaterContent(0 /* rainfall */,
+                              total_flux_density_sunlit_potential,
+                              total_flux_density_shaded_potential);
 
       // TODO: Add in other factors like sunlight and water
       // TODO: Figure out how to use this resource parameter

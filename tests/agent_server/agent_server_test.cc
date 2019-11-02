@@ -1,13 +1,15 @@
 #include <chrono>
+#include <memory>
 
 #include <gtest/gtest.h>
 
 #include "agent_server/agent_server.h"
-#include "environment/config.h"
-#include "environment/location.h"
+#include "config/config.h"
+#include "config/location.h"
 #include "environment/terrain.h"
 
 using namespace agent_server;
+using namespace config;
 using namespace environment;
 
 const size_t kTerrainSize = 5;
@@ -22,34 +24,37 @@ const size_t kCol = 6;
 class AgentServerTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    dummy_config =
-        new Config("place name", Location(100.0, 100.0, 200.0, 200.0));
-    dummy_terrain = new Terrain(kTerrainSize);
+    dummy_config.reset(new Config("place name", Location(100, 101, 201, 200)));
+    dummy_terrain_raw_data.reset(new TerrainRawData(kTerrainSize, 0));
 
-    agent_server.CreateEnvironment(kDummyEnvName, *dummy_config, kStartTime,
-                                   kTimeStepLength, *dummy_terrain);
+    agent_server.CreateEnvironment(kDummyEnvName, *dummy_config,
+                                   *dummy_terrain_raw_data, kStartTime,
+                                   kTimeStepLength);
     agent_server.CreateQLearningAgent(kDummyAgentName, kDummyEnvName, kRow,
                                       kCol);
   }
 
   AgentServer agent_server;
-  Config *dummy_config = nullptr;
-  Terrain *dummy_terrain = nullptr;
+  std::unique_ptr<Config> dummy_config;
+  std::unique_ptr<TerrainRawData> dummy_terrain_raw_data;
 };
 
 TEST_F(AgentServerTest, CreateAndGetEnvironmentTest) {
   std::string env_name_1 = "env_name_1";
-  auto create_ret = agent_server.CreateEnvironment(
-      env_name_1, *dummy_config, kStartTime, kTimeStepLength, *dummy_terrain);
+  auto create_ret = agent_server.CreateEnvironment(env_name_1, *dummy_config,
+                                                   *dummy_terrain_raw_data,
+                                                   kStartTime, kTimeStepLength);
   EXPECT_EQ(AgentServer::OK, create_ret);
 
-  create_ret = agent_server.CreateEnvironment(
-      env_name_1, *dummy_config, kStartTime, kTimeStepLength, *dummy_terrain);
+  create_ret = agent_server.CreateEnvironment(env_name_1, *dummy_config,
+                                              *dummy_terrain_raw_data,
+                                              kStartTime, kTimeStepLength);
   EXPECT_EQ(AgentServer::ALREADY_EXISTS, create_ret);
 
   std::string env_name_2 = "env_name_2";
-  create_ret = agent_server.CreateEnvironment(
-      env_name_2, *dummy_config, kStartTime, kTimeStepLength, *dummy_terrain);
+  create_ret = agent_server.CreateEnvironment(env_name_2, *dummy_config,
+                                              *dummy_terrain_raw_data,
+                                              kStartTime, kTimeStepLength);
   EXPECT_EQ(AgentServer::OK, create_ret);
 
   std::string env_not_exist = "env_not_exist";

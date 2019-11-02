@@ -173,7 +173,7 @@ AGENT_SERVER_TEST := $(AGENT_SERVER_TEST_PATH)/agent_server_test \
 %.grpc.pb.cc: %.proto %.pb.cc
 	$(PROTOC) $(AGENT_SERVER_GRPC_FLAGS) $<
 
-agent_server: $(ALL_OBJ) $(AGENT_SERVER_OBJ)
+agent_server: $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_PATH)/agent_server_grpc_service.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_PATH)/agent_server_grpc_service.cc $(LDFLAGS) -o $(AGENT_SERVER_PATH)/agent_server $(OPENGLLIBS)
 
 agent_server_test: $(ALL_OBJ) $(AGENT_SERVER_OBJ)

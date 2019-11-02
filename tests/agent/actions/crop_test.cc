@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <chrono>
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -425,7 +425,9 @@ TEST_F(AddWaterTest, AddToRange1) {
       const Plant *plant = terrain->GetPlant(Coordinate(i, j));
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(15.0, terrain->GetSoil(Coordinate(i, j))->water_content().water_amount_1);
+        EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }
@@ -447,7 +449,9 @@ TEST_F(AddWaterTest, AddToRange2) {
       const Plant *plant = terrain->GetPlant(Coordinate(i, j));
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(15.0, terrain->GetSoil(Coordinate(i, j))->water_content().water_amount_1);
+        EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }
@@ -461,7 +465,9 @@ TEST_F(AddWaterTest, AddToRange2) {
       const Plant *plant = terrain->GetPlant(Coordinate(i, j));
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(30.0, terrain->GetSoil(Coordinate(i, j))->water_content().water_amount_1);
+        EXPECT_EQ(30.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }

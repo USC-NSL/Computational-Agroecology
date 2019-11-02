@@ -58,9 +58,6 @@ class Environment {
   inline const Plant *GetPlant(const Coordinate &coord) {
     return terrain_.GetPlant(coord);
   }
-  inline const Soil *GetSoil(const Coordinate &coord) {
-    return terrain_.GetSoil(coord);
-  }
   inline const std::priority_queue<const agent::action::Action *,
                                    std::vector<const agent::action::Action *>,
                                    agent::action::ActionStartTimeComparator>
