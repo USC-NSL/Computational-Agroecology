@@ -8,6 +8,7 @@
 #include "environment/environment.h"
 
 using namespace agent::action;
+using namespace config;
 using namespace environment;
 
 class EnvironmentTest : public ::testing::Test {
@@ -20,9 +21,9 @@ class EnvironmentTest : public ::testing::Test {
     auto time_step_length = std::chrono::hours(1);
 
     Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
-    Terrain terrain(kTerrainSize);
+    TerrainRawData terrain_raw_data(kTerrainSize, 0);
 
-    return new Environment(config, time, time_step_length, terrain);
+    return new Environment(config, terrain_raw_data, time, time_step_length);
   }
 
   void SetUp() override {
@@ -94,4 +95,3 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

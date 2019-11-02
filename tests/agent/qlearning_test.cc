@@ -9,6 +9,7 @@
 #include "environment/environment.h"
 
 using namespace agent;
+using namespace config;
 using namespace environment;
 using namespace agent::action;
 
@@ -22,10 +23,11 @@ class QlearningTest : public ::testing::Test {
  protected:
   void SetUp() override {
     Config config("place name", Location(100.0, 100.0, 200.0, 200.0));
-    Terrain terrain(5);
+    TerrainRawData terrain_raw_data(5, 0);
 
-    env = new Environment(config, std::chrono::system_clock::now(),
-                          std::chrono::hours(1), terrain);
+    env = new Environment(config, terrain_raw_data,
+                          std::chrono::system_clock::now(),
+                          std::chrono::hours(1));
     qlearning = new Qlearning("agent name", env, 10, 54);
   }
 

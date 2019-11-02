@@ -2,6 +2,7 @@
 
 #include "environment/climate.h"
 
+using namespace config;
 using namespace environment;
 
 TEST(ClimateTest, ConstructorTest_1) {

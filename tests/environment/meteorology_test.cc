@@ -6,6 +6,7 @@
 
 #include "environment/meteorology.h"
 
+using namespace config;
 using namespace environment;
 
 class MeteorologyTest : public ::testing::Test {
