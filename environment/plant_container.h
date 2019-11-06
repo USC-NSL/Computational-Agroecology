@@ -4,7 +4,6 @@
 #include <string>
 
 #include "KDTree/KDTree.hpp"
-
 #include "environment/coordinate.h"
 #include "environment/plant.h"
 

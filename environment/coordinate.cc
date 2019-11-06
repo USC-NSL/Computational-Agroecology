@@ -1,6 +1,7 @@
 #include "coordinate.h"
 
 #include <assert.h>
+
 #include <vector>
 
 namespace environment {

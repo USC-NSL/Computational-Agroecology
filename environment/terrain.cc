@@ -1,6 +1,7 @@
 #include "terrain.h"
 
 #include <assert.h>
+
 #include <vector>
 
 #include "environment/plant.h"
