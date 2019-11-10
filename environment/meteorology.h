@@ -83,6 +83,10 @@ class Meteorology {
 
   double wind_speed() const { return wind_speed_; }
 
+  double solar_hour_sunrise() const { return solar_hour_sunrise_; }
+
+  double solar_hour_sunset() const { return solar_hour_sunset_; }
+
   // This stores some caches of constants related to geographic information and
   // day of a year. These variables are useful when we need to frequently call
   // `CalculateHourlySolarIrradiance()`.
@@ -100,6 +104,12 @@ class Meteorology {
     // To solve integral sin(β), we need the following a and b
     double a;
     double b;
+  };
+
+  struct DayLengthAndTimesSunriseSunset {
+    double solar_hour_sunrise;
+    double solar_hour_sunset;
+    double day_length;
   };
 
  private:
@@ -123,12 +133,6 @@ class Meteorology {
     // Actual vapor pressure (mbar)
     // This is denoted as e_a in the book.
     double actual;
-  };
-
-  struct DayLengthAndTimesSunriseSunset {
-    double solar_hour_sunrise;
-    double solar_hour_sunset;
-    double day_length;
   };
 
   // Information binded to the current geographic location

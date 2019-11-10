@@ -6,6 +6,9 @@
 
 namespace environment {
 
+Photosynthesis::Photosynthesis(const Meteorology &meteorology)
+: meteorology_(meteorology) {}
+
 double Photosynthesis::Q10TemperatureSensitivity(
     double michaelis_menten_constant_c25, double q10_temperature_sensitivity,
     double leaf_temperature) {
@@ -102,21 +105,28 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
 
   // From formula 6.37 on page 140
-  double dTsr = Sunrise();
-  double dIval = Sunset() - dTsr;
-  double dAssim = 0.0;
-  for (int i = 0; i < 5; ++i) {
-    double dHour = dTsr + ABS[i] * dIval;  // current hour
-    double dET = 0.0, dETs = 0.0, dETc = 0.0;
-    double dH = 0.0, dHs = 0.0, dHc = 0.0;
-    HourHeatFluxes(dHour, dET, dETs, dETc, dH, dHs, dHc);
-    double dTf = CanopyTemp(dHour, dH, dHc);
+  double solar_hour_sunrise = meteorology_.solar_hour_sunrise();
+  double solar_hours_per_day = meteorology_.solar_hour_sunset() - solar_hour_sunrise;
+  double assimilation = 0.0;
+
+  for (int i = 0; i < 5; ++i) 
+  {
+    double dHour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
+    double total_latent_heat_flux = 0.0;
+    double latent_heat_flux_soil = 0.0;
+    double latent_heat_flux_crop = 0.0;
+    double total_sensible_heat_flux = 0.0;
+    double sensible_heat_flux_soil = 0.0;
+    double sensible_heat_flux_crop = 0.0;
+    // HourHeatFluxes(dHour, total_latent_heat_flux, latent_heat_flux_soil, 
+        // latent_heat_flux_crop, total_sensible_heat_flux, sensible_heat_flux_soil, sensible_heat_flux_crop);
+    double dTf = CanopyTemp(dHour, total_sensible_heat_flux, sensible_heat_flux_crop);
     double dAn = GrossCanopyPhotosynthesis(dHour, dTf);
     // x 3600 to convert sec to hour:
-    dAssim = dAssim + dAn * 3600.0 * WGT[i] * dIval;
+    assimilation = assimilation + dAn * 3600.0 * WGT[i] * solar_hours_per_day;
   }
 
-  return dAssim;
+  return assimilation;
 }
 
 }  // namespace environment

@@ -1,20 +1,23 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PHOTOSYNTHESIS_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PHOTOSYNTHESIS_H_
 
+#include "environment/meteorology.h"
+
 namespace environment {
 
 class Photosynthesis {
  public:
+  Photosynthesis(const Meteorology &meteorology);
   // Gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 s-1).
   //   th (local solar time, hour), lai (leaf area index, m2 m-2),
   //   lftemp (leaf temperature, deg. C)
-  static double GrossCanopyPhotosynthesis(double local_solar_hour,
+  double GrossCanopyPhotosynthesis(double local_solar_hour,
                                           double leaf_temperature);
 
   // Daily gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 day-1)
-  static double DailyGrossCanopyPhotosynthesis();
+  double DailyGrossCanopyPhotosynthesis();
 
  private:
   // Changes the given model parameter based on current temperature.
@@ -69,6 +72,8 @@ class Photosynthesis {
 
   static constexpr double kConversionFactorToUmolM2S1 = 4.5;
   static constexpr double kTemperatureScalar25 = 25.0;
+
+  Meteorology meteorology_;
 };
 
 }  // namespace environment
