@@ -99,7 +99,8 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
               leafIndexAreaReturn.shaded);  // in umol CO2 m-2 s-1
 }
 
-double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
+// TODO: How to get this EnergyBalance? Where does it exist?
+double Photosynthesis::DailyGrossCanopyPhotosynthesis(EnergyBalance energyBalance) {
   // 5-point gauss integration over sunrise to sunset:
   double const ABS[5] = {0.0469101, 0.2307534, 0.5000000, 0.7692465, 0.9530899};
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
@@ -111,19 +112,14 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
 
   for (int i = 0; i < 5; ++i) 
   {
-    double dHour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
-    double total_latent_heat_flux = 0.0;
-    double latent_heat_flux_soil = 0.0;
-    double latent_heat_flux_crop = 0.0;
-    double total_sensible_heat_flux = 0.0;
-    double sensible_heat_flux_soil = 0.0;
-    double sensible_heat_flux_crop = 0.0;
-    // HourHeatFluxes(dHour, total_latent_heat_flux, latent_heat_flux_soil, 
-        // latent_heat_flux_crop, total_sensible_heat_flux, sensible_heat_flux_soil, sensible_heat_flux_crop);
-    double dTf = CanopyTemp(dHour, total_sensible_heat_flux, sensible_heat_flux_crop);
-    double dAn = GrossCanopyPhotosynthesis(dHour, dTf);
-    // x 3600 to convert sec to hour:
-    assimilation = assimilation + dAn * 3600.0 * WGT[i] * solar_hours_per_day;
+    double current_hour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
+    double total_sensible_heat_flux = energyBalance.total_sensible_heat_flux();
+    double sensible_heat_flux_crop = energyBalance.sensible_heat_flux_crop();
+    
+    // TODO: Where is canopy temperature defined?
+    double canopy_temperature = CanopyTemp(current_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
+    double gross_canopy_photosynthesis = GrossCanopyPhotosynthesis(current_hour, canopy_temperature);
+    assimilation += gross_canopy_photosynthesis * kHourToSeconds * WGT[i] * solar_hours_per_day;
   }
 
   return assimilation;

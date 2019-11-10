@@ -1,6 +1,7 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PHOTOSYNTHESIS_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_PHOTOSYNTHESIS_H_
 
+#include "environment/energy_balance.h"
 #include "environment/meteorology.h"
 
 namespace environment {
@@ -72,6 +73,7 @@ class Photosynthesis {
 
   static constexpr double kConversionFactorToUmolM2S1 = 4.5;
   static constexpr double kTemperatureScalar25 = 25.0;
+  static constexpr double kHourToSeconds = 3600.0;
 
   Meteorology meteorology_;
 };
