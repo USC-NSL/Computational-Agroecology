@@ -159,7 +159,7 @@ void Water::Execute(environment::Terrain *terrain) const {
   }
 
   for (const auto &c : applied_range_) {
-    terrain->soil_container_[c].AddWaterToSoil(water_amount_);
+    terrain->soil_container_.GetSoil(c).AddWaterToSoil(water_amount_);
   }
 }
 
