@@ -1,13 +1,13 @@
 #include "photosynthesis.h"
-#include "plant_radiation.h"
 
 #include <algorithm>
 #include <cmath>
 
 namespace environment {
 
-Photosynthesis::Photosynthesis(const Meteorology &meteorology)
-: meteorology_(meteorology) {}
+Photosynthesis::Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation_)
+: meteorology_(meteorology),
+plant_radiation_(plant_radiation_) {}
 
 double Photosynthesis::Q10TemperatureSensitivity(
     double michaelis_menten_constant_c25, double q10_temperature_sensitivity,
@@ -81,7 +81,7 @@ double Photosynthesis::LeafPhotosynthesis(double par, double leaf_temperature) {
 double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
                                                  double leaf_temperature) {
   PlantRadiation::AbsorbedPhotosyntheticallyActiveRadiation
-      absorbedHourParReturn = PlantRadiation::CalculateAbsorbedHourPAR(
+      absorbedHourParReturn = plant_radiation_.CalculateAbsorbedHourPAR(
           0, 0,
           0);  // TODO: Figure Out What Values to put here as parameters!!!!
   double sunlit = absorbedHourParReturn.sunlit * kConversionFactorToUmolM2S1;
@@ -91,7 +91,7 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
   double photosynthesis_shaded = LeafPhotosynthesis(shaded, leaf_temperature);
   // sunlit and shaded LAI
   PlantRadiation::LeafIndexArea leafIndexAreaReturn =
-      PlantRadiation::CalculateLai(
+      plant_radiation_.CalculateLai(
           local_solar_hour);  // TODO: Is this the right input value to the
                               // function???
   return (photosynthesis_sunlit * leafIndexAreaReturn.sunlit +
@@ -112,13 +112,13 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis(EnergyBalance energyBalanc
 
   for (int i = 0; i < 5; ++i) 
   {
-    double current_hour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
+    double solar_hour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
     double total_sensible_heat_flux = energyBalance.total_sensible_heat_flux();
     double sensible_heat_flux_crop = energyBalance.sensible_heat_flux_crop();
     
-    // TODO: Where is canopy temperature defined?
-    double canopy_temperature = CanopyTemp(current_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
-    double gross_canopy_photosynthesis = GrossCanopyPhotosynthesis(current_hour, canopy_temperature);
+    // TODO: should energy balance be defined? How should CalculateCanopyTemperature be called?
+    double canopy_temperature = energyBalance.CalculateCanopyTemperature(solar_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
+    double gross_canopy_photosynthesis = GrossCanopyPhotosynthesis(solar_hour, canopy_temperature);
     assimilation += gross_canopy_photosynthesis * kHourToSeconds * WGT[i] * solar_hours_per_day;
   }
 

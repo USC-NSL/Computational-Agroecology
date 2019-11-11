@@ -30,6 +30,9 @@ class EnergyBalance {
   // Updates the data in this class according to the given information.
   void Update(const Meteorology &meteorology,
               const PlantRadiation &plant_radiation, const Weather &weather);
+  
+  // Canopy temperature (deg. C).
+  double CalculateCanopyTemperature(double solar_hour, double sensible_heat_total, double sensible_heat_canopy);
 
   // Accessors
   inline double total_latent_heat_flux() const {
