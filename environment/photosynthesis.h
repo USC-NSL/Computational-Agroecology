@@ -9,15 +9,18 @@ namespace environment {
 
 class Photosynthesis {
  public:
-  // TODO: Should PlantRadiation and EnergyBalance be a part of the constructor ???
-  Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation, const EnergyBalance &energy_balance);
+  // TODO: Should PlantRadiation and EnergyBalance be a part of the constructor
+  // ???
+  Photosynthesis(const Meteorology &meteorology,
+                 const PlantRadiation &plant_radiation,
+                 const EnergyBalance &energy_balance);
 
   // Gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 s-1).
   //   th (local solar time, hour), lai (leaf area index, m2 m-2),
   //   lftemp (leaf temperature, deg. C)
   double GrossCanopyPhotosynthesis(double local_solar_hour,
-                                          double leaf_temperature);
+                                   double leaf_temperature);
 
   // Daily gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 day-1)
