@@ -5,9 +5,10 @@
 
 namespace environment {
 
-Photosynthesis::Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation_)
+Photosynthesis::Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation, const EnergyBalance &energy_balance)
 : meteorology_(meteorology),
-plant_radiation_(plant_radiation_) {}
+plant_radiation_(plant_radiation),
+energy_balance_(energy_balance) {}
 
 double Photosynthesis::Q10TemperatureSensitivity(
     double michaelis_menten_constant_c25, double q10_temperature_sensitivity,
@@ -99,8 +100,7 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
               leafIndexAreaReturn.shaded);  // in umol CO2 m-2 s-1
 }
 
-// TODO: How to get this EnergyBalance? Where does it exist?
-double Photosynthesis::DailyGrossCanopyPhotosynthesis(EnergyBalance energyBalance) {
+double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
   // 5-point gauss integration over sunrise to sunset:
   double const ABS[5] = {0.0469101, 0.2307534, 0.5000000, 0.7692465, 0.9530899};
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
@@ -112,12 +112,12 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis(EnergyBalance energyBalanc
 
   for (int i = 0; i < 5; ++i) 
   {
-    double solar_hour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;  // current hour
-    double total_sensible_heat_flux = energyBalance.total_sensible_heat_flux();
-    double sensible_heat_flux_crop = energyBalance.sensible_heat_flux_crop();
+    double solar_hour = solar_hour_sunrise + ABS[i] * solar_hours_per_day;
+    double total_sensible_heat_flux = energy_balance_.total_sensible_heat_flux();
+    double sensible_heat_flux_crop = energy_balance_.sensible_heat_flux_crop();
     
     // TODO: should energy balance be defined? How should CalculateCanopyTemperature be called?
-    double canopy_temperature = energyBalance.CalculateCanopyTemperature(solar_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
+    double canopy_temperature = energy_balance_.CalculateCanopyTemperature(solar_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
     double gross_canopy_photosynthesis = GrossCanopyPhotosynthesis(solar_hour, canopy_temperature);
     assimilation += gross_canopy_photosynthesis * kHourToSeconds * WGT[i] * solar_hours_per_day;
   }

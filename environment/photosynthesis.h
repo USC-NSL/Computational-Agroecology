@@ -9,8 +9,9 @@ namespace environment {
 
 class Photosynthesis {
  public:
-  // TODO: Should PlantRadiation be a part of the constructor ???
-  Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation_);
+  // TODO: Should PlantRadiation and EnergyBalance be a part of the constructor ???
+  Photosynthesis(const Meteorology &meteorology, const PlantRadiation &plant_radiation, const EnergyBalance &energy_balance);
+
   // Gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 s-1).
   //   th (local solar time, hour), lai (leaf area index, m2 m-2),
@@ -20,8 +21,7 @@ class Photosynthesis {
 
   // Daily gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 day-1)
-  // TODO: Function declaration should not look like this
-  double DailyGrossCanopyPhotosynthesis(EnergyBalance energyBalance);
+  double DailyGrossCanopyPhotosynthesis();
 
  private:
   // Changes the given model parameter based on current temperature.
@@ -80,6 +80,7 @@ class Photosynthesis {
 
   Meteorology meteorology_;
   PlantRadiation plant_radiation_;
+  EnergyBalance energy_balance_;
 };
 
 }  // namespace environment
