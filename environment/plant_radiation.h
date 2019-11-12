@@ -55,14 +55,14 @@ class PlantRadiation {
   // Returns the sunlit leaf area index (sunlit leaf area per unit ground area)
   // and shaded leaf area index (shaded leaf area per unit ground area) given
   // k_dr (a calculated constant).
-  LeafIndexArea CalculateLai(const double extinction_coefficient_direct);
+  LeafIndexArea CalculateLai(const double extinction_coefficient_direct) const;
 
   // Returns the total flux density absorbed by sunlit leaves and shaded leaves
   // (W m^-2) given direct, diffuse radiation (W m^-2), and extinction
   // coefficient for direct fluexes (k_dr).
   AbsorbedPhotosyntheticallyActiveRadiation CalculateAbsorbedHourPAR(
       const double direct_radiation, const double diffuse_radiation,
-      const double extinction_coefficient_direct);
+      const double extinction_coefficient_direct) const;
 
  private:
   friend class EnergyBalance;

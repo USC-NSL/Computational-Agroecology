@@ -28,11 +28,9 @@ class Photosynthesis {
 
  private:
   // Changes the given model parameter based on current temperature.
-  //   k25 (model parameter at 25 deg. C): how well a substrate complexes with a
-  //   given enzyme q10_temperature_sensitivity (Q10 value): a measure of the
-  //   temperature sensitivity of an enzymatic reaction rate due to increase in
-  //   temperature by 10 degrees celsisu, leaf_temperature (leaf temperature,
-  //   deg. C)
+  //   michaelis_menten_constant_25_degrees: how well a substrate complexes with a given enzyme q10_temperature_sensitivity 
+  //   q10_temperature_sensitivity: a measure of the temperature sensitivity of an enzymatic reaction rate due to increase in temperature by 10 degrees celsius
+  //   leaf_temperature: (deg. C)
   static double Q10TemperatureSensitivity(
       double michaelis_menten_constant_25_degrees,
       double q10_temperature_sensitivity, double leaf_temperature);
