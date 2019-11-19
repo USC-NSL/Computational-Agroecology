@@ -1,7 +1,7 @@
-#include "photosynthesis.h"
-
 #include <algorithm>
 #include <cmath>
+
+#include "environment/photosynthesis.h"
 
 namespace environment {
 
