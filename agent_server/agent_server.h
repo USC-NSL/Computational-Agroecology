@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "agent/actions/crop.h"
-#include "agent/q_learning.h"
+#include "agent/agent.h"
 #include "environment/config.h"
 #include "environment/environment.h"
 #include "environment/terrain.h"

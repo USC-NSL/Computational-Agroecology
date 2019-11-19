@@ -46,7 +46,7 @@ AgentServer::ReturnCodes AgentServer::CreateQLearningAgent(
 
   name_to_agent_.emplace(std::make_pair(
       agent_name,
-      new agent::Qlearning(agent_name, &(env_result->second), row, col)));
+      new agent::Agent(agent_name, &(env_result->second))));
 
   return OK;
 }
