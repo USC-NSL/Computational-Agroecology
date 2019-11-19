@@ -32,16 +32,16 @@ class Terrain {
   PlantContainer &plant_container() { return plant_container_; }
   const PlantContainer &plant_container() const { return plant_container_; }
 
-  // When a crop / plant is added, it acts on and has access only to the
-  // "Terrain" object, and the newly created plant instance must have access to
-  // meteorology. But meteorology is normally only held within the envrionment.
-  // So we need to store a pointer to meteorology within the terrain
-  const Meteorology &meteorology() const { return meteorology_; }
-
   // Modifiers
   void ExecuteAction(const agent::action::Action &action);
 
  private:
+   // When a crop / plant is added, it acts on and has access only to the
+  // "Terrain" object, and the newly created plant instance must have access to
+  // meteorology. But meteorology is normally only held within the envrionment.
+  // So we need to store a pointer to meteorology within the terrain
+  const Meteorology &meteorology() const { return meteorology_; }
+  
   friend std::ostream &operator<<(std::ostream &os, const Terrain &terrain);
 
   // befriend with a list of actions
