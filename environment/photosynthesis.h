@@ -19,13 +19,15 @@ class Photosynthesis {
   //   (umol CO2 m-2 s-1).
   //   th (local solar time, hour), lai (leaf area index, m2 m-2),
   //   lftemp (leaf temperature, deg. C)
-  double GrossCanopyPhotosynthesis(double local_solar_hour,
-                                   double leaf_temperature,
-                                   PlantRadiation::LeafIndexArea leaf_area_index);
+  double GrossCanopyPhotosynthesis(
+      double local_solar_hour, double leaf_temperature,
+      PlantRadiation::LeafIndexArea leaf_area_index);
 
   // Daily gross canopy photosynthesis (per unit ground area)
   //   (umol CO2 m-2 day-1)
-  double DailyGrossCanopyPhotosynthesis(PlantRadiation::LeafIndexArea leaf_area_index);
+  double DailyGrossCanopyPhotosynthesis(
+      PlantRadiation::LeafIndexArea leaf_area_index, double solar_hour_sunrise,
+      double solar_hour_sunset);
 
  private:
   // Changes the given model parameter based on current temperature.
@@ -82,7 +84,6 @@ class Photosynthesis {
   static constexpr double kTemperatureScalar25 = 25.0;
   static constexpr double kHourToSeconds = 3600.0;
 
-  Meteorology meteorology_;
   PlantRadiation plant_radiation_;
   EnergyBalance energy_balance_;
 };

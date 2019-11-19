@@ -8,10 +8,9 @@ namespace environment {
 Photosynthesis::Photosynthesis(const Meteorology &meteorology,
                                const PlantRadiation &plant_radiation,
                                const EnergyBalance &energy_balance)
-    : meteorology_(meteorology),
-      plant_radiation_(plant_radiation),
-      energy_balance_(energy_balance) {}
+    : plant_radiation_(plant_radiation), energy_balance_(energy_balance) {}
 
+// Described on page 130
 double Photosynthesis::Q10TemperatureSensitivity(
     double michaelis_menten_constant_c25, double q10_temperature_sensitivity,
     double leaf_temperature) {
@@ -82,9 +81,9 @@ double Photosynthesis::LeafPhotosynthesis(double par, double leaf_temperature) {
               fmin(light_limited_value, sucrose_sink_limited_value));
 }
 
-double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
-                                                 double leaf_temperature,
-                                                 PlantRadiation::LeafIndexArea leaf_area_index) {
+double Photosynthesis::GrossCanopyPhotosynthesis(
+    double local_solar_hour, double leaf_temperature,
+    PlantRadiation::LeafIndexArea leaf_area_index) {
   PlantRadiation::AbsorbedPhotosyntheticallyActiveRadiation
       absorbedHourParReturn = plant_radiation_.CalculateAbsorbedHourPAR(
           0, 0,
@@ -94,22 +93,22 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
   // leaf assimilation:
   double photosynthesis_sunlit = LeafPhotosynthesis(sunlit, leaf_temperature);
   double photosynthesis_shaded = LeafPhotosynthesis(shaded, leaf_temperature);
-                              
+
   // From formula 6.36 on page 138
   return (photosynthesis_sunlit * leaf_area_index.sunlit +
           photosynthesis_shaded *
               leaf_area_index.shaded);  // in umol CO2 m-2 s-1
 }
 
-double Photosynthesis::DailyGrossCanopyPhotosynthesis(PlantRadiation::LeafIndexArea leaf_area_index) {
+double Photosynthesis::DailyGrossCanopyPhotosynthesis(
+    PlantRadiation::LeafIndexArea leaf_area_index, double solar_hour_sunrise,
+    double solar_hour_sunset) {
   // 5-point gauss integration over sunrise to sunset:
   double const ABS[5] = {0.0469101, 0.2307534, 0.5000000, 0.7692465, 0.9530899};
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
 
   // From formula 6.37 on page 140
-  double solar_hour_sunrise = meteorology_.solar_hour_sunrise();
-  double solar_hours_per_day =
-      meteorology_.solar_hour_sunset() - solar_hour_sunrise;
+  double solar_hours_per_day = solar_hour_sunset - solar_hour_sunrise;
   double assimilation = 0.0;
 
   for (int i = 0; i < 5; ++i) {
@@ -122,8 +121,8 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis(PlantRadiation::LeafIndexA
     // CalculateCanopyTemperature be called?
     double canopy_temperature = energy_balance_.CalculateCanopyTemperature(
         solar_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
-    double gross_canopy_photosynthesis =
-        GrossCanopyPhotosynthesis(solar_hour, canopy_temperature, leaf_area_index);
+    double gross_canopy_photosynthesis = GrossCanopyPhotosynthesis(
+        solar_hour, canopy_temperature, leaf_area_index);
     assimilation += gross_canopy_photosynthesis * kHourToSeconds * WGT[i] *
                     solar_hours_per_day;
   }
