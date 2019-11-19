@@ -5,12 +5,14 @@
 using namespace config;
 using namespace environment;
 
+// Coordinate is initialized with correct values
 TEST(CoordinateTest, ConstructorTest) {
   Coordinate c(0, 1);
   EXPECT_EQ(0, c.x);
   EXPECT_EQ(1, c.y);
 }
 
+// Coordinates are equal when they have the same x and y
 TEST(CoordinateTest, OperatorTest) {
   Coordinate c_1(0, 1);
   Coordinate c_2(0, 1);
@@ -20,6 +22,7 @@ TEST(CoordinateTest, OperatorTest) {
   EXPECT_FALSE(c_1 == c_2);
 }
 
+// Terrain object is initialized correctly from raw terrain data
 TEST(TerrainTest, ConstructorTest) {
   Config dumb_config("place name", Location(100, 101, 201, 200));
   Climate dumb_climate(dumb_config);
@@ -30,7 +33,6 @@ TEST(TerrainTest, ConstructorTest) {
   TerrainRawData dumb_terrain_raw_data(5, 0);
   Terrain terrain(dumb_terrain_raw_data, dumb_meteorology);
 
-  EXPECT_EQ(5, terrain.size());
   EXPECT_EQ(5, terrain.size());
 }
 

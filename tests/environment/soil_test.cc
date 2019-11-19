@@ -4,6 +4,7 @@
 
 using namespace environment;
 
+// Soil is initialized correctly from parameters
 TEST(SoilTest, ConstructorTest) {
   Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 0.0, 0.0);
 
@@ -15,6 +16,7 @@ TEST(SoilTest, ConstructorTest) {
   EXPECT_EQ(0.0, soil.water_content().water_amount_2);
 }
 
+// Soil equivalence test
 TEST(SoilTest, OperatorTest) {
   Soil lhs(Soil::CLAY, 6.0, 1.0, 2.0, 0.0, 0.0);
   Soil rhs(Soil::CLAY, 6.0, 1.0, 2.0, 0.0, 0.0);

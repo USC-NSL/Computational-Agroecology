@@ -6,6 +6,7 @@
 
 using namespace environment;
 
+// Tests if weather is initialized with correct parameters using first constructor
 TEST(WeatherTest, ConstructorTest_1) {
   Weather weather(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
 
@@ -16,6 +17,7 @@ TEST(WeatherTest, ConstructorTest_1) {
   EXPECT_EQ(5.0, weather.rainfall);
 }
 
+// Weather is initialized with correct parameters using second constructor
 TEST(WeatherTest, ConstructorTest_2) {
   Weather weather(0.0, MinMaxTemperature({1.0, 2.0}), 3.0, 4.0, 5.0);
 
@@ -26,6 +28,7 @@ TEST(WeatherTest, ConstructorTest_2) {
   EXPECT_EQ(5.0, weather.rainfall);
 }
 
+// Two weather instances are equal when initialized with same values
 TEST(WeatherTest, OperatorTest) {
   Weather lhs(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
   Weather rhs(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
