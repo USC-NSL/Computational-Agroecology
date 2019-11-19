@@ -69,6 +69,7 @@ double Photosynthesis::PhotosynthesisLimitedBySucroseSink(
 }
 
 double Photosynthesis::LeafPhotosynthesis(double par, double leaf_temperature) {
+  // From formula 6.27 on page 134
   double rubisco_limited_value = PhotosynthesisLimitedByRubisco(
       leaf_temperature, kInternalCo2Concentration);
   double light_limited_value = PhotosynthesisLimitedByLight(
@@ -97,6 +98,8 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
       plant_radiation_.CalculateLai(
           local_solar_hour);  // TODO: Is this the right input value to the
                               // function???
+                              
+  // From formula 6.36 on page 138
   return (photosynthesis_sunlit * leafIndexAreaReturn.sunlit +
           photosynthesis_shaded *
               leafIndexAreaReturn.shaded);  // in umol CO2 m-2 s-1
