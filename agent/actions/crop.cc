@@ -44,7 +44,7 @@ void Add::Execute(environment::Terrain *terrain) const {
   using environment::PlantBuilder;
   for (const auto &coordinate : applied_range_) {
     const auto &meteorology = terrain->meteorology();
-    terrain->plant_container_.AddPlant(crop_type_name_, coordinate, *meteorology);
+    terrain->plant_container_.AddPlant(crop_type_name_, coordinate, meteorology);
   }
 }
 

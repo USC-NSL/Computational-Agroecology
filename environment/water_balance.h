@@ -103,7 +103,7 @@ class WaterBalance {
   static constexpr double depth_2 = 0.03;
   static constexpr double photosynthesis_efficiency_c3 = 0.05;
   // Explained on page 71, it's the amount of energy required to convert 1 kg of
-  // liquid water to vapor, without any change in temperature
+  // liquid water to vapor, without any change in temperature (joules)
   static constexpr double latent_heat_of_vaporization_of_water = 2454000.0;
   static constexpr double liquid_density_for_water_20c = 998.0;
   static constexpr double portential_factor =

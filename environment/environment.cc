@@ -102,8 +102,6 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   // TODO: GLOG
 
   while (time_step_ < time_step) {
-    time_step_++;
-
     // Iterate through all plants, need to be able to modify plants, so not
     // const
     for (auto &plant : terrain_.plant_container()) {
@@ -130,6 +128,7 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
       std::unordered_map<ResourceType, int64_t> resources = {};
       plant->GrowStep(1, resources);
     }
+    time_step_++;
   }
 
   time_step_ = time_step;

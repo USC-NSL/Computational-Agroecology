@@ -36,7 +36,7 @@ class Terrain {
   // "Terrain" object, and the newly created plant instance must have access to
   // meteorology. But meteorology is normally only held within the envrionment.
   // So we need to store a pointer to meteorology within the terrain
-  const Meteorology *meteorology() const { return meteorology_; }
+  const Meteorology &meteorology() const { return meteorology_; }
 
   // Modifiers
   void ExecuteAction(const agent::action::Action &action);
@@ -52,7 +52,7 @@ class Terrain {
 
   PlantContainer plant_container_;
   SoilContainer soil_container_;
-  const Meteorology *meteorology_;
+  const Meteorology meteorology_;
 
   int yield_;
   // TODO: Now we assume the terrain to be a square space.
