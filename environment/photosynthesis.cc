@@ -83,7 +83,8 @@ double Photosynthesis::LeafPhotosynthesis(double par, double leaf_temperature) {
 }
 
 double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
-                                                 double leaf_temperature) {
+                                                 double leaf_temperature,
+                                                 PlantRadiation::LeafIndexArea leaf_area_index) {
   PlantRadiation::AbsorbedPhotosyntheticallyActiveRadiation
       absorbedHourParReturn = plant_radiation_.CalculateAbsorbedHourPAR(
           0, 0,
@@ -93,19 +94,14 @@ double Photosynthesis::GrossCanopyPhotosynthesis(double local_solar_hour,
   // leaf assimilation:
   double photosynthesis_sunlit = LeafPhotosynthesis(sunlit, leaf_temperature);
   double photosynthesis_shaded = LeafPhotosynthesis(shaded, leaf_temperature);
-  // sunlit and shaded LAI
-  PlantRadiation::LeafIndexArea leafIndexAreaReturn =
-      plant_radiation_.CalculateLai(
-          local_solar_hour);  // TODO: Is this the right input value to the
-                              // function???
                               
   // From formula 6.36 on page 138
-  return (photosynthesis_sunlit * leafIndexAreaReturn.sunlit +
+  return (photosynthesis_sunlit * leaf_area_index.sunlit +
           photosynthesis_shaded *
-              leafIndexAreaReturn.shaded);  // in umol CO2 m-2 s-1
+              leaf_area_index.shaded);  // in umol CO2 m-2 s-1
 }
 
-double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
+double Photosynthesis::DailyGrossCanopyPhotosynthesis(PlantRadiation::LeafIndexArea leaf_area_index) {
   // 5-point gauss integration over sunrise to sunset:
   double const ABS[5] = {0.0469101, 0.2307534, 0.5000000, 0.7692465, 0.9530899};
   double const WGT[5] = {0.1184635, 0.2393144, 0.2844444, 0.2393144, 0.1184635};
@@ -127,7 +123,7 @@ double Photosynthesis::DailyGrossCanopyPhotosynthesis() {
     double canopy_temperature = energy_balance_.CalculateCanopyTemperature(
         solar_hour, total_sensible_heat_flux, sensible_heat_flux_crop);
     double gross_canopy_photosynthesis =
-        GrossCanopyPhotosynthesis(solar_hour, canopy_temperature);
+        GrossCanopyPhotosynthesis(solar_hour, canopy_temperature, leaf_area_index);
     assimilation += gross_canopy_photosynthesis * kHourToSeconds * WGT[i] *
                     solar_hours_per_day;
   }
