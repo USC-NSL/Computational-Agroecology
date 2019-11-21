@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-#include "agent/q_learning.h"
+#include "agent/agent.h"
 #include "agent/resource.h"
 #include "environment/climate.h"
 #include "environment/config.h"

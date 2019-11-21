@@ -28,6 +28,10 @@ struct ActionID {
 
 class Agent {
  public:
+  Agent(const std::string &name, environment::Environment *env);
+  Agent(const std::string &name, environment::Environment *env,
+        const Resources &owned_resources);
+
   enum ReturnCodes { SUCCESS = 0, INVALID_ARGUMENT, NOT_ENOUGH_RESOURCES };
 
   // modifiers
@@ -55,12 +59,6 @@ class Agent {
   inline const Resources owned_resource() const { return owned_resources_; }
 
  protected:
-  // constructors which can only be used in heritance
-  // only children can call these
-  Agent(const std::string &name, environment::Environment *env);
-  Agent(const std::string &name, environment::Environment *env,
-        const Resources &owned_resources);
-
   // Name of this agent
   std::string name_;
 
