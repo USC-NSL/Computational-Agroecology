@@ -27,6 +27,8 @@ class PlantContainer {
 
   PlantContainer() : plants_(), kdtree_(){};
 
+  // Fetches a plant pointer specified by the `coordinate` here.
+  // Returns `nullptr` if no plant is found.
   Plant *operator[](const Coordinate &coordinate);
   const Plant *operator[](const Coordinate &coordinate) const;
 

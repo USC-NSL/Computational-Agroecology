@@ -16,6 +16,8 @@ class SoilContainer : private std::vector<std::vector<Soil>> {
   // soil instances are dumb instances.
   SoilContainer(const size_t size);
 
+  // Retrieves a soil instance by giving its position (`struct Coordinate`).
+  // For example, (*this)[Coordinate(1, 2)] fetches the soil on coordinate (1, 2).
   Soil &operator[](const Coordinate &coordinate);
   const Soil &operator[](const Coordinate &coordinate) const;
 
