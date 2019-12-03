@@ -1,6 +1,7 @@
 #include "crop.h"
 
 #include "environment/terrain.h"
+#include "environment/meteorology.h"
 
 namespace agent {
 
@@ -41,8 +42,9 @@ void Add::Execute(environment::Terrain *terrain) const {
   std::cout << "Adding " << applied_range_.size() << " crop(s)." << std::endl;
 
   using environment::PlantBuilder;
-  for (const auto &c : applied_range_) {
-    terrain->plant_container_.AddPlant(crop_type_name_, c);
+  for (const auto &coordinate : applied_range_) {
+    const auto &meteorology = terrain->meteorology();
+    terrain->plant_container_.AddPlant(crop_type_name_, coordinate, meteorology);
   }
 }
 
@@ -157,7 +159,7 @@ void Water::Execute(environment::Terrain *terrain) const {
   }
 
   for (const auto &c : applied_range_) {
-    terrain->soil_container_.GetSoil(c)->water_content += water_amount_;
+    terrain->soil_container_.GetSoil(c).AddWaterToSoil(water_amount_);
   }
 }
 

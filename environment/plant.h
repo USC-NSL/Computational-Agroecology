@@ -6,7 +6,10 @@
 #include <unordered_map>
 
 #include "environment/coordinate.h"
+#include "environment/meteorology.h"
+#include "environment/plant_radiation.h"
 #include "environment/soil.h"
+#include "environment/water_balance.h"
 
 namespace environment {
 
@@ -95,10 +98,16 @@ class Plant {
   int produce() const { return produce_; }
   const PlantParams &params() const { return params_; }
 
+  const PlantRadiation &plant_radiation() const { return plant_radiation_; }
+
+  void UpdatePlantRadiation(const Meteorology &meteorology) {
+    plant_radiation_.Update(meteorology);
+  }
+
  protected:
   // Constructs a generic plant with default values, only for child class use.
-  Plant(const std::string &name, const double trunk_size = 0.0,
-        const double root_size_ = 0.0)
+  Plant(const std::string &name, const Meteorology &meteorology,
+        const double trunk_size = 0.0, const double root_size_ = 0.0)
       : name_(name),
         position_(),
         trunk_size_(trunk_size),
@@ -108,7 +117,10 @@ class Plant {
         accumulated_gdd_(0),
         maturity_(SEED),
         produce_(0),
-        params_(kDefaultParams) {}
+        params_(kDefaultParams),
+        leaf_index_area_(1),
+        plant_radiation_(leaf_index_area_, meteorology) {
+  }  // TODO: Set this value for leaf_index_area cleanly
 
   // Overrides internal parameters with the given `params`.
   void SetParams(const PlantParams &params) {
@@ -153,6 +165,10 @@ class Plant {
 
   // A collection of static parameters of this plant.
   PlantParams params_;
+
+  PlantRadiation plant_radiation_;
+
+  double leaf_index_area_;
 };
 
 }  // namespace environment

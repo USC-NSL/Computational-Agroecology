@@ -11,7 +11,7 @@
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 
-#include "environment/config.h"
+#include "config/config.h"
 #include "environment/terrain.h"
 #include "message_convertor.h"
 
@@ -33,15 +33,15 @@ namespace service {
         "`ServerContext` or `CreateEnvironmentRequest` is nullptr.");
   }
 
-  environment::Config config = FromProtobuf(request->config());
+  config::Config config = FromProtobuf(request->config());
   std::chrono::system_clock::time_point tp =
       FromProtobufTimePoint(request->timestamp_epoch_count());
   std::chrono::duration<int> time_step_length =
       FromProtobufDuration(request->time_step_epoch_count());
-  environment::Terrain terrain(request->terrain_size());
+  config::TerrainRawData terrain_raw_data(request->terrain_size(), 0);
 
-  auto ret = agent_server_.CreateEnvironment(request->name(), config, tp,
-                                             time_step_length, terrain);
+  auto ret = agent_server_.CreateEnvironment(
+      request->name(), config, terrain_raw_data, tp, time_step_length);
 
   if (ret == ::agent_server::AgentServer::ALREADY_EXISTS) {
     return grpc::Status(grpc::ALREADY_EXISTS,
@@ -129,7 +129,7 @@ namespace service {
                           request->name() + " is not found.");
   }
 
-  *(response->mutable_environment()) = ToProtobuf(*(result.second));
+  *(response->mutable_environment()) = ToProtobuf(*(*(result.second)));
   return ::grpc::Status::OK;
 }
 

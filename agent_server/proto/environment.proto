@@ -57,11 +57,16 @@ message Soil {
     double sulfur = 6;
   }
 
+  message WaterContent {
+    double water_amount_1 = 1;
+    double water_amount_2 = 2;
+  }
+
   Texture texture = 1;
   double pH = 2;
   double salinity = 3;
   double organic_matter = 4;
-  double water_content = 5;
+  WaterContent water_content = 5;
 }
 
 message Coordinate {

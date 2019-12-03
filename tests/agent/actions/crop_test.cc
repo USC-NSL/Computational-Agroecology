@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -10,6 +11,7 @@
 #include "environment/terrain.h"
 
 using namespace agent::action;
+using namespace config;
 using namespace environment;
 
 const size_t kNumberOfRange = 5;
@@ -23,12 +25,22 @@ class AddTest : public ::testing::Test {
 
     cost[agent::ResourceType::MONEY] = 20;
     cost[agent::ResourceType::LABOR] = 40;
+
+    Config dumb_config("place name", Location(100, 101, 201, 200));
+    Climate dumb_climate(dumb_config);
+    Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                                 dumb_config.location,
+                                 dumb_climate.climate_zone, dumb_weather);
+    TerrainRawData dumb_terrain_raw_data(kNumberOfRange, 0);
+    terrain.reset(new Terrain(dumb_terrain_raw_data, dumb_meteorology));
   }
 
   std::vector<Coordinate> applied_range;
   int64_t time_step = 0;
   int64_t duration = 1;
   agent::Resources cost;
+  std::unique_ptr<Terrain> terrain;
 };
 
 class RemoveTest : public ::testing::Test {
@@ -40,12 +52,22 @@ class RemoveTest : public ::testing::Test {
 
     cost[agent::ResourceType::MONEY] = 20;
     cost[agent::ResourceType::LABOR] = 40;
+
+    Config dumb_config("place name", Location(100, 101, 201, 200));
+    Climate dumb_climate(dumb_config);
+    Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                                 dumb_config.location,
+                                 dumb_climate.climate_zone, dumb_weather);
+    TerrainRawData dumb_terrain_raw_data(kNumberOfRange, 0);
+    terrain.reset(new Terrain(dumb_terrain_raw_data, dumb_meteorology));
   }
 
   std::vector<Coordinate> applied_range;
   int64_t time_step = 0;
   int64_t duration = 1;
   agent::Resources cost;
+  std::unique_ptr<Terrain> terrain;
 };
 
 class HarvestTest : public ::testing::Test {
@@ -57,12 +79,22 @@ class HarvestTest : public ::testing::Test {
 
     cost[agent::ResourceType::MONEY] = 20;
     cost[agent::ResourceType::LABOR] = 40;
+
+    Config dumb_config("place name", Location(100, 101, 201, 200));
+    Climate dumb_climate(dumb_config);
+    Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                                 dumb_config.location,
+                                 dumb_climate.climate_zone, dumb_weather);
+    TerrainRawData dumb_terrain_raw_data(kNumberOfRange, 0);
+    terrain.reset(new Terrain(dumb_terrain_raw_data, dumb_meteorology));
   }
 
   std::vector<Coordinate> applied_range;
   int64_t time_step = 0;
   int64_t duration = 1;
   agent::Resources cost;
+  std::unique_ptr<Terrain> terrain;
 };
 
 class AddWaterTest : public ::testing::Test {
@@ -74,12 +106,22 @@ class AddWaterTest : public ::testing::Test {
 
     cost[agent::ResourceType::MONEY] = 20;
     cost[agent::ResourceType::LABOR] = 40;
+
+    Config dumb_config("place name", Location(100, 101, 201, 200));
+    Climate dumb_climate(dumb_config);
+    Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                                 dumb_config.location,
+                                 dumb_climate.climate_zone, dumb_weather);
+    TerrainRawData dumb_terrain_raw_data(kNumberOfRange, 0);
+    terrain.reset(new Terrain(dumb_terrain_raw_data, dumb_meteorology));
   }
 
   std::vector<Coordinate> applied_range;
   int64_t time_step = 0;
   int64_t duration = 1;
   agent::Resources cost;
+  std::unique_ptr<Terrain> terrain;
 };
 
 const std::string kBeanTypeName = "bean";
@@ -125,13 +167,12 @@ TEST_F(AddTest, ConstrcutorTest_4) {
 
 TEST_F(AddTest, ExecuteTest_1) {
   crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
 
-  action.Execute(&terrain);
+  action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(kBeanTypeName, plant->name());
@@ -144,15 +185,14 @@ TEST_F(AddTest, ExecuteTest_1) {
 
 TEST_F(AddTest, ExecuteTest_2) {
   crop::Add action(applied_range, time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
 
-  action.Execute(&terrain);
+  action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
         ASSERT_NE(nullptr, plant);
@@ -212,13 +252,12 @@ TEST_F(RemoveTest, ConstrcutorTest_4) {
 
 TEST_F(RemoveTest, ExecuteTest_1) {
   crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
 
-  action.Execute(&terrain);
+  action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
         EXPECT_EQ(kBeanTypeName, plant->name());
@@ -230,11 +269,11 @@ TEST_F(RemoveTest, ExecuteTest_1) {
 
   crop::Remove remove_action(applied_range.front(), time_step, duration);
 
-  remove_action.Execute(&terrain);
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
+  remove_action.Execute(terrain.get());
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
       if (Coordinate(i, j) == applied_range.front()) {
-        EXPECT_EQ(nullptr, terrain.GetPlant(Coordinate(i, j)));
+        EXPECT_EQ(nullptr, terrain->plant_container()[Coordinate(i, j)]);
       }
     }
   }
@@ -242,15 +281,14 @@ TEST_F(RemoveTest, ExecuteTest_1) {
 
 TEST_F(RemoveTest, ExecuteTest_2) {
   crop::Add action(applied_range, time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
 
-  action.Execute(&terrain);
+  action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
         ASSERT_NE(nullptr, plant);
@@ -263,14 +301,14 @@ TEST_F(RemoveTest, ExecuteTest_2) {
 
   crop::Remove remove_action(applied_range, time_step, duration);
 
-  remove_action.Execute(&terrain);
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
+  remove_action.Execute(terrain.get());
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
       // if the (i, j) is in the `applied_range`, we should see the effect of
       // this action
       if (std::find(applied_range.begin(), applied_range.end(),
                     Coordinate(i, j)) != applied_range.end()) {
-        EXPECT_EQ(nullptr, terrain.GetPlant(Coordinate(i, j)));
+        EXPECT_EQ(nullptr, terrain->plant_container()[Coordinate(i, j)]);
       }
     }
   }
@@ -376,18 +414,20 @@ TEST_F(AddWaterTest, ConstrcutorTest_4) {
 // Adds water to a range of plants
 TEST_F(AddWaterTest, AddToRange1) {
   crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
-  action.Execute(&terrain);
+
+  action.Execute(terrain.get());
   // add water to terrain
   crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
-  water_action.Execute(&terrain);
+  water_action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(15.0, terrain.GetSoil(Coordinate(i, j))->water_content);
+        EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }
@@ -398,32 +438,36 @@ TEST_F(AddWaterTest, AddToRange1) {
 // Adds water to a range of plants twice
 TEST_F(AddWaterTest, AddToRange2) {
   crop::Add action(applied_range.front(), time_step, duration, kBeanTypeName);
-  Terrain terrain(kNumberOfRange);
-  action.Execute(&terrain);
+
+  action.Execute(terrain.get());
   // add water to terrain
   crop::Water water_action(applied_range.front(), time_step, duration, 15.0);
-  water_action.Execute(&terrain);
+  water_action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(15.0, terrain.GetSoil(Coordinate(i, j))->water_content);
+        EXPECT_EQ(15.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }
     }
   }
   // add same amount of water to the range again
-  water_action.Execute(&terrain);
+  water_action.Execute(terrain.get());
 
-  for (size_t i = 0; i < terrain.size(); ++i) {
-    for (size_t j = 0; j < terrain.size(); ++j) {
-      const Plant *plant = terrain.GetPlant(Coordinate(i, j));
+  for (size_t i = 0; i < terrain->size(); ++i) {
+    for (size_t j = 0; j < terrain->size(); ++j) {
+      const Plant *plant = terrain->plant_container()[Coordinate(i, j)];
       if (Coordinate(i, j) == applied_range.front()) {
         ASSERT_NE(nullptr, plant);
-        EXPECT_EQ(30.0, terrain.GetSoil(Coordinate(i, j))->water_content);
+        EXPECT_EQ(30.0, terrain->soil_container()[Coordinate(i, j)]
+                            .water_content()
+                            .water_amount_1);
       } else {
         EXPECT_EQ(nullptr, plant);
       }
@@ -446,4 +490,3 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

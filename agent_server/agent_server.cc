@@ -5,17 +5,18 @@
 namespace agent_server {
 
 AgentServer::ReturnCodes AgentServer::CreateEnvironment(
-    const std::string &name, const environment::Config &config,
+    const std::string &name, const config::Config &config,
+    const config::TerrainRawData &terrain_raw_data,
     const std::chrono::system_clock::time_point &time,
-    const std::chrono::duration<int> &time_step_length,
-    const environment::Terrain &terrain) {
+    const std::chrono::duration<int> &time_step_length) {
   auto result = name_to_env_.find(name);
   if (result != name_to_env_.end()) {
     return ALREADY_EXISTS;
   }
 
-  name_to_env_.emplace(std::make_pair(
-      name, environment::Environment(config, time, time_step_length, terrain)));
+  name_to_env_.emplace(
+      std::make_pair(name, environment::Environment(config, terrain_raw_data,
+                                                    time, time_step_length)));
 
   return OK;
 }
@@ -61,14 +62,14 @@ AgentServer::ReturnCodes AgentServer::DeleteAgent(const std::string &name) {
   return OK;
 }
 
-std::pair<AgentServer::ReturnCodes, std::optional<environment::Environment>>
+std::pair<AgentServer::ReturnCodes, std::optional<const environment::Environment *>>
 AgentServer::GetEnvironment(const std::string &name) {
   auto result = name_to_env_.find(name);
   if (result == name_to_env_.end()) {
     return std::make_pair(ENV_NOT_FOUND, std::nullopt);
   }
 
-  return std::make_pair(OK, result->second);
+  return std::make_pair(OK, &(result->second));
 }
 
 AgentServer::ReturnCodes AgentServer::SimulateToTimeStep(

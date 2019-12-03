@@ -28,6 +28,12 @@ class PlantRadiation {
   void Update(const int day_of_year, const double solar_hour);
 
   // TODO: add accessors for other classes to use
+  double total_flux_density_shaded() const {
+    return total_flux_density_shaded_;
+  };
+  double total_flux_density_sunlit() const {
+    return total_flux_density_sunlit_;
+  };
 
  private:
   friend class EnergyBalance;

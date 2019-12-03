@@ -63,7 +63,9 @@ void PhotonSimulator::SimulateToTime(
   // TODO: add functionality if render is required.
 }
 
-void PhotonSimulator::FreeModels() { models_.clear(); }
+void PhotonSimulator::FreeModels() {
+  models_.clear();
+}
 
 // TODO: implement these two functions after refining class plant
 void PhotonSimulator::LoadModels(environment::Environment *env) {}

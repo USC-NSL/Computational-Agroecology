@@ -1,22 +1,26 @@
 #include "environment.h"
 
+#include "environment/resource.h"
+#include "environment/water_balance.h"
+
 #include <ctime>
 
 namespace environment {
 
-Environment::Environment(const Config &config,
+Environment::Environment(const config::Config &config,
+                         const config::TerrainRawData &terrain_raw_data,
                          const std::chrono::system_clock::time_point &time,
-                         const std::chrono::duration<int> &time_step_length,
-                         const Terrain &terrain)
+                         const std::chrono::duration<int> &time_step_length)
     : config_(config),
       climate_(config),
       timestamp_(time),
       time_step_length_(time_step_length),
       time_step_(0),
-      terrain_(terrain),
       weather_(0.0, 0.0, 0.0, 0.0, 0.0,
                0.0),  // TODO: Get weather data and put them into this struct.
-      meteorology_(time, config.location, climate_.climate_zone, weather_) {
+      meteorology_(time, config.location, climate_.climate_zone, weather_),
+      terrain_(terrain_raw_data, meteorology_) {
+  // TODO: Create some data structure here
   auto to_round = timestamp_.time_since_epoch() % time_step_length_;
   timestamp_ -= to_round;
 }
@@ -97,10 +101,35 @@ void Environment::SimulateToTimeStep(const int64_t time_step) {
   auto new_timestamp = timestamp_ + (time_step_diff * time_step_length_);
   // TODO: GLOG
 
-  // TODO: call all other simulators
-  // TODO: plant growth model
+  while (time_step_ < time_step) {
+    // Iterate through all plants, need to be able to modify plants, so not
+    // const
+    for (auto &plant : terrain_.plant_container()) {
+      const PlantRadiation &plant_radiation = plant->plant_radiation();
+      plant->UpdatePlantRadiation(meteorology_);
 
-  // Update the information of environment
+      // TODO: Do you need to actually get the soil flux instead? Where is it?
+      // Because we need that for water content in SOIL.
+      // TODO: The book uses these scalars? Why?
+      double total_flux_density_shaded_potential =
+          plant_radiation.total_flux_density_shaded() * flux_density_factor;
+      double total_flux_density_sunlit_potential =
+          plant_radiation.total_flux_density_sunlit() * flux_density_factor;
+
+      // TODO: Add rainfall amount to UpdateWaterContent
+      const Coordinate &plant_coordinate = plant->position();
+      Soil &soil = terrain_.soil_container()[plant_coordinate];
+      soil.UpdateWaterContent(0 /* rainfall */,
+                              total_flux_density_sunlit_potential,
+                              total_flux_density_shaded_potential);
+
+      // TODO: Add in other factors like sunlight and water
+      // TODO: Figure out how to use this resource parameter
+      std::unordered_map<ResourceType, int64_t> resources = {};
+      plant->GrowStep(1, resources);
+    }
+    time_step_++;
+  }
 
   time_step_ = time_step;
   timestamp_ = new_timestamp;

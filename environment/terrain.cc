@@ -3,13 +3,18 @@
 #include <assert.h>
 #include <vector>
 
+#include "environment/meteorology.h"
 #include "environment/plant.h"
 
 namespace environment {
 
 // `class Terrain`
-Terrain::Terrain(const size_t size)
-    : size_(size), yield_(0), soil_container_(size) {}
+Terrain::Terrain(const config::TerrainRawData &terrain_raw_data,
+                 const Meteorology &meteorology)
+    : size_(terrain_raw_data.size),
+      yield_(terrain_raw_data.yield),
+      soil_container_(terrain_raw_data.size),
+      meteorology_(meteorology) {}
 
 void Terrain::ExecuteAction(const agent::action::Action &action) {
   action.Execute(this);

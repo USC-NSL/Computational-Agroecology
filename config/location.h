@@ -1,7 +1,7 @@
-#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_LOCATION_H_
-#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_LOCATION_H_
+#ifndef COMPUTATIONAL_AGROECOLOGY_CONFIG_LOCATION_H_
+#define COMPUTATIONAL_AGROECOLOGY_CONFIG_LOCATION_H_
 
-namespace environment {
+namespace config {
 
 // Geographical location
 struct Location {
@@ -16,6 +16,6 @@ struct Location {
 
 bool operator==(const Location &lhs, const Location &rhs);
 
-}  // namespace environment
+}  // namespace config
 
-#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_LOCATION_H_
+#endif  // COMPUTATIONAL_AGROECOLOGY_CONFIG_LOCATION_H_

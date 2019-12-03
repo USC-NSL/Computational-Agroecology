@@ -9,7 +9,7 @@
 
 #include "agent/actions/crop.h"
 #include "agent/q_learning.h"
-#include "environment/config.h"
+#include "config/config.h"
 #include "environment/environment.h"
 #include "environment/terrain.h"
 
@@ -27,10 +27,10 @@ class AgentServer {
   };
 
   ReturnCodes CreateEnvironment(
-      const std::string &name, const environment::Config &config,
+      const std::string &name, const config::Config &config,
+      const config::TerrainRawData &terrain_raw_data,
       const std::chrono::system_clock::time_point &time,
-      const std::chrono::duration<int> &time_step_length,
-      const environment::Terrain &terrain);
+      const std::chrono::duration<int> &time_step_length);
   ReturnCodes DeleteEnvironment(const std::string &name);
 
   ReturnCodes CreateQLearningAgent(const std::string &agent_name,
@@ -39,7 +39,8 @@ class AgentServer {
 
   ReturnCodes DeleteAgent(const std::string &name);
 
-  std::pair<ReturnCodes, std::optional<environment::Environment>>
+  // This returned pointer belongs to the `name_to_env_`. The caller should not free it.
+  std::pair<ReturnCodes, std::optional<const environment::Environment *>>
   GetEnvironment(const std::string &name);
   ReturnCodes SimulateToTimeStep(const std::string &env_name,
                                  const int64_t time_step);

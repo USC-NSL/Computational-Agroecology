@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "environment/location.h"
+#include "config/location.h"
 
-using namespace environment;
+using namespace config;
 
 TEST(LocationTest, ConstructorTest) {
   Location location(100, 200, 300, 400);

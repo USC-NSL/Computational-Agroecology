@@ -2,9 +2,9 @@
 
 #include <gtest/gtest.h>
 
-#include "environment/config.h"
+#include "config/config.h"
 
-using namespace environment;
+using namespace config;
 
 TEST(ConfigTest, ConstructorTest) {
   std::string place_name("place name");

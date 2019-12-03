@@ -10,12 +10,13 @@
 
 // This is an experimental main
 int main() {
-  environment::Location location(100, 101, 201, 200);
-  environment::Config config("place name", location);
-  environment::Terrain terrain(3);
+  config::Location location(100, 101, 201, 200);
+  config::Config config("place name", location);
+  config::TerrainRawData terrain_raw_data(3, 0);
 
-  environment::Environment env(config, std::chrono::system_clock::now(),
-                               std::chrono::hours(1), terrain);
+  environment::Environment env(config, terrain_raw_data,
+                               std::chrono::system_clock::now(),
+                               std::chrono::hours(1));
 
   const std::string kBeanTypeName = "bean";
 
@@ -26,8 +27,8 @@ int main() {
   agent::Qlearning agent_test(agent_name, env_pointer, 10, 54);
   // Create Action
   agent::ActionID action = {
-      agent_test.RandomInt(0, terrain.size() - 1),
-      agent_test.RandomInt(0, terrain.size() - 1),
+      agent_test.RandomInt(0, env.terrain().size() - 1),
+      agent_test.RandomInt(0, env.terrain().size() - 1),
       ::agent::action::ActionType(agent_test.RandomInt(
           0, ::agent::action::ActionType::NUM_ACTIONS - 1)),
       1,

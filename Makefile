@@ -16,14 +16,19 @@ INCLUDES += -I $(THIRD_PARTY_PATH)/Optimized-Photon-Mapping/src
 
 MAIN_NAME := ./environment/main
 
+# components in config
+CONFIG_PATH := ./config
+CONFIG_OBJ := $(CONFIG_PATH)/config.o \
+	$(CONFIG_PATH)/location.o \
+	$(CONFIG_PATH)/terrain_raw_data.o \
+
 # components in environment
 ENVIRONMENT_PATH := ./environment
-ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/climate.o \
-	$(ENVIRONMENT_PATH)/config.o \
+ENVIRONMENT_OBJ := $(ENVIRONMENT_PATH)/water_balance.o \
+	$(ENVIRONMENT_PATH)/climate.o \
 	$(ENVIRONMENT_PATH)/coordinate.o \
 	$(ENVIRONMENT_PATH)/environment.o \
 	$(ENVIRONMENT_PATH)/energy_balance.o \
-	$(ENVIRONMENT_PATH)/location.o \
 	$(ENVIRONMENT_PATH)/meteorology.o \
 	$(ENVIRONMENT_PATH)/plant_builder.o \
 	$(ENVIRONMENT_PATH)/plant_container.o \
@@ -67,7 +72,8 @@ PHOTON_SIMULATOR_OBJ := $(THIRDPARTY_MATH_VECTOR_OBJ) \
 SIMULATOR_OBJ := $(SIMULATOR_PATH)/photon_simulator.o \
   $(PHOTON_SIMULATOR_OBJ)
 
-ALL_OBJ :=	$(ENVIRONMENT_OBJ) \
+ALL_OBJ := $(CONFIG_OBJ) \
+	$(ENVIRONMENT_OBJ) \
 	$(AGENT_OBJ) \
 	$(ACTION_OBJ) \
 	$(PLANTS_OBJ) \
@@ -83,12 +89,14 @@ TEST_AGENT := $(TEST_AGENT_PATH)/agent_test \
 TEST_AGENT_ACTIONS_PATH := $(TEST_AGENT_PATH)/actions
 TEST_AGENT_ACTIONS := $(TEST_AGENT_ACTIONS_PATH)/crop_test
 
+TEST_CONFIG_PATH := $(TEST_PATH)/config
+TEST_CONFIG := $(TEST_CONFIG_PATH)/config_test \
+	$(TEST_CONFIG_PATH)/location_test
+
 TEST_ENVIRONMENT_PATH := $(TEST_PATH)/environment
 TEST_ENVIRONMENT := $(TEST_ENVIRONMENT_PATH)/climate_test \
-	$(TEST_ENVIRONMENT_PATH)/config_test \
 	$(TEST_ENVIRONMENT_PATH)/environment_test \
 	$(TEST_ENVIRONMENT_PATH)/plant_container_test \
-	$(TEST_ENVIRONMENT_PATH)/location_test \
 	$(TEST_ENVIRONMENT_PATH)/meteorology_test \
 	$(TEST_ENVIRONMENT_PATH)/soil_test \
 	$(TEST_ENVIRONMENT_PATH)/terrain_test \
@@ -104,6 +112,7 @@ TEST_PHOTON_SIMULATOR_MODEL := $(TEST_PHOTON_SIMULATOR_PATH)/photon_simulator_mo
 
 TEST_ALL := $(TEST_AGENT) \
 	$(TEST_AGENT_ACTIONS) \
+	$(TEST_CONFIG) \
 	$(TEST_ENVIRONMENT) \
 	$(TEST_ENVIRONMENT_PLANTS) \
 	$(TEST_PHOTON_SIMULATOR_MODEL)
@@ -131,6 +140,7 @@ $(PHOTON_SIMULATOR_PATH)/KDTree.o: $(THIRDPARTY_KDTREE_PATH)/KDTree.cpp $(THIRDP
 all: $(ALL_OBJ)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(ALL_OBJ) $(MAIN_NAME).cc -o $(MAIN_NAME) $(OPENGLLIBS)
 
+config: $(CONFIG_OBJ)
 environment: $(ENVIRONMENT_OBJ)
 agent: $(AGENT_OBJ)
 action: $(ACTION_OBJ)
@@ -163,7 +173,7 @@ AGENT_SERVER_TEST := $(AGENT_SERVER_TEST_PATH)/agent_server_test \
 %.grpc.pb.cc: %.proto %.pb.cc
 	$(PROTOC) $(AGENT_SERVER_GRPC_FLAGS) $<
 
-agent_server: $(ALL_OBJ) $(AGENT_SERVER_OBJ)
+agent_server: $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_PATH)/agent_server_grpc_service.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(ALL_OBJ) $(AGENT_SERVER_OBJ) $(AGENT_SERVER_PATH)/agent_server_grpc_service.cc $(LDFLAGS) -o $(AGENT_SERVER_PATH)/agent_server $(OPENGLLIBS)
 
 agent_server_test: $(ALL_OBJ) $(AGENT_SERVER_OBJ)

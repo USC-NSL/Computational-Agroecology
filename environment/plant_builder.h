@@ -10,7 +10,7 @@
 namespace environment {
 
 // A generator function for constructing a new plant object.
-using PlantGenerator = std::function<Plant *()>;
+using PlantGenerator = std::function<Plant *(const Meteorology &meteorology)>;
 
 // TODO: Create a public method to show all available plant names.
 // A non-instantiable class to construct plant objects by model/spec.
@@ -28,8 +28,10 @@ class PlantBuilder {
   // under `model_name` and passes `overrides` to the generator.  If no model is
   // found or an error occurs, returns nullptr.  Does not retain ownership of
   // the returned pointer.
-  static Plant *NewPlant(const std::string &model_name);
   static Plant *NewPlant(const std::string &model_name,
+                         const Meteorology &meteorology);
+  static Plant *NewPlant(const std::string &model_name,
+                         const Meteorology &meteorology,
                          const PlantParams &overrides);
 
   // Returns a list of all registered plant model names
@@ -48,8 +50,8 @@ class PlantBuilder {
    public:                                                                \
     _PLANT##_generator_class() {                                          \
       PlantBuilder::RegisterPlant(                                        \
-          _NAME, PlantGenerator([]() {                                    \
-            return new environment::plants::_PLANT(_NAME);                \
+          _NAME, PlantGenerator([](const Meteorology &meteorology) {      \
+            return new environment::plants::_PLANT(_NAME, meteorology);   \
           }));                                                            \
     }                                                                     \
     ~_PLANT##_generator_class() { PlantBuilder::UnregisterPlant(_NAME); } \

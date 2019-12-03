@@ -1,5 +1,6 @@
 #include "plant_builder.h"
 
+#include "environment/meteorology.h"
 #include "environment/plant.h"
 
 namespace environment {
@@ -17,14 +18,16 @@ void PlantBuilder::UnregisterPlant(const std::string &model_name) {
   models_.erase(model_name);
 }
 
-Plant *PlantBuilder::NewPlant(const std::string &model_name) {
-  return NewPlant(model_name, PlantParams());
+Plant *PlantBuilder::NewPlant(const std::string &model_name,
+                              const Meteorology &meteorology) {
+  return NewPlant(model_name, meteorology, PlantParams());
 }
 
 Plant *PlantBuilder::NewPlant(const std::string &model_name,
+                              const Meteorology &meteorology,
                               const PlantParams &overrides) {
   if (models_.count(model_name)) {
-    Plant *p = models_[model_name]();
+    Plant *p = models_[model_name](meteorology);
     p->SetParams(overrides);
     return p;
   }

@@ -8,22 +8,22 @@
 
 namespace environment {
 
-class SoilContainer {
+class SoilContainer : private std::vector<std::vector<Soil>> {
  public:
   // TODO: implement the constructor by physical unit
   // Temporary constructor
   // Currently constructs a square grid with size of `size`. In each grid the
   // soil instances are dumb instances.
-  SoilContainer(const size_t size)
-      : soils_(size,
-               std::vector<Soil>(size, Soil(Soil::CLAY, 7.0, 0.0, 0.0, 0.0))) {}
+  SoilContainer(const size_t size);
+
+  // Retrieves a soil instance by giving its position (`struct Coordinate`).
+  // For example, (*this)[Coordinate(1, 2)] fetches the soil on coordinate (1, 2).
+  Soil &operator[](const Coordinate &coordinate);
+  const Soil &operator[](const Coordinate &coordinate) const;
 
   // Retrieves a soil instance by giving its position (`struct Coordinate`)
-  Soil *GetSoil(const Coordinate &coordinate);
-  const Soil *GetSoil(const Coordinate &coordinate) const;
-
- private:
-  std::vector<std::vector<Soil>> soils_;
+  Soil &GetSoil(const Coordinate &coordinate);
+  const Soil &GetSoil(const Coordinate &coordinate) const;
 };
 
 }  // namespace environment

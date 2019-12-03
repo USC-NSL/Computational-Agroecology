@@ -18,14 +18,13 @@ int64_t ToProtobuf(const std::chrono::duration<int> &time_step_length) {
   return time_step_length.count();
 }
 
-environment::Location FromProtobuf(
-    const data_format::Location &protobuf_location) {
-  return environment::Location(
+config::Location FromProtobuf(const data_format::Location &protobuf_location) {
+  return config::Location(
       protobuf_location.longitude_left(), protobuf_location.longitude_right(),
       protobuf_location.latitude_top(), protobuf_location.latitude_bottom());
 }
 
-data_format::Location ToProtobuf(const environment::Location &location) {
+data_format::Location ToProtobuf(const config::Location &location) {
   data_format::Location location_protobuf;
 
   location_protobuf.set_longitude_left(location.longitude_left);
@@ -36,12 +35,12 @@ data_format::Location ToProtobuf(const environment::Location &location) {
   return location_protobuf;
 }
 
-environment::Config FromProtobuf(const data_format::Config &protobuf_config) {
-  environment::Location location = FromProtobuf(protobuf_config.location());
-  return environment::Config(protobuf_config.name(), location);
+config::Config FromProtobuf(const data_format::Config &protobuf_config) {
+  config::Location location = FromProtobuf(protobuf_config.location());
+  return config::Config(protobuf_config.name(), location);
 }
 
-data_format::Config ToProtobuf(const environment::Config &config) {
+data_format::Config ToProtobuf(const config::Config &config) {
   data_format::Config config_protobuf;
 
   config_protobuf.set_name(config.name);
@@ -120,15 +119,17 @@ environment::Soil FromProtobuf(const data_format::Soil &protobuf_soil) {
       break;
   }
 
-  return environment::Soil(
-      soil_texture, protobuf_soil.ph(), protobuf_soil.salinity(),
-      protobuf_soil.organic_matter(), protobuf_soil.water_content());
+  return environment::Soil(soil_texture, protobuf_soil.ph(),
+                           protobuf_soil.salinity(),
+                           protobuf_soil.organic_matter(),
+                           protobuf_soil.water_content().water_amount_1(),
+                           protobuf_soil.water_content().water_amount_2());
 }
 
 data_format::Soil ToProtobuf(const environment::Soil &soil) {
   data_format::Soil soil_protobuf;
   data_format::Soil_Texture soil_texture;
-  switch (soil.texture) {
+  switch (soil.texture()) {
     case environment::Soil::CLAY:
       soil_texture = data_format::Soil_Texture::Soil_Texture_CLAY;
       break;
@@ -141,10 +142,13 @@ data_format::Soil ToProtobuf(const environment::Soil &soil) {
   }
 
   soil_protobuf.set_texture(soil_texture);
-  soil_protobuf.set_ph(soil.pH);
-  soil_protobuf.set_salinity(soil.salinity);
-  soil_protobuf.set_organic_matter(soil.organic_matter);
-  soil_protobuf.set_water_content(soil.water_content);
+  soil_protobuf.set_ph(soil.pH());
+  soil_protobuf.set_salinity(soil.salinity());
+  soil_protobuf.set_organic_matter(soil.organic_matter());
+  soil_protobuf.mutable_water_content()->set_water_amount_1(
+      soil.water_content().water_amount_1);
+  soil_protobuf.mutable_water_content()->set_water_amount_2(
+      soil.water_content().water_amount_2);
 
   return soil_protobuf;
 }
@@ -171,7 +175,7 @@ data_format::Terrain ToProtobuf(const environment::Terrain &terrain) {
   terrain_protobuf.set_yield(terrain.yield());
   terrain_protobuf.set_size(terrain.size());
 
-  for (const auto &p : terrain.GetAllPlants()) {
+  for (const auto &p : terrain.plant_container()) {
     auto *new_plant = terrain_protobuf.add_plants();
     *(new_plant->mutable_position()) = ToProtobuf(p->position());
     *(new_plant->mutable_plant()) = ToProtobuf(*p);
@@ -184,7 +188,7 @@ data_format::Terrain ToProtobuf(const environment::Terrain &terrain) {
       new_soil->mutable_position()->set_x(i);
       new_soil->mutable_position()->set_y(j);
 
-      *(new_soil->mutable_soil()) = ToProtobuf(*(terrain.GetSoil(pos)));
+      *(new_soil->mutable_soil()) = ToProtobuf(terrain.soil_container()[pos]);
     }
   }
   return terrain_protobuf;

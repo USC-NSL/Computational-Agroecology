@@ -1,7 +1,7 @@
 #ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CLIMATE_H_
 #define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_CLIMATE_H_
 
-#include "environment/config.h"
+#include "config/config.h"
 #include "environment/utility.h"
 
 namespace environment {
@@ -25,7 +25,7 @@ struct Climate {
   };
 
   // Construct this based on the `config`
-  Climate(const environment::Config &config);
+  Climate(const config::Config &config);
 
   // TODO: include other existing libraries to replace the current types with
   // unit types

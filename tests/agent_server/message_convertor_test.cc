@@ -6,11 +6,12 @@
 #include "agent/actions/crop.h"
 #include "agent/resource.h"
 #include "agent_server/message_convertor.h"
-#include "environment/config.h"
-#include "environment/location.h"
+#include "config/config.h"
+#include "config/location.h"
 #include "environment/plant_builder.h"
 #include "environment/terrain.h"
 
+using namespace config;
 using namespace environment;
 
 // All unit tests below are testing on converting selected data structures (in
@@ -92,7 +93,8 @@ TEST(MessageConvertorTest, DurationConvertorTest) {
   EXPECT_EQ(dur, FromProtobufDuration(dur_protobuf));
 }
 
-// This tests on converting a `struct environment::Location` to and from protobuf.
+// This tests on converting a `struct environment::Location` to and from
+// protobuf.
 TEST(MessageConvertorTest, LocationConvertorTest) {
   Location location(100.0, 200.0, 300.0, 400.0);
 
@@ -110,7 +112,13 @@ TEST(MessageConvertorTest, ConfigConvertorTest) {
 
 // This tests on converting a `class environment::Plant` to protobuf.
 TEST(MessageConvertorTest, PlantConvertorTest) {
-  Plant *plant = environment::PlantBuilder::NewPlant("bean");
+  Config dumb_config("place name", Location(100, 101, 201, 200));
+  Climate dumb_climate(dumb_config);
+  Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                               dumb_config.location, dumb_climate.climate_zone,
+                               dumb_weather);
+  Plant *plant = environment::PlantBuilder::NewPlant("bean", dumb_meteorology);
 
   ASSERT_NE(nullptr, plant);
 
@@ -121,7 +129,7 @@ TEST(MessageConvertorTest, PlantConvertorTest) {
 
 // This tests on converting a `struct environment::Soil` to and from protobuf.
 TEST(MessageConvertorTest, SoilConvertorTest) {
-  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 3.0);
+  Soil soil(Soil::CLAY, 6.0, 1.0, 2.0, 0.0, 0.0);
 
   auto soil_protobuf = ToProtobuf(soil);
   EXPECT_EQ(soil, FromProtobuf(soil_protobuf));
@@ -138,18 +146,28 @@ TEST(MessageConvertorTest, CoordinateConvertorTest) {
 
 // This tests on converting a `class environment::Terrain` to protobuf.
 TEST(MessageConvertorTest, TerrainConvertorTest) {
-  Terrain terrain(5);
+  Config dumb_config("place name", Location(100, 101, 201, 200));
+  Climate dumb_climate(dumb_config);
+  Weather dumb_weather(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  Meteorology dumb_meteorology(std::chrono::system_clock::now(),
+                               dumb_config.location, dumb_climate.climate_zone,
+                               dumb_weather);
+  TerrainRawData dumb_terrain_raw_data(5, 0);
+  Terrain terrain(dumb_terrain_raw_data, dumb_meteorology);
 
   auto terrain_protobuf = ToProtobuf(terrain);
 
   EXPECT_EQ(terrain.yield(), terrain_protobuf.yield());
   EXPECT_EQ(terrain.size(), terrain_protobuf.size());
 
-  for (size_t i = 0; i < terrain.GetAllPlants().size(); ++i) {
-    EXPECT_EQ(terrain.GetAllPlants()[i]->position(),
-              FromProtobuf(terrain_protobuf.plants()[i].position()));
-    TestPlantConvertor(*(terrain.GetAllPlants()[i]),
-                       terrain_protobuf.plants()[i].plant());
+  {
+    size_t i = 0;
+    for (const auto &plant : terrain.plant_container()) {
+      EXPECT_EQ(plant->position(),
+                FromProtobuf(terrain_protobuf.plants()[i].position()));
+      TestPlantConvertor(*plant, terrain_protobuf.plants()[i].plant());
+      ++i;
+    }
   }
 
   for (size_t i = 0; i < terrain.length(); ++i) {
@@ -157,7 +175,7 @@ TEST(MessageConvertorTest, TerrainConvertorTest) {
       size_t idx = i * terrain.length() + j;
       const environment::Coordinate &pos =
           FromProtobuf(terrain_protobuf.soil()[idx].position());
-      EXPECT_EQ(*(terrain.GetSoil(pos)),
+      EXPECT_EQ(terrain.soil_container()[pos],
                 FromProtobuf(terrain_protobuf.soil()[idx].soil()));
     }
   }
@@ -201,7 +219,8 @@ class ActionConvertorTest : public ::testing::Test {
   agent::Resources cost;
 };
 
-// This tests on converting a `class agent::action::crop::Add` to and from protobuf.
+// This tests on converting a `class agent::action::crop::Add` to and from
+// protobuf.
 TEST_F(ActionConvertorTest, ActionAddCropTest) {
   agent::action::crop::Add action(applied_range, start_time_step, duration,
                                   cost, "Corn");
@@ -210,7 +229,8 @@ TEST_F(ActionConvertorTest, ActionAddCropTest) {
   EXPECT_EQ(action, FromProtobuf(action_protobuf));
 }
 
-// This tests on converting a `class agent::action::crop::Remove` to and from protobuf.
+// This tests on converting a `class agent::action::crop::Remove` to and from
+// protobuf.
 TEST_F(ActionConvertorTest, ActionRemoveCropTest) {
   agent::action::crop::Remove action(applied_range, start_time_step, duration,
                                      cost);

@@ -5,6 +5,7 @@
 
 #include "environment/resource.h"
 #include "environment/utility.h"
+#include "environment/water_balance.h"
 
 namespace environment {
 
@@ -12,20 +13,37 @@ namespace environment {
 // utility.h, and add to utility.h as needed.
 // TODO: Merge Soil and SoilCondition.
 // Ralph: The todos above are done.
-struct Soil {
+class Soil {
+ public:
   enum Texture { CLAY = 0, SILT, SAND };
 
   Soil(const Texture texture, const double pH, const double salinity,
-       const double organic_matter, const double water_content);
+       const double organic_matter, const double water_content_layer_1,
+       const double water_content_layer_2);
 
-  Texture texture;
-  double pH;
-  double salinity;
-  double organic_matter;
+  void UpdateWaterContent(double rainfall,
+                          double total_flux_density_sunlit_potential,
+                          double total_flux_density_shaded_potential);
 
-  Resources resources;
+  void AddWaterToSoil(double water_amount);
 
-  double water_content;
+  double pH() const { return pH_; }
+  double salinity() const { return salinity_; }
+  double organic_matter() const { return organic_matter_; }
+  Texture texture() const { return texture_; }
+  const WaterBalance::DailyWaterContentReturn &water_content() const {
+    return water_content_;
+  }
+
+ private:
+  Texture texture_;
+  double pH_;
+  double salinity_;
+  double organic_matter_;
+
+  Resources resources_;
+
+  WaterBalance::DailyWaterContentReturn water_content_;
 };
 
 bool operator==(const Soil &lhs, const Soil &rhs);
