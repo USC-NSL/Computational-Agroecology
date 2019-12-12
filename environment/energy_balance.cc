@@ -348,6 +348,22 @@ EnergyBalance::EnergySupply EnergyBalance::CalculateEnergySupply(
   return {radiance_soil, radiance_canopy};
 }
 
+double EnergyBalance::CalculateCanopyTemperature(double solar_hour,
+                                                 double sensible_heat_total,
+                                                 double sensible_heat_canopy) {
+  AeroResistances aero_resistances =
+      CalculateAeroResistances(meteorology_.wind_speed(), soil_);
+  double temperature_at_surface =
+      ((sensible_heat_total / KHeatToRaiseOneKelvinUnitVolume) *
+       aero_resistances.between_canopy_reference_height) +
+      meteorology_.air_temperature();
+  // TODO: Why does this function not take wind_speed as a parameter?
+  double boundary_layer_resistance = CalculateBoundaryLayerResistance();
+  return ((sensible_heat_canopy / KHeatToRaiseOneKelvinUnitVolume) *
+          boundary_layer_resistance) +
+         temperature_at_surface;
+}
+
 double EnergyBalance::CalculateTotalLatentHeatFlux(
     const double slope_of_saturated_vapor_pressure,
     const EnergyBalance::AeroResistances &aero_resistances,

@@ -60,14 +60,18 @@ const Plant *PlantContainer::GetPlant(const Coordinate &coordinate) const {
   return GetPlant(coordinate);
 }
 
-PlantContainer::iterator PlantContainer::begin() { return plants_.begin(); }
+PlantContainer::iterator PlantContainer::begin() {
+  return plants_.begin();
+}
 PlantContainer::const_iterator PlantContainer::begin() const {
   return plants_.begin();
 }
 PlantContainer::const_iterator PlantContainer::cbegin() const {
   return plants_.cbegin();
 }
-PlantContainer::iterator PlantContainer::end() { return plants_.end(); }
+PlantContainer::iterator PlantContainer::end() {
+  return plants_.end();
+}
 PlantContainer::const_iterator PlantContainer::end() const {
   return plants_.end();
 }

@@ -57,7 +57,7 @@ void PlantRadiation::UpdateSolarHour(const double solar_hour) {
 }
 
 double PlantRadiation::CalculateExtinctionCoefficientForDirect(
-    const double solar_elevation) {
+    const double solar_elevation) const {
   // Sun is below horizon
   if (solar_elevation < 0.00000001) {
     return 0.0f;
