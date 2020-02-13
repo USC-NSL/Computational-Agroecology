@@ -1,4 +1,4 @@
-import {FunctionMode, WeatherMode} from "./common";
+import {WeatherMode} from "./common";
 import {Render} from "./render";
 import {API} from "./API";
 import * as dat from 'dat.gui';
@@ -6,7 +6,6 @@ import * as dat from 'dat.gui';
 export class GUI {
   api: API;
   render: Render;
-  functionMode = FunctionMode[FunctionMode.SQUASH];
   weatherMode = WeatherMode[WeatherMode.SUNNY];
   cameraX = 0;
   cameraY = 0;
@@ -23,9 +22,6 @@ export class GUI {
 
     let gui = new dat.GUI();
 
-    gui.add(this, 'functionMode',
-            Object.keys(FunctionMode)
-                .filter((key: any) => { return isNaN(Number(key)); }));
     gui.add(this, 'weatherMode',
             Object.keys(WeatherMode)
                 .filter((key: any) => { return isNaN(Number(key)); }))
@@ -41,11 +37,6 @@ export class GUI {
 
     this.updateCamera();
     this.updateWeather();
-  }
-
-  getFunctionMode(): string { return this.functionMode; }
-  setFunctionMode(functionMode: FunctionMode) {
-    this.functionMode = FunctionMode[functionMode];
   }
 
   // TODO: deprecate it later

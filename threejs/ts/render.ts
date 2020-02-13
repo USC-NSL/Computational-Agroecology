@@ -93,11 +93,13 @@ export class Render {
   bindTileMapEvent(tilemap: TileMap) {
     this.tilemap = tilemap;
     document.addEventListener(
+        'mousedown', this.tilemap.onDocumentMouseDown.bind(this.tilemap),
+        false);
+    document.addEventListener(
         'mousemove', this.tilemap.onDocumentMouseMove.bind(this.tilemap),
         false);
     document.addEventListener(
-        'mousedown', this.tilemap.onDocumentMouseDown.bind(this.tilemap),
-        false);
+        'mouseup', this.tilemap.onDocumentMouseUp.bind(this.tilemap), false);
     document.addEventListener(
         'touchstart', this.tilemap.onDocumentTouchStart.bind(this.tilemap),
         false);
