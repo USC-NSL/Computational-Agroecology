@@ -1,0 +1,378 @@
+diff --git a/environment/simulators/grow_simulator.cc b/environment/simulators/grow_simulator.cc
+new file mode 100644
+index 0000000..1bc4f5b
+--- /dev/null
++++ b/environment/simulators/grow_simulator.cc
+@@ -0,0 +1,32 @@
++#include "grow_simulator.h"
++#include "environment.h"
++
++namespace simulator {
++
++namespace growsimulator {
++
++GrowSimulator::GrowSimulator(const double rightHorizontalDegree,
++                             const double rightVerticalDegree,
++                             const double rightGrowLengthRatio,
++                             const double leftHorizontalDegree,
++                             const double leftVerticalDegree,
++                             const double leftGrowLengthRatio,
++                             const double length)
++    : rightHorizontalDegree_(DegreeToRadian(rightHorizontalDegree)),
++      rightVerticalDegree_(DegreeToRadian(90 - rightVerticalDegree)),
++      rightGrowLengthRatio_(rightGrowLengthRatio),
++      leftHorizontalDegree_(DegreeToRadian(leftHorizontalDegree)),
++      leftVerticalDegree_(DegreeToRadian(90 - leftVerticalDegree)),
++      leftGrowLengthRatio_(leftGrowLengthRatio) {}
++
++void GrowSimulator::SimulateToTime(
++    environment::Environment *env,
++    const std::chrono::system_clock::time_point &time) {
++  for (auto obj : objgrows_) {
++    obj.PlantGrow();
++  }
++}
++
++}  // namespace growsimulator
++
++}  // namespace simulator
+\ No newline at end of file
+diff --git a/environment/simulators/grow_simulator.h b/environment/simulators/grow_simulator.h
+new file mode 100644
+index 0000000..c445b9f
+--- /dev/null
++++ b/environment/simulators/grow_simulator.h
+@@ -0,0 +1,37 @@
++#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_H_
++#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_H_
++
++#include <vector>
++
++#include "grow_simulator/objgrow.h"
++#include "simulator.h"
++
++namespace simulator {
++
++namespace growsimulator {
++
++const double kPI = 3.141592653589793238462643383279;
++const double kMin = 0.00000001;
++
++class GrowSimulator : public Simulator {
++ public:
++  GrowSimulator(const double rightHorizontalDegree,
++                const double rightVerticalDegree,
++                const double rightGrowLengthRatio,
++                const double leftHorizontalDegree,
++                const double leftVerticalDegree,
++                const double leftGrowLengthRatio, const double length);
++  void SimulateToTime(
++      environment::Environment *env,
++      const std::chrono::system_clock::time_point &time) override;
++
++ private:
++  double rightHorizontalDegree, rightVerticalDegree, rightGrowLengthRatio;
++  double leftHorizontalDegree, leftVerticalDegree, leftGrowLengthRatio;
++  std::vector<ObjGrow> objgrows_;
++};
++
++}  // namespace growsimulator
++
++}  // namespace simulator
++#endif  // COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_H_
+diff --git a/environment/simulators/grow_simulator/objgrow.cc b/environment/simulators/grow_simulator/objgrow.cc
+new file mode 100644
+index 0000000..cd504a8
+--- /dev/null
++++ b/environment/simulators/grow_simulator/objgrow.cc
+@@ -0,0 +1,202 @@
++#include <fstream>
++
++#include "objgrow.h"
++
++namespace simulator {
++
++namespace growsimulator {
++
++ObjGrow::ObjGrow(const double rightHorizontalDegree,
++                 const double rightVerticalDegree,
++                 const double rightGrowLengthRatio,
++                 const double leftHorizontalDegree,
++                 const double leftVerticalDegree,
++                 const double leftGrowLengthRatio, const double length)
++    : rightHorizontalDegree_(DegreeToRadian(rightHorizontalDegree)),
++      rightVerticalDegree_(DegreeToRadian(90 - rightVerticalDegree)),
++      rightGrowLengthRatio_(rightGrowLengthRatio),
++      leftHorizontalDegree_(DegreeToRadian(leftHorizontalDegree)),
++      leftVerticalDegree_(DegreeToRadian(90 - leftVerticalDegree)),
++      leftGrowLengthRatio_(leftGrowLengthRatio) {
++  plantRootsToGrow.push_back(
++      PlantRoot(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(1, 0, 0), length));
++}
++
++double ObjGrow::DegreeToRadian(const double degree) const {
++  return degree * kPI / 180.0;
++}
++
++double ObjGrow::RadianToDegree(const double radian) const {
++  return radian / kPI * 180.0;
++}
++
++void ObjGrow::PlantGrow() {
++  auto plantrootEnd = plantRootsToGrow.end();
++  for (auto plantroot = plantRootsToGrow.begin(); plantroot != plantrootEnd;) {
++    Vector3 right =
++        getRightDir(*plantroot, rightHorizontalDegree_, rightVerticalDegree_);
++    plantRootsToGrow.push_front(
++        PlantRoot(plantroot->pos + plantroot->length * plantroot->dir, right,
++                  normalize(cross(right, plantroot->norm)),
++                  rightGrowLengthRatio_ * plantroot->length));
++    Vector3 left =
++        getLeftDir(*plantroot, leftHorizontalDegree_, leftVerticalDegree_);
++    plantRootsToGrow.push_front(
++        PlantRoot(plantroot->pos + plantroot->length * plantroot->dir, left,
++                  normalize(cross(left, plantroot->norm)),
++                  leftGrowLengthRatio_ * plantroot->length));
++    plantRootsHasGrown.push_back(*plantroot);
++    /*std::cout << "-------------------------------" << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->dir, right)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->norm, right)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->dir, left)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->norm, left)) << std::endl;
++    std::cout << "-------------------------------" << std::endl;*/
++    plantroot = plantRootsToGrow.erase(plantroot);
++  }
++}
++
++void ObjGrow::PlantGrow(const double rightHorizontalDegree,
++                        const double rightVerticalDegree,
++                        const double rightGrowLengthRatio,
++                        const double leftHorizontalDegree,
++                        const double leftVerticalDegree,
++                        const double leftGrowLengthRatio, const double length) {
++  auto plantrootEnd = plantRootsToGrow.end();
++  for (auto plantroot = plantRootsToGrow.begin(); plantroot != plantrootEnd;) {
++    Vector3 right =
++        getRightDir(*plantroot, rightHorizontalDegree, rightVerticalDegree);
++    plantRootsToGrow.push_front(
++        PlantRoot(plantroot->pos + plantroot->length * plantroot->dir, right,
++                  normalize(cross(right, plantroot->norm)),
++                  rightGrowLengthRatio * plantroot->length));
++    Vector3 left =
++        getLeftDir(*plantroot, leftHorizontalDegree, leftVerticalDegree);
++    plantRootsToGrow.push_front(
++        PlantRoot(plantroot->pos + plantroot->length * plantroot->dir, left,
++                  normalize(cross(left, plantroot->norm)),
++                  leftGrowLengthRatio * plantroot->length));
++    plantRootsHasGrown.push_back(*plantroot);
++    /*std::cout << "-------------------------------" << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->dir, right)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->norm, right)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->dir, left)) << std::endl;
++    std::cout << RadianToDegree(getDegree(plantroot->norm, left)) << std::endl;
++    std::cout << "-------------------------------" << std::endl;*/
++    plantroot = plantRootsToGrow.erase(plantroot);
++  }
++}
++
++std::list<int> ObjGrow::getListByInt(int a, int b, int c) {
++  std::list<int> f;
++  f.push_back(a);
++  f.push_back(b);
++  f.push_back(c);
++  return f;
++}
++
++void ObjGrow::ExportObj(const char *pathname, double width) {
++  std::ofstream file(pathname);
++  std::list<Vector3> v;
++  std::list<std::list<int>> f;
++  int index = 0;
++  for (auto plantroot : plantRootsHasGrown) {
++    Vector3 rightDir = cross(plantroot.dir, plantroot.norm);
++    v.push_back(plantroot.pos + width / 2 * plantroot.norm +
++                width / 2 * rightDir);
++    v.push_back(plantroot.pos - width / 2 * plantroot.norm +
++                width / 2 * rightDir);
++    v.push_back(plantroot.pos + width / 2 * plantroot.norm -
++                width / 2 * rightDir);
++    v.push_back(plantroot.pos - width / 2 * plantroot.norm -
++                width / 2 * rightDir);
++    v.push_back(plantroot.pos + plantroot.dir * plantroot.length +
++                width / 2 * plantroot.norm + width / 2 * rightDir);
++    v.push_back(plantroot.pos + plantroot.dir * plantroot.length -
++                width / 2 * plantroot.norm + width / 2 * rightDir);
++    v.push_back(plantroot.pos + plantroot.dir * plantroot.length +
++                width / 2 * plantroot.norm - width / 2 * rightDir);
++    v.push_back(plantroot.pos + plantroot.dir * plantroot.length -
++                width / 2 * plantroot.norm - width / 2 * rightDir);
++    f.push_back(getListByInt(index * 8 + 1, index * 8 + 2, index * 8 + 3));
++    f.push_back(getListByInt(index * 8 + 4, index * 8 + 2, index * 8 + 3));
++
++    f.push_back(getListByInt(index * 8 + 1, index * 8 + 2, index * 8 + 5));
++    f.push_back(getListByInt(index * 8 + 6, index * 8 + 2, index * 8 + 5));
++
++    f.push_back(getListByInt(index * 8 + 1, index * 8 + 3, index * 8 + 5));
++    f.push_back(getListByInt(index * 8 + 7, index * 8 + 3, index * 8 + 5));
++
++    f.push_back(getListByInt(index * 8 + 3, index * 8 + 4, index * 8 + 7));
++    f.push_back(getListByInt(index * 8 + 8, index * 8 + 4, index * 8 + 7));
++
++    f.push_back(getListByInt(index * 8 + 5, index * 8 + 6, index * 8 + 7));
++    f.push_back(getListByInt(index * 8 + 8, index * 8 + 6, index * 8 + 7));
++
++    f.push_back(getListByInt(index * 8 + 2, index * 8 + 4, index * 8 + 6));
++    f.push_back(getListByInt(index * 8 + 8, index * 8 + 4, index * 8 + 6));
++    index += 1;
++  }
++  for (auto vitem : v) {
++    file << "v " << vitem.x << " " << vitem.y << " " << vitem.z << std::endl;
++  }
++  file << std::endl;
++  for (auto fitem : f) {
++    file << "f " << fitem.front() << " ";
++    fitem.pop_front();
++    file << fitem.front() << " ";
++    fitem.pop_front();
++    file << fitem.front() << std::endl;
++    fitem.pop_front();
++  }
++  file.close();
++}
++
++real_t ObjGrow::getDegree(const Vector3 &left, const Vector3 &right) {
++  real_t res = dotresult(left, right);
++  if (length(left) < kMin || length(right) < kMin)
++    return 0.0;
++  return acos(res / length(left) / length(right));
++}
++
++Vector3 ObjGrow::getLeftDir(const PlantRoot &plantroot, double HorizontalDegree,
++                            double VerticalDegree) {
++  Vector3 RightNorm = normalize(cross(plantroot.dir, plantroot.norm)),
++          dirForRoot;
++  if (fabs(VerticalDegree - kPI / 2) < kMin)
++    dirForRoot = plantroot.dir;
++  else
++    dirForRoot = cos(HorizontalDegree) * plantroot.norm -
++                 sin(HorizontalDegree) * RightNorm +
++                 tan(VerticalDegree) * plantroot.dir;
++  return normalize(dirForRoot);
++}
++
++Vector3 ObjGrow::getRightDir(const PlantRoot &plantroot,
++                             double HorizontalDegree, double VerticalDegree) {
++  Vector3 RightNorm = normalize(cross(plantroot.dir, plantroot.norm)),
++          dirForRoot;
++  if (fabs(VerticalDegree - kPI / 2) < kMin)
++    dirForRoot = plantroot.dir;
++  else
++    dirForRoot = cos(HorizontalDegree) * plantroot.norm +
++                 sin(HorizontalDegree) * RightNorm +
++                 tan(VerticalDegree) * plantroot.dir;
++  return normalize(dirForRoot);
++}
++
++void ObjGrow::getMultiRes(real_t *left, real_t *right, real_t *res, const int m,
++                          const int n, const int t) {
++  for (int i = 0; i < m; i++) {
++    for (int j = 0; j < t; j++) {
++      res[i * t + j] = 0;
++      for (int k = 0; k < n; k++) {
++        res[i * t + j] += left[i * n + k] * right[k * t + j];
++      }
++    }
++  }
++}
++
++}  // namespace growsimulator
++
++}  // namespace simulator
+\ No newline at end of file
+diff --git a/environment/simulators/grow_simulator/objgrow.h b/environment/simulators/grow_simulator/objgrow.h
+new file mode 100644
+index 0000000..e145d93
+--- /dev/null
++++ b/environment/simulators/grow_simulator/objgrow.h
+@@ -0,0 +1,50 @@
++#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_OBJGROW_H_
++#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_OBJGROW_H_
++
++#include <list>
++
++#include "plant_root.h"
++
++namespace simulator {
++
++namespace growsimulator {
++
++const double kPI = 3.141592653589793238462643383279;
++const double kMin = 0.00000001;
++
++class ObjGrow {
++ public:
++  ObjGrow(const double rightHorizontalDegree, const double rightVerticalDegree,
++          const double rightGrowLengthRatio, const double leftHorizontalDegree,
++          const double leftVerticalDegree, const double leftGrowLengthRatio,
++          const double length);
++  void PlantGrow();
++  void PlantGrow(const double rightHorizontalDegree,
++                 const double rightVerticalDegree,
++                 const double rightGrowLengthRatio,
++                 const double leftHorizontalDegree,
++                 const double leftVerticalDegree,
++                 const double leftGrowLengthRatio, const double length);
++  void ExportObj(const char *pathname, double width);
++
++ private:
++  double rightHorizontalDegree_, rightVerticalDegree_, rightGrowLengthRatio_;
++  double leftHorizontalDegree_, leftVerticalDegree_, leftGrowLengthRatio_;
++  double DegreeToRadian(const double degree) const;
++  double RadianToDegree(const double radian) const;
++  Vector3 getLeftDir(const PlantRoot &plantroot, double HorizontalDegree,
++                     double VerticalDegree);
++  Vector3 getRightDir(const PlantRoot &plantroot, double HorizontalDegree,
++                      double VerticalDegree);
++  real_t getDegree(const Vector3 &left, const Vector3 &right);
++  void getMultiRes(real_t *left, real_t *right, real_t *res, const int m,
++                   const int n, const int t);
++  std::list<int> getListByInt(int a, int b, int c);
++  std::list<PlantRoot> plantRootsToGrow;
++  std::list<PlantRoot> plantRootsHasGrown;
++};
++
++}  // namespace growsimulator
++
++}  // namespace simulator
++#endif  // !COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_OBJGROW_H_
+\ No newline at end of file
+diff --git a/environment/simulators/grow_simulator/plantroot.h b/environment/simulators/grow_simulator/plantroot.h
+new file mode 100644
+index 0000000..c026617
+--- /dev/null
++++ b/environment/simulators/grow_simulator/plantroot.h
+@@ -0,0 +1,23 @@
++#ifndef COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_PLANTROOT_H_
++#define COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_PLANTROOT_H_
++
++#include "../vectors.h"
++
++namespace simulator {
++
++namespace growsimulator {
++
++struct PlantRoot {
++  Vector3 pos;
++  Vector3 dir;
++  Vector3 norm;
++  real_t length;
++  PlantRoot(const Vector3 &pos, const Vector3 &dir, const Vector3 &norm,
++            const real_t length)
++      : pos(pos), dir(dir), norm(norm), length(length) {}
++};
++
++}  // namespace growsimulator
++
++}  // namespace simulator
++#endif  // !COMPUTATIONAL_AGROECOLOGY_ENVIRONMENT_SIMULATORS_GROW_SIMULATOR_PLANTROOT_H_
+\ No newline at end of file
