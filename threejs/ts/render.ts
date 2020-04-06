@@ -8,7 +8,7 @@ import {
   AmbientLight,
   FogExp2,
 } from "three/src/Three";
-import {MapControls} from 'three/examples/jsm/controls/MapControls';
+import {MapControls} from 'three/examples/jsm/controls/OrbitControls';
 
 import {TileMap} from './tilemap';
 import {PlantConfigs} from './plant';
