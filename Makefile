@@ -1,6 +1,12 @@
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall
-OPENGLLIBS := -lGL -lglut -lGLEW
+OS := $(shell uname)
+
+ifeq ($(OS),Darwin)
+	OPENGLLIBS := -framework OpenGL #-lGL -lglut -lGLEW
+else
+	OPENGLLIBS := -lGL -lglut -lGLEW
+endif
 
 LDFLAGS := `pkg-config --libs protobuf grpc++`
 

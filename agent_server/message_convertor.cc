@@ -2,7 +2,8 @@
 
 std::chrono::system_clock::time_point FromProtobufTimePoint(
     const int64_t timestamp_epoch_count) {
-  auto epoch_count = std::chrono::nanoseconds(timestamp_epoch_count);
+  auto epoch_count = std::chrono::microseconds(timestamp_epoch_count);
+  //changed from nano to micro
   return std::chrono::system_clock::time_point(epoch_count);
 }
 

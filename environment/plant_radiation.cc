@@ -87,7 +87,9 @@ PlantRadiation::CalculateInterceptHourlyRadiance(
   // scatter coefficient
   constexpr double kScatterCoefficient = 0.5;
   // scatter correction
-  constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
+  //constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
+  //remove constexpr due to sqrt
+  double kScatterCorrection = std::sqrt(kScatterCoefficient);
 
   // Formula [3.8] in book p.58
   // I_i_dr = (1 - p) * I_dr * (1 - exp(-sqrt(α) * k_dr * L))
@@ -127,8 +129,10 @@ PlantRadiation::CalculateAbsorbedHourPAR(
   // scatter coefficient
   constexpr double kScatterCoefficient = 0.8;
   // scatter correction
-  constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
-
+  
+  //constexpr double kScatterCorrection = std::sqrt(kScatterCoefficient);
+  //remove constexpr due to sqrt
+  double kScatterCorrection = std::sqrt(kScatterCoefficient);
   // Formula [3.1] in book p.52
   // τ_dr = exp(-k_dr * L)
   // L: leaf area index
