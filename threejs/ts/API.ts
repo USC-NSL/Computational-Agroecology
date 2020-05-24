@@ -43,7 +43,7 @@ export class API {
   constructor(configs: PlantConfigs) {
     this.configs = configs;
     /////////////  change the IP address to your server's IP
-    this.server = new AgentServerClient('http://204.57.3.150:8080', null, null);
+    this.server = new AgentServerClient('http://localhost:8080', null, null);
     this.init();
   }
 
